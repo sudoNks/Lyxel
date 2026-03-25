@@ -81,8 +81,10 @@ namespace MobiladorStex
         // ESTADO
         // ══════════════════════════════════════════════════════════════
 
-        public bool EstaCorriendo =>
-            _proceso != null && !_proceso.HasExited;
+        public bool EstaCorriendo
+        {
+            get { var p = _proceso; return p != null && !p.HasExited; }
+        }
 
         // ══════════════════════════════════════════════════════════════
         // LANZAR

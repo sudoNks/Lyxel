@@ -63,20 +63,39 @@ namespace MobiladorStex
                     btnReiniciarAdb.Text = "Reiniciando...";
                     lblAdbEstado.Text = "●  Reiniciando servidor ADB...";
                     lblAdbEstado.ForeColor = Color.FromArgb(255, 167, 38);
-                    await adbManager.ReiniciarServidorAsync();
-                    await ActualizarEstadoAdbAsync(lblAdbEstado);
-                    btnReiniciarAdb.Text = "🔌 Reiniciar ADB";
-                    btnReiniciarAdb.Enabled = true;
+                    try
+                    {
+                        await adbManager.ReiniciarServidorAsync();
+                        await ActualizarEstadoAdbAsync(lblAdbEstado);
+                    }
+                    finally
+                    {
+                        if (!IsDisposed)
+                        {
+                            btnReiniciarAdb.Text = "🔌 Reiniciar ADB";
+                            btnReiniciarAdb.Enabled = true;
+                        }
+                    }
                 };
 
                 btnLimpiarHuerfanas.Click += async (s, e) =>
                 {
                     btnLimpiarHuerfanas.Enabled = false;
                     btnLimpiarHuerfanas.Text = "Limpiando...";
-                    var (exito, cantidad, mensaje) = await adbManager.LimpiarConexionesWifiAsync(true);
-                    MessageBox.Show(mensaje, exito ? "✓ Limpieza completada" : "Error", MessageBoxButtons.OK, exito ? MessageBoxIcon.Information : MessageBoxIcon.Error);
-                    btnLimpiarHuerfanas.Text = "🧹 Limpiar WiFi Huérfanas";
-                    btnLimpiarHuerfanas.Enabled = true;
+                    try
+                    {
+                        var (exito, cantidad, mensaje) = await adbManager.LimpiarConexionesWifiAsync(true);
+                        if (!IsDisposed)
+                            MessageBox.Show(mensaje, exito ? "✓ Limpieza completada" : "Error", MessageBoxButtons.OK, exito ? MessageBoxIcon.Information : MessageBoxIcon.Error);
+                    }
+                    finally
+                    {
+                        if (!IsDisposed)
+                        {
+                            btnLimpiarHuerfanas.Text = "🧹 Limpiar WiFi Huérfanas";
+                            btnLimpiarHuerfanas.Enabled = true;
+                        }
+                    }
                 };
 
                 cardAdb.Controls.AddRange(new Control[] { lblAdbEstado, btnReiniciarAdb, btnLimpiarHuerfanas });
@@ -155,15 +174,22 @@ namespace MobiladorStex
                 {
                     btnDetectarOtg.Enabled = false;
                     txtOtgConsola.Text = "Detectando...";
-                    var (exito, seriales, output) = await Task.Run(() => adbManager.ListarDispositivos());
-                    if (exito && seriales.Count > 0)
+                    try
                     {
-                        txtOtgConsola.Text = output;
-                        if (seriales.Count == 1) { _otgSerial = seriales[0]; txtOtgSerial.Text = seriales[0]; }
+                        var (exito, seriales, output) = await Task.Run(() => adbManager.ListarDispositivos());
+                        if (IsDisposed) return;
+                        if (exito && seriales.Count > 0)
+                        {
+                            txtOtgConsola.Text = output;
+                            if (seriales.Count == 1) { _otgSerial = seriales[0]; txtOtgSerial.Text = seriales[0]; }
+                        }
+                        else
+                            txtOtgConsola.Text = "❌ No se detectaron dispositivos\n• Verifica USB\n• Depuración USB habilitada";
                     }
-                    else
-                        txtOtgConsola.Text = "❌ No se detectaron dispositivos\n• Verifica USB\n• Depuración USB habilitada";
-                    btnDetectarOtg.Enabled = true;
+                    finally
+                    {
+                        if (!IsDisposed) btnDetectarOtg.Enabled = true;
+                    }
                 };
 
                 cardOtg.Controls.AddRange(new Control[]

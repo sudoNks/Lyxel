@@ -484,9 +484,9 @@ namespace MobiladorStex
         public event Action<bool>? OnDispositivoUsbCambio;
 
         private System.Diagnostics.Process? _trackProcess;
-        private bool _ultimoEstadoDispositivo = false;
-        private bool _ultimoEstadoDispositivoUsb = false;
-        private bool _trackActivo = false;
+        private volatile bool _ultimoEstadoDispositivo = false;
+        private volatile bool _ultimoEstadoDispositivoUsb = false;
+        private volatile bool _trackActivo = false;
 
         // ══════════════════════════════════════════════════════════════
         // POINTER SPEED — velocidad del cursor del mouse en Android

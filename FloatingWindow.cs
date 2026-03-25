@@ -52,6 +52,7 @@ namespace MobiladorStex
         private System.Windows.Forms.Timer _timerEstado;
         private Label _lblFps;          // null si PrintFps está desactivado
         private bool _printFps;
+        private Action<string>? _fpsHandler; // referencia para poder desuscribir
 
         public FloatingWindow(ScrcpyManager scrcpyManager, string infoText,
                               Action onDetener, Action onMostrarApp, bool printFps = false)
@@ -67,7 +68,7 @@ namespace MobiladorStex
             // Suscribirse al evento solo si PrintFps está activo
             if (_printFps)
             {
-                _scrcpyManager.OnFpsUpdate += fps =>
+                _fpsHandler = fps =>
                 {
                     // El evento viene de un hilo de fondo — Invoke para tocar la UI
                     if (_lblFps == null || _lblFps.IsDisposed) return;
@@ -78,6 +79,7 @@ namespace MobiladorStex
                     }
                     catch { /* ventana cerrada */ }
                 };
+                _scrcpyManager.OnFpsUpdate += _fpsHandler;
             }
         }
 
@@ -236,6 +238,11 @@ namespace MobiladorStex
         {
             _timerEstado?.Stop();
             _timerEstado?.Dispose();
+            if (_fpsHandler != null)
+            {
+                _scrcpyManager.OnFpsUpdate -= _fpsHandler;
+                _fpsHandler = null;
+            }
             base.OnFormClosed(e);
         }
 
