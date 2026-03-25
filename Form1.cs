@@ -131,7 +131,7 @@ namespace MobiladorStex
             scrcpyPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "scrcpy", "scrcpy.exe");
 
             adbManager = new ADBManager(adbPath);
-            scrcpyManager = new ScrcpyManager(scrcpyPath);
+            scrcpyManager = new ScrcpyManager(scrcpyPath, adbPath);
 
             string perfilesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "perfiles.ini");
             if (!File.Exists(perfilesPath))

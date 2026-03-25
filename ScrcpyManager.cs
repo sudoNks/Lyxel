@@ -70,11 +70,13 @@ namespace MobiladorStex
     public class ScrcpyManager
     {
         private readonly string _scrcpyPath;
+        private readonly string _adbPath;
         private Process? _proceso;
 
-        public ScrcpyManager(string scrcpyPath)
+        public ScrcpyManager(string scrcpyPath, string adbPath)
         {
             _scrcpyPath = scrcpyPath;
+            _adbPath = adbPath;
         }
 
         // ══════════════════════════════════════════════════════════════
@@ -230,6 +232,7 @@ namespace MobiladorStex
                     RedirectStandardOutput = true,   // scrcpy escribe FPS en stdout
                     StandardOutputEncoding = Encoding.UTF8
                 };
+                startInfo.Environment["ADB"] = _adbPath;
 
                 _proceso = new Process { StartInfo = startInfo };
                 _proceso.Start();
@@ -306,20 +309,19 @@ namespace MobiladorStex
             {
                 try
                 {
-                    var proc = new Process
+                    var encoderStartInfo = new ProcessStartInfo
                     {
-                        StartInfo = new ProcessStartInfo
-                        {
-                            FileName = _scrcpyPath,
-                            Arguments = "--list-encoders",
-                            UseShellExecute = false,
-                            CreateNoWindow = true,
-                            RedirectStandardOutput = true,
-                            RedirectStandardError = true,
-                            StandardOutputEncoding = Encoding.UTF8,
-                            StandardErrorEncoding = Encoding.UTF8
-                        }
+                        FileName = _scrcpyPath,
+                        Arguments = "--list-encoders",
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        StandardOutputEncoding = Encoding.UTF8,
+                        StandardErrorEncoding = Encoding.UTF8
                     };
+                    encoderStartInfo.Environment["ADB"] = _adbPath;
+                    var proc = new Process { StartInfo = encoderStartInfo };
 
                     proc.Start();
 
