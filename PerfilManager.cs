@@ -103,9 +103,6 @@ namespace MobiladorStex
                 s["shortcut_mod"] = config.ShortcutMod ?? "lalt";
                 s["modo_otg"] = config.ModoOtg.ToString().ToLower();
                 s["otg_serial"] = config.OtgSerial ?? "";
-                s["usar_wifi"] = config.UsarWifi.ToString().ToLower();
-                s["wifi_ip"] = config.WifiIp ?? "";
-                s["wifi_puerto"] = config.WifiPuerto.ToString();
                 s["resolucion_ancho"] = config.ResolucionAncho.ToString();
                 s["resolucion_alto"] = config.ResolucionAlto.ToString();
                 s["aspect_ratio"] = config.AspectRatio ?? "16:9";
@@ -173,9 +170,6 @@ namespace MobiladorStex
                 ShortcutMod = s["shortcut_mod"] ?? "lalt",
                 ModoOtg = ParseBool(s["modo_otg"], false),
                 OtgSerial = s["otg_serial"] ?? "",
-                UsarWifi = ParseBool(s["usar_wifi"], false),
-                WifiIp = s["wifi_ip"] ?? "",
-                WifiPuerto = ParseInt(s["wifi_puerto"], 5555),
                 ResolucionAncho = ParseInt(s["resolucion_ancho"], 1080),
                 ResolucionAlto = ParseInt(s["resolucion_alto"], 2400),
                 AspectRatio = s["aspect_ratio"] ?? "16:9",
@@ -296,9 +290,6 @@ namespace MobiladorStex
                 sec.AddKey("fullscreen_crop", config.FullscreenCrop ?? "");
                 sec.AddKey("modo_otg", config.ModoOtg.ToString());
                 sec.AddKey("otg_serial", config.OtgSerial ?? "");
-                sec.AddKey("usar_wifi", config.UsarWifi.ToString());
-                sec.AddKey("wifi_ip", config.WifiIp ?? "");
-                sec.AddKey("wifi_puerto", config.WifiPuerto.ToString());
                 sec.AddKey("resolucion_ancho", config.ResolucionAncho.ToString());
                 sec.AddKey("resolucion_alto", config.ResolucionAlto.ToString());
                 sec.AddKey("aspect_ratio", config.AspectRatio ?? "16:9");

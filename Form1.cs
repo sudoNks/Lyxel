@@ -145,8 +145,7 @@ namespace MobiladorStex
             BuildUI();
             CargarUltimoPerfilSiExiste();
 
-            _ = ActualizarEstadoDispositivoAsync(mostrarToast: true);
-            _ = LimpiarWifiHuerfanasBackgroundAsync();
+            _ = IniciarDeteccionDispositivoAsync();
 
             // Track devices event-driven — detecta conexión/desconexión sin polling
             adbManager.OnDispositivoCambio += hayDispositivo =>
@@ -206,7 +205,8 @@ namespace MobiladorStex
                 });
             };
 
-            adbManager.IniciarTrackDevices();
+            // IniciarTrackDevices() se llama al final de IniciarDeteccionDispositivoAsync,
+            // una vez que _inicializacionCompleta = true y el estado ADB está estable.
 
             this.FormClosing += (s, e) =>
             {
@@ -693,10 +693,32 @@ namespace MobiladorStex
             if (cfg != null) CargarPerfilEnApp(cfg);
         }
 
-        private async Task LimpiarWifiHuerfanasBackgroundAsync()
+        // Limpia conexiones WiFi residuales de sesiones anteriores antes de la
+        // detección inicial, evitando falsos positivos cuando solo hay USB conectado.
+        // El monitor ADB se pausa durante toda la limpieza y se reactiva al final,
+        // cuando _inicializacionCompleta = true y el estado es estable.
+        private async Task IniciarDeteccionDispositivoAsync()
         {
-            await Task.Delay(2000);
-            await adbManager.LimpiarConexionesWifiAsync(false);
+            adbManager.DetenerTrackDevices(); // silenciar eventos durante la limpieza
+
+            await adbManager.DesconectarTodoAsync();
+            await Task.Delay(1500);
+
+            // Verificar que no queden dispositivos WiFi residuales tras el primer disconnect.
+            // Si aún hay seriales con ':' (formato ip:puerto), reintentar una vez más.
+            var (_, seriales, _) = await Task.Run(() => adbManager.ListarDispositivos());
+            if (seriales.Any(s => s.Contains(':')))
+            {
+                System.Diagnostics.Debug.WriteLine("[Init] WiFi residual detectado tras disconnect — reintentando");
+                await adbManager.DesconectarTodoAsync();
+                await Task.Delay(500);
+            }
+
+            // ActualizarEstadoDispositivoAsync pone _inicializacionCompleta = true al final.
+            await ActualizarEstadoDispositivoAsync(mostrarToast: true);
+
+            // Reanudar el monitor solo cuando el estado ya es definitivo.
+            if (!IsDisposed) adbManager.IniciarTrackDevices();
         }
 
         private void LoadInicioPage()
@@ -753,7 +775,7 @@ namespace MobiladorStex
 
             btnIniciarScrcpy = new Guna2Button()
             {
-                Text = "▶  INICIAR SCRCPY",
+                Text = "Detectando dispositivo...",
                 Width = cardRapido.Width - 48,
                 Height = 48,
                 Left = 24,
@@ -798,7 +820,9 @@ namespace MobiladorStex
             cardRapido.Controls.AddRange(new Control[] { btnIniciarScrcpy, btnDetenerScrcpy, lblUltimoPerfil });
             contentPanel.Controls.AddRange(new Control[] { cardEstado, cardRapido });
 
-            _ = ActualizarEstadoDispositivoAsync();
+            // Solo refrescar estado al navegar aquí después de la init — durante el arranque
+            // IniciarDeteccionDispositivoAsync es el responsable de la primera detección.
+            if (_inicializacionCompleta) _ = ActualizarEstadoDispositivoAsync();
             IniciarLoopEstadoScrcpy();
         }
 
@@ -951,10 +975,16 @@ namespace MobiladorStex
             bool corriendo = scrcpyManager.EstaCorriendo;
             bool hayDispositivo = _hayDispositivo || _modoOtg;
 
-            bool puedeIniciar = !corriendo && (hayDispositivo || _usarWifi);
+            bool puedeIniciar = _inicializacionCompleta && !corriendo && (hayDispositivo || _usarWifi);
             btnIniciarScrcpy.Enabled = puedeIniciar;
             btnIniciarScrcpy.FillColor = puedeIniciar ? accentColor : Color.FromArgb(60, 45, 80);
             btnIniciarScrcpy.ForeColor = puedeIniciar ? Color.White : Color.FromArgb(150, 150, 150);
+            if (!_inicializacionCompleta)
+                btnIniciarScrcpy.Text = "Detectando dispositivo...";
+            else if (corriendo)
+                btnIniciarScrcpy.Text = "▶  INICIAR SCRCPY";
+            else
+                btnIniciarScrcpy.Text = puedeIniciar ? "▶  INICIAR SCRCPY" : "Sin dispositivo";
             btnDetenerScrcpy.Enabled = corriendo;
         }
 
@@ -1214,9 +1244,8 @@ namespace MobiladorStex
             _cropActivo = false; // al cargar perfil, crop no está activo hasta que se calcula
             _modoOtg = cfg.ModoOtg;
             _otgSerial = cfg.OtgSerial;
-            _usarWifi = cfg.UsarWifi;
-            _wifiIp = cfg.WifiIp;
-            _wifiPuerto = cfg.WifiPuerto;
+            // WiFi no se carga del perfil — el modo de conexión lo determina
+            // exclusivamente el estado actual de _wifiConectado y la IP disponible.
             _resolucionAncho = cfg.ResolucionAncho;
             _resolucionAlto = cfg.ResolucionAlto;
             _aspectRatio = cfg.AspectRatio;
@@ -1359,7 +1388,7 @@ namespace MobiladorStex
             FullscreenCrop = _fullscreenCrop,
             ModoOtg = _modoOtg,
             OtgSerial = _otgSerial,
-            UsarWifi = _usarWifi,
+            UsarWifi = _wifiConectado,
             WifiIp = _wifiIp,
             WifiPuerto = _wifiPuerto,
             ResolucionAncho = _resolucionAncho,
@@ -1724,7 +1753,9 @@ namespace MobiladorStex
                     "Cargar Perfil", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (confirm != DialogResult.Yes) return;
                 CargarPerfilEnApp(perfil);
-                lblAccionStatus.Text = $"✓ Perfil '{nombre}' cargado";
+                _perfilSeleccionado = nombre;
+                GuardarConfigTema();
+                lblAccionStatus.Text = $"✓ Perfil '{nombre}' cargado y guardado como activo";
                 lblAccionStatus.ForeColor = Color.FromArgb(16, 124, 16);
             };
 
