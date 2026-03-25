@@ -116,23 +116,30 @@ namespace MobiladorStex
                     btnDetectarRes.Enabled = false;
                     lblResStatus.Text = "Detectando...";
                     lblResStatus.ForeColor = Color.FromArgb(255, 167, 38);
-                    var (exito, ancho, alto, mensaje) = await adbManager.DetectarResolucionAsync();
-                    if (exito)
+                    try
                     {
-                        _resolucionAncho = ancho; _resolucionAlto = alto;
-                        lblResAncho.Text = ancho.ToString();
-                        lblResAlto.Text = alto.ToString();
-                        lblResStatus.Text = $"✓ {mensaje}";
-                        lblResStatus.ForeColor = Color.FromArgb(16, 124, 16);
-                        ActualizarEstados(); // habilitar botones ahora que hay resolución válida
-                        MarcarCambiosSinGuardar();
+                        var (exito, ancho, alto, mensaje) = await adbManager.DetectarResolucionAsync();
+                        if (IsDisposed) return;
+                        if (exito)
+                        {
+                            _resolucionAncho = ancho; _resolucionAlto = alto;
+                            lblResAncho.Text = ancho.ToString();
+                            lblResAlto.Text = alto.ToString();
+                            lblResStatus.Text = $"✓ {mensaje}";
+                            lblResStatus.ForeColor = Color.FromArgb(16, 124, 16);
+                            ActualizarEstados();
+                            MarcarCambiosSinGuardar();
+                        }
+                        else
+                        {
+                            lblResStatus.Text = $"⚠ {mensaje}";
+                            lblResStatus.ForeColor = Color.FromArgb(255, 167, 38);
+                        }
                     }
-                    else
+                    finally
                     {
-                        lblResStatus.Text = $"⚠ {mensaje}";
-                        lblResStatus.ForeColor = Color.FromArgb(255, 167, 38);
+                        if (!IsDisposed) btnDetectarRes.Enabled = true;
                     }
-                    btnDetectarRes.Enabled = true;
                 };
 
                 cardResolucion.Controls.AddRange(new Control[]
@@ -451,44 +458,64 @@ namespace MobiladorStex
                     }
                     btnAplicarRes.Enabled = false;
                     lblAdbStatus.Text = "Aplicando...";
-                    var (exito, wmSize, error) = await adbManager.AplicarResolucionAsync(_resolucionAncho, _resolucionAlto, ratio);
-                    if (exito)
+                    bool completadoAplicar = false;
+                    try
                     {
-                        lblAdbStatus.Text = $"✓ Resolución aplicada: {wmSize}";
-                        _resAdbActiva = true;
-                        lblAdbStatus.ForeColor = Color.FromArgb(16, 124, 16);
-                        ActualizarEstados();
-                        lblCropConflicto.Visible = true;
-                        MarcarCambiosSinGuardar();
+                        var (exito, wmSize, error) = await adbManager.AplicarResolucionAsync(_resolucionAncho, _resolucionAlto, ratio);
+                        completadoAplicar = true;
+                        if (IsDisposed) return;
+                        if (exito)
+                        {
+                            lblAdbStatus.Text = $"✓ Resolución aplicada: {wmSize}";
+                            _resAdbActiva = true;
+                            lblAdbStatus.ForeColor = Color.FromArgb(16, 124, 16);
+                            ActualizarEstados();
+                            lblCropConflicto.Visible = true;
+                            MarcarCambiosSinGuardar();
+                        }
+                        else
+                        {
+                            // Detectar error de permisos — dispositivo no compatible
+                            string mensajeError = error.Contains("WRITE_SECURE_SETTINGS") || error.Contains("SecurityException")
+                                ? "⚠ Tu dispositivo no permite cambiar la resolución vía ADB.\nEsta función no es compatible con todos los modelos."
+                                : $"✗ Error: {error}";
+                            lblAdbStatus.Text = mensajeError;
+                            lblAdbStatus.ForeColor = Color.FromArgb(220, 50, 50);
+                            btnAplicarRes.Enabled = true;
+                        }
                     }
-                    else
+                    finally
                     {
-                        // Detectar error de permisos — dispositivo no compatible
-                        string mensajeError = error.Contains("WRITE_SECURE_SETTINGS") || error.Contains("SecurityException")
-                            ? "⚠ Tu dispositivo no permite cambiar la resolución vía ADB.\nEsta función no es compatible con todos los modelos."
-                            : $"✗ Error: {error}";
-                        lblAdbStatus.Text = mensajeError;
-                        lblAdbStatus.ForeColor = Color.FromArgb(220, 50, 50);
-                        btnAplicarRes.Enabled = true;
+                        if (!completadoAplicar && !IsDisposed) btnAplicarRes.Enabled = true;
                     }
                 };
 
                 btnResetearRes.Click += async (s, e) =>
                 {
                     btnResetearRes.Enabled = false;
-                    var (exito, error) = await adbManager.ResetearResolucionAsync();
-                    lblAdbStatus.Text = exito ? "✓ Resolución restaurada" : $"✗ {error}";
-                    lblAdbStatus.ForeColor = exito ? Color.FromArgb(16, 124, 16) : Color.FromArgb(220, 50, 50);
-                    if (exito)
+                    bool completadoReset = false;
+                    try
                     {
-                        _resAdbActiva = false;
-                        ActualizarEstados();
-                        if (btnAplicarRes != null) btnAplicarRes.FillColor = Color.FromArgb(180, 80, 0);
-                        MarcarCambiosSinGuardar();
+                        var (exito, error) = await adbManager.ResetearResolucionAsync();
+                        completadoReset = true;
+                        if (IsDisposed) return;
+                        lblAdbStatus.Text = exito ? "✓ Resolución restaurada" : $"✗ {error}";
+                        lblAdbStatus.ForeColor = exito ? Color.FromArgb(16, 124, 16) : Color.FromArgb(220, 50, 50);
+                        if (exito)
+                        {
+                            _resAdbActiva = false;
+                            ActualizarEstados();
+                            if (btnAplicarRes != null) btnAplicarRes.FillColor = Color.FromArgb(180, 80, 0);
+                            MarcarCambiosSinGuardar();
+                        }
+                        else
+                        {
+                            btnResetearRes.Enabled = true;
+                        }
                     }
-                    else
+                    finally
                     {
-                        btnResetearRes.Enabled = true; // solo re-habilitar si falló
+                        if (!completadoReset && !IsDisposed) btnResetearRes.Enabled = true;
                     }
                 };
 
@@ -611,37 +638,56 @@ namespace MobiladorStex
                     btnAplicarWm.Enabled = false;
                     lblWmSizeStatus.Text = "Aplicando...";
                     lblWmSizeStatus.ForeColor = textSecondary;
-                    var (exito, error) = await adbManager.AplicarWmSizePersonalizadaAsync(valor);
-                    if (exito)
+                    bool completadoWm = false;
+                    try
                     {
-                        _wmSizeActivo = true;
-                        _wmSizeValor = valor;
-                        _fullscreenCrop = "";
-                        _resAdbActiva = false;
-                        // Bloquear crop y ADB
-                        ActualizarEstados();
-                        lblWmSizeStatus.Text = "✓ Aplicado";
-                        lblWmSizeStatus.ForeColor = Color.FromArgb(16, 124, 16);
-                        MarcarCambiosSinGuardar();
+                        var (exito, error) = await adbManager.AplicarWmSizePersonalizadaAsync(valor);
+                        completadoWm = true;
+                        if (IsDisposed) return;
+                        if (exito)
+                        {
+                            _wmSizeActivo = true;
+                            _wmSizeValor = valor;
+                            _fullscreenCrop = "";
+                            _resAdbActiva = false;
+                            ActualizarEstados();
+                            lblWmSizeStatus.Text = "✓ Aplicado";
+                            lblWmSizeStatus.ForeColor = Color.FromArgb(16, 124, 16);
+                            MarcarCambiosSinGuardar();
+                        }
+                        else
+                        {
+                            lblWmSizeStatus.Text = $"✗ {(string.IsNullOrEmpty(error) ? "Sin dispositivo conectado" : error)}";
+                            lblWmSizeStatus.ForeColor = Color.FromArgb(220, 50, 50);
+                            btnAplicarWm.Enabled = true;
+                        }
                     }
-                    else
+                    finally
                     {
-                        lblWmSizeStatus.Text = $"✗ {(string.IsNullOrEmpty(error) ? "Sin dispositivo conectado" : error)}";
-                        lblWmSizeStatus.ForeColor = Color.FromArgb(220, 50, 50);
-                        btnAplicarWm.Enabled = true;
+                        if (!completadoWm && !IsDisposed) btnAplicarWm.Enabled = true;
                     }
                 };
 
                 btnRevertirWm.Click += async (s, e) =>
                 {
                     btnRevertirWm.Enabled = false;
-                    var (exito, error) = await adbManager.ResetearResolucionAsync();
-                    _wmSizeActivo = false;
-                    lblWmSizeStatus.Text = exito ? "✓ Revertido" : "Guardado — sin dispositivo";
-                    lblWmSizeStatus.ForeColor = exito ? textSecondary : Color.FromArgb(255, 167, 38);
-                    ActualizarEstados();
-                    if (btnAplicarRes != null) btnAplicarRes.FillColor = Color.FromArgb(180, 80, 0);
-                    MarcarCambiosSinGuardar();
+                    bool completadoRevertir = false;
+                    try
+                    {
+                        var (exito, error) = await adbManager.ResetearResolucionAsync();
+                        completadoRevertir = true;
+                        if (IsDisposed) return;
+                        _wmSizeActivo = false;
+                        lblWmSizeStatus.Text = exito ? "✓ Revertido" : "Guardado — sin dispositivo";
+                        lblWmSizeStatus.ForeColor = exito ? textSecondary : Color.FromArgb(255, 167, 38);
+                        ActualizarEstados();
+                        if (btnAplicarRes != null) btnAplicarRes.FillColor = Color.FromArgb(180, 80, 0);
+                        MarcarCambiosSinGuardar();
+                    }
+                    finally
+                    {
+                        if (!completadoRevertir && !IsDisposed) ActualizarEstados();
+                    }
                 };
 
                 cardWmSize.Controls.AddRange(new Control[]
@@ -702,10 +748,17 @@ namespace MobiladorStex
                 btnDetectarDpi.Click += async (s, e) =>
                 {
                     btnDetectarDpi.Enabled = false;
-                    var (exito, dpi, _) = await adbManager.DetectarDPIAsync();
-                    if (exito) { _dpi = dpi; numDpi.Value = dpi; lblDpiActual.Text = $"DPI actual: {dpi}"; lblDpiActual.ForeColor = Color.FromArgb(16, 124, 16); MarcarCambiosSinGuardar(); }
-                    else { lblDpiActual.Text = "DPI actual: No detectado"; lblDpiActual.ForeColor = Color.FromArgb(255, 167, 38); }
-                    btnDetectarDpi.Enabled = true;
+                    try
+                    {
+                        var (exito, dpi, _) = await adbManager.DetectarDPIAsync();
+                        if (IsDisposed) return;
+                        if (exito) { _dpi = dpi; numDpi.Value = dpi; lblDpiActual.Text = $"DPI actual: {dpi}"; lblDpiActual.ForeColor = Color.FromArgb(16, 124, 16); MarcarCambiosSinGuardar(); }
+                        else { lblDpiActual.Text = "DPI actual: No detectado"; lblDpiActual.ForeColor = Color.FromArgb(255, 167, 38); }
+                    }
+                    finally
+                    {
+                        if (!IsDisposed) btnDetectarDpi.Enabled = true;
+                    }
                 };
 
                 var btnAplicarDpi = new Guna2Button()
@@ -724,10 +777,17 @@ namespace MobiladorStex
                 {
                     if (MessageBox.Show($"¿Aplicar DPI {_dpi}?\n\nUsa 'Resetear' si algo sale mal.", "⚠ Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes) return;
                     btnAplicarDpi.Enabled = false;
-                    var (exito, mensaje, _) = await adbManager.AplicarDPIAsync(_dpi);
-                    lblDpiStatus.Text = exito ? $"✓ {mensaje}" : $"✗ {mensaje}";
-                    lblDpiStatus.ForeColor = exito ? Color.FromArgb(16, 124, 16) : Color.FromArgb(220, 50, 50);
-                    btnAplicarDpi.Enabled = true;
+                    try
+                    {
+                        var (exito, mensaje, _) = await adbManager.AplicarDPIAsync(_dpi);
+                        if (IsDisposed) return;
+                        lblDpiStatus.Text = exito ? $"✓ {mensaje}" : $"✗ {mensaje}";
+                        lblDpiStatus.ForeColor = exito ? Color.FromArgb(16, 124, 16) : Color.FromArgb(220, 50, 50);
+                    }
+                    finally
+                    {
+                        if (!IsDisposed) btnAplicarDpi.Enabled = true;
+                    }
                 };
 
                 var btnResetearDpi = new Guna2Button()
@@ -747,11 +807,18 @@ namespace MobiladorStex
                 btnResetearDpi.Click += async (s, e) =>
                 {
                     btnResetearDpi.Enabled = false;
-                    var (exito, mensaje, _) = await adbManager.ResetearDPIAsync();
-                    lblDpiStatus.Text = exito ? $"✓ {mensaje}" : $"✗ {mensaje}";
-                    lblDpiStatus.ForeColor = exito ? Color.FromArgb(16, 124, 16) : Color.FromArgb(220, 50, 50);
-                    if (exito) { var (eD, dpi, _2) = await adbManager.DetectarDPIAsync(); if (eD) { _dpi = dpi; numDpi.Value = dpi; lblDpiActual.Text = $"DPI actual: {dpi}"; } }
-                    btnResetearDpi.Enabled = true;
+                    try
+                    {
+                        var (exito, mensaje, _) = await adbManager.ResetearDPIAsync();
+                        if (IsDisposed) return;
+                        lblDpiStatus.Text = exito ? $"✓ {mensaje}" : $"✗ {mensaje}";
+                        lblDpiStatus.ForeColor = exito ? Color.FromArgb(16, 124, 16) : Color.FromArgb(220, 50, 50);
+                        if (exito) { var (eD, dpi, _2) = await adbManager.DetectarDPIAsync(); if (!IsDisposed && eD) { _dpi = dpi; numDpi.Value = dpi; lblDpiActual.Text = $"DPI actual: {dpi}"; } }
+                    }
+                    finally
+                    {
+                        if (!IsDisposed) btnResetearDpi.Enabled = true;
+                    }
                 };
 
                 cardDpi.Controls.AddRange(new Control[]

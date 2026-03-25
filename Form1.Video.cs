@@ -469,8 +469,9 @@ namespace MobiladorStex
                     btnDetectarEncoders.Text = "Detectando...";
                     lblEncoderStatus.Text = "⏳ Consultando encoders...";
                     lblEncoderStatus.ForeColor = Color.FromArgb(255, 167, 38);
-
+                    try {
                     var (exito, nombres, displayLabels, rawOutput) = await scrcpyManager.DetectarEncodersAsync();
+                    if (IsDisposed) return;
 
                     if (exito && nombres.Count > 0)
                     {
@@ -522,8 +523,9 @@ namespace MobiladorStex
                         }
                     }
 
-                    btnDetectarEncoders.Text = "🔄 Detectar";
-                    btnDetectarEncoders.Enabled = true;
+                    } finally {
+                        if (!IsDisposed) { btnDetectarEncoders.Text = "🔄 Detectar"; btnDetectarEncoders.Enabled = true; }
+                    }
                 };
 
                 cmbEncoders.SelectedIndexChanged += (s, e) =>
