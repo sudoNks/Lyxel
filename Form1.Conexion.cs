@@ -103,15 +103,36 @@ namespace MobiladorStex
                 // ── CARD: Modo OTG ────────────────────────────────────────
                 var cardOtg = CreateCard("Modo OTG — Teclado y Mouse", 30, 180, 260);
 
+                bool otgBloqueadoPorWifi = _wifiConectado || _usarWifi;
+
                 var togOtg = new Guna2ToggleSwitch()
                 {
                     Left = cardOtg.Width - 70,
                     Top = 48,
                     Checked = _modoOtg,
+                    Enabled = !otgBloqueadoPorWifi,
                     CheckedState = { FillColor = accentColor },
                     UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
+
+                var lblOtgActivar = new Label()
+                {
+                    Text = "Activar Modo OTG",
+                    Font = new Font("Segoe UI", 10f),
+                    ForeColor = textPrimary,
+                    Left = 24,
+                    Top = 50,
+                    AutoSize = true
+                };
+
+                if (otgBloqueadoPorWifi)
+                {
+                    var ttOtg = new ToolTip();
+                    string ttTexto = "OTG solo funciona por USB. Desactiva WiFi primero.";
+                    ttOtg.SetToolTip(lblOtgActivar, ttTexto);
+                    lblOtgActivar.ForeColor = textSecondary;
+                }
 
                 var txtOtgSerial = new Guna2TextBox()
                 {
@@ -159,20 +180,43 @@ namespace MobiladorStex
 
                 togOtg.CheckedChanged += (s, e) =>
                 {
-                    _modoOtg = togOtg.Checked;
-                    if (_modoOtg && _usarWifi)
+                    if (_cargandoPagina) return;
+
+                    if (togOtg.Checked && (_wifiConectado || _usarWifi))
                     {
-                        _usarWifi = false;
-                        MessageBox.Show("OTG es incompatible con WiFi. WiFi desactivado.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        _cargandoPagina = true;
+                        togOtg.Checked = false;
+                        _cargandoPagina = false;
+                        MessageBox.Show(this,
+                            "El modo OTG solo funciona con cable USB.\nDesactiva WiFi primero.",
+                            "OTG no disponible", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
                     }
+
+                    _modoOtg = togOtg.Checked;
                     if (_modoOtg)
-                        MessageBox.Show("Modo OTG activado.\n\n• Video y audio se desactivarán automáticamente\n• Solo funciona por USB — no compatible con WiFi\n• No requiere depuración USB habilitada\n\nEl teclado y mouse de tu PC controlarán el dispositivo directamente.", "ℹ Modo OTG", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    if (!_cargandoPagina) MarcarCambiosSinGuardar();
+                        MessageBox.Show(this,
+                            "Modo OTG activado.\n\n" +
+                            "• Video y audio se desactivarán automáticamente\n" +
+                            "• Solo funciona por USB — no compatible con WiFi\n" +
+                            "• No requiere depuración USB habilitada\n\n" +
+                            "El teclado y mouse de tu PC controlarán el dispositivo directamente.",
+                            "ℹ Modo OTG", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MarcarCambiosSinGuardar();
                 };
 
                 btnDetectarOtg.Click += async (s, e) =>
                 {
                     btnDetectarOtg.Enabled = false;
+
+                    if (_modoOtg)
+                        MessageBox.Show(this,
+                            "Modo OTG activo — Información importante:\n\n" +
+                            "- Cable USB normal: Activa la depuración USB en tu teléfono para usarlo. OTG funcionará correctamente, recuerda que no habrá video ni audio.\n\n" +
+                            "- Adaptador OTG: No requiere depuración USB. Conecta el adaptador compatible y lanza directamente.\n\n" +
+                            "Si no se detecta tu dispositivo, verifica que el cable o adaptador sea compatible con OTG.",
+                            "ℹ Modo OTG — Detección de dispositivos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
                     txtOtgConsola.Text = "Detectando...";
                     try
                     {
@@ -184,7 +228,9 @@ namespace MobiladorStex
                             if (seriales.Count == 1) { _otgSerial = seriales[0]; txtOtgSerial.Text = seriales[0]; }
                         }
                         else
-                            txtOtgConsola.Text = "❌ No se detectaron dispositivos\n• Verifica USB\n• Depuración USB habilitada";
+                            txtOtgConsola.Text = _modoOtg
+                                ? "❌ No se detectaron dispositivos. Verifica que la depuración USB esté habilitada, o si usas adaptador OTG, confirma que sea compatible."
+                                : "❌ No se detectaron dispositivos\n• Verifica USB\n• Depuración USB habilitada";
                     }
                     finally
                     {
@@ -194,7 +240,7 @@ namespace MobiladorStex
 
                 cardOtg.Controls.AddRange(new Control[]
                 {
-                new Label() { Text = "Activar Modo OTG", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = 24, Top = 50, AutoSize = true },
+                lblOtgActivar,
                 togOtg,
                 new Label() { Text = "Control total del teléfono via teclado/mouse físico.\nNo incluye transmisión de video/audio.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = 24, Top = 72, AutoSize = true },
                 new Label() { Text = "Serial (opcional):", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 116, AutoSize = true },

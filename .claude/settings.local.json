@@ -3,7 +3,8 @@
     "allow": [
       "Bash(wc -l /c/Users/Admin/source/repos/MobiladorStex/*.cs)",
       "Bash(dotnet build:*)",
-      "Bash(\"bin/scrcpy/scrcpy.exe\" --help)"
+      "Bash(\"bin/scrcpy/scrcpy.exe\" --help)",
+      "Bash(grep -v \"^$\")"
     ]
   }
 }

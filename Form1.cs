@@ -830,18 +830,24 @@ namespace MobiladorStex
         {
             try
             {
-                var (hayDispositivo, seriales, _) = await Task.Run(() => adbManager.ListarDispositivos());
-
-                if (!hayDispositivo || seriales.Count == 0)
+                // OTG no requiere ADB — scrcpy detecta el dispositivo por USB físico
+                var seriales = new List<string>();
+                if (!_modoOtg)
                 {
-                    MessageBox.Show(
-                        "No se puede iniciar scrcpy.\n\n" +
-                        "Verifica que:\n" +
-                        "• El teléfono esté conectado por USB o WiFi\n" +
-                        "• La depuración USB esté habilitada\n" +
-                        "• ADB reconozca el dispositivo (botón Reconectar)",
-                        "Sin dispositivo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                    var (hayDispositivo, serialesAdb, _) = await Task.Run(() => adbManager.ListarDispositivos());
+
+                    if (!hayDispositivo || serialesAdb.Count == 0)
+                    {
+                        MessageBox.Show(
+                            "No se puede iniciar scrcpy.\n\n" +
+                            "Verifica que:\n" +
+                            "• El teléfono esté conectado por USB o WiFi\n" +
+                            "• La depuración USB esté habilitada\n" +
+                            "• ADB reconozca el dispositivo (botón Reconectar)",
+                            "Sin dispositivo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    seriales = serialesAdb;
                 }
 
                 if (_modoOtg && string.IsNullOrWhiteSpace(_otgSerial))
@@ -857,6 +863,7 @@ namespace MobiladorStex
                             "OTG — Selecciona dispositivo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
+                    // Si ADB no ve el dispositivo (sin USB debug), scrcpy --otg lo identifica por USB físico
                 }
 
                 var config = ObtenerConfigActual();
@@ -877,6 +884,26 @@ namespace MobiladorStex
                 _scrcpyEstabaActivo = true;
                 ActualizarBotonesScrcpy();
                 this.WindowState = FormWindowState.Minimized;
+
+                // OTG: detectar cierre rápido por fallo de compatibilidad
+                if (_modoOtg)
+                {
+                    _ = Task.Run(async () =>
+                    {
+                        await Task.Delay(3000);
+                        if (!scrcpyManager.EstaCorriendo)
+                            InvokeSeguro(() =>
+                            {
+                                this.Show();
+                                this.WindowState = FormWindowState.Normal;
+                                this.BringToFront();
+                                this.Activate();
+                                MessageBox.Show(this,
+                                    "OTG no pudo iniciarse. Verifica que tu cable soporte modo OTG y que el dispositivo sea compatible con esta función.",
+                                    "OTG — Error de inicio", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            });
+                    });
+                }
 
                 string modo = _modoOtg ? "OTG" : _usarWifi ? "WiFi" : (!_video && !_audio) ? "Control Only" : "USB";
                 string info = $"{_perfilSeleccionado}  |  {_fps} FPS  |  {_bitrate} Mb  |  {modo}";
