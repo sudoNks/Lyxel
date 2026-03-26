@@ -46,7 +46,7 @@ namespace MobiladorStex
         private Guna2Button btnIniciarScrcpy;
         private Guna2Button btnDetenerScrcpy;
         private System.Windows.Forms.Timer _timerScrcpy;
-        private FloatingWindow? _flotante;
+        private Form? _flotante;
 
         // ── VIDEO Y AUDIO — Estado persistente ───────────────────────
         private bool _video = true;
@@ -216,8 +216,21 @@ namespace MobiladorStex
 
             this.FormClosing += (s, e) =>
             {
-                adbManager.DetenerTrackDevices();
+                // 1. Detener scrcpy primero — bloqueante:
+                //    CloseMainWindow → WaitForExit(2s) → Kill() si sigue vivo
+                //    Garantiza que el proceso esté muerto antes de continuar
                 scrcpyManager.Detener();
+
+                // 2. Cerrar ventana flotante DESPUÉS de que scrcpy terminó,
+                //    para que su timer no dispare _onDetener sobre recursos liberados
+                try { _flotante?.Close(); } catch { }
+                _flotante = null;
+
+                adbManager.DetenerTrackDevices();
+
+                // 3. OTG: desconectar serial ADB si tenía USB debug activo
+                if (_modoOtg && !string.IsNullOrEmpty(_otgSerial))
+                    adbManager.DesconectarTodo();
 
                 bool hayDispositivo = _hayDispositivo;
 
@@ -953,35 +966,48 @@ namespace MobiladorStex
 
                 if (_mostrarFlotante)
                 {
-                    _flotante = new FloatingWindow(
-                        scrcpyManager, info,
-                        onDetener: () =>
+                    Action onDetenerFlotante = () =>
+                    {
+                        scrcpyManager.Detener();
+                        if (adbManager.HayDispositivoConectado())
                         {
-                            scrcpyManager.Detener();
-                            // Reset de resolución al detener — igual que al cerrar el launcher
-                            if (adbManager.HayDispositivoConectado())
-                            {
-                                if (_wmSizeActivo) adbManager.ResetearResolucion();
-                                if (_resAdbActiva) adbManager.ResetearResolucion();
-                            }
-                            InvokeSeguro(() =>
-                            {
-                                _flotante = null;
-                                this.WindowState = FormWindowState.Normal;
-                                this.BringToFront();
-                                ActualizarBotonesScrcpy();
-                            });
-                        },
-                        onMostrarApp: () =>
+                            if (_wmSizeActivo) adbManager.ResetearResolucion();
+                            if (_resAdbActiva) adbManager.ResetearResolucion();
+                        }
+                        InvokeSeguro(() =>
                         {
-                            InvokeSeguro(() =>
-                            {
-                                this.WindowState = FormWindowState.Normal;
-                                this.BringToFront();
-                            });
-                        },
-                        printFps: _printFps
-                    );
+                            _flotante = null;
+                            this.WindowState = FormWindowState.Normal;
+                            this.BringToFront();
+                            ActualizarBotonesScrcpy();
+                        });
+                    };
+                    Action onMostrarFlotante = () =>
+                    {
+                        InvokeSeguro(() =>
+                        {
+                            this.WindowState = FormWindowState.Normal;
+                            this.BringToFront();
+                        });
+                    };
+
+                    if (_modoOtg)
+                    {
+                        _flotante = new FloatingWindowOtg(
+                            scrcpyManager,
+                            serial: _otgSerial,
+                            shortcutMod: _shortcutMod,
+                            onDetener: onDetenerFlotante,
+                            onMostrarApp: onMostrarFlotante);
+                    }
+                    else
+                    {
+                        _flotante = new FloatingWindow(
+                            scrcpyManager, info,
+                            onDetener: onDetenerFlotante,
+                            onMostrarApp: onMostrarFlotante,
+                            printFps: _printFps);
+                    }
 
                     this.Resize += MostrarFlotanteAlMinimizar;
 

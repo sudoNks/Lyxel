@@ -243,6 +243,7 @@ namespace MobiladorStex
 
                 _proceso = new Process { StartInfo = startInfo };
                 _proceso.Start();
+                Program.AsignarAlJob(_proceso.Handle);
 
                 // Leer stderr en hilo separado siempre (evita bloqueo del proceso)
                 // Solo dispara el evento si PrintFps está activo
