@@ -35,10 +35,8 @@ namespace MobiladorStex
                     Left = S(24),
                     Top = S(92),
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.FromArgb(55, 40, 75),
-                    ForeColor = textSecondary,
-                    BorderColor = Color.FromArgb(60, 60, 60),
-                    BorderThickness = 1,
+                    FillColor = accentColor,
+                    ForeColor = Color.White,
                     BorderRadius = 4
                 };
 
@@ -50,10 +48,8 @@ namespace MobiladorStex
                     Left = S(194),
                     Top = S(92),
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.FromArgb(55, 40, 75),
-                    ForeColor = textSecondary,
-                    BorderColor = Color.FromArgb(60, 60, 60),
-                    BorderThickness = 1,
+                    FillColor = accentColor,
+                    ForeColor = Color.White,
                     BorderRadius = 4
                 };
 
@@ -147,7 +143,7 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(42, 42, 45),
                     ForeColor = textPrimary,
-                    BorderColor = Color.FromArgb(60, 60, 60),
+                    BorderColor = Color.FromArgb(107, 47, 196),
                     BorderRadius = 4,
                     DropDownStyle = ComboBoxStyle.DropDownList,
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
@@ -186,10 +182,8 @@ namespace MobiladorStex
                     Left = S(24),
                     Top = S(212) + otgTopOffset,
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.FromArgb(55, 40, 75),
-                    ForeColor = textSecondary,
-                    BorderColor = Color.FromArgb(60, 60, 60),
-                    BorderThickness = 1,
+                    FillColor = accentColor,
+                    ForeColor = Color.White,
                     BorderRadius = 4
                 };
 
@@ -380,7 +374,7 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 9.5f),
                     FillColor = Color.FromArgb(42, 42, 45),
                     ForeColor = Color.FromArgb(238, 238, 238),
-                    BorderColor = Color.FromArgb(80, 60, 100),
+                    BorderColor = Color.FromArgb(107, 47, 196),
                     BorderRadius = 4,
                     MaxLength = 5
                 };
@@ -404,7 +398,7 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(42, 42, 45),
                     ForeColor = textPrimary,
-                    BorderColor = Color.FromArgb(60, 60, 60),
+                    BorderColor = Color.FromArgb(107, 47, 196),
                     BorderRadius = 4
                 };
                 txtIp.TextChanged += (s, e) => { _wifiIp = txtIp.Text; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
@@ -497,10 +491,8 @@ namespace MobiladorStex
                     Left = S(24),
                     Top = S(284) + wifiTopOffset,
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.FromArgb(55, 40, 75),
-                    ForeColor = textSecondary,
-                    BorderColor = Color.FromArgb(60, 60, 60),
-                    BorderThickness = 1,
+                    FillColor = accentColor,
+                    ForeColor = Color.White,
                     BorderRadius = 4,
                     Enabled = _puertotcpActivo
                 };

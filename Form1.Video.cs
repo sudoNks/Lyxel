@@ -118,7 +118,7 @@ namespace MobiladorStex
                     Height = S(32),
                     FillColor = Color.FromArgb(42, 42, 45),
                     ForeColor = textPrimary,
-                    BorderColor = Color.FromArgb(60, 60, 60),
+                    BorderColor = Color.FromArgb(107, 47, 196),
                     BorderRadius = 4,
                     DropDownStyle = ComboBoxStyle.DropDownList,
                     Font = new Font("Segoe UI", 9f),
@@ -234,7 +234,7 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(42, 42, 45),
                     ForeColor = textPrimary,
-                    BorderColor = Color.FromArgb(60, 60, 60),
+                    BorderColor = Color.FromArgb(107, 47, 196),
                     BorderRadius = 4,
                     DropDownStyle = ComboBoxStyle.DropDownList
                 };
@@ -348,7 +348,7 @@ namespace MobiladorStex
                     Height = S(34),
                     FillColor = Color.FromArgb(42, 42, 45),
                     ForeColor = textPrimary,
-                    BorderColor = Color.FromArgb(60, 60, 60),
+                    BorderColor = Color.FromArgb(107, 47, 196),
                     BorderRadius = 4,
                     DropDownStyle = ComboBoxStyle.DropDownList,
                     Font = new Font("Segoe UI", 8.5f),

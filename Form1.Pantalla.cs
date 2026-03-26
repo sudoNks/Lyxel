@@ -105,10 +105,8 @@ namespace MobiladorStex
                     Left = S(400),
                     Top = S(58),
                     Font = new Font("Segoe UI", 11f),
-                    FillColor = Color.Transparent,
-                    ForeColor = textSecondary,
-                    BorderColor = Color.FromArgb(60, 60, 60),
-                    BorderThickness = 1,
+                    FillColor = Color.FromArgb(107, 47, 196),
+                    ForeColor = Color.White,
                     BorderRadius = 4
                 };
                 btnDetectarRes.Click += async (s, e) =>
@@ -189,7 +187,7 @@ namespace MobiladorStex
                     Height = S(32),
                     FillColor = Color.FromArgb(42, 42, 45),
                     ForeColor = textPrimary,
-                    BorderColor = Color.FromArgb(60, 60, 60),
+                    BorderColor = Color.FromArgb(107, 47, 196),
                     BorderRadius = 4,
                     DropDownStyle = ComboBoxStyle.DropDownList,
                     Font = new Font("Segoe UI", 9f)
@@ -298,10 +296,8 @@ namespace MobiladorStex
                     Left = S(174),
                     Top = S(190),
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.FromArgb(55, 40, 75),
-                    ForeColor = textSecondary,
-                    BorderColor = Color.FromArgb(60, 60, 60),
-                    BorderThickness = 1,
+                    FillColor = accentColor,
+                    ForeColor = Color.White,
                     BorderRadius = 4
                 };
 
@@ -342,7 +338,7 @@ namespace MobiladorStex
                     lblCropAplicado.Text = "Sin crop aplicado";
                     lblCropAplicado.ForeColor = textSecondary;
                     ActualizarEstados();
-                    if (btnAplicarRes != null) btnAplicarRes.FillColor = Color.FromArgb(180, 80, 0);
+                    if (btnAplicarRes != null) btnAplicarRes.FillColor = accentColor;
                     MarcarCambiosSinGuardar();
                 };
 
@@ -398,13 +394,13 @@ namespace MobiladorStex
 
                 btnAplicarRes = new Guna2Button()
                 {
-                    Text = "⚠ Aplicar Resolución",
+                    Text = "Aplicar Resolución",
                     Width = S(180),
                     Height = S(36),
                     Left = S(24),
                     Top = S(182),
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.FromArgb(180, 80, 0),
+                    FillColor = accentColor,
                     ForeColor = Color.White,
                     BorderRadius = 4
                 };
@@ -417,10 +413,8 @@ namespace MobiladorStex
                     Left = S(214),
                     Top = S(182),
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.FromArgb(55, 40, 75),
-                    ForeColor = textSecondary,
-                    BorderColor = Color.FromArgb(60, 60, 60),
-                    BorderThickness = 1,
+                    FillColor = accentColor,
+                    ForeColor = Color.White,
                     BorderRadius = 4
                 };
 
@@ -505,7 +499,7 @@ namespace MobiladorStex
                         {
                             _resAdbActiva = false;
                             ActualizarEstados();
-                            if (btnAplicarRes != null) btnAplicarRes.FillColor = Color.FromArgb(180, 80, 0);
+                            if (btnAplicarRes != null) btnAplicarRes.FillColor = accentColor;
                             MarcarCambiosSinGuardar();
                         }
                         else
@@ -558,7 +552,7 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 10f),
                     FillColor = Color.FromArgb(42, 42, 45),
                     ForeColor = Color.FromArgb(238, 238, 238),
-                    BorderColor = Color.FromArgb(80, 60, 100),
+                    BorderColor = Color.FromArgb(107, 47, 196),
                     BorderRadius = 4
                 };
                 txtWmSize.TextChanged += (s, e) =>
@@ -598,10 +592,8 @@ namespace MobiladorStex
                     Left = S(134),
                     Top = S(156),
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.FromArgb(55, 40, 75),
-                    ForeColor = textSecondary,
-                    BorderColor = Color.FromArgb(80, 60, 100),
-                    BorderThickness = 1,
+                    FillColor = accentColor,
+                    ForeColor = Color.White,
                     BorderRadius = 4
                 };
 
@@ -681,7 +673,7 @@ namespace MobiladorStex
                         lblWmSizeStatus.Text = exito ? "✓ Revertido" : "Guardado — sin dispositivo";
                         lblWmSizeStatus.ForeColor = exito ? textSecondary : Color.FromArgb(255, 167, 38);
                         ActualizarEstados();
-                        if (btnAplicarRes != null) btnAplicarRes.FillColor = Color.FromArgb(180, 80, 0);
+                        if (btnAplicarRes != null) btnAplicarRes.FillColor = accentColor;
                         MarcarCambiosSinGuardar();
                     }
                     finally
@@ -716,10 +708,8 @@ namespace MobiladorStex
                     Left = S(220),
                     Top = S(54),
                     Font = new Font("Segoe UI", 11f),
-                    FillColor = Color.Transparent,
-                    ForeColor = textSecondary,
-                    BorderColor = Color.FromArgb(60, 60, 60),
-                    BorderThickness = 1,
+                    FillColor = Color.FromArgb(107, 47, 196),
+                    ForeColor = Color.White,
                     BorderRadius = 4
                 };
 
@@ -763,13 +753,13 @@ namespace MobiladorStex
 
                 var btnAplicarDpi = new Guna2Button()
                 {
-                    Text = "⚠ Aplicar DPI",
+                    Text = "Aplicar DPI",
                     Width = S(140),
                     Height = S(36),
                     Left = S(24),
                     Top = S(172),
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.FromArgb(180, 80, 0),
+                    FillColor = accentColor,
                     ForeColor = Color.White,
                     BorderRadius = 4
                 };
@@ -799,10 +789,8 @@ namespace MobiladorStex
                     Left = S(174),
                     Top = S(172),
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.FromArgb(55, 40, 75),
-                    ForeColor = textSecondary,
-                    BorderColor = Color.FromArgb(60, 60, 60),
-                    BorderThickness = 1,
+                    FillColor = accentColor,
+                    ForeColor = Color.White,
                     BorderRadius = 4
                 };
                 btnResetearDpi.Click += async (s, e) =>

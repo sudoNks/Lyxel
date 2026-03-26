@@ -61,7 +61,7 @@ namespace MobiladorStex
         private static readonly Color COLOR_TEXTO = Color.FromArgb(238, 238, 238);
         private static readonly Color COLOR_BOTON = Color.FromArgb(78, 28, 141);
         private static readonly Color COLOR_HOVER = Color.FromArgb(107, 47, 196);
-        private static readonly Color COLOR_BORDE = Color.FromArgb(80, 60, 100);
+        private static readonly Color COLOR_BORDE = Color.FromArgb(107, 47, 196);
 
         public StexNumericUpDown()
         {
