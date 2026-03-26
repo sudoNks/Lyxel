@@ -15,25 +15,25 @@ namespace MobiladorStex
             {
 
                 // ── CARD: Estado ADB ──────────────────────────────────────
-                var cardAdb = CreateCard("Estado de Conexión ADB", 30, 20, 140);
+                var cardAdb = CreateCard("Estado de Conexión ADB", S(30), S(20), S(140));
 
                 var lblAdbEstado = new Label()
                 {
                     Text = "●  Verificando...",
                     Font = new Font("Segoe UI", 10f),
                     ForeColor = textSecondary,
-                    Left = 24,
-                    Top = 58,
+                    Left = S(24),
+                    Top = S(58),
                     AutoSize = true
                 };
 
                 var btnReiniciarAdb = new Guna2Button()
                 {
                     Text = "🔌 Reiniciar ADB",
-                    Width = 160,
-                    Height = 36,
-                    Left = 24,
-                    Top = 92,
+                    Width = S(160),
+                    Height = S(36),
+                    Left = S(24),
+                    Top = S(92),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(55, 40, 75),
                     ForeColor = textSecondary,
@@ -45,10 +45,10 @@ namespace MobiladorStex
                 var btnLimpiarHuerfanas = new Guna2Button()
                 {
                     Text = "🧹 Limpiar WiFi Huérfanas",
-                    Width = 200,
-                    Height = 36,
-                    Left = 194,
-                    Top = 92,
+                    Width = S(200),
+                    Height = S(36),
+                    Left = S(194),
+                    Top = S(92),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(55, 40, 75),
                     ForeColor = textSecondary,
@@ -102,15 +102,15 @@ namespace MobiladorStex
 
                 // ── CARD: Modo OTG ────────────────────────────────────────
                 bool mostrarIndicadorOtg = !string.IsNullOrEmpty(_otgSerial);
-                int otgTopOffset = mostrarIndicadorOtg ? 46 : 0;
-                var cardOtg = CreateCard("Modo OTG — Teclado y Mouse", 30, 180, 260 + otgTopOffset);
+                int otgTopOffset = mostrarIndicadorOtg ? S(46) : 0;
+                var cardOtg = CreateCard("Modo OTG — Teclado y Mouse", S(30), S(180), S(260) + otgTopOffset);
 
                 bool otgBloqueadoPorWifi = _wifiConectado || _usarWifi;
 
                 var togOtg = new Guna2ToggleSwitch()
                 {
-                    Left = cardOtg.Width - 70,
-                    Top = 48 + otgTopOffset,
+                    Left = cardOtg.Width - S(70),
+                    Top = S(48) + otgTopOffset,
                     Checked = _modoOtg,
                     Enabled = !otgBloqueadoPorWifi,
                     CheckedState = { FillColor = accentColor },
@@ -123,8 +123,8 @@ namespace MobiladorStex
                     Text = "Activar Modo OTG",
                     Font = new Font("Segoe UI", 10f),
                     ForeColor = textPrimary,
-                    Left = 24,
-                    Top = 50 + otgTopOffset,
+                    Left = S(24),
+                    Top = S(50) + otgTopOffset,
                     AutoSize = true
                 };
 
@@ -140,10 +140,10 @@ namespace MobiladorStex
 
                 var cmbSerial = new Guna2ComboBox()
                 {
-                    Left = 24,
-                    Top = 118 + otgTopOffset,
-                    Width = cardOtg.Width - 48,
-                    Height = 34,
+                    Left = S(24),
+                    Top = S(118) + otgTopOffset,
+                    Width = cardOtg.Width - S(48),
+                    Height = S(34),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(42, 42, 45),
                     ForeColor = textPrimary,
@@ -167,10 +167,10 @@ namespace MobiladorStex
 
                 var txtOtgConsola = new Label()
                 {
-                    Left = 24,
-                    Top = 162 + otgTopOffset,
-                    Width = cardOtg.Width - 48,
-                    Height = 42,
+                    Left = S(24),
+                    Top = S(162) + otgTopOffset,
+                    Width = cardOtg.Width - S(48),
+                    Height = S(42),
                     BackColor = Color.FromArgb(42, 42, 45),
                     ForeColor = Color.FromArgb(0, 200, 0),
                     Font = new Font("Consolas", 8f),
@@ -181,10 +181,10 @@ namespace MobiladorStex
                 var btnDetectarOtg = new Guna2Button()
                 {
                     Text = "🔄 Detectar Dispositivos",
-                    Width = 200,
-                    Height = 36,
-                    Left = 24,
-                    Top = 212 + otgTopOffset,
+                    Width = S(200),
+                    Height = S(36),
+                    Left = S(24),
+                    Top = S(212) + otgTopOffset,
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(55, 40, 75),
                     ForeColor = textSecondary,
@@ -341,8 +341,8 @@ namespace MobiladorStex
                 {
                 lblOtgActivar,
                 togOtg,
-                new Label() { Text = "Control total del teléfono via teclado/mouse físico.\nNo incluye transmisión de video/audio.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = 24, Top = 72 + otgTopOffset, AutoSize = true },
-                new Label() { Text = "Dispositivo USB:", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 106 + otgTopOffset, AutoSize = true },
+                new Label() { Text = "Control total del teléfono via teclado/mouse físico.\nNo incluye transmisión de video/audio.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = S(24), Top = S(72) + otgTopOffset, AutoSize = true },
+                new Label() { Text = "Dispositivo USB:", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = S(24), Top = S(106) + otgTopOffset, AutoSize = true },
                 cmbSerial, txtOtgConsola, btnDetectarOtg
                 });
                 cardOtg.Controls.AddRange(controlsOtg.ToArray());
@@ -357,13 +357,13 @@ namespace MobiladorStex
                 bool wifiActivoAlCargar = _wifiConectado || _puertotcpActivo;
                 _usarWifi = wifiActivoAlCargar;
                 bool mostrarIndicadorWifi = !string.IsNullOrEmpty(_wifiIp);
-                int wifiTopOffset = mostrarIndicadorWifi ? 46 : 0;
-                var cardWifi = CreateCard("Conexión WiFi (Avanzada)", 30, 468 + otgTopOffset, 392 + wifiTopOffset);
+                int wifiTopOffset = mostrarIndicadorWifi ? S(46) : 0;
+                var cardWifi = CreateCard("Conexión WiFi (Avanzada)", S(30), S(468) + otgTopOffset, S(392) + wifiTopOffset);
 
                 var togWifi = new Guna2ToggleSwitch()
                 {
-                    Left = cardWifi.Width - 70,
-                    Top = 70 + wifiTopOffset,
+                    Left = cardWifi.Width - S(70),
+                    Top = S(70) + wifiTopOffset,
                     Checked = wifiActivoAlCargar,
                     CheckedState = { FillColor = accentColor },
                     UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
@@ -372,10 +372,10 @@ namespace MobiladorStex
 
                 var numPuerto = new Guna2TextBox()
                 {
-                    Left = 120,
-                    Top = 126 + wifiTopOffset,
-                    Width = 110,
-                    Height = 32,
+                    Left = S(120),
+                    Top = S(126) + wifiTopOffset,
+                    Width = S(110),
+                    Height = S(32),
                     Text = _wifiPuerto.ToString(),
                     Font = new Font("Segoe UI", 9.5f),
                     FillColor = Color.FromArgb(42, 42, 45),
@@ -395,10 +395,10 @@ namespace MobiladorStex
 
                 var txtIp = new Guna2TextBox()
                 {
-                    Left = 180,
-                    Top = 166 + wifiTopOffset,
-                    Width = 160,
-                    Height = 34,
+                    Left = S(180),
+                    Top = S(166) + wifiTopOffset,
+                    Width = S(160),
+                    Height = S(34),
                     Text = _wifiIp,
                     PlaceholderText = "192.168.1.X",
                     Font = new Font("Segoe UI", 9f),
@@ -412,10 +412,10 @@ namespace MobiladorStex
                 var btnDetectarIp = new Guna2Button()
                 {
                     Text = "🔄",
-                    Width = 36,
-                    Height = 34,
-                    Left = 350,
-                    Top = 166 + wifiTopOffset,
+                    Width = S(36),
+                    Height = S(34),
+                    Left = S(350),
+                    Top = S(166) + wifiTopOffset,
                     Font = new Font("Segoe UI", 11f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
@@ -454,18 +454,18 @@ namespace MobiladorStex
                     Text = wifiStatusTextoInicial,
                     Font = new Font("Segoe UI", 9f, FontStyle.Bold),
                     ForeColor = wifiStatusColorInicial,
-                    Left = 24,
-                    Top = 210 + wifiTopOffset,
+                    Left = S(24),
+                    Top = S(210) + wifiTopOffset,
                     AutoSize = true
                 };
 
                 var btnHabilitarPuerto = new Guna2Button()
                 {
                     Text = _puertotcpActivo ? "✓ Puerto Habilitado" : "③ Habilitar Puerto",
-                    Width = 170,
-                    Height = 36,
-                    Left = 24,
-                    Top = 238 + wifiTopOffset,
+                    Width = S(170),
+                    Height = S(36),
+                    Left = S(24),
+                    Top = S(238) + wifiTopOffset,
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
@@ -476,10 +476,10 @@ namespace MobiladorStex
                 var btnConectarWifi = new Guna2Button()
                 {
                     Text = _wifiConectado ? "✓ Conectado" : "⑤ Conectar WiFi",
-                    Width = 150,
-                    Height = 36,
-                    Left = 204,
-                    Top = 238 + wifiTopOffset,
+                    Width = S(150),
+                    Height = S(36),
+                    Left = S(204),
+                    Top = S(238) + wifiTopOffset,
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(55, 40, 75),
                     ForeColor = textSecondary,
@@ -492,10 +492,10 @@ namespace MobiladorStex
                 var btnCerrarPuerto = new Guna2Button()
                 {
                     Text = "🔒 Cerrar Puerto",
-                    Width = 160,
-                    Height = 36,
-                    Left = 24,
-                    Top = 284 + wifiTopOffset,
+                    Width = S(160),
+                    Height = S(36),
+                    Left = S(24),
+                    Top = S(284) + wifiTopOffset,
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(55, 40, 75),
                     ForeColor = textSecondary,
@@ -869,15 +869,15 @@ namespace MobiladorStex
                 controlsWifi.AddRange(new Control[]
                 {
                 // Paso 1 — Conectar cable (informativo)
-                new Label() { Text = "① Conecta el cable USB primero", Font = new Font("Segoe UI", 8f), ForeColor = Color.FromArgb(107, 47, 196), Left = 24, Top = 50 + wifiTopOffset, AutoSize = true },
+                new Label() { Text = "① Conecta el cable USB primero", Font = new Font("Segoe UI", 8f), ForeColor = Color.FromArgb(107, 47, 196), Left = S(24), Top = S(50) + wifiTopOffset, AutoSize = true },
                 // Paso 2 — Activar WiFi
-                new Label() { Text = "② Activar WiFi", Font = new Font("Segoe UI", 10f, FontStyle.Bold), ForeColor = textPrimary, Left = 24, Top = 74 + wifiTopOffset, AutoSize = true },
+                new Label() { Text = "② Activar WiFi", Font = new Font("Segoe UI", 10f, FontStyle.Bold), ForeColor = textPrimary, Left = S(24), Top = S(74) + wifiTopOffset, AutoSize = true },
                 togWifi,
-                new Label() { Text = "⚠ Solo usar en redes privadas — No en redes públicas", Font = new Font("Segoe UI", 8f, FontStyle.Bold), ForeColor = Color.FromArgb(255, 167, 38), Left = 24, Top = 102 + wifiTopOffset, AutoSize = true },
-                new Label() { Text = "Puerto:", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 130 + wifiTopOffset, AutoSize = true },
+                new Label() { Text = "⚠ Solo usar en redes privadas — No en redes públicas", Font = new Font("Segoe UI", 8f, FontStyle.Bold), ForeColor = Color.FromArgb(255, 167, 38), Left = S(24), Top = S(102) + wifiTopOffset, AutoSize = true },
+                new Label() { Text = "Puerto:", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = S(24), Top = S(130) + wifiTopOffset, AutoSize = true },
                 numPuerto,
                 // IP — se rellena automáticamente al habilitar el puerto o se introduce a mano
-                new Label() { Text = "IP del dispositivo:", Font = new Font("Segoe UI", 9.5f, FontStyle.Bold), ForeColor = Color.FromArgb(107, 47, 196), Left = 24, Top = 170 + wifiTopOffset, AutoSize = true },
+                new Label() { Text = "IP del dispositivo:", Font = new Font("Segoe UI", 9.5f, FontStyle.Bold), ForeColor = Color.FromArgb(107, 47, 196), Left = S(24), Top = S(170) + wifiTopOffset, AutoSize = true },
                 txtIp, btnDetectarIp,
                 lblWifiStatus, btnHabilitarPuerto, btnConectarWifi, btnCerrarPuerto,
                 new Label() {
@@ -886,7 +886,7 @@ namespace MobiladorStex
                            "  → ¡Listo! Ya puedes quitar el cable  ·  Para volver: Cerrar Puerto",
                     Font = new Font("Segoe UI", 8f),
                     ForeColor = Color.FromArgb(160, 140, 190),
-                    Left = 24, Top = 330 + wifiTopOffset, Width = cardWifi.Width - 48, Height = 52,
+                    Left = S(24), Top = S(330) + wifiTopOffset, Width = cardWifi.Width - S(48), Height = S(52),
                     AutoSize = false,
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                 }

@@ -16,6 +16,8 @@ namespace MobiladorStex
         private System.Windows.Forms.Timer _timerFade;
         private int _duracionMs;
 
+        private int S(int px) => (int)Math.Round(px * this.DeviceDpi / 96.0);
+
         // ── Constructor privado — usar el método estático Mostrar ─────
         private ToastNotification(string mensaje, ToastTipo tipo, int duracionMs)
         {
@@ -80,51 +82,60 @@ namespace MobiladorStex
             this.StartPosition = FormStartPosition.Manual;
             this.Opacity = 0.95;
             this.BackColor = ObtenerColorFondo(tipo);
-            this.Size = new Size(400, 0); // altura dinámica
+            this.Size = new Size(S(400), 0); // altura dinámica
+
+            // Geometría explícita: icono con ancho fijo, mensaje deriva del icono
+            int iconLeft  = S(12);
+            int iconWidth = S(24); // fijo: suficiente para cualquier carácter a cualquier DPI
+            int msgLeft   = iconLeft + iconWidth + S(4);
+            int msgWidth  = this.Width - msgLeft - S(12);
 
             // ── Icono ─────────────────────────────────────────────────
             var lblIcono = new Label()
             {
-                Text = ObtenerIcono(tipo),
-                Font = new Font("Segoe UI", 14f),
+                Text      = ObtenerIcono(tipo),
+                Font      = new Font("Segoe UI", 14f),
                 ForeColor = Color.White,
-                Left = 12,
-                Top = 14,
-                AutoSize = true
+                Left      = iconLeft,
+                Top       = 0,       // llenará la altura total; MiddleCenter centra verticalmente
+                Width     = iconWidth,
+                AutoSize  = false,
+                TextAlign = ContentAlignment.MiddleCenter
             };
 
             // ── Mensaje ───────────────────────────────────────────────
             var lblMensaje = new Label()
             {
-                Text = mensaje,
-                Font = new Font("Segoe UI", 9f),
+                Text      = mensaje,
+                Font      = new Font("Segoe UI", 9f),
                 ForeColor = Color.White,
-                Left = 42,
-                Top = 10,
-                Width = 346,
-                AutoSize = false
+                Left      = msgLeft,
+                Top       = S(10),
+                Width     = msgWidth,
+                AutoSize  = false
             };
 
             // Calcular altura necesaria para el texto
+            // MeasureString devuelve píxeles ya DPI-aware — no aplicar S()
             using var g = Graphics.FromHwnd(IntPtr.Zero);
             var size = g.MeasureString(mensaje, lblMensaje.Font,
-                new SizeF(lblMensaje.Width, 200));
+                new SizeF(msgWidth, 200));
             int alturaTexto = (int)Math.Ceiling(size.Height);
-            lblMensaje.Height = alturaTexto + 4;
+            lblMensaje.Height = alturaTexto + S(4);
 
             // Ajustar altura total del form
-            int alturaTotal = Math.Max(48, alturaTexto + 28);
-            this.Height = alturaTotal;
-            lblIcono.Top = (alturaTotal - 22) / 2;
-            lblMensaje.Top = (alturaTotal - lblMensaje.Height) / 2;
+            int alturaTotal = Math.Max(S(48), alturaTexto + S(28));
+            this.Height      = alturaTotal;
+            lblIcono.Height  = alturaTotal; // MiddleCenter se ocupa del centrado vertical
+            lblMensaje.Top   = (alturaTotal - lblMensaje.Height) / 2;
 
             // ── Barra de color izquierda ──────────────────────────────
             var barraIzq = new Panel()
             {
-                Left = 0,
-                Top = 0,
-                Width = 4,
-                Height = alturaTotal,
+                Left      = 0,
+                Top       = 0,
+                Width     = S(4),
+                Height    = alturaTotal,
                 BackColor = ObtenerColorBarra(tipo)
             };
 
@@ -170,10 +181,12 @@ namespace MobiladorStex
 
         private static void PosicionarSobreOwner(ToastNotification toast, Form owner)
         {
-            // Esquina inferior derecha del owner, con margen
-            int margen = 16;
+            // Esquina inferior derecha del owner, con margen escalado por DPI
+            float scale = owner.DeviceDpi / 96f;
+            int margen = (int)(16 * scale);
+            int margenBottom = (int)(40 * scale);
             int x = owner.Left + owner.Width - toast.Width - margen;
-            int y = owner.Top + owner.Height - toast.Height - margen - 40;
+            int y = owner.Top + owner.Height - toast.Height - margen - margenBottom;
             toast.Location = new Point(x, y);
         }
 

@@ -24,12 +24,12 @@ namespace MobiladorStex
                 Guna2Button? btnCalcularCropRef = null;
 
                 // ── CARD: Fullscreen ──────────────────────────────────────
-                var cardFullscreen = CreateCard("Pantalla Completa", 30, 20, 100);
+                var cardFullscreen = CreateCard("Pantalla Completa", S(30), S(20), S(100));
 
                 var togFullscreen = new Guna2ToggleSwitch()
                 {
-                    Left = cardFullscreen.Width - 70,
-                    Top = 48,
+                    Left = cardFullscreen.Width - S(70),
+                    Top = S(48),
                     Checked = _fullscreen,
                     CheckedState = { FillColor = accentColor },
                     UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
@@ -39,17 +39,17 @@ namespace MobiladorStex
 
                 cardFullscreen.Controls.AddRange(new Control[]
                 {
-                new Label() { Text = "Activar Pantalla Completa", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = 24, Top = 50, AutoSize = true },
-                new Label() { Text = "Usa MOD+F para salir", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = 24, Top = 72, AutoSize = true },
+                new Label() { Text = "Activar Pantalla Completa", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(50), AutoSize = true },
+                new Label() { Text = "Usa MOD+F para salir", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = S(24), Top = S(72), AutoSize = true },
                 togFullscreen
                 });
 
                 // ── CARD: Resolución del Dispositivo ─────────────────────
                 // ── CARD: Window Size ────────────────────────────────────
-                var cardWindowSize = CreateCard("Tamaño de Ventana", 30, 140, 120);
+                var cardWindowSize = CreateCard("Tamaño de Ventana", S(30), S(140), S(120));
 
-                var numWindowW = CreateNumeric(160, 64, 100, 0, 3840, _windowWidth, 10);
-                var numWindowH = CreateNumeric(290, 64, 100, 0, 2160, _windowHeight, 10);
+                var numWindowW = CreateNumeric(S(160), S(64), S(100), 0, 3840, _windowWidth, 10);
+                var numWindowH = CreateNumeric(S(290), S(64), S(100), 0, 2160, _windowHeight, 10);
                 numWindowW.ValueChanged += (s, e) => { _windowWidth = (int)numWindowW.Value; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
                 numWindowW.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true; this.ActiveControl = null; } };
                 numWindowW.Leave += (s, e) => { _windowWidth = (int)numWindowW.Value; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
@@ -59,13 +59,13 @@ namespace MobiladorStex
 
                 cardWindowSize.Controls.AddRange(new Control[]
                 {
-                new Label() { Text = "0 = automático", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = 24, Top = 42, AutoSize = true },
+                new Label() { Text = "0 = automático", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = S(24), Top = S(42), AutoSize = true },
                 numWindowW,
-                new Label() { Text = "×", Font = new Font("Segoe UI", 10f), ForeColor = textSecondary, Left = 270, Top = 68, AutoSize = true },
+                new Label() { Text = "×", Font = new Font("Segoe UI", 10f), ForeColor = textSecondary, Left = S(270), Top = S(68), AutoSize = true },
                 numWindowH
                 });
 
-                var cardResolucion = CreateCard("Resolución Nativa del Dispositivo", 30, 280, 140);
+                var cardResolucion = CreateCard("Resolución Nativa del Dispositivo", S(30), S(280), S(140));
 
                 // Resolución como label solo lectura — se detecta automáticamente
                 var lblResAncho = new Label()
@@ -73,8 +73,8 @@ namespace MobiladorStex
                     Text = _resolucionAncho.ToString(),
                     Font = new Font("Segoe UI", 11f, FontStyle.Bold),
                     ForeColor = Color.FromArgb(107, 47, 196),
-                    Left = 160,
-                    Top = 60,
+                    Left = S(160),
+                    Top = S(60),
                     AutoSize = true
                 };
                 var lblResAlto = new Label()
@@ -82,8 +82,8 @@ namespace MobiladorStex
                     Text = _resolucionAlto.ToString(),
                     Font = new Font("Segoe UI", 11f, FontStyle.Bold),
                     ForeColor = Color.FromArgb(107, 47, 196),
-                    Left = 290,
-                    Top = 60,
+                    Left = S(290),
+                    Top = S(60),
                     AutoSize = true
                 };
 
@@ -92,18 +92,18 @@ namespace MobiladorStex
                     Text = "Presiona 🔄 para detectar automáticamente",
                     Font = new Font("Segoe UI", 8f),
                     ForeColor = textSecondary,
-                    Left = 24,
-                    Top = 100,
+                    Left = S(24),
+                    Top = S(100),
                     AutoSize = true
                 };
 
                 var btnDetectarRes = new Guna2Button()
                 {
                     Text = "🔄",
-                    Width = 36,
-                    Height = 34,
-                    Left = 400,
-                    Top = 58,
+                    Width = S(36),
+                    Height = S(34),
+                    Left = S(400),
+                    Top = S(58),
                     Font = new Font("Segoe UI", 11f),
                     FillColor = Color.Transparent,
                     ForeColor = textSecondary,
@@ -144,14 +144,14 @@ namespace MobiladorStex
 
                 cardResolucion.Controls.AddRange(new Control[]
                 {
-                new Label() { Text = "Ancho:", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 64, AutoSize = true },
+                new Label() { Text = "Ancho:", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = S(24), Top = S(64), AutoSize = true },
                 lblResAncho,
-                new Label() { Text = "×", Font = new Font("Segoe UI", 10f), ForeColor = textSecondary, Left = 270, Top = 66, AutoSize = true },
+                new Label() { Text = "×", Font = new Font("Segoe UI", 10f), ForeColor = textSecondary, Left = S(270), Top = S(66), AutoSize = true },
                 lblResAlto, btnDetectarRes, lblResStatus
                 });
 
                 // ── CARD: Crop ────────────────────────────────────────────
-                var cardCrop = CreateCard("Recorte de Imagen — Opción 1 (Recomendado)", 30, 440, 254);
+                var cardCrop = CreateCard("Recorte de Imagen — Opción 1 (Recomendado)", S(30), S(440), S(254));
 
                 var lblCropDesc = new Label()
                 {
@@ -160,11 +160,11 @@ namespace MobiladorStex
                            "Si el resultado no es satisfactorio, prueba la Opción 3.",
                     Font = new Font("Segoe UI", 8f),
                     ForeColor = textSecondary,
-                    Left = 24,
-                    Top = 48,
-                    Width = cardCrop.Width - 48,
+                    Left = S(24),
+                    Top = S(48),
+                    Width = cardCrop.Width - S(48),
                     AutoSize = false,
-                    Height = 46,
+                    Height = S(46),
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                 };
 
@@ -173,9 +173,9 @@ namespace MobiladorStex
                     Text = "⚠ Resolución ADB activa. Resetea la resolución para usar crop.",
                     Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
                     ForeColor = Color.FromArgb(255, 167, 38),
-                    Left = 24,
-                    Top = 100,
-                    Width = cardCrop.Width - 48,
+                    Left = S(24),
+                    Top = S(100),
+                    Width = cardCrop.Width - S(48),
                     AutoSize = false,
                     Visible = false,
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
@@ -183,10 +183,10 @@ namespace MobiladorStex
 
                 var cmbAspect = new Guna2ComboBox()
                 {
-                    Left = 160,
-                    Top = 118,
-                    Width = 130,
-                    Height = 32,
+                    Left = S(160),
+                    Top = S(118),
+                    Width = S(130),
+                    Height = S(32),
                     FillColor = Color.FromArgb(42, 42, 45),
                     ForeColor = textPrimary,
                     BorderColor = Color.FromArgb(60, 60, 60),
@@ -199,9 +199,9 @@ namespace MobiladorStex
                 cmbAspect.SelectedItem = _aspectRatio;
                 if (cmbAspect.SelectedIndex < 0) cmbAspect.SelectedIndex = 0;
 
-                var numCustomW = CreateNumeric(300, 118, 60, 1, 99, _customRatioW, 1);
-                var lblCustomX = new Label() { Text = ":", Font = new Font("Segoe UI", 10f), ForeColor = textSecondary, Left = 364, Top = 124, AutoSize = true };
-                var numCustomH = CreateNumeric(374, 118, 60, 1, 99, _customRatioH, 1);
+                var numCustomW = CreateNumeric(S(300), S(118), S(60), 1, 99, _customRatioW, 1);
+                var lblCustomX = new Label() { Text = ":", Font = new Font("Segoe UI", 10f), ForeColor = textSecondary, Left = S(364), Top = S(124), AutoSize = true };
+                var numCustomH = CreateNumeric(S(374), S(118), S(60), 1, 99, _customRatioH, 1);
 
                 numCustomW.ValueChanged += (s, e) => { _customRatioW = (int)numCustomW.Value; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
                 numCustomW.KeyDown += (s, e) =>
@@ -241,8 +241,8 @@ namespace MobiladorStex
                          : "Sin crop aplicado",
                     Font = new Font("Segoe UI", 8.5f, FontStyle.Italic),
                     ForeColor = _cropActivo ? Color.FromArgb(16, 124, 16) : textSecondary,
-                    Left = 24,
-                    Top = 166,
+                    Left = S(24),
+                    Top = S(166),
                     AutoSize = true
                 };
 
@@ -279,10 +279,10 @@ namespace MobiladorStex
                 var btnCalcularCrop = new Guna2Button()
                 {
                     Text = "Calcular Crop",
-                    Width = 140,
-                    Height = 36,
-                    Left = 24,
-                    Top = 190,
+                    Width = S(140),
+                    Height = S(36),
+                    Left = S(24),
+                    Top = S(190),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
@@ -293,10 +293,10 @@ namespace MobiladorStex
                 btnRestablecerCrop = new Guna2Button()
                 {
                     Text = "Restablecer",
-                    Width = 110,
-                    Height = 36,
-                    Left = 174,
-                    Top = 190,
+                    Width = S(110),
+                    Height = S(36),
+                    Left = S(174),
+                    Top = S(190),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(55, 40, 75),
                     ForeColor = textSecondary,
@@ -349,13 +349,13 @@ namespace MobiladorStex
                 cardCrop.Controls.AddRange(new Control[]
                 {
                 lblCropDesc, lblCropConflicto,
-                new Label() { Text = "Aspect Ratio:", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 124, AutoSize = true },
+                new Label() { Text = "Aspect Ratio:", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = S(24), Top = S(124), AutoSize = true },
                 cmbAspect, numCustomW, lblCustomX, numCustomH,
                 lblCropAplicado, btnCalcularCrop, btnRestablecerCrop
                 });
 
                 // ── CARD: Resolución ADB ──────────────────────────────────
-                var cardAdb = CreateCard("Modificar Resolución ADB — Opción 2 (Avanzado)", 30, 700, 238);
+                var cardAdb = CreateCard("Modificar Resolución ADB — Opción 2 (Avanzado)", S(30), S(700), S(238));
 
                 var lblAdbAdvertencia = new Label()
                 {
@@ -365,11 +365,11 @@ namespace MobiladorStex
                            "Si experimentas problemas, desactívala — los bordes son preferibles a un mal rendimiento.",
                     Font = new Font("Segoe UI", 8f),
                     ForeColor = Color.FromArgb(120, 120, 120),
-                    Left = 24,
-                    Top = 40,
-                    Width = cardAdb.Width - 48,
+                    Left = S(24),
+                    Top = S(40),
+                    Width = cardAdb.Width - S(48),
                     AutoSize = false,
-                    Height = 54,
+                    Height = S(54),
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                 };
 
@@ -378,9 +378,9 @@ namespace MobiladorStex
                     Text = "⚠ Tienes un crop activo. Restablece el crop para usar esta opción.",
                     Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
                     ForeColor = Color.FromArgb(255, 167, 38),
-                    Left = 24,
-                    Top = 100,
-                    Width = cardAdb.Width - 48,
+                    Left = S(24),
+                    Top = S(100),
+                    Width = cardAdb.Width - S(48),
                     AutoSize = false,
                     Visible = !string.IsNullOrEmpty(_fullscreenCrop),
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
@@ -391,18 +391,18 @@ namespace MobiladorStex
                     Text = "",
                     Font = new Font("Segoe UI", 8f, FontStyle.Italic),
                     ForeColor = textSecondary,
-                    Left = 24,
-                    Top = 152,
+                    Left = S(24),
+                    Top = S(152),
                     AutoSize = true
                 };
 
                 btnAplicarRes = new Guna2Button()
                 {
                     Text = "⚠ Aplicar Resolución",
-                    Width = 180,
-                    Height = 36,
-                    Left = 24,
-                    Top = 182,
+                    Width = S(180),
+                    Height = S(36),
+                    Left = S(24),
+                    Top = S(182),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(180, 80, 0),
                     ForeColor = Color.White,
@@ -412,10 +412,10 @@ namespace MobiladorStex
                 btnResetearRes = new Guna2Button()
                 {
                     Text = "Resetear",
-                    Width = 100,
-                    Height = 36,
-                    Left = 214,
-                    Top = 182,
+                    Width = S(100),
+                    Height = S(36),
+                    Left = S(214),
+                    Top = S(182),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(55, 40, 75),
                     ForeColor = textSecondary,
@@ -523,13 +523,13 @@ namespace MobiladorStex
                 {
                 lblAdbAdvertencia,
                 lblAdbConflicto,
-                new Label() { Text = "Modifica la resolución física del dispositivo via ADB.\n⚠ Xiaomi/MIUI y Oppo/ColorOS pueden bloquear este comando.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = 24, Top = 116, AutoSize = true },
+                new Label() { Text = "Modifica la resolución física del dispositivo via ADB.\n⚠ Xiaomi/MIUI y Oppo/ColorOS pueden bloquear este comando.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = S(24), Top = S(116), AutoSize = true },
                 lblAdbStatus, btnAplicarRes, btnResetearRes
                 });
 
 
                 // ── CARD: Resolución Personalizada wm size ────────────────
-                var cardWmSize = CreateCard("Resolución Personalizada — Opción 3 (Recomendado)", 30, 960, 218);
+                var cardWmSize = CreateCard("Resolución Personalizada — Opción 3 (Recomendado)", S(30), S(960), S(218));
 
                 var lblWmSizeInfo = new Label()
                 {
@@ -539,20 +539,20 @@ namespace MobiladorStex
                            "Si experimentas problemas, usa Revertir. Se restaura automáticamente al detener la app.",
                     Font = new Font("Segoe UI", 8f),
                     ForeColor = textSecondary,
-                    Left = 24,
-                    Top = 40,
-                    Width = cardWmSize.Width - 48,
+                    Left = S(24),
+                    Top = S(40),
+                    Width = cardWmSize.Width - S(48),
                     AutoSize = false,
-                    Height = 54,
+                    Height = S(54),
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                 };
 
                 var txtWmSize = new Guna2TextBox()
                 {
-                    Left = 24,
-                    Top = 108,
-                    Width = 180,
-                    Height = 34,
+                    Left = S(24),
+                    Top = S(108),
+                    Width = S(180),
+                    Height = S(34),
                     Text = _wmSizeValor,
                     PlaceholderText = "ej. 1280x720",
                     Font = new Font("Segoe UI", 10f),
@@ -572,18 +572,18 @@ namespace MobiladorStex
                     Text = _wmSizeActivo ? "✓ Activo" : "",
                     Font = new Font("Segoe UI", 8f, FontStyle.Italic),
                     ForeColor = _wmSizeActivo ? Color.FromArgb(16, 124, 16) : textSecondary,
-                    Left = 214,
-                    Top = 98,
+                    Left = S(214),
+                    Top = S(98),
                     AutoSize = true
                 };
 
                 btnAplicarWm = new Guna2Button()
                 {
                     Text = "Aplicar",
-                    Width = 100,
-                    Height = 34,
-                    Left = 24,
-                    Top = 156,
+                    Width = S(100),
+                    Height = S(34),
+                    Left = S(24),
+                    Top = S(156),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
@@ -593,10 +593,10 @@ namespace MobiladorStex
                 btnRevertirWm = new Guna2Button()
                 {
                     Text = "Revertir",
-                    Width = 100,
-                    Height = 34,
-                    Left = 134,
-                    Top = 156,
+                    Width = S(100),
+                    Height = S(34),
+                    Left = S(134),
+                    Top = S(156),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(55, 40, 75),
                     ForeColor = textSecondary,
@@ -696,25 +696,25 @@ namespace MobiladorStex
                 });
 
                 // ── CARD: DPI ─────────────────────────────────────────────
-                var cardDpi = CreateCard("Control de DPI — Opción 4 (Avanzado)", 30, 1198, 220);
+                var cardDpi = CreateCard("Control de DPI — Opción 4 (Avanzado)", S(30), S(1198), S(220));
 
                 var lblDpiActual = new Label()
                 {
                     Text = "DPI actual: Detectando...",
                     Font = new Font("Segoe UI", 9f, FontStyle.Bold),
                     ForeColor = textSecondary,
-                    Left = 24,
-                    Top = 56,
+                    Left = S(24),
+                    Top = S(56),
                     AutoSize = true
                 };
 
                 var btnDetectarDpi = new Guna2Button()
                 {
                     Text = "🔄",
-                    Width = 36,
-                    Height = 32,
-                    Left = 220,
-                    Top = 54,
+                    Width = S(36),
+                    Height = S(32),
+                    Left = S(220),
+                    Top = S(54),
                     Font = new Font("Segoe UI", 11f),
                     FillColor = Color.Transparent,
                     ForeColor = textSecondary,
@@ -723,7 +723,7 @@ namespace MobiladorStex
                     BorderRadius = 4
                 };
 
-                var numDpi = CreateNumeric(160, 100, 100, 120, 800, _dpi, 10);
+                var numDpi = CreateNumeric(S(160), S(100), S(100), 120, 800, _dpi, 10);
                 numDpi.ValueChanged += (s, e) => { _dpi = (int)numDpi.Value; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
                 numDpi.KeyDown += (s, e) =>
                 {
@@ -740,8 +740,8 @@ namespace MobiladorStex
                     Text = "",
                     Font = new Font("Segoe UI", 8f, FontStyle.Italic),
                     ForeColor = textSecondary,
-                    Left = 24,
-                    Top = 148,
+                    Left = S(24),
+                    Top = S(148),
                     AutoSize = true
                 };
 
@@ -764,10 +764,10 @@ namespace MobiladorStex
                 var btnAplicarDpi = new Guna2Button()
                 {
                     Text = "⚠ Aplicar DPI",
-                    Width = 140,
-                    Height = 36,
-                    Left = 24,
-                    Top = 172,
+                    Width = S(140),
+                    Height = S(36),
+                    Left = S(24),
+                    Top = S(172),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(180, 80, 0),
                     ForeColor = Color.White,
@@ -794,10 +794,10 @@ namespace MobiladorStex
                 var btnResetearDpi = new Guna2Button()
                 {
                     Text = "Resetear DPI",
-                    Width = 120,
-                    Height = 36,
-                    Left = 174,
-                    Top = 172,
+                    Width = S(120),
+                    Height = S(36),
+                    Left = S(174),
+                    Top = S(172),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(55, 40, 75),
                     ForeColor = textSecondary,
@@ -825,7 +825,7 @@ namespace MobiladorStex
                 cardDpi.Controls.AddRange(new Control[]
                 {
                 lblDpiActual, btnDetectarDpi,
-                new Label() { Text = "Nuevo DPI (120-800):", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 106, AutoSize = true },
+                new Label() { Text = "Nuevo DPI (120-800):", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = S(24), Top = S(106), AutoSize = true },
                 numDpi, lblDpiStatus, btnAplicarDpi, btnResetearDpi
                 });
 
@@ -835,8 +835,8 @@ namespace MobiladorStex
                         Text = $"Último DPI aplicado: {_ultimoDpiAplicado}",
                         Font = new Font("Segoe UI", 7.5f, FontStyle.Italic),
                         ForeColor = Color.FromArgb(107, 47, 196),
-                        Left = 24,
-                        Top = 88,
+                        Left = S(24),
+                        Top = S(88),
                         AutoSize = true
                     });
 

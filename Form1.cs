@@ -128,6 +128,8 @@ namespace MobiladorStex
         private int paginaActiva = 0;
         private string tituloPaginaActiva = "Inicio";
 
+        private int S(int px) => (int)Math.Round(px * this.DeviceDpi / 96.0);
+
         public Form1()
         {
             InitializeComponent();
@@ -436,20 +438,20 @@ namespace MobiladorStex
         private void BuildUI()
         {
             this.Text = "MobiladorSteX";
-            this.Size = new Size(1100, 720);
+            this.Size = new Size(S(1100), S(720));
             this.BackColor = bgPrimary;
             this.ForeColor = textPrimary;
             this.Font = new Font("Segoe UI", 9f);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.Sizable;
-            this.MinimumSize = new Size(900, 600);
+            this.MinimumSize = new Size(S(900), S(600));
 
             // ── SIDEBAR ──────────────────────────────────────────────
             sidePanel = new Panel()
             {
                 Left = 0,
                 Top = 0,
-                Width = SIDEBAR_WIDTH,
+                Width = S(SIDEBAR_WIDTH),
                 Height = this.ClientSize.Height,
                 BackColor = bgSecondary,
                 Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left
@@ -460,8 +462,8 @@ namespace MobiladorStex
                 Text = "MobiladorSteX",
                 Font = new Font("Segoe UI", 14f, FontStyle.Bold),
                 ForeColor = textPrimary,
-                Left = 16,
-                Top = 20,
+                Left = S(16),
+                Top = S(20),
                 AutoSize = true
             };
 
@@ -470,8 +472,8 @@ namespace MobiladorStex
                 Text = ObtenerVersionApp(),
                 Font = new Font("Segoe UI", 9f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(147, 90, 220),
-                Left = 18,
-                Top = 48,
+                Left = S(18),
+                Top = S(48),
                 AutoSize = true
             };
 
@@ -491,10 +493,10 @@ namespace MobiladorStex
             btnToggle = new Guna2Button()
             {
                 Text = "☰",
-                Width = 40,
-                Height = 40,
-                Left = 8,
-                Top = this.ClientSize.Height - 170,
+                Width = S(40),
+                Height = S(40),
+                Left = S(8),
+                Top = this.ClientSize.Height - S(170),
                 Font = new Font("Segoe UI", 13f),
                 FillColor = Color.Transparent,
                 ForeColor = Color.FromArgb(150, 150, 150),
@@ -509,10 +511,10 @@ namespace MobiladorStex
             btnGuardadoRapido = new Guna2Button()
             {
                 Text = "💾 Guardar",
-                Width = 200,
-                Height = 32,
-                Left = 10,
-                Top = this.ClientSize.Height - 210,
+                Width = S(200),
+                Height = S(32),
+                Left = S(10),
+                Top = this.ClientSize.Height - S(210),
                 Font = new Font("Segoe UI", 9f, FontStyle.Bold),
                 FillColor = accentColor,
                 ForeColor = Color.White,
@@ -533,9 +535,9 @@ namespace MobiladorStex
             // ── MAIN PANEL ───────────────────────────────────────────
             mainPanel = new Panel()
             {
-                Left = SIDEBAR_WIDTH,
+                Left = S(SIDEBAR_WIDTH),
                 Top = 0,
-                Width = this.ClientSize.Width - SIDEBAR_WIDTH,
+                Width = this.ClientSize.Width - S(SIDEBAR_WIDTH),
                 Height = this.ClientSize.Height,
                 BackColor = bgPrimary,
                 AutoScroll = true,
@@ -547,7 +549,7 @@ namespace MobiladorStex
                 Left = 0,
                 Top = 0,
                 Width = mainPanel.Width,
-                Height = 70,
+                Height = S(70),
                 BackColor = bgPrimary,
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
             };
@@ -557,8 +559,8 @@ namespace MobiladorStex
                 Text = tituloPaginaActiva,
                 Font = new Font("Segoe UI", 24f, FontStyle.Bold),
                 ForeColor = textPrimary,
-                Left = 30,
-                Top = 6,
+                Left = S(30),
+                Top = S(6),
                 AutoSize = true
             };
 
@@ -568,8 +570,8 @@ namespace MobiladorStex
                 Name = "lblAvisoHeader",
                 Font = new Font("Segoe UI", 9f, FontStyle.Italic),
                 ForeColor = Color.FromArgb(255, 167, 38),
-                Left = 30,
-                Top = 52,
+                Left = S(30),
+                Top = S(52),
                 AutoSize = true
             };
             headerPanel.Controls.AddRange(new Control[] { lblTituloPagina, lblAviso });
@@ -577,9 +579,9 @@ namespace MobiladorStex
             contentPanel = new Panel()
             {
                 Left = 0,
-                Top = 70,
-                Width = mainPanel.Width - 20,
-                Height = mainPanel.Height - 70,
+                Top = S(70),
+                Width = mainPanel.Width - S(20),
+                Height = mainPanel.Height - S(70),
                 BackColor = bgPrimary,
                 AutoScroll = true,
                 Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
@@ -634,7 +636,7 @@ namespace MobiladorStex
                 btnToggle.Enabled = false;
 
                 sidebarExpanded = !sidebarExpanded;
-                int targetWidth = sidebarExpanded ? SIDEBAR_WIDTH : SIDEBAR_COLLAPSED;
+                int targetWidth = sidebarExpanded ? S(SIDEBAR_WIDTH) : S(SIDEBAR_COLLAPSED);
 
                 sidePanel.Width = targetWidth;
                 mainPanel.Left = targetWidth;
@@ -645,19 +647,19 @@ namespace MobiladorStex
                 if (sidebarExpanded)
                 {
                     lblVersion.Text = ObtenerVersionApp();
-                    lblVersion.Left = 18;
+                    lblVersion.Left = S(18);
                 }
                 else
                 {
                     lblVersion.Text = "v" + (System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.2.0");
-                    lblVersion.Left = 4;
+                    lblVersion.Left = S(4);
                 }
 
                 // Botón guardado rápido: ajustar tamaño igual que navButtons
                 if (btnGuardadoRapido != null && btnGuardadoRapido.Visible)
                 {
-                    btnGuardadoRapido.Width = sidebarExpanded ? 200 : 40;
-                    btnGuardadoRapido.Left = sidebarExpanded ? 10 : 8;
+                    btnGuardadoRapido.Width = sidebarExpanded ? S(200) : S(40);
+                    btnGuardadoRapido.Left = sidebarExpanded ? S(10) : S(8);
                     btnGuardadoRapido.Text = sidebarExpanded ? "💾 Guardar" : "💾";
                 }
 
@@ -670,8 +672,8 @@ namespace MobiladorStex
                         string full = btn.Tag?.ToString() ?? "";
                         btn.Text = full.Length >= 2 ? full.Substring(0, 2) : "●";
                     }
-                    btn.Width = sidebarExpanded ? 200 : 40;
-                    btn.Left = sidebarExpanded ? 10 : 8;
+                    btn.Width = sidebarExpanded ? S(200) : S(40);
+                    btn.Left = sidebarExpanded ? S(10) : S(8);
                 }
 
                 await Task.Delay(300);
@@ -708,8 +710,8 @@ namespace MobiladorStex
                 {
                     if (btnGuardadoRapido == null) return;
                     btnGuardadoRapido.Visible = true;
-                    btnGuardadoRapido.Width = sidebarExpanded ? 200 : 40;
-                    btnGuardadoRapido.Left = sidebarExpanded ? 10 : 8;
+                    btnGuardadoRapido.Width = sidebarExpanded ? S(200) : S(40);
+                    btnGuardadoRapido.Left = sidebarExpanded ? S(10) : S(8);
                     btnGuardadoRapido.Text = sidebarExpanded ? "💾 Guardar" : "💾";
                 });
             }
@@ -772,15 +774,15 @@ namespace MobiladorStex
 
         private void LoadInicioPage()
         {
-            var cardEstado = CreateCard("Estado del Dispositivo", 30, 20, 160);
+            var cardEstado = CreateCard("Estado del Dispositivo", S(30), S(20), S(160));
 
             lblEstadoIndicador = new Label()
             {
                 Text = "●",
                 Font = new Font("Segoe UI", 12f),
                 ForeColor = Color.FromArgb(120, 120, 120), // gris mientras verifica
-                Left = 24,
-                Top = 62,
+                Left = S(24),
+                Top = S(62),
                 AutoSize = true
             };
 
@@ -789,18 +791,18 @@ namespace MobiladorStex
                 Text = "Verificando...",
                 Font = new Font("Segoe UI", 10f),
                 ForeColor = textSecondary,
-                Left = 44,
-                Top = 64,
+                Left = S(44),
+                Top = S(64),
                 AutoSize = true
             };
 
             var btnReconectar = new Guna2Button()
             {
                 Text = "RECONECTAR ADB",
-                Width = 180,
-                Height = 36,
-                Left = 24,
-                Top = 100,
+                Width = S(180),
+                Height = S(36),
+                Left = S(24),
+                Top = S(100),
                 Font = new Font("Segoe UI", 9f),
                 FillColor = Color.FromArgb(55, 40, 75),
                 ForeColor = textSecondary,
@@ -820,15 +822,15 @@ namespace MobiladorStex
 
             cardEstado.Controls.AddRange(new Control[] { lblEstadoIndicador, lblEstadoTexto, btnReconectar });
 
-            var cardRapido = CreateCard("Acceso Rápido", 30, 200, 180);
+            var cardRapido = CreateCard("Acceso Rápido", S(30), S(200), S(180));
 
             btnIniciarScrcpy = new Guna2Button()
             {
                 Text = "Detectando dispositivo...",
-                Width = cardRapido.Width - 48,
-                Height = 48,
-                Left = 24,
-                Top = 56,
+                Width = cardRapido.Width - S(48),
+                Height = S(48),
+                Left = S(24),
+                Top = S(56),
                 Font = new Font("Segoe UI", 11f, FontStyle.Bold),
                 FillColor = Color.FromArgb(60, 45, 80),
                 ForeColor = Color.FromArgb(150, 150, 150),
@@ -841,10 +843,10 @@ namespace MobiladorStex
             btnDetenerScrcpy = new Guna2Button()
             {
                 Text = "⏹  DETENER SCRCPY",
-                Width = cardRapido.Width - 48,
-                Height = 36,
-                Left = 24,
-                Top = 114,
+                Width = cardRapido.Width - S(48),
+                Height = S(36),
+                Left = S(24),
+                Top = S(114),
                 Font = new Font("Segoe UI", 9.5f),
                 FillColor = Color.FromArgb(55, 40, 75),
                 ForeColor = textSecondary,
@@ -861,8 +863,8 @@ namespace MobiladorStex
                 Text = ObtenerTextoUltimoPerfil(),
                 Font = new Font("Segoe UI", 8.5f),
                 ForeColor = textSecondary,
-                Left = 24,
-                Top = 158,
+                Left = S(24),
+                Top = S(158),
                 AutoSize = true
             };
 
@@ -1215,10 +1217,10 @@ namespace MobiladorStex
             {
                 Text = text,
                 Tag = text,
-                Width = 200,
-                Height = 44,
-                Left = 10,
-                Top = 90 + (index * 48),
+                Width = S(200),
+                Height = S(44),
+                Left = S(10),
+                Top = S(90) + (index * S(48)),
                 Font = new Font("Segoe UI", 9.5f),
                 FillColor = Color.Transparent,
                 ForeColor = textSecondary,
@@ -1246,7 +1248,7 @@ namespace MobiladorStex
             {
                 Left = left,
                 Top = top,
-                Width = contentPanel.Width - 60,
+                Width = contentPanel.Width - S(60),
                 Height = height,
                 BackColor = bgCard,
                 BorderStyle = BorderStyle.None,
@@ -1257,8 +1259,8 @@ namespace MobiladorStex
                 Text = title,
                 Font = new Font("Segoe UI", 11f, FontStyle.Bold),
                 ForeColor = textPrimary,
-                Left = 24,
-                Top = 20,
+                Left = S(24),
+                Top = S(20),
                 AutoSize = true
             });
             return card;
@@ -1272,7 +1274,7 @@ namespace MobiladorStex
                 Left = left,
                 Top = top,
                 Width = width,
-                Height = 34,
+                Height = S(34),
                 Minimum = min,
                 Maximum = max,
                 Value = value,
@@ -1529,9 +1531,9 @@ namespace MobiladorStex
         {
             var panelIzq = new Panel()
             {
-                Left = 30,
-                Top = 20,
-                Width = 240,
+                Left = S(30),
+                Top = S(20),
+                Width = S(240),
                 Height = contentPanel.Height - 40,
                 BackColor = bgCard,
                 Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left
@@ -1539,9 +1541,9 @@ namespace MobiladorStex
 
             var panelDer = new Panel()
             {
-                Left = 286,
-                Top = 20,
-                Width = contentPanel.Width - 316,
+                Left = S(286),
+                Top = S(20),
+                Width = contentPanel.Width - S(316),
                 Height = contentPanel.Height - 40,
                 BackColor = bgCard,
                 Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
@@ -1553,23 +1555,23 @@ namespace MobiladorStex
                 Text = "Perfiles Guardados",
                 Font = new Font("Segoe UI", 11f, FontStyle.Bold),
                 ForeColor = textPrimary,
-                Left = 16,
-                Top = 16,
+                Left = S(16),
+                Top = S(16),
                 AutoSize = true
             });
 
             _lstPerfiles = new ListBox()
             {
-                Left = 12,
-                Top = 48,
-                Width = panelIzq.Width - 24,
-                Height = panelIzq.Height - 140,
+                Left = S(12),
+                Top = S(48),
+                Width = panelIzq.Width - S(24),
+                Height = panelIzq.Height - S(140),
                 BackColor = Color.FromArgb(33, 32, 35),
                 ForeColor = textPrimary,
                 BorderStyle = BorderStyle.None,
                 Font = new Font("Segoe UI", 9.5f),
                 DrawMode = DrawMode.OwnerDrawFixed,
-                ItemHeight = 28,
+                ItemHeight = S(28),
                 Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
             };
             _lstPerfiles.DrawItem += (s, e) =>
@@ -1591,10 +1593,10 @@ namespace MobiladorStex
             var btnNuevoPerfil = new Guna2Button()
             {
                 Text = "＋ Nuevo Perfil",
-                Left = 12,
-                Top = panelIzq.Height - 84,
-                Width = panelIzq.Width - 24,
-                Height = 36,
+                Left = S(12),
+                Top = panelIzq.Height - S(84),
+                Width = panelIzq.Width - S(24),
+                Height = S(36),
                 Font = new Font("Segoe UI", 9f),
                 FillColor = accentColor,
                 ForeColor = Color.White,
@@ -1605,10 +1607,10 @@ namespace MobiladorStex
             var btnImportar = new Guna2Button()
             {
                 Text = "📂 Importar",
-                Left = 12,
-                Top = panelIzq.Height - 42,
-                Width = (panelIzq.Width - 30) / 2,
-                Height = 32,
+                Left = S(12),
+                Top = panelIzq.Height - S(42),
+                Width = (panelIzq.Width - S(30)) / 2,
+                Height = S(32),
                 Font = new Font("Segoe UI", 8.5f),
                 FillColor = Color.FromArgb(55, 40, 75),
                 ForeColor = textSecondary,
@@ -1621,10 +1623,10 @@ namespace MobiladorStex
             var btnExportarLista = new Guna2Button()
             {
                 Text = "💾 Exportar",
-                Left = 18 + (panelIzq.Width - 30) / 2,
-                Top = panelIzq.Height - 42,
-                Width = (panelIzq.Width - 30) / 2,
-                Height = 32,
+                Left = S(18) + (panelIzq.Width - S(30)) / 2,
+                Top = panelIzq.Height - S(42),
+                Width = (panelIzq.Width - S(30)) / 2,
+                Height = S(32),
                 Font = new Font("Segoe UI", 8.5f),
                 FillColor = Color.FromArgb(55, 40, 75),
                 ForeColor = textSecondary,
@@ -1698,7 +1700,7 @@ namespace MobiladorStex
                 Font = new Font("Segoe UI", 13f),
                 ForeColor = textSecondary,
                 AutoSize = true,
-                Left = 40,
+                Left = S(40),
                 Top = _panelDetalle.Height / 2 - 30,
                 Anchor = AnchorStyles.None
             });
@@ -1717,17 +1719,17 @@ namespace MobiladorStex
                 Text = "Nombre del Perfil",
                 Font = new Font("Segoe UI", 11f, FontStyle.Bold),
                 ForeColor = textPrimary,
-                Left = 24,
-                Top = 20,
+                Left = S(24),
+                Top = S(20),
                 AutoSize = true
             });
 
             var txtNombre = new Guna2TextBox()
             {
-                Left = 24,
-                Top = 48,
-                Width = 300,
-                Height = 36,
+                Left = S(24),
+                Top = S(48),
+                Width = S(300),
+                Height = S(36),
                 Text = nombre,
                 Font = new Font("Segoe UI", 10f),
                 FillColor = Color.FromArgb(42, 42, 45),
@@ -1741,8 +1743,8 @@ namespace MobiladorStex
                 Text = "",
                 Font = new Font("Segoe UI", 8f),
                 ForeColor = Color.FromArgb(220, 50, 50),
-                Left = 24,
-                Top = 88,
+                Left = S(24),
+                Top = S(88),
                 AutoSize = true
             };
 
@@ -1751,8 +1753,8 @@ namespace MobiladorStex
                 Text = "Valores del Perfil",
                 Font = new Font("Segoe UI", 10f, FontStyle.Bold),
                 ForeColor = textPrimary,
-                Left = 24,
-                Top = 106,
+                Left = S(24),
+                Top = S(106),
                 AutoSize = true
             });
 
@@ -1761,10 +1763,10 @@ namespace MobiladorStex
                 Text = FormatearValoresPerfil(perfil),
                 Font = new Font("Segoe UI", 8.5f),
                 ForeColor = textSecondary,
-                Left = 24,
-                Top = 128,
-                Width = _panelDetalle.Width - 48,
-                Height = 160,
+                Left = S(24),
+                Top = S(128),
+                Width = _panelDetalle.Width - S(48),
+                Height = S(160),
                 AutoSize = false,
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
             };
@@ -1772,10 +1774,10 @@ namespace MobiladorStex
             var btnCargar = new Guna2Button()
             {
                 Text = "▶ Cargar en App",
-                Left = 24,
-                Top = 300,
-                Width = 160,
-                Height = 38,
+                Left = S(24),
+                Top = S(300),
+                Width = S(160),
+                Height = S(38),
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
                 FillColor = accentColor,
                 ForeColor = Color.White,
@@ -1785,10 +1787,10 @@ namespace MobiladorStex
             var btnGuardar = new Guna2Button()
             {
                 Text = "💾 Guardar Cambios",
-                Left = 194,
-                Top = 300,
-                Width = 170,
-                Height = 38,
+                Left = S(194),
+                Top = S(300),
+                Width = S(170),
+                Height = S(38),
                 Font = new Font("Segoe UI", 9.5f),
                 FillColor = Color.FromArgb(55, 40, 75),
                 ForeColor = textSecondary,
@@ -1800,10 +1802,10 @@ namespace MobiladorStex
             var btnEliminar = new Guna2Button()
             {
                 Text = "🗑 Eliminar",
-                Left = 24,
-                Top = 348,
-                Width = 130,
-                Height = 34,
+                Left = S(24),
+                Top = S(348),
+                Width = S(130),
+                Height = S(34),
                 Font = new Font("Segoe UI", 9f),
                 FillColor = Color.FromArgb(180, 40, 40),
                 ForeColor = Color.White,
@@ -1813,10 +1815,10 @@ namespace MobiladorStex
             var btnExportar = new Guna2Button()
             {
                 Text = "📤 Exportar este Perfil",
-                Left = 164,
-                Top = 348,
-                Width = 190,
-                Height = 34,
+                Left = S(164),
+                Top = S(348),
+                Width = S(190),
+                Height = S(34),
                 Font = new Font("Segoe UI", 9f),
                 FillColor = Color.FromArgb(55, 40, 75),
                 ForeColor = textSecondary,
@@ -1830,8 +1832,8 @@ namespace MobiladorStex
                 Text = "",
                 Font = new Font("Segoe UI", 8.5f, FontStyle.Italic),
                 ForeColor = Color.FromArgb(16, 124, 16),
-                Left = 24,
-                Top = 392,
+                Left = S(24),
+                Top = S(392),
                 AutoSize = true
             };
 
@@ -2037,14 +2039,14 @@ namespace MobiladorStex
 
         private void LoadAcercaPage()
         {
-            var cardMain = CreateCard("MobiladorSteX × Morrigan", 30, 20, 240);
+            var cardMain = CreateCard("MobiladorSteX × Morrigan", S(30), S(20), S(240));
 
             var picBox = new PictureBox()
             {
-                Left = cardMain.Width - 130,
-                Top = 48,
-                Width = 100,
-                Height = 100,
+                Left = cardMain.Width - S(130),
+                Top = S(48),
+                Width = S(100),
+                Height = S(100),
                 BackColor = Color.FromArgb(60, 45, 80),
                 BorderStyle = BorderStyle.None,
                 SizeMode = PictureBoxSizeMode.Zoom,
@@ -2066,15 +2068,15 @@ namespace MobiladorStex
             cardMain.Controls.AddRange(new Control[]
             {
                 picBox,
-                new Label() { Text = $"MobiladorSteX — MORRIGAN God's Apocalypse\n{ObtenerVersionApp()}", Font = new Font("Segoe UI", 10f, FontStyle.Bold), ForeColor = accentColor, Left = 24, Top = 52, AutoSize = true },
-                new Label() { Text = "Desarrollado por Dario (@nks_array)", Font = new Font("Segoe UI", 9f), ForeColor = textSecondary, Left = 24, Top = 92, AutoSize = true },
-                new Label() { Text = "\"No controlas el teléfono. Controlas la distancia.\"", Font = new Font("Segoe UI", 9f, FontStyle.Italic), ForeColor = Color.FromArgb(180, 140, 220), Left = 24, Top = 116, Width = cardMain.Width - 160, AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
-                new Label() { Text = "Versión insignia de la comunidad Free Fire PC.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = 24, Top = 148, AutoSize = true },
-                CreateBtnSocial("🎵  TikTok — @nks_array", 24, 180, 210, Color.FromArgb(55, 40, 75), "https://www.tiktok.com/@nks_array"),
-                CreateBtnSocial("💬  Discord — Unirse", 244, 180, 185, Color.FromArgb(78, 28, 141), "https://discord.gg/CU5quVNyun")
+                new Label() { Text = $"MobiladorSteX — MORRIGAN God's Apocalypse\n{ObtenerVersionApp()}", Font = new Font("Segoe UI", 10f, FontStyle.Bold), ForeColor = accentColor, Left = S(24), Top = S(52), AutoSize = true },
+                new Label() { Text = "Desarrollado por Dario (@nks_array)", Font = new Font("Segoe UI", 9f), ForeColor = textSecondary, Left = S(24), Top = S(92), AutoSize = true },
+                new Label() { Text = "\"No controlas el teléfono. Controlas la distancia.\"", Font = new Font("Segoe UI", 9f, FontStyle.Italic), ForeColor = Color.FromArgb(180, 140, 220), Left = S(24), Top = S(116), Width = cardMain.Width - S(160), AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
+                new Label() { Text = "Versión insignia de la comunidad Free Fire PC.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = S(24), Top = S(148), AutoSize = true },
+                CreateBtnSocial("🎵  TikTok — @nks_array", S(24), S(180), S(210), Color.FromArgb(55, 40, 75), "https://www.tiktok.com/@nks_array"),
+                CreateBtnSocial("💬  Discord — Unirse", S(244), S(180), S(185), Color.FromArgb(78, 28, 141), "https://discord.gg/CU5quVNyun")
             });
 
-            var cardCreditos = CreateCard("Créditos", 30, 280, 140);
+            var cardCreditos = CreateCard("Créditos", S(30), S(280), S(140));
             cardCreditos.Controls.Add(new Label()
             {
                 Text = "scrcpy — Genymobile  |  Licencia Apache 2.0\n" +
@@ -2082,12 +2084,12 @@ namespace MobiladorStex
                        "ini-parser — Ricardo Amores  |  MIT License",
                 Font = new Font("Segoe UI", 9f),
                 ForeColor = textSecondary,
-                Left = 24,
-                Top = 52,
+                Left = S(24),
+                Top = S(52),
                 AutoSize = true
             });
 
-            var cardProyecto = CreateCard("Acerca del Proyecto", 30, 440, 200);
+            var cardProyecto = CreateCard("Acerca del Proyecto", S(30), S(440), S(200));
             cardProyecto.Controls.Add(new Label()
             {
                 Text = "MobiladorSteX está diseñado para llevar la experiencia móvil a PC con la mayor fluidez\n" +
@@ -2098,8 +2100,8 @@ namespace MobiladorStex
                        "Más que una herramienta, es una forma de transformar cómo ves y controlas tu dispositivo.",
                 Font = new Font("Segoe UI", 9f),
                 ForeColor = textSecondary,
-                Left = 24,
-                Top = 50,
+                Left = S(24),
+                Top = S(50),
                 AutoSize = true
             });
 
@@ -2112,7 +2114,7 @@ namespace MobiladorStex
             {
                 Text = text,
                 Width = width,
-                Height = 38,
+                Height = S(38),
                 Left = left,
                 Top = top,
                 Font = new Font("Segoe UI", 9.5f),

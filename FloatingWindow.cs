@@ -54,6 +54,8 @@ namespace MobiladorStex
         private bool _printFps;
         private Action<string>? _fpsHandler; // referencia para poder desuscribir
 
+        private int S(int px) => (int)Math.Round(px * this.DeviceDpi / 96.0);
+
         public FloatingWindow(ScrcpyManager scrcpyManager, string infoText,
                               Action onDetener, Action onMostrarApp, bool printFps = false)
         {
@@ -94,12 +96,12 @@ namespace MobiladorStex
             this.ShowInTaskbar = false;
 
             // Altura: 130 base + 28 extra si hay FPS
-            int alturaExtra = _printFps ? 28 : 0;
-            this.Size = new Size(220, 130 + alturaExtra);
+            int alturaExtra = _printFps ? S(28) : 0;
+            this.Size = new Size(S(220), S(130) + alturaExtra);
 
             var screen = Screen.PrimaryScreen.WorkingArea;
             this.Location = new Point(
-                screen.Right - this.Width - 24,
+                screen.Right - this.Width - S(24),
                 screen.Bottom / 2 - this.Height / 2);
 
             // ── Arrastre nativo vía WinAPI ────────────────────────────
@@ -114,9 +116,9 @@ namespace MobiladorStex
                     Text = "● esperando fps...",
                     Font = new Font("Segoe UI", 8f, FontStyle.Bold),
                     ForeColor = Color.FromArgb(147, 90, 220),
-                    Left = 12,
-                    Top = 10,
-                    Width = 196,
+                    Left = S(12),
+                    Top = S(10),
+                    Width = S(196),
                     AutoSize = false
                 };
                 this.Controls.Add(_lblFps);
@@ -124,15 +126,15 @@ namespace MobiladorStex
             }
 
             // Offset vertical: si hay FPS el resto baja 28px
-            int oy = _printFps ? 28 : 0;
+            int oy = _printFps ? S(28) : 0;
 
             var lblTitulo = new Label()
             {
                 Text = "▶  scrcpy corriendo",
                 Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(147, 90, 220),
-                Left = 12,
-                Top = 10 + oy,
+                Left = S(12),
+                Top = S(10) + oy,
                 AutoSize = true
             };
 
@@ -141,17 +143,17 @@ namespace MobiladorStex
                 Text = infoText,
                 Font = new Font("Segoe UI", 7.5f),
                 ForeColor = Color.FromArgb(200, 200, 200),
-                Left = 12,
-                Top = 30 + oy,
-                Width = 196,
+                Left = S(12),
+                Top = S(30) + oy,
+                Width = S(196),
                 AutoSize = false
             };
 
             var linea = new Panel()
             {
                 Left = 0,
-                Top = 72 + oy,
-                Width = 220,
+                Top = S(72) + oy,
+                Width = S(220),
                 Height = 1,
                 BackColor = Color.FromArgb(78, 28, 141)
             };
@@ -159,10 +161,10 @@ namespace MobiladorStex
             var btnDetener = new Guna2Button()
             {
                 Text = "⏹ Detener",
-                Width = 94,
-                Height = 32,
-                Left = 12,
-                Top = 82 + oy,
+                Width = S(94),
+                Height = S(32),
+                Left = S(12),
+                Top = S(82) + oy,
                 Font = new Font("Segoe UI", 8.5f),
                 FillColor = Color.FromArgb(160, 30, 30),
                 ForeColor = Color.White,
@@ -172,10 +174,10 @@ namespace MobiladorStex
             var btnMostrar = new Guna2Button()
             {
                 Text = "↑ Mostrar",
-                Width = 94,
-                Height = 32,
-                Left = 114,
-                Top = 82 + oy,
+                Width = S(94),
+                Height = S(32),
+                Left = S(114),
+                Top = S(82) + oy,
                 Font = new Font("Segoe UI", 8.5f),
                 FillColor = Color.FromArgb(55, 28, 100),
                 ForeColor = Color.FromArgb(220, 200, 255),

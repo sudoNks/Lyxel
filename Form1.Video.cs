@@ -21,12 +21,12 @@ namespace MobiladorStex
             {
 
                 // ── CARD: Video ───────────────────────────────────────────
-                var cardVideo = CreateCard("Configuración de Video", 30, 20, 470);
+                var cardVideo = CreateCard("Configuración de Video", S(30), S(20), S(470));
 
                 var togVideo = new Guna2ToggleSwitch()
                 {
-                    Left = cardVideo.Width - 70,
-                    Top = 58,
+                    Left = cardVideo.Width - S(70),
+                    Top = S(58),
                     Checked = _video,
                     CheckedState = { FillColor = accentColor },
                     UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
@@ -39,10 +39,10 @@ namespace MobiladorStex
                     Minimum = 30,
                     Maximum = 240,
                     Value = _fps,
-                    Left = 160,
-                    Top = 106,
-                    Width = cardVideo.Width - 300,
-                    Height = 28,
+                    Left = S(160),
+                    Top = S(106),
+                    Width = cardVideo.Width - S(300),
+                    Height = S(28),
                     ThumbColor = accentColor,
                     FillColor = Color.FromArgb(40, 40, 40),
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
@@ -52,9 +52,9 @@ namespace MobiladorStex
                     Text = _fps.ToString(),
                     Font = new Font("Segoe UI", 10f, FontStyle.Bold),
                     ForeColor = textPrimary,
-                    Left = cardVideo.Width - 70,
-                    Top = 108,
-                    Width = 50,
+                    Left = cardVideo.Width - S(70),
+                    Top = S(108),
+                    Width = S(50),
                     TextAlign = ContentAlignment.MiddleRight,
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
@@ -70,10 +70,10 @@ namespace MobiladorStex
                     Minimum = 1,
                     Maximum = 200,
                     Value = _bitrate,
-                    Left = 160,
-                    Top = 156,
-                    Width = cardVideo.Width - 300,
-                    Height = 28,
+                    Left = S(160),
+                    Top = S(156),
+                    Width = cardVideo.Width - S(300),
+                    Height = S(28),
                     ThumbColor = accentColor,
                     FillColor = Color.FromArgb(40, 40, 40),
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
@@ -83,9 +83,9 @@ namespace MobiladorStex
                     Text = _bitrate.ToString(),
                     Font = new Font("Segoe UI", 10f, FontStyle.Bold),
                     ForeColor = textPrimary,
-                    Left = cardVideo.Width - 70,
-                    Top = 158,
-                    Width = 50,
+                    Left = cardVideo.Width - S(70),
+                    Top = S(158),
+                    Width = S(50),
                     TextAlign = ContentAlignment.MiddleRight,
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
@@ -96,7 +96,7 @@ namespace MobiladorStex
                     if (!_cargandoPagina) MarcarCambiosSinGuardar();
                 };
 
-                var numMaxSize = CreateNumeric(160, 265, 120, 0, 4000, _maxSize, 100);
+                var numMaxSize = CreateNumeric(S(160), S(265), S(120), 0, 4000, _maxSize, 100);
                 numMaxSize.ValueChanged += (s, e) => { _maxSize = (int)numMaxSize.Value; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
                 numMaxSize.KeyDown += (s, e) =>
                 {
@@ -112,10 +112,10 @@ namespace MobiladorStex
                 // Video Codec — en fila 435, label arriba, combo + aviso debajo
                 var cmbCodec = new Guna2ComboBox()
                 {
-                    Left = 160,
-                    Top = 318,
-                    Width = 120,
-                    Height = 32,
+                    Left = S(160),
+                    Top = S(318),
+                    Width = S(120),
+                    Height = S(32),
                     FillColor = Color.FromArgb(42, 42, 45),
                     ForeColor = textPrimary,
                     BorderColor = Color.FromArgb(60, 60, 60),
@@ -141,9 +141,9 @@ namespace MobiladorStex
                     Text = "⚠ Desactivado — usando encoder avanzado",
                     Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
                     ForeColor = Color.FromArgb(255, 140, 0),
-                    Left = 292,
-                    Top = 322,   // a la derecha del combo (160+120+12)
-                    Width = 340,
+                    Left = S(292),
+                    Top = S(322),   // a la derecha del combo (160+120+12)
+                    Width = S(340),
                     AutoSize = false,
                     Visible = _useAdvancedEncoder
                 };
@@ -151,10 +151,10 @@ namespace MobiladorStex
                 // ── Video Buffer ──────────────────────────────────────────
                 var numVideoBuffer = new StexNumericUpDown()
                 {
-                    Left = 160,
-                    Top = 418,
-                    Width = 100,
-                    Height = 32,
+                    Left = S(160),
+                    Top = S(418),
+                    Width = S(100),
+                    Height = S(32),
                     Minimum = 0,
                     Maximum = 500,
                     Value = _videoBuffer,
@@ -181,31 +181,31 @@ namespace MobiladorStex
 
                 cardVideo.Controls.AddRange(new Control[]
                 {
-                new Label() { Text = "Habilitar Video",   Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = 24, Top = 60, AutoSize = true },
+                new Label() { Text = "Habilitar Video",   Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(60), AutoSize = true },
                 togVideo,
-                new Label() { Text = "FPS",               Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 110, AutoSize = true },
+                new Label() { Text = "FPS",               Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = S(24), Top = S(110), AutoSize = true },
                 trackFps, lblFpsVal,
-                new Label() { Text = "Bitrate (Mb)",      Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 160, AutoSize = true },
+                new Label() { Text = "Bitrate (Mb)",      Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = S(24), Top = S(160), AutoSize = true },
                 trackBitrate, lblBitrateVal,
-                new Label() { Text = "⚠ Si la pantalla no abre, reduce FPS o Bitrate. Depende del dispositivo y cable.", Font = new Font("Segoe UI", 7.5f), ForeColor = Color.FromArgb(200, 140, 40), Left = 24, Top = 186, Width = cardVideo.Width - 48, AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
-                new Label() { Text = "Max Size",          Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 215, AutoSize = true },
-                new Label() { Text = "Limita la resolución transmitida (menor = más rendimiento)", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = 24, Top = 235, Width = cardVideo.Width - 48, AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
+                new Label() { Text = "⚠ Si la pantalla no abre, reduce FPS o Bitrate. Depende del dispositivo y cable.", Font = new Font("Segoe UI", 7.5f), ForeColor = Color.FromArgb(200, 140, 40), Left = S(24), Top = S(186), Width = cardVideo.Width - S(48), AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
+                new Label() { Text = "Max Size",          Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = S(24), Top = S(215), AutoSize = true },
+                new Label() { Text = "Limita la resolución transmitida (menor = más rendimiento)", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = S(24), Top = S(235), Width = cardVideo.Width - S(48), AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
                 numMaxSize,
-                new Label() { Text = "Video Codec",       Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 290, AutoSize = true },
+                new Label() { Text = "Video Codec",       Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = S(24), Top = S(290), AutoSize = true },
                 cmbCodec,
                 lblCodecDesactivado,
-                new Label() { Text = "Video Buffer (ms)", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 370, AutoSize = true },
-                new Label() { Text = "0 = sin buffer (menor latencia). Aumentar si hay saltos de imagen.", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = 24, Top = 390, Width = cardVideo.Width - 48, AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
+                new Label() { Text = "Video Buffer (ms)", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = S(24), Top = S(370), AutoSize = true },
+                new Label() { Text = "0 = sin buffer (menor latencia). Aumentar si hay saltos de imagen.", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = S(24), Top = S(390), Width = cardVideo.Width - S(48), AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
                 numVideoBuffer
                 });
 
                 // ── CARD: Audio ───────────────────────────────────────────
-                var cardAudio = CreateCard("Configuración de Audio", 30, 510, 400);
+                var cardAudio = CreateCard("Configuración de Audio", S(30), S(510), S(400));
 
                 var togAudio = new Guna2ToggleSwitch()
                 {
-                    Left = cardAudio.Width - 70,
-                    Top = 58,
+                    Left = cardAudio.Width - S(70),
+                    Top = S(58),
                     Checked = _audio,
                     CheckedState = { FillColor = accentColor },
                     UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
@@ -215,8 +215,8 @@ namespace MobiladorStex
 
                 var togAudioDoble = new Guna2ToggleSwitch()
                 {
-                    Left = cardAudio.Width - 70,
-                    Top = 108,
+                    Left = cardAudio.Width - S(70),
+                    Top = S(108),
                     Checked = _audioDoble,
                     CheckedState = { FillColor = accentColor },
                     UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
@@ -227,10 +227,10 @@ namespace MobiladorStex
                 // ── Audio Codec ───────────────────────────────────────────
                 var cmbAudioCodec = new Guna2ComboBox()
                 {
-                    Left = 160,
-                    Top = 192,
-                    Width = 120,
-                    Height = 32,
+                    Left = S(160),
+                    Top = S(192),
+                    Width = S(120),
+                    Height = S(32),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(42, 42, 45),
                     ForeColor = textPrimary,
@@ -250,10 +250,10 @@ namespace MobiladorStex
                 // ── Audio Bitrate ─────────────────────────────────────────
                 var numAudioBitrate = new StexNumericUpDown()
                 {
-                    Left = 160,
-                    Top = 252,
-                    Width = 100,
-                    Height = 32,
+                    Left = S(160),
+                    Top = S(252),
+                    Width = S(100),
+                    Height = S(32),
                     Minimum = 32,
                     Maximum = 320,
                     Value = _audioBitrate,
@@ -281,10 +281,10 @@ namespace MobiladorStex
                 // ── Audio Buffer ──────────────────────────────────────────
                 var numAudioBuffer = new StexNumericUpDown()
                 {
-                    Left = 160,
-                    Top = 342,
-                    Width = 100,
-                    Height = 32,
+                    Left = S(160),
+                    Top = S(342),
+                    Width = S(100),
+                    Height = S(32),
                     Minimum = 0,
                     Maximum = 500,
                     Value = _audioBuffer,
@@ -311,29 +311,29 @@ namespace MobiladorStex
 
                 cardAudio.Controls.AddRange(new Control[]
                 {
-                new Label() { Text = "Habilitar Audio",   Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = 24, Top = 60, AutoSize = true },
+                new Label() { Text = "Habilitar Audio",   Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(60), AutoSize = true },
                 togAudio,
-                new Label() { Text = "Audio Doble",       Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = 24, Top = 110, AutoSize = true },
-                new Label() { Text = "Android 13+ | Usa audífonos para evitar eco", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = 24, Top = 132, AutoSize = true },
+                new Label() { Text = "Audio Doble",       Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(110), AutoSize = true },
+                new Label() { Text = "Android 13+ | Usa audífonos para evitar eco", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = S(24), Top = S(132), AutoSize = true },
                 togAudioDoble,
-                new Label() { Text = "Audio Codec",       Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = 24, Top = 158, AutoSize = true },
-                new Label() { Text = "Usa aac si opus falla en tu dispositivo", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = 24, Top = 176, AutoSize = true },
+                new Label() { Text = "Audio Codec",       Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(158), AutoSize = true },
+                new Label() { Text = "Usa aac si opus falla en tu dispositivo", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = S(24), Top = S(176), AutoSize = true },
                 cmbAudioCodec,
-                new Label() { Text = "Bitrate (Kbps)",    Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = 24, Top = 236, AutoSize = true },
-                new Label() { Text = "Default: 128 Kbps", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = 24, Top = 256, AutoSize = true },
+                new Label() { Text = "Bitrate (Kbps)",    Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(236), AutoSize = true },
+                new Label() { Text = "Default: 128 Kbps", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = S(24), Top = S(256), AutoSize = true },
                 numAudioBitrate,
-                new Label() { Text = "Audio Buffer (ms)", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = 24, Top = 296, AutoSize = true },
-                new Label() { Text = "Default: 50 ms. Aumentar si hay cortes de audio.", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = 24, Top = 318, AutoSize = true },
+                new Label() { Text = "Audio Buffer (ms)", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(296), AutoSize = true },
+                new Label() { Text = "Default: 50 ms. Aumentar si hay cortes de audio.", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = S(24), Top = S(318), AutoSize = true },
                 numAudioBuffer
                 });
 
                 // ── CARD: Encoder Avanzado ────────────────────────────────
-                var cardEncoder = CreateCard("Encoder Avanzado", 30, 930, 210);
+                var cardEncoder = CreateCard("Encoder Avanzado", S(30), S(930), S(210));
 
                 var togEncoder = new Guna2ToggleSwitch()
                 {
-                    Left = cardEncoder.Width - 70,
-                    Top = 48,
+                    Left = cardEncoder.Width - S(70),
+                    Top = S(48),
                     Checked = _useAdvancedEncoder,
                     CheckedState = { FillColor = accentColor },
                     UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
@@ -342,10 +342,10 @@ namespace MobiladorStex
 
                 var cmbEncoders = new Guna2ComboBox()
                 {
-                    Left = 90,
-                    Top = 110,
-                    Width = cardEncoder.Width - 90 - 136,
-                    Height = 34,
+                    Left = S(90),
+                    Top = S(110),
+                    Width = cardEncoder.Width - S(90) - S(136),
+                    Height = S(34),
                     FillColor = Color.FromArgb(42, 42, 45),
                     ForeColor = textPrimary,
                     BorderColor = Color.FromArgb(60, 60, 60),
@@ -359,10 +359,10 @@ namespace MobiladorStex
                 var btnDetectarEncoders = new Guna2Button()
                 {
                     Text = "🔄 Detectar",
-                    Width = 120,
-                    Height = 34,
-                    Left = cardEncoder.Width - 144,
-                    Top = 110,
+                    Width = S(120),
+                    Height = S(34),
+                    Left = cardEncoder.Width - S(144),
+                    Top = S(110),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
@@ -376,10 +376,10 @@ namespace MobiladorStex
                     Text = "",
                     Font = new Font("Segoe UI", 8f),
                     ForeColor = textSecondary,
-                    Left = 24,
-                    Top = 156,
-                    Width = cardEncoder.Width - 48,
-                    Height = 18,
+                    Left = S(24),
+                    Top = S(156),
+                    Width = cardEncoder.Width - S(48),
+                    Height = S(18),
                     AutoSize = false,
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                 };
@@ -392,10 +392,10 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 8f, FontStyle.Italic),
                     ForeColor = _useAdvancedEncoder && !string.IsNullOrEmpty(_videoEncoder)
                         ? Color.FromArgb(16, 124, 16) : textSecondary,
-                    Left = 24,
-                    Top = 178,
-                    Width = cardEncoder.Width - 48,
-                    Height = 18,
+                    Left = S(24),
+                    Top = S(178),
+                    Width = cardEncoder.Width - S(48),
+                    Height = S(18),
                     AutoSize = false,
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                 };
@@ -553,10 +553,10 @@ namespace MobiladorStex
 
                 cardEncoder.Controls.AddRange(new Control[]
                 {
-                new Label() { Text = "Activar Encoder Avanzado", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = 24, Top = 50, AutoSize = true },
+                new Label() { Text = "Activar Encoder Avanzado", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(50), AutoSize = true },
                 togEncoder,
-                new Label() { Text = "Usa un encoder específico del dispositivo cuando el codec genérico tiene problemas.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = 24, Top = 68, Width = cardEncoder.Width - 48, AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
-                new Label() { Text = "Encoder:", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 118, AutoSize = true },
+                new Label() { Text = "Usa un encoder específico del dispositivo cuando el codec genérico tiene problemas.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = S(24), Top = S(68), Width = cardEncoder.Width - S(48), AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
+                new Label() { Text = "Encoder:", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = S(24), Top = S(118), AutoSize = true },
                 cmbEncoders, btnDetectarEncoders,
                 lblEncoderStatus, lblEncoderActivo
                 });

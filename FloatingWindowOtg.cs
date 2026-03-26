@@ -30,6 +30,8 @@ namespace MobiladorStex
         private readonly Action _onMostrarApp;
         private System.Windows.Forms.Timer _timerEstado;
 
+        private int S(int px) => (int)Math.Round(px * this.DeviceDpi / 96.0);
+
         public FloatingWindowOtg(ScrcpyManager scrcpyManager, string serial,
                                   string shortcutMod, Action onDetener, Action onMostrarApp)
         {
@@ -50,11 +52,11 @@ namespace MobiladorStex
             this.BackColor       = Color.FromArgb(33, 32, 35);
             this.Opacity         = 0.92;
             this.ShowInTaskbar   = false;
-            this.Size            = new Size(264, 156);
+            this.Size            = new Size(S(264), S(156));
 
             var screen = Screen.PrimaryScreen.WorkingArea;
             this.Location = new Point(
-                screen.Right  - this.Width  - 24,
+                screen.Right  - this.Width  - S(24),
                 screen.Bottom / 2 - this.Height / 2);
 
             this.MouseDown += (s, e) => { if (e.Button == MouseButtons.Left) IniciarArrastre(); };
@@ -64,7 +66,7 @@ namespace MobiladorStex
                 Text      = "MobiladorSteX — Modo OTG",
                 Font      = new Font("Segoe UI", 8.5f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(147, 90, 220),
-                Left = 12, Top = 10, Width = 240, Height = 20,
+                Left = S(12), Top = S(10), Width = S(240), Height = S(20),
                 AutoSize = false
             };
 
@@ -73,7 +75,7 @@ namespace MobiladorStex
                 Text      = "⚡ OTG Activo",
                 Font      = new Font("Segoe UI", 8.5f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(0, 200, 80),
-                Left = 12, Top = 34, Width = 240, Height = 20,
+                Left = S(12), Top = S(34), Width = S(240), Height = S(20),
                 AutoSize = false
             };
 
@@ -86,7 +88,7 @@ namespace MobiladorStex
                 Text      = dispositivoTexto,
                 Font      = new Font("Segoe UI", 7.5f),
                 ForeColor = Color.FromArgb(200, 200, 200),
-                Left = 12, Top = 60, Width = 240, Height = 16,
+                Left = S(12), Top = S(60), Width = S(240), Height = S(16),
                 AutoSize = false
             };
 
@@ -96,15 +98,15 @@ namespace MobiladorStex
                 Text      = $"Tecla MOD: {modTexto}",
                 Font      = new Font("Segoe UI", 7.5f),
                 ForeColor = Color.FromArgb(160, 150, 180),
-                Left = 12, Top = 80, Width = 240, Height = 16,
+                Left = S(12), Top = S(80), Width = S(240), Height = S(16),
                 AutoSize = false
             };
 
             var linea = new Panel()
             {
                 Left      = 0,
-                Top       = 100,
-                Width     = 264,
+                Top       = S(100),
+                Width     = S(264),
                 Height    = 1,
                 BackColor = Color.FromArgb(78, 28, 141)
             };
@@ -112,8 +114,8 @@ namespace MobiladorStex
             var btnDetener = new Guna2Button()
             {
                 Text         = "⏹ Detener",
-                Width        = 116, Height = 32,
-                Left         = 12, Top = 110,
+                Width        = S(116), Height = S(32),
+                Left         = S(12), Top = S(110),
                 Font         = new Font("Segoe UI", 8.5f),
                 FillColor    = Color.FromArgb(160, 30, 30),
                 ForeColor    = Color.White,
@@ -123,8 +125,8 @@ namespace MobiladorStex
             var btnMostrar = new Guna2Button()
             {
                 Text            = "↑ Mostrar launcher",
-                Width           = 116, Height = 32,
-                Left            = 136, Top = 110,
+                Width           = S(116), Height = S(32),
+                Left            = S(136), Top = S(110),
                 Font            = new Font("Segoe UI", 8.5f),
                 FillColor       = Color.FromArgb(55, 28, 100),
                 ForeColor       = Color.FromArgb(220, 200, 255),

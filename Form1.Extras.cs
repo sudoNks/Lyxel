@@ -15,12 +15,12 @@ namespace MobiladorStex
             {
 
                 // ── CARD: Comportamiento del dispositivo ──────────────────
-                var cardComport = CreateCard("Comportamiento del Dispositivo", 30, 20, 220);
+                var cardComport = CreateCard("Comportamiento del Dispositivo", S(30), S(20), S(220));
 
                 var togScreensaver = new Guna2ToggleSwitch()
                 {
-                    Left = cardComport.Width - 70,
-                    Top = 58,
+                    Left = cardComport.Width - S(70),
+                    Top = S(58),
                     Checked = _disableScreensaver,
                     CheckedState = { FillColor = accentColor },
                     UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
@@ -30,8 +30,8 @@ namespace MobiladorStex
 
                 var togStayAwake = new Guna2ToggleSwitch()
                 {
-                    Left = cardComport.Width - 70,
-                    Top = 108,
+                    Left = cardComport.Width - S(70),
+                    Top = S(108),
                     Checked = _stayAwake,
                     CheckedState = { FillColor = accentColor },
                     UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
@@ -41,8 +41,8 @@ namespace MobiladorStex
 
                 var togScreenOff = new Guna2ToggleSwitch()
                 {
-                    Left = cardComport.Width - 70,
-                    Top = 158,
+                    Left = cardComport.Width - S(70),
+                    Top = S(158),
                     Checked = _turnScreenOff,
                     CheckedState = { FillColor = accentColor },
                     UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
@@ -52,21 +52,21 @@ namespace MobiladorStex
 
                 cardComport.Controls.AddRange(new Control[]
                 {
-                new Label() { Text = "Disable Screensaver", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = 24, Top = 60, AutoSize = true },
+                new Label() { Text = "Disable Screensaver", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(60), AutoSize = true },
                 togScreensaver,
-                new Label() { Text = "Stay Awake",          Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = 24, Top = 110, AutoSize = true },
+                new Label() { Text = "Stay Awake",          Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(110), AutoSize = true },
                 togStayAwake,
-                new Label() { Text = "Turn Screen Off",     Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = 24, Top = 160, AutoSize = true },
+                new Label() { Text = "Turn Screen Off",     Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(160), AutoSize = true },
                 togScreenOff
                 });
 
                 // ── CARD: Depuración ──────────────────────────────────────
-                var cardDebug = CreateCard("Depuración", 30, 260, 230);
+                var cardDebug = CreateCard("Depuración", S(30), S(260), S(230));
 
                 var togFlotante = new Guna2ToggleSwitch()
                 {
-                    Left = cardDebug.Width - 70,
-                    Top = 58,
+                    Left = cardDebug.Width - S(70),
+                    Top = S(58),
                     Checked = _mostrarFlotante,
                     CheckedState = { FillColor = accentColor },
                     UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
@@ -76,8 +76,8 @@ namespace MobiladorStex
 
                 var togPrintFps = new Guna2ToggleSwitch()
                 {
-                    Left = cardDebug.Width - 70,
-                    Top = 128,
+                    Left = cardDebug.Width - S(70),
+                    Top = S(128),
                     Checked = _printFps,
                     CheckedState = { FillColor = accentColor },
                     UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
@@ -87,22 +87,22 @@ namespace MobiladorStex
 
                 cardDebug.Controls.AddRange(new Control[]
                 {
-                new Label() { Text = "Ventana flotante", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = 24, Top = 60, AutoSize = true },
-                new Label() { Text = "Muestra el panel flotante con info de la sesión al iniciar scrcpy", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = 24, Top = 80, AutoSize = true },
+                new Label() { Text = "Ventana flotante", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(60), AutoSize = true },
+                new Label() { Text = "Muestra el panel flotante con info de la sesión al iniciar scrcpy", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = S(24), Top = S(80), AutoSize = true },
                 togFlotante,
-                new Label() { Text = "Mostrar FPS", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = 24, Top = 130, AutoSize = true },
-                new Label() { Text = "Muestra los FPS reales en la ventana flotante durante la sesión", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = 24, Top = 150, AutoSize = true },
+                new Label() { Text = "Mostrar FPS", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(130), AutoSize = true },
+                new Label() { Text = "Muestra los FPS reales en la ventana flotante durante la sesión", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = S(24), Top = S(150), AutoSize = true },
                 togPrintFps,
-                new Label() { Text = "ℹ El contador aparecerá al iniciar scrcpy, no al activar esta opción.", Font = new Font("Segoe UI", 8f, FontStyle.Bold), ForeColor = Color.FromArgb(255, 167, 38), Left = 24, Top = 180, Width = cardDebug.Width - 48, AutoSize = false, Height = 20, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right }
+                new Label() { Text = "ℹ El contador aparecerá al iniciar scrcpy, no al activar esta opción.", Font = new Font("Segoe UI", 8f, FontStyle.Bold), ForeColor = Color.FromArgb(255, 167, 38), Left = S(24), Top = S(180), Width = cardDebug.Width - S(48), AutoSize = false, Height = S(20), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right }
                 });
 
                 // ── CARD: Mouse y Teclado ─────────────────────────────────
-                var cardInput = CreateCard("Mouse y Teclado", 30, 510, 240);
+                var cardInput = CreateCard("Mouse y Teclado", S(30), S(510), S(240));
 
                 var togForwardClicks = new Guna2ToggleSwitch()
                 {
-                    Left = cardInput.Width - 70,
-                    Top = 58,
+                    Left = cardInput.Width - S(70),
+                    Top = S(58),
                     Checked = _forwardAllClicks,
                     CheckedState = { FillColor = accentColor },
                     UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
@@ -112,10 +112,10 @@ namespace MobiladorStex
 
                 var cmbInputMode = new Guna2ComboBox()
                 {
-                    Left = 160,
-                    Top = 128,
-                    Width = 160,
-                    Height = 32,
+                    Left = S(160),
+                    Top = S(128),
+                    Width = S(160),
+                    Height = S(32),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(42, 42, 45),
                     ForeColor = textPrimary,
@@ -134,11 +134,11 @@ namespace MobiladorStex
                         : "SDK — Inyección vía API Android. Más compatible.",
                     Font = new Font("Segoe UI", 8.5f),
                     ForeColor = Color.FromArgb(210, 210, 210),
-                    Left = 24,
-                    Top = 172,
-                    Width = 280,
+                    Left = S(24),
+                    Top = S(172),
+                    Width = S(280),
                     AutoSize = false,
-                    Height = 36
+                    Height = S(36)
                 };
 
                 cmbInputMode.SelectedIndexChanged += (s, e) =>
@@ -152,23 +152,23 @@ namespace MobiladorStex
 
                 cardInput.Controls.AddRange(new Control[]
                 {
-                new Label() { Text = "Pasar todos los clics al dispositivo", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = 24, Top = 60, AutoSize = true },
-                new Label() { Text = "Fix para Shift+clic derecho en juegos (Free Fire, etc.)", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = 24, Top = 80, AutoSize = true },
+                new Label() { Text = "Pasar todos los clics al dispositivo", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(60), AutoSize = true },
+                new Label() { Text = "Fix para Shift+clic derecho en juegos (Free Fire, etc.)", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = S(24), Top = S(80), AutoSize = true },
                 togForwardClicks,
-                new Label() { Text = "Modo de Entrada", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = 24, Top = 110, AutoSize = true },
+                new Label() { Text = "Modo de Entrada", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(110), AutoSize = true },
                 cmbInputMode,
                 lblInputDesc
                 });
 
                 // ── CARD: Tecla de Atajos (MOD) ───────────────────────────
-                var cardMod = CreateCard("Tecla de Atajos (MOD)", 30, 770, 140);
+                var cardMod = CreateCard("Tecla de Atajos (MOD)", S(30), S(770), S(140));
 
                 var cmbMod = new Guna2ComboBox()
                 {
-                    Left = 24,
-                    Top = 56,
-                    Width = 200,
-                    Height = 32,
+                    Left = S(24),
+                    Top = S(56),
+                    Width = S(200),
+                    Height = S(32),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(42, 42, 45),
                     ForeColor = textPrimary,
@@ -198,18 +198,18 @@ namespace MobiladorStex
                 cardMod.Controls.AddRange(new Control[]
                 {
                 cmbMod,
-                new Label() { Text = "Tecla para atajos: MOD+F fullscreen, MOD+M menú, MOD+P power", Font = new Font("Segoe UI", 8f), ForeColor = Color.FromArgb(210, 210, 210), Left = 24, Top = 104, Width = cardMod.Width - 48, AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right }
+                new Label() { Text = "Tecla para atajos: MOD+F fullscreen, MOD+M menú, MOD+P power", Font = new Font("Segoe UI", 8f), ForeColor = Color.FromArgb(210, 210, 210), Left = S(24), Top = S(104), Width = cardMod.Width - S(48), AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right }
                 });
 
                 // ── CARD: Velocidad del Cursor ────────────────────────────
-                var cardCursor = CreateCard("Velocidad del Cursor (Mouse)  —  Experimental", 30, 930, 170);
+                var cardCursor = CreateCard("Velocidad del Cursor (Mouse)  —  Experimental", S(30), S(930), S(170));
 
                 var trackCursor = new Guna2TrackBar()
                 {
-                    Left = 24,
-                    Top = 66,
-                    Width = 300,
-                    Height = 30,
+                    Left = S(24),
+                    Top = S(66),
+                    Width = S(300),
+                    Height = S(30),
                     Minimum = -7,
                     Maximum = 7,
                     Value = _pointerSpeed,
@@ -223,18 +223,18 @@ namespace MobiladorStex
                     Text = _pointerSpeed == 0 ? "0 (default)" : _pointerSpeed.ToString("+0;-0"),
                     Font = new Font("Segoe UI", 10f, FontStyle.Bold),
                     ForeColor = Color.FromArgb(107, 47, 196),
-                    Left = 310,
-                    Top = 62,
+                    Left = S(310),
+                    Top = S(62),
                     AutoSize = true
                 };
 
                 var btnAplicarCursor = new Guna2Button()
                 {
                     Text = "✓ Aplicar ahora",
-                    Width = 140,
-                    Height = 32,
-                    Left = 24,
-                    Top = 118,
+                    Width = S(140),
+                    Height = S(32),
+                    Left = S(24),
+                    Top = S(118),
                     Font = new Font("Segoe UI", 8.5f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
@@ -244,10 +244,10 @@ namespace MobiladorStex
                 var btnResetCursor = new Guna2Button()
                 {
                     Text = "↺ Restablecer (0)",
-                    Width = 150,
-                    Height = 32,
-                    Left = 174,
-                    Top = 118,
+                    Width = S(150),
+                    Height = S(32),
+                    Left = S(174),
+                    Top = S(118),
                     Font = new Font("Segoe UI", 8.5f),
                     FillColor = Color.FromArgb(55, 40, 75),
                     ForeColor = textSecondary,
@@ -261,8 +261,8 @@ namespace MobiladorStex
                     Text = "",
                     Font = new Font("Segoe UI", 8f, FontStyle.Italic),
                     ForeColor = Color.FromArgb(16, 124, 16),
-                    Left = 334,
-                    Top = 126,
+                    Left = S(334),
+                    Top = S(126),
                     AutoSize = true
                 };
 
@@ -298,9 +298,9 @@ namespace MobiladorStex
 
                 cardCursor.Controls.AddRange(new Control[]
                 {
-                new Label() { Text = "Ajusta la velocidad del cursor del mouse en Android.", Font = new Font("Segoe UI", 8.5f), ForeColor = Color.FromArgb(210, 210, 210), Left = 24, Top = 40, AutoSize = true },
+                new Label() { Text = "Ajusta la velocidad del cursor del mouse en Android.", Font = new Font("Segoe UI", 8.5f), ForeColor = Color.FromArgb(210, 210, 210), Left = S(24), Top = S(40), AutoSize = true },
                 trackCursor, lblCursorValor,
-                new Label() { Text = "-7 = más lento   |   0 = default   |   +7 = más rápido", Font = new Font("Segoe UI", 7.5f), ForeColor = textSecondary, Left = 24, Top = 94, AutoSize = true },
+                new Label() { Text = "-7 = más lento   |   0 = default   |   +7 = más rápido", Font = new Font("Segoe UI", 7.5f), ForeColor = textSecondary, Left = S(24), Top = S(94), AutoSize = true },
                 btnAplicarCursor, btnResetCursor, lblCursorStatus
                 });
 
@@ -310,8 +310,8 @@ namespace MobiladorStex
                         Text = $"Última velocidad aplicada: {(_ultimaVelocidadCursor == 0 ? "0 (default)" : _ultimaVelocidadCursor.ToString("+0;-0"))}",
                         Font = new Font("Segoe UI", 7.5f, FontStyle.Italic),
                         ForeColor = Color.FromArgb(107, 47, 196),
-                        Left = 24,
-                        Top = 52,
+                        Left = S(24),
+                        Top = S(52),
                         AutoSize = true
                     });
 

@@ -22,13 +22,15 @@ namespace MobiladorStex
         private Guna2Button _btnContinuar;
         private CheckBox[]  _chkObligatorios;
 
+        private int S(int px) => (int)Math.Round(px * this.DeviceDpi / 96.0);
+
         public DialogoAvanzado(string titulo, string descripcion, string[] checks)
         {
             this.Text            = "";
             this.FormBorderStyle = FormBorderStyle.None;
             this.StartPosition   = FormStartPosition.CenterParent;
             this.BackColor       = BG;
-            this.Size            = new Size(500, 0); // altura se calcula después
+            this.Size            = new Size(S(500), 0); // altura se calcula después
             this.ShowInTaskbar   = false;
 
             BuildUI(titulo, descripcion, checks);
@@ -41,18 +43,18 @@ namespace MobiladorStex
             // ── Barra de título ───────────────────────────────────────
             var pnlTitulo = new Panel()
             {
-                Left = 0, Top = 0, Width = this.Width, Height = 48,
+                Left = 0, Top = 0, Width = this.Width, Height = S(48),
                 BackColor = Color.FromArgb(78, 28, 141)
             };
             var lblTitulo = new Label()
             {
                 Text = "⚠  " + titulo,
                 Font = new Font("Segoe UI", 11f, FontStyle.Bold),
-                ForeColor = TEXTO, Left = 16, Top = 12, AutoSize = true
+                ForeColor = TEXTO, Left = S(16), Top = S(12), AutoSize = true
             };
             pnlTitulo.Controls.Add(lblTitulo);
             this.Controls.Add(pnlTitulo);
-            y = 48;
+            y = S(48);
 
             // ── Descripción ───────────────────────────────────────────
             var lblDesc = new Label()
@@ -60,36 +62,36 @@ namespace MobiladorStex
                 Text = descripcion,
                 Font = new Font("Segoe UI", 9f),
                 ForeColor = SECUNDARIO,
-                Left = 20, Top = y + 16,
-                Width = this.Width - 40,
+                Left = S(20), Top = y + S(16),
+                Width = this.Width - S(40),
                 AutoSize = false
             };
-            // Calcular altura necesaria
+            // Calcular altura necesaria — MeasureString devuelve píxeles DPI-aware
             var g = this.CreateGraphics();
             var sz = g.MeasureString(descripcion, lblDesc.Font, lblDesc.Width);
-            lblDesc.Height = (int)sz.Height + 4;
+            lblDesc.Height = (int)sz.Height + S(4);
             g.Dispose();
             this.Controls.Add(lblDesc);
-            y = lblDesc.Top + lblDesc.Height + 16;
+            y = lblDesc.Top + lblDesc.Height + S(16);
 
             // ── Línea divisoria ───────────────────────────────────────
             var linea = new Panel()
             {
-                Left = 20, Top = y, Width = this.Width - 40, Height = 1,
+                Left = S(20), Top = y, Width = this.Width - S(40), Height = 1,
                 BackColor = Color.FromArgb(78, 28, 141)
             };
             this.Controls.Add(linea);
-            y += 12;
+            y += S(12);
 
             // ── Checkboxes obligatorios ───────────────────────────────
             var lblPara = new Label()
             {
                 Text = "Para continuar, confirma que entiendes lo siguiente:",
                 Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
-                ForeColor = TEXTO, Left = 20, Top = y, AutoSize = true
+                ForeColor = TEXTO, Left = S(20), Top = y, AutoSize = true
             };
             this.Controls.Add(lblPara);
-            y += 24;
+            y += S(24);
 
             _chkObligatorios = new CheckBox[checks.Length];
             for (int i = 0; i < checks.Length; i++)
@@ -100,17 +102,17 @@ namespace MobiladorStex
                     Font      = new Font("Segoe UI", 9f),
                     ForeColor = TEXTO,
                     BackColor = Color.Transparent,
-                    Left      = 20, Top = y,
-                    Width     = this.Width - 40,
-                    AutoSize  = false, Height = 36
+                    Left      = S(20), Top = y,
+                    Width     = this.Width - S(40),
+                    AutoSize  = false, Height = S(36)
                 };
                 chk.CheckedChanged += (s, e) => ActualizarBoton();
                 this.Controls.Add(chk);
                 _chkObligatorios[i] = chk;
-                y += 38;
+                y += S(38);
             }
 
-            y += 8;
+            y += S(8);
 
             // ── Checkbox opcional ─────────────────────────────────────
             var chkNoMostrar = new CheckBox()
@@ -119,19 +121,19 @@ namespace MobiladorStex
                 Font      = new Font("Segoe UI", 8.5f),
                 ForeColor = SECUNDARIO,
                 BackColor = Color.Transparent,
-                Left = 20, Top = y, AutoSize = true
+                Left = S(20), Top = y, AutoSize = true
             };
             chkNoMostrar.CheckedChanged += (s, e) =>
                 NoVolverMostrar = chkNoMostrar.Checked;
             this.Controls.Add(chkNoMostrar);
-            y += 32;
+            y += S(32);
 
             // ── Botones ───────────────────────────────────────────────
-            y += 8;
+            y += S(8);
             var btnCancelar = new Guna2Button()
             {
-                Text = "Cancelar", Width = 110, Height = 36,
-                Left = this.Width - 244, Top = y,
+                Text = "Cancelar", Width = S(110), Height = S(36),
+                Left = this.Width - S(244), Top = y,
                 Font = new Font("Segoe UI", 9f),
                 FillColor = Color.FromArgb(55, 40, 75),
                 ForeColor = SECUNDARIO,
@@ -147,8 +149,8 @@ namespace MobiladorStex
 
             _btnContinuar = new Guna2Button()
             {
-                Text = "Continuar →", Width = 120, Height = 36,
-                Left = this.Width - 130, Top = y,
+                Text = "Continuar →", Width = S(120), Height = S(36),
+                Left = this.Width - S(130), Top = y,
                 Font = new Font("Segoe UI", 9f, FontStyle.Bold),
                 FillColor = Color.FromArgb(60, 60, 65), // deshabilitado inicialmente
                 ForeColor = Color.FromArgb(100, 100, 100),
@@ -160,7 +162,7 @@ namespace MobiladorStex
                 this.Close();
             };
             this.Controls.Add(_btnContinuar);
-            y += 36 + 20;
+            y += S(36) + S(20);
 
             // ── Ajustar altura del form ───────────────────────────────
             this.Height = y;
