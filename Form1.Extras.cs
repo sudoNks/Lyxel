@@ -279,6 +279,7 @@ namespace MobiladorStex
                     var (exito, error) = await adbManager.AplicarPointerSpeedAsync(_pointerSpeed);
                     lblCursorStatus.Text = exito ? "✓ Aplicado" : "✗ Sin dispositivo conectado";
                     lblCursorStatus.ForeColor = exito ? Color.FromArgb(16, 124, 16) : Color.FromArgb(220, 50, 50);
+                    if (exito) { _ultimaVelocidadCursor = _pointerSpeed; GuardarConfigTema(); }
                     btnAplicarCursor.Text = "✓ Aplicar ahora"; btnAplicarCursor.Enabled = true;
                     await Task.Delay(2500);
                     if (!lblCursorStatus.IsDisposed) lblCursorStatus.Text = "";
@@ -302,6 +303,17 @@ namespace MobiladorStex
                 new Label() { Text = "-7 = más lento   |   0 = default   |   +7 = más rápido", Font = new Font("Segoe UI", 7.5f), ForeColor = textSecondary, Left = 24, Top = 94, AutoSize = true },
                 btnAplicarCursor, btnResetCursor, lblCursorStatus
                 });
+
+                if (_ultimaVelocidadCursor != int.MinValue)
+                    cardCursor.Controls.Add(new Label()
+                    {
+                        Text = $"Última velocidad aplicada: {(_ultimaVelocidadCursor == 0 ? "0 (default)" : _ultimaVelocidadCursor.ToString("+0;-0"))}",
+                        Font = new Font("Segoe UI", 7.5f, FontStyle.Italic),
+                        ForeColor = Color.FromArgb(107, 47, 196),
+                        Left = 24,
+                        Top = 52,
+                        AutoSize = true
+                    });
 
                 contentPanel.Controls.AddRange(new Control[]
                 {

@@ -107,6 +107,12 @@ namespace MobiladorStex
         private bool _modoOtg = false;
         private string _otgSerial = "";
 
+        // INDICADORES DE SESIÓN ANTERIOR
+        private bool _ultimaSesionWifi = false;
+        private bool _ultimaSesionOtg = false;
+        private int _ultimoDpiAplicado = 0;            // 0 = nunca aplicado
+        private int _ultimaVelocidadCursor = int.MinValue; // MinValue = nunca aplicado
+
         // PERFILES
         private string _perfilSeleccionado = "";
         private ListBox _lstPerfiles;
@@ -307,6 +313,26 @@ namespace MobiladorStex
                 _encodersDisplayLabels = string.IsNullOrWhiteSpace(encLbl)
                     ? new List<string>()
                     : new List<string>(encLbl.Split('|').Where(x => !string.IsNullOrWhiteSpace(x)));
+
+                // Sesión anterior — WiFi, OTG, DPI aplicado, velocidad cursor
+                if (data.Sections.ContainsSection("Sesion"))
+                {
+                    var s = data["Sesion"];
+                    if (s.ContainsKey("ultima_sesion_wifi"))
+                        bool.TryParse(s["ultima_sesion_wifi"], out _ultimaSesionWifi);
+                    if (s.ContainsKey("ultima_sesion_otg"))
+                        bool.TryParse(s["ultima_sesion_otg"], out _ultimaSesionOtg);
+                    if (s.ContainsKey("wifi_ip") && !string.IsNullOrEmpty(s["wifi_ip"]))
+                        _wifiIp = s["wifi_ip"];
+                    if (s.ContainsKey("wifi_puerto") && int.TryParse(s["wifi_puerto"], out int wp) && wp >= 1024 && wp <= 65535)
+                        _wifiPuerto = wp;
+                    if (s.ContainsKey("otg_serial") && !string.IsNullOrEmpty(s["otg_serial"]))
+                        _otgSerial = s["otg_serial"];
+                    if (s.ContainsKey("ultimo_dpi_aplicado") && int.TryParse(s["ultimo_dpi_aplicado"], out int ud) && ud > 0)
+                        _ultimoDpiAplicado = ud;
+                    if (s.ContainsKey("ultima_velocidad_cursor") && int.TryParse(s["ultima_velocidad_cursor"], out int uvc))
+                        _ultimaVelocidadCursor = uvc;
+                }
             }
             catch { }
         }
@@ -333,6 +359,16 @@ namespace MobiladorStex
                 // (cierre normal fallido o kill forzado), se limpia en el próximo arranque
                 data.Sections.AddSection("Dispositivo");
                 data["Dispositivo"]["resolucion_pendiente_reset"] = (_wmSizeActivo || _resAdbActiva).ToString().ToLower();
+
+                // Sesión anterior — para indicadores visuales y restauración parcial de estado
+                data.Sections.AddSection("Sesion");
+                data["Sesion"]["ultima_sesion_wifi"] = _ultimaSesionWifi.ToString().ToLower();
+                data["Sesion"]["ultima_sesion_otg"] = _ultimaSesionOtg.ToString().ToLower();
+                data["Sesion"]["wifi_ip"] = _wifiIp ?? "";
+                data["Sesion"]["wifi_puerto"] = _wifiPuerto.ToString();
+                data["Sesion"]["otg_serial"] = _otgSerial ?? "";
+                data["Sesion"]["ultimo_dpi_aplicado"] = _ultimoDpiAplicado > 0 ? _ultimoDpiAplicado.ToString() : "";
+                data["Sesion"]["ultima_velocidad_cursor"] = _ultimaVelocidadCursor != int.MinValue ? _ultimaVelocidadCursor.ToString() : "";
 
                 parser.WriteFile(_configPath, data);
             }
@@ -830,10 +866,9 @@ namespace MobiladorStex
         {
             try
             {
-                // OTG no requiere ADB — scrcpy detecta el dispositivo por USB físico
-                var seriales = new List<string>();
                 if (!_modoOtg)
                 {
+                    // Modo normal: ADB requerido para verificar el dispositivo
                     var (hayDispositivo, serialesAdb, _) = await Task.Run(() => adbManager.ListarDispositivos());
 
                     if (!hayDispositivo || serialesAdb.Count == 0)
@@ -847,29 +882,34 @@ namespace MobiladorStex
                             "Sin dispositivo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
-                    seriales = serialesAdb;
                 }
-
-                if (_modoOtg && string.IsNullOrWhiteSpace(_otgSerial))
+                else
                 {
-                    if (seriales.Count == 1)
-                        _otgSerial = seriales[0];
-                    else if (seriales.Count > 1)
+                    // Modo OTG: si no hay serial seleccionado, intentar obtenerlo via ADB
+                    // para pasar -s [serial] y evitar ambigüedad con múltiples conexiones activas
+                    if (string.IsNullOrWhiteSpace(_otgSerial))
                     {
-                        MessageBox.Show(
-                            "Hay varios dispositivos conectados.\n\n" +
-                            "Ve a Conexión → Modo OTG → Detectar Dispositivos\n" +
-                            "y selecciona el serial del dispositivo a usar.",
-                            "OTG — Selecciona dispositivo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
+                        var (_, serialesAdb, _) = await Task.Run(() => adbManager.ListarDispositivos());
+                        if (serialesAdb.Count == 1)
+                        {
+                            _otgSerial = serialesAdb[0];
+                            GuardarConfigTema();
+                        }
+                        else if (serialesAdb.Count > 1)
+                        {
+                            MessageBox.Show(
+                                "Hay varios dispositivos conectados.\n\n" +
+                                "Ve a Conexión → Modo OTG → Detectar Dispositivos\n" +
+                                "y selecciona el serial del dispositivo a usar.",
+                                "OTG — Selecciona dispositivo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                        // Si ADB no detecta nada (adaptador OTG sin USB debug),
+                        // scrcpy --otg identifica el dispositivo por USB físico — continuar sin serial
                     }
-                    // Si ADB no ve el dispositivo (sin USB debug), scrcpy --otg lo identifica por USB físico
                 }
 
                 var config = ObtenerConfigActual();
-
-                if (_pointerSpeed != 0)
-                    _ = adbManager.AplicarPointerSpeedAsync(_pointerSpeed);
 
                 bool exito = scrcpyManager.Lanzar(config);
 
@@ -882,6 +922,9 @@ namespace MobiladorStex
                 }
 
                 _scrcpyEstabaActivo = true;
+                _ultimaSesionWifi = _wifiConectado;
+                _ultimaSesionOtg = _modoOtg;
+                GuardarConfigTema();
                 ActualizarBotonesScrcpy();
                 this.WindowState = FormWindowState.Minimized;
 
@@ -899,7 +942,7 @@ namespace MobiladorStex
                                 this.BringToFront();
                                 this.Activate();
                                 MessageBox.Show(this,
-                                    "OTG no pudo iniciarse. Verifica que tu cable soporte modo OTG y que el dispositivo sea compatible con esta función.",
+                                    "OTG no pudo iniciarse. Verifica que tu cable soporte modo OTG y que el dispositivo sea compatible con esta función.\n\n• Si usas cable normal con depuración USB habilitada, intenta desactivar y reactivar la depuración USB en tu teléfono antes de lanzar.",
                                     "OTG — Error de inicio", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             });
                     });
@@ -1267,17 +1310,11 @@ namespace MobiladorStex
             _turnScreenOff = cfg.TurnScreenOff;
             _shortcutMod = cfg.ShortcutMod;
             _fullscreen = cfg.Fullscreen;
-            _fullscreenCrop = cfg.FullscreenCrop;
-            _cropActivo = false; // al cargar perfil, crop no está activo hasta que se calcula
-            _modoOtg = cfg.ModoOtg;
-            _otgSerial = cfg.OtgSerial;
+            // _fullscreenCrop, _resolucion*, _aspectRatio, _cropActivo: temporales — no se cargan de perfil
+            _modoOtg = false; // siempre inicia apagado, independientemente del perfil
+            // _otgSerial: viene de config.ini (sesión anterior), no de perfiles
             // WiFi no se carga del perfil — el modo de conexión lo determina
             // exclusivamente el estado actual de _wifiConectado y la IP disponible.
-            _resolucionAncho = cfg.ResolucionAncho;
-            _resolucionAlto = cfg.ResolucionAlto;
-            _aspectRatio = cfg.AspectRatio;
-            _customRatioW = cfg.CustomRatioW;
-            _customRatioH = cfg.CustomRatioH;
             _dpi = cfg.Dpi;
             _printFps = cfg.PrintFps;
             _forwardAllClicks = cfg.ForwardAllClicks;

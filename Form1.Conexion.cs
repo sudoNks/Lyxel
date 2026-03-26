@@ -101,14 +101,16 @@ namespace MobiladorStex
                 cardAdb.Controls.AddRange(new Control[] { lblAdbEstado, btnReiniciarAdb, btnLimpiarHuerfanas });
 
                 // ── CARD: Modo OTG ────────────────────────────────────────
-                var cardOtg = CreateCard("Modo OTG — Teclado y Mouse", 30, 180, 260);
+                bool mostrarIndicadorOtg = !string.IsNullOrEmpty(_otgSerial);
+                int otgTopOffset = mostrarIndicadorOtg ? 46 : 0;
+                var cardOtg = CreateCard("Modo OTG — Teclado y Mouse", 30, 180, 260 + otgTopOffset);
 
                 bool otgBloqueadoPorWifi = _wifiConectado || _usarWifi;
 
                 var togOtg = new Guna2ToggleSwitch()
                 {
                     Left = cardOtg.Width - 70,
-                    Top = 48,
+                    Top = 48 + otgTopOffset,
                     Checked = _modoOtg,
                     Enabled = !otgBloqueadoPorWifi,
                     CheckedState = { FillColor = accentColor },
@@ -122,7 +124,7 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 10f),
                     ForeColor = textPrimary,
                     Left = 24,
-                    Top = 50,
+                    Top = 50 + otgTopOffset,
                     AutoSize = true
                 };
 
@@ -134,32 +136,45 @@ namespace MobiladorStex
                     lblOtgActivar.ForeColor = textSecondary;
                 }
 
-                var txtOtgSerial = new Guna2TextBox()
+                const string OTG_OPCION_VACIA = "— Seleccionar dispositivo —";
+
+                var cmbSerial = new Guna2ComboBox()
                 {
-                    Left = 160,
-                    Top = 112,
-                    Width = 260,
+                    Left = 24,
+                    Top = 118 + otgTopOffset,
+                    Width = cardOtg.Width - 48,
                     Height = 34,
-                    Text = _otgSerial,
-                    PlaceholderText = "Dejar vacío si hay un solo dispositivo",
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(42, 42, 45),
                     ForeColor = textPrimary,
                     BorderColor = Color.FromArgb(60, 60, 60),
-                    BorderRadius = 4
+                    BorderRadius = 4,
+                    DropDownStyle = ComboBoxStyle.DropDownList,
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                 };
-                txtOtgSerial.TextChanged += (s, e) => { _otgSerial = txtOtgSerial.Text; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
+                cmbSerial.Items.Add(OTG_OPCION_VACIA);
+                cmbSerial.SelectedIndex = 0;
+
+                cmbSerial.SelectedIndexChanged += (s, e) =>
+                {
+                    if (_cargandoPagina) return;
+                    var item = cmbSerial.SelectedItem?.ToString() ?? "";
+                    _otgSerial = (item == OTG_OPCION_VACIA || string.IsNullOrEmpty(item))
+                        ? ""
+                        : (item.Contains(" — ") ? item.Split(new[] { " — " }, StringSplitOptions.None)[0].Trim() : item.Trim());
+                    GuardarConfigTema();
+                };
 
                 var txtOtgConsola = new Label()
                 {
                     Left = 24,
-                    Top = 158,
+                    Top = 162 + otgTopOffset,
                     Width = cardOtg.Width - 48,
-                    Height = 50,
+                    Height = 42,
                     BackColor = Color.FromArgb(42, 42, 45),
                     ForeColor = Color.FromArgb(0, 200, 0),
                     Font = new Font("Consolas", 8f),
-                    Text = "Presiona 'Detectar' para ver dispositivos conectados",
+                    Text = "Presiona 'Detectar' para listar dispositivos",
                     AutoSize = false
                 };
 
@@ -169,7 +184,7 @@ namespace MobiladorStex
                     Width = 200,
                     Height = 36,
                     Left = 24,
-                    Top = 216,
+                    Top = 212 + otgTopOffset,
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(55, 40, 75),
                     ForeColor = textSecondary,
@@ -178,7 +193,50 @@ namespace MobiladorStex
                     BorderRadius = 4
                 };
 
-                togOtg.CheckedChanged += (s, e) =>
+                // Rellena cmbSerial con los dispositivos ADB actuales.
+                // silencioso=true solo rellena sin mostrar estado en consola.
+                async Task PopularCmbSerial(bool silencioso = false)
+                {
+                    btnDetectarOtg.Enabled = false;
+                    if (!silencioso) txtOtgConsola.Text = "Detectando...";
+                    try
+                    {
+                        var (_, seriales, _) = await Task.Run(() => adbManager.ListarDispositivos());
+                        if (IsDisposed) return;
+
+                        _cargandoPagina = true;
+                        cmbSerial.Items.Clear();
+                        cmbSerial.Items.Add(OTG_OPCION_VACIA);
+                        foreach (var ser in seriales)
+                            cmbSerial.Items.Add(ser);
+
+                        // Restaurar serial guardado si sigue en la lista
+                        bool seleccionado = false;
+                        if (!string.IsNullOrEmpty(_otgSerial))
+                        {
+                            for (int i = 1; i < cmbSerial.Items.Count; i++)
+                            {
+                                if ((cmbSerial.Items[i]?.ToString() ?? "").Trim() == _otgSerial)
+                                { cmbSerial.SelectedIndex = i; seleccionado = true; break; }
+                            }
+                        }
+                        if (!seleccionado)
+                            cmbSerial.SelectedIndex = 0;
+
+                        _cargandoPagina = false;
+
+                        if (!silencioso)
+                            txtOtgConsola.Text = seriales.Count > 0
+                                ? $"✓ {seriales.Count} dispositivo(s) detectado(s)"
+                                : "❌ No se detectaron dispositivos\n• Verifica USB y depuración USB habilitada";
+                    }
+                    finally
+                    {
+                        if (!IsDisposed) { _cargandoPagina = false; btnDetectarOtg.Enabled = true; }
+                    }
+                }
+
+                togOtg.CheckedChanged += async (s, e) =>
                 {
                     if (_cargandoPagina) return;
 
@@ -193,73 +251,119 @@ namespace MobiladorStex
                         return;
                     }
 
-                    _modoOtg = togOtg.Checked;
-                    if (_modoOtg)
-                        MessageBox.Show(this,
-                            "Modo OTG activado.\n\n" +
-                            "• Video y audio se desactivarán automáticamente\n" +
-                            "• Solo funciona por USB — no compatible con WiFi\n" +
-                            "• No requiere depuración USB habilitada\n\n" +
-                            "El teclado y mouse de tu PC controlarán el dispositivo directamente.",
-                            "ℹ Modo OTG", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    MarcarCambiosSinGuardar();
-                };
-
-                btnDetectarOtg.Click += async (s, e) =>
-                {
-                    btnDetectarOtg.Enabled = false;
-
-                    if (_modoOtg)
-                        MessageBox.Show(this,
-                            "Modo OTG activo — Información importante:\n\n" +
-                            "- Cable USB normal: Activa la depuración USB en tu teléfono para usarlo. OTG funcionará correctamente, recuerda que no habrá video ni audio.\n\n" +
-                            "- Adaptador OTG: No requiere depuración USB. Conecta el adaptador compatible y lanza directamente.\n\n" +
-                            "Si no se detecta tu dispositivo, verifica que el cable o adaptador sea compatible con OTG.",
-                            "ℹ Modo OTG — Detección de dispositivos", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    txtOtgConsola.Text = "Detectando...";
-                    try
+                    if (togOtg.Checked && !string.IsNullOrEmpty(_otgSerial))
                     {
-                        var (exito, seriales, output) = await Task.Run(() => adbManager.ListarDispositivos());
-                        if (IsDisposed) return;
-                        if (exito && seriales.Count > 0)
+                        // Sesión anterior detectada — mostrar opciones al usuario
+                        int opcionOtg = 0;
+                        using (var dlg = new Form()
                         {
-                            txtOtgConsola.Text = output;
-                            if (seriales.Count == 1) { _otgSerial = seriales[0]; txtOtgSerial.Text = seriales[0]; }
+                            Text = "",
+                            FormBorderStyle = FormBorderStyle.None,
+                            StartPosition = FormStartPosition.CenterParent,
+                            BackColor = Color.FromArgb(33, 32, 35),
+                            Size = new Size(460, 154),
+                            ShowInTaskbar = false
+                        })
+                        {
+                            dlg.Controls.Add(new Label()
+                            {
+                                Text = $"Sesión anterior: OTG (Serial: {_otgSerial}).",
+                                Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
+                                ForeColor = Color.FromArgb(238, 238, 238),
+                                Left = 20, Top = 18, Width = 420, Height = 20, AutoSize = false
+                            });
+                            dlg.Controls.Add(new Label()
+                            {
+                                Text = "¿Qué deseas hacer?",
+                                Font = new Font("Segoe UI", 9f),
+                                ForeColor = Color.FromArgb(180, 180, 180),
+                                Left = 20, Top = 42, Width = 420, Height = 18, AutoSize = false
+                            });
+                            var btnUsar = new Guna2Button() { Text = "Usar serial guardado", Left = 20, Top = 84, Width = 130, Height = 36, Font = new Font("Segoe UI", 9f), FillColor = Color.FromArgb(107, 47, 196), ForeColor = Color.White, BorderRadius = 4 };
+                            var btnSel = new Guna2Button() { Text = "Seleccionar de la lista", Left = 162, Top = 84, Width = 138, Height = 36, Font = new Font("Segoe UI", 9f), FillColor = Color.FromArgb(55, 40, 75), ForeColor = Color.FromArgb(200, 200, 200), BorderColor = Color.FromArgb(80, 60, 110), BorderThickness = 1, BorderRadius = 4 };
+                            var btnCanc = new Guna2Button() { Text = "Cancelar", Left = 312, Top = 84, Width = 130, Height = 36, Font = new Font("Segoe UI", 9f), FillColor = Color.FromArgb(42, 42, 45), ForeColor = Color.FromArgb(160, 160, 160), BorderColor = Color.FromArgb(60, 60, 60), BorderThickness = 1, BorderRadius = 4 };
+                            btnUsar.Click += (bs, be) => { opcionOtg = 1; dlg.Close(); };
+                            btnSel.Click += (bs, be) => { opcionOtg = 2; dlg.Close(); };
+                            btnCanc.Click += (bs, be) => { dlg.Close(); };
+                            dlg.Controls.AddRange(new Control[] { btnUsar, btnSel, btnCanc });
+                            dlg.ShowDialog(this);
                         }
-                        else
-                            txtOtgConsola.Text = _modoOtg
-                                ? "❌ No se detectaron dispositivos. Verifica que la depuración USB esté habilitada, o si usas adaptador OTG, confirma que sea compatible."
-                                : "❌ No se detectaron dispositivos\n• Verifica USB\n• Depuración USB habilitada";
+                        if (opcionOtg == 0)
+                        {
+                            _cargandoPagina = true;
+                            togOtg.Checked = false;
+                            _cargandoPagina = false;
+                            return;
+                        }
+                        if (opcionOtg == 2)
+                        {
+                            _otgSerial = "";
+                            GuardarConfigTema();
+                            await PopularCmbSerial(silencioso: true);
+                        }
+                        // opcionOtg == 1: usar serial guardado — _otgSerial ya está establecido
                     }
-                    finally
-                    {
-                        if (!IsDisposed) btnDetectarOtg.Enabled = true;
-                    }
+
+                    _modoOtg = togOtg.Checked;
+                    // OTG es temporal — no pertenece al perfil, no marca cambios pendientes
                 };
 
-                cardOtg.Controls.AddRange(new Control[]
+                btnDetectarOtg.Click += async (s, e) => await PopularCmbSerial(silencioso: false);
+
+                // Indicador de sesión anterior OTG
+                var controlsOtg = new System.Collections.Generic.List<Control>();
+                if (mostrarIndicadorOtg)
+                {
+                    var panelSesionOtg = new Panel()
+                    {
+                        Left = 24, Top = 46, Height = 34,
+                        Width = cardOtg.Width - 48,
+                        BackColor = Color.FromArgb(30, 107, 47, 196),
+                        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
+                    };
+                    panelSesionOtg.Paint += (ps, pe) =>
+                    {
+                        using var pen = new Pen(Color.FromArgb(150, 107, 47, 196), 1);
+                        pe.Graphics.DrawRectangle(pen, 0, 0, panelSesionOtg.Width - 1, panelSesionOtg.Height - 1);
+                    };
+                    panelSesionOtg.Controls.Add(new Label()
+                    {
+                        Text = $"📡 Sesión anterior: OTG (Serial: {_otgSerial}) — activa el toggle para reconectar.",
+                        Font = new Font("Segoe UI", 8f, FontStyle.Bold),
+                        ForeColor = Color.FromArgb(210, 190, 245),
+                        Left = 8, Top = 7, Width = panelSesionOtg.Width - 16, Height = 18,
+                        AutoSize = false,
+                        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
+                    });
+                    controlsOtg.Add(panelSesionOtg);
+                }
+                controlsOtg.AddRange(new Control[]
                 {
                 lblOtgActivar,
                 togOtg,
-                new Label() { Text = "Control total del teléfono via teclado/mouse físico.\nNo incluye transmisión de video/audio.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = 24, Top = 72, AutoSize = true },
-                new Label() { Text = "Serial (opcional):", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 116, AutoSize = true },
-                txtOtgSerial, txtOtgConsola, btnDetectarOtg
+                new Label() { Text = "Control total del teléfono via teclado/mouse físico.\nNo incluye transmisión de video/audio.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = 24, Top = 72 + otgTopOffset, AutoSize = true },
+                new Label() { Text = "Dispositivo USB:", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 106 + otgTopOffset, AutoSize = true },
+                cmbSerial, txtOtgConsola, btnDetectarOtg
                 });
+                cardOtg.Controls.AddRange(controlsOtg.ToArray());
+
+                // Poblar el ComboBox al abrir la página (silencioso — sin diálogos ni estado en consola)
+                _ = PopularCmbSerial(silencioso: true);
 
                 // ── CARD: WiFi ────────────────────────────────────────────
-                var cardWifi = CreateCard("Conexión WiFi (Avanzada)", 30, 460, 374);
-
                 // El toggle refleja si hay una sesión WiFi activa o en progreso.
                 // _usarWifi se persiste en config, pero puede quedar true sin sesión real
                 // (ej: app cerrada a mitad del setup). Se recalcula desde el estado real.
                 bool wifiActivoAlCargar = _wifiConectado || _puertotcpActivo;
                 _usarWifi = wifiActivoAlCargar;
+                bool mostrarIndicadorWifi = !string.IsNullOrEmpty(_wifiIp);
+                int wifiTopOffset = mostrarIndicadorWifi ? 46 : 0;
+                var cardWifi = CreateCard("Conexión WiFi (Avanzada)", 30, 468 + otgTopOffset, 392 + wifiTopOffset);
 
                 var togWifi = new Guna2ToggleSwitch()
                 {
                     Left = cardWifi.Width - 70,
-                    Top = 48,
+                    Top = 70 + wifiTopOffset,
                     Checked = wifiActivoAlCargar,
                     CheckedState = { FillColor = accentColor },
                     UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
@@ -269,7 +373,7 @@ namespace MobiladorStex
                 var numPuerto = new Guna2TextBox()
                 {
                     Left = 120,
-                    Top = 102,
+                    Top = 126 + wifiTopOffset,
                     Width = 110,
                     Height = 32,
                     Text = _wifiPuerto.ToString(),
@@ -292,7 +396,7 @@ namespace MobiladorStex
                 var txtIp = new Guna2TextBox()
                 {
                     Left = 180,
-                    Top = 146,
+                    Top = 166 + wifiTopOffset,
                     Width = 160,
                     Height = 34,
                     Text = _wifiIp,
@@ -311,7 +415,7 @@ namespace MobiladorStex
                     Width = 36,
                     Height = 34,
                     Left = 350,
-                    Top = 146,
+                    Top = 166 + wifiTopOffset,
                     Font = new Font("Segoe UI", 11f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
@@ -351,7 +455,7 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 9f, FontStyle.Bold),
                     ForeColor = wifiStatusColorInicial,
                     Left = 24,
-                    Top = 194,
+                    Top = 210 + wifiTopOffset,
                     AutoSize = true
                 };
 
@@ -361,7 +465,7 @@ namespace MobiladorStex
                     Width = 170,
                     Height = 36,
                     Left = 24,
-                    Top = 224,
+                    Top = 238 + wifiTopOffset,
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
@@ -375,7 +479,7 @@ namespace MobiladorStex
                     Width = 150,
                     Height = 36,
                     Left = 204,
-                    Top = 224,
+                    Top = 238 + wifiTopOffset,
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(55, 40, 75),
                     ForeColor = textSecondary,
@@ -391,7 +495,7 @@ namespace MobiladorStex
                     Width = 160,
                     Height = 36,
                     Left = 24,
-                    Top = 270,
+                    Top = 284 + wifiTopOffset,
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.FromArgb(55, 40, 75),
                     ForeColor = textSecondary,
@@ -421,7 +525,100 @@ namespace MobiladorStex
                     if (_usarWifi && _modoOtg) { _modoOtg = false; MessageBox.Show(this, "WiFi es incompatible con OTG. OTG desactivado.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information); }
                     if (_usarWifi)
                     {
-                        // Toggle activado → habilitar el primer paso si el puerto aún no está activo
+                        // Si hay datos de sesión anterior, ofrecer usarlos directamente
+                        if (!string.IsNullOrEmpty(_wifiIp) && !_puertotcpActivo)
+                        {
+                            string ipMostrar = _wifiPuerto > 0 ? $"{_wifiIp}:{_wifiPuerto}" : _wifiIp;
+                            // 0 = sin decisión/cancelado, 1 = usar guardados, 2 = configurar de nuevo
+                            int opcionDlg = 0;
+                            using (var dlg = new Form()
+                            {
+                                Text = "",
+                                FormBorderStyle = FormBorderStyle.None,
+                                StartPosition = FormStartPosition.CenterParent,
+                                BackColor = Color.FromArgb(33, 32, 35),
+                                Size = new Size(460, 154),
+                                ShowInTaskbar = false
+                            })
+                            {
+                                dlg.Controls.Add(new Label()
+                                {
+                                    Text = $"Se encontraron datos de sesión anterior (IP: {ipMostrar}).",
+                                    Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
+                                    ForeColor = Color.FromArgb(238, 238, 238),
+                                    Left = 20, Top = 18, Width = 400, Height = 20,
+                                    AutoSize = false
+                                });
+                                dlg.Controls.Add(new Label()
+                                {
+                                    Text = "¿Qué deseas hacer?",
+                                    Font = new Font("Segoe UI", 9f),
+                                    ForeColor = Color.FromArgb(180, 180, 180),
+                                    Left = 20, Top = 42, Width = 400, Height = 18,
+                                    AutoSize = false
+                                });
+                                var btnUsar = new Guna2Button()
+                                {
+                                    Text = "Usar datos guardados",
+                                    Left = 20, Top = 84, Width = 130, Height = 36,
+                                    Font = new Font("Segoe UI", 9f),
+                                    FillColor = Color.FromArgb(107, 47, 196),
+                                    ForeColor = Color.White,
+                                    BorderRadius = 4
+                                };
+                                var btnNuevo = new Guna2Button()
+                                {
+                                    Text = "Configurar de nuevo",
+                                    Left = 162, Top = 84, Width = 130, Height = 36,
+                                    Font = new Font("Segoe UI", 9f),
+                                    FillColor = Color.FromArgb(55, 40, 75),
+                                    ForeColor = Color.FromArgb(200, 200, 200),
+                                    BorderColor = Color.FromArgb(80, 60, 110),
+                                    BorderThickness = 1,
+                                    BorderRadius = 4
+                                };
+                                var btnCancelar = new Guna2Button()
+                                {
+                                    Text = "Cancelar",
+                                    Left = 304, Top = 84, Width = 130, Height = 36,
+                                    Font = new Font("Segoe UI", 9f),
+                                    FillColor = Color.FromArgb(42, 42, 45),
+                                    ForeColor = Color.FromArgb(160, 160, 160),
+                                    BorderColor = Color.FromArgb(60, 60, 60),
+                                    BorderThickness = 1,
+                                    BorderRadius = 4
+                                };
+                                btnUsar.Click += (bs, be) => { opcionDlg = 1; dlg.Close(); };
+                                btnNuevo.Click += (bs, be) => { opcionDlg = 2; dlg.Close(); };
+                                btnCancelar.Click += (bs, be) => { opcionDlg = 0; dlg.Close(); };
+                                dlg.Controls.AddRange(new Control[] { btnUsar, btnNuevo, btnCancelar });
+                                dlg.ShowDialog(this);
+                            }
+                            bool usarGuardados = opcionDlg == 1;
+                            if (opcionDlg == 0)
+                            {
+                                // Cancelado — revertir el toggle sin disparar el handler
+                                _cargandoPagina = true;
+                                togWifi.Checked = false;
+                                _usarWifi = false;
+                                _cargandoPagina = false;
+                                return;
+                            }
+                            if (usarGuardados)
+                            {
+                                txtIp.Text = _wifiIp;
+                                _puertotcpActivo = true;
+                                btnHabilitarPuerto.Text = "✓ Puerto Habilitado";
+                                btnHabilitarPuerto.Enabled = false;
+                                btnConectarWifi.Enabled = true;
+                                // btnCerrarPuerto solo se habilita al completar la conexión WiFi (_wifiConectado = true)
+                                lblWifiStatus.Text = $"🔵 Datos cargados ({ipMostrar}) — pulsa ⑤ Conectar WiFi";
+                                lblWifiStatus.ForeColor = Color.FromArgb(33, 150, 243);
+                                return;
+                            }
+                        }
+
+                        // Flujo normal: habilitar el primer paso si el puerto aún no está activo
                         btnHabilitarPuerto.Enabled = !_puertotcpActivo;
                         lblWifiStatus.Text = _puertotcpActivo
                             ? $"🔵 Puerto {_wifiPuerto} habilitado — continúa con Conectar WiFi"
@@ -564,6 +761,7 @@ namespace MobiladorStex
                             _ = MonitorearUsbConWifiAsync();
                             lblWifiStatus.Text = $"🟢 Conectado a {_wifiIp}:{_wifiPuerto}"; lblWifiStatus.ForeColor = Color.FromArgb(16, 124, 16);
                             btnConectarWifi.Text = "✓ Conectado"; btnConectarWifi.Enabled = false;
+                            btnCerrarPuerto.Enabled = true;
                             // Actualizar el estado ADB inmediatamente para que el label de la card
                             // refleje la nueva conexión sin necesidad de cambiar de pestaña.
                             _ = ActualizarEstadoAdbAsync(lblAdbEstado);
@@ -637,18 +835,49 @@ namespace MobiladorStex
                     }
                 };
 
-                cardWifi.Controls.AddRange(new Control[]
+                // Indicador de sesión anterior — se construye antes del AddRange para incluirlo
+                Panel panelSesionWifi = null;
+                if (mostrarIndicadorWifi)
+                {
+                    panelSesionWifi = new Panel()
+                    {
+                        Left = 24, Top = 46, Height = 34,
+                        Width = cardWifi.Width - 48,
+                        BackColor = Color.FromArgb(30, 107, 47, 196),
+                        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
+                    };
+                    panelSesionWifi.Paint += (ps, pe) =>
+                    {
+                        using var pen = new Pen(Color.FromArgb(150, 107, 47, 196), 1);
+                        pe.Graphics.DrawRectangle(pen, 0, 0, panelSesionWifi.Width - 1, panelSesionWifi.Height - 1);
+                    };
+                    string ipGuardada = !string.IsNullOrEmpty(_wifiIp) ? $" · {_wifiIp}" : "";
+                    panelSesionWifi.Controls.Add(new Label()
+                    {
+                        Text = $"📡 Sesión anterior guardada{ipGuardada} — activa el toggle para reconectar rápido.",
+                        Font = new Font("Segoe UI", 8f, FontStyle.Bold),
+                        ForeColor = Color.FromArgb(210, 190, 245),
+                        Left = 8, Top = 7,
+                        Width = panelSesionWifi.Width - 16, Height = 18,
+                        AutoSize = false,
+                        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
+                    });
+                }
+
+                var controlsWifi = new System.Collections.Generic.List<Control>();
+                if (panelSesionWifi != null) controlsWifi.Add(panelSesionWifi);
+                controlsWifi.AddRange(new Control[]
                 {
                 // Paso 1 — Conectar cable (informativo)
-                new Label() { Text = "① Conecta el cable USB primero", Font = new Font("Segoe UI", 8f), ForeColor = Color.FromArgb(107, 47, 196), Left = 24, Top = 36, AutoSize = true },
+                new Label() { Text = "① Conecta el cable USB primero", Font = new Font("Segoe UI", 8f), ForeColor = Color.FromArgb(107, 47, 196), Left = 24, Top = 50 + wifiTopOffset, AutoSize = true },
                 // Paso 2 — Activar WiFi
-                new Label() { Text = "② Activar WiFi", Font = new Font("Segoe UI", 10f, FontStyle.Bold), ForeColor = textPrimary, Left = 24, Top = 54, AutoSize = true },
+                new Label() { Text = "② Activar WiFi", Font = new Font("Segoe UI", 10f, FontStyle.Bold), ForeColor = textPrimary, Left = 24, Top = 74 + wifiTopOffset, AutoSize = true },
                 togWifi,
-                new Label() { Text = "⚠ Solo usar en redes privadas — No en redes públicas", Font = new Font("Segoe UI", 8f, FontStyle.Bold), ForeColor = Color.FromArgb(255, 167, 38), Left = 24, Top = 76, AutoSize = true },
-                new Label() { Text = "Puerto:", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 106, AutoSize = true },
+                new Label() { Text = "⚠ Solo usar en redes privadas — No en redes públicas", Font = new Font("Segoe UI", 8f, FontStyle.Bold), ForeColor = Color.FromArgb(255, 167, 38), Left = 24, Top = 102 + wifiTopOffset, AutoSize = true },
+                new Label() { Text = "Puerto:", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 130 + wifiTopOffset, AutoSize = true },
                 numPuerto,
                 // IP — se rellena automáticamente al habilitar el puerto o se introduce a mano
-                new Label() { Text = "IP del dispositivo:", Font = new Font("Segoe UI", 9.5f, FontStyle.Bold), ForeColor = Color.FromArgb(107, 47, 196), Left = 24, Top = 150, AutoSize = true },
+                new Label() { Text = "IP del dispositivo:", Font = new Font("Segoe UI", 9.5f, FontStyle.Bold), ForeColor = Color.FromArgb(107, 47, 196), Left = 24, Top = 170 + wifiTopOffset, AutoSize = true },
                 txtIp, btnDetectarIp,
                 lblWifiStatus, btnHabilitarPuerto, btnConectarWifi, btnCerrarPuerto,
                 new Label() {
@@ -657,11 +886,12 @@ namespace MobiladorStex
                            "  → ¡Listo! Ya puedes quitar el cable  ·  Para volver: Cerrar Puerto",
                     Font = new Font("Segoe UI", 8f),
                     ForeColor = Color.FromArgb(160, 140, 190),
-                    Left = 24, Top = 310, Width = cardWifi.Width - 48, Height = 52,
+                    Left = 24, Top = 330 + wifiTopOffset, Width = cardWifi.Width - 48, Height = 52,
                     AutoSize = false,
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                 }
                 });
+                cardWifi.Controls.AddRange(controlsWifi.ToArray());
 
                 contentPanel.Controls.AddRange(new Control[] { cardAdb, cardOtg, cardWifi });
 

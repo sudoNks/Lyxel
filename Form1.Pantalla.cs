@@ -783,6 +783,7 @@ namespace MobiladorStex
                         if (IsDisposed) return;
                         lblDpiStatus.Text = exito ? $"✓ {mensaje}" : $"✗ {mensaje}";
                         lblDpiStatus.ForeColor = exito ? Color.FromArgb(16, 124, 16) : Color.FromArgb(220, 50, 50);
+                        if (exito) { _ultimoDpiAplicado = _dpi; GuardarConfigTema(); }
                     }
                     finally
                     {
@@ -827,6 +828,17 @@ namespace MobiladorStex
                 new Label() { Text = "Nuevo DPI (120-800):", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = 24, Top = 106, AutoSize = true },
                 numDpi, lblDpiStatus, btnAplicarDpi, btnResetearDpi
                 });
+
+                if (_ultimoDpiAplicado > 0)
+                    cardDpi.Controls.Add(new Label()
+                    {
+                        Text = $"Último DPI aplicado: {_ultimoDpiAplicado}",
+                        Font = new Font("Segoe UI", 7.5f, FontStyle.Italic),
+                        ForeColor = Color.FromArgb(107, 47, 196),
+                        Left = 24,
+                        Top = 88,
+                        AutoSize = true
+                    });
 
                 contentPanel.Controls.AddRange(new Control[]
                 {

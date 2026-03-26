@@ -99,15 +99,10 @@ namespace MobiladorStex
                 s["stay_awake"] = config.StayAwake.ToString().ToLower();
                 s["turn_screen_off"] = config.TurnScreenOff.ToString().ToLower();
                 s["fullscreen"] = config.Fullscreen.ToString().ToLower();
-                s["fullscreen_crop"] = config.FullscreenCrop ?? "";
                 s["shortcut_mod"] = config.ShortcutMod ?? "lalt";
-                s["modo_otg"] = config.ModoOtg.ToString().ToLower();
-                s["otg_serial"] = config.OtgSerial ?? "";
-                s["resolucion_ancho"] = config.ResolucionAncho.ToString();
-                s["resolucion_alto"] = config.ResolucionAlto.ToString();
-                s["aspect_ratio"] = config.AspectRatio ?? "16:9";
-                s["custom_ratio_w"] = config.CustomRatioW.ToString();
-                s["custom_ratio_h"] = config.CustomRatioH.ToString();
+                // modo_otg: siempre inicia OFF — no se persiste en perfiles
+                // otg_serial: viene de config.ini (sesión anterior), no de perfiles
+                // resolucion_ancho/alto, aspect_ratio, custom_ratio_w/h, fullscreen_crop: temporales — no se persisten en perfiles
                 s["dpi"] = config.Dpi.ToString();
                 s["input_mode"] = config.InputMode ?? "uhid";
                 s["pointer_speed"] = config.PointerSpeed.ToString();
@@ -287,14 +282,9 @@ namespace MobiladorStex
                 sec.AddKey("turn_screen_off", config.TurnScreenOff.ToString());
                 sec.AddKey("shortcut_mod", config.ShortcutMod ?? "lalt");
                 sec.AddKey("fullscreen", config.Fullscreen.ToString());
-                sec.AddKey("fullscreen_crop", config.FullscreenCrop ?? "");
-                sec.AddKey("modo_otg", config.ModoOtg.ToString());
-                sec.AddKey("otg_serial", config.OtgSerial ?? "");
-                sec.AddKey("resolucion_ancho", config.ResolucionAncho.ToString());
-                sec.AddKey("resolucion_alto", config.ResolucionAlto.ToString());
-                sec.AddKey("aspect_ratio", config.AspectRatio ?? "16:9");
-                sec.AddKey("custom_ratio_w", config.CustomRatioW.ToString());
-                sec.AddKey("custom_ratio_h", config.CustomRatioH.ToString());
+                // modo_otg: siempre inicia OFF — no se persiste en perfiles
+                // otg_serial: viene de config.ini (sesión anterior), no de perfiles
+                // resolucion_ancho/alto, aspect_ratio, custom_ratio_w/h, fullscreen_crop: temporales — no se persisten en perfiles
                 sec.AddKey("dpi", config.Dpi.ToString());
                 sec.AddKey("input_mode", config.InputMode ?? "uhid");
                 sec.AddKey("pointer_speed", config.PointerSpeed.ToString());

@@ -219,6 +219,31 @@ namespace MobiladorStex
             return (true, seriales, stdout);
         }
 
+        // Devuelve lista de (serial, modelo) usando "adb devices -l" (un solo llamado).
+        // El modelo se extrae del campo "model:" en la salida extendida.
+        // Dispositivos offline/unauthorized se incluyen con modelo vacío.
+        public List<(string serial, string modelo)> ListarDispositivosDetallado()
+        {
+            var (exito, stdout, _) = EjecutarComando(new List<string> { "devices", "-l" }, 5000);
+            var resultado = new List<(string serial, string modelo)>();
+            if (!exito) return resultado;
+
+            foreach (var linea in stdout.Split('\n').Skip(1))
+            {
+                if (!linea.Contains('\t')) continue;
+                var serial = linea.Split('\t')[0].Trim();
+                if (string.IsNullOrEmpty(serial)) continue;
+
+                string modelo = "";
+                var m = Regex.Match(linea, @"model:(\S+)");
+                if (m.Success)
+                    modelo = m.Groups[1].Value.Replace('_', ' ').Trim();
+
+                resultado.Add((serial, modelo));
+            }
+            return resultado;
+        }
+
         public (bool exito, string mensaje) ReiniciarServidor()
         {
             try

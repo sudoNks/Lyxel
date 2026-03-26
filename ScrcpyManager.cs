@@ -106,6 +106,13 @@ namespace MobiladorStex
                 cmd.Add("--otg");
                 if (!string.IsNullOrEmpty(config.OtgSerial))
                     cmd.AddRange(new[] { "-s", config.OtgSerial });
+                else
+                    cmd.Add("-d"); // --select-usb: usar el único dispositivo USB físico disponible
+                // Opciones de comportamiento compatibles con OTG
+                // --stay-awake requiere video activo — incompatible con --otg, no se incluye
+                if (config.DisableScreensaver) cmd.Add("--disable-screensaver");
+                // DPI y velocidad de cursor son comandos ADB, no argumentos de scrcpy
+                // Video, audio, input mode y turn-screen-off no aplican en modo OTG
                 cmd.AddRange(new[] { "--window-title", "Mobilador_SteX_OTG" });
                 return LanzarProceso(cmd, config);
             }
