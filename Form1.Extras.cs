@@ -202,7 +202,7 @@ namespace MobiladorStex
                 });
 
                 // ── CARD: Velocidad del Cursor ────────────────────────────
-                var cardCursor = CreateCard("Velocidad del Cursor (Mouse)  —  Experimental", S(30), S(930), S(170));
+                var cardCursor = CreateCard("Velocidad del Cursor (Mouse)  —  Experimental", S(30), S(930), S(185));
 
                 var trackCursor = new Guna2TrackBar()
                 {
@@ -270,7 +270,6 @@ namespace MobiladorStex
                 {
                     _pointerSpeed = trackCursor.Value;
                     lblCursorValor.Text = _pointerSpeed == 0 ? "0 (default)" : _pointerSpeed.ToString("+0;-0");
-                    if (!_cargandoPagina) MarcarCambiosSinGuardar();
                 };
 
                 btnAplicarCursor.Click += async (s, e) =>
@@ -288,7 +287,7 @@ namespace MobiladorStex
                 btnResetCursor.Click += async (s, e) =>
                 {
                     _cargandoPagina = true; trackCursor.Value = 0; _pointerSpeed = 0; _cargandoPagina = false;
-                    lblCursorValor.Text = "0 (default)"; MarcarCambiosSinGuardar();
+                    lblCursorValor.Text = "0 (default)";
                     var (exito, _) = await adbManager.AplicarPointerSpeedAsync(0);
                     lblCursorStatus.Text = exito ? "✓ Restablecido a 0" : "Guardado — se aplicará al conectar";
                     lblCursorStatus.ForeColor = exito ? Color.FromArgb(16, 124, 16) : textSecondary;
@@ -311,7 +310,7 @@ namespace MobiladorStex
                         Font = new Font("Segoe UI", 7.5f, FontStyle.Italic),
                         ForeColor = Color.FromArgb(107, 47, 196),
                         Left = S(24),
-                        Top = S(52),
+                        Top = S(158),
                         AutoSize = true
                     });
 

@@ -688,7 +688,7 @@ namespace MobiladorStex
                 });
 
                 // ── CARD: DPI ─────────────────────────────────────────────
-                var cardDpi = CreateCard("Control de DPI — Opción 4 (Avanzado)", S(30), S(1198), S(220));
+                var cardDpi = CreateCard("Control de DPI — Opción 4 (Avanzado)", S(30), S(1198), S(234));
 
                 var lblDpiActual = new Label()
                 {
@@ -714,7 +714,7 @@ namespace MobiladorStex
                 };
 
                 var numDpi = CreateNumeric(S(160), S(100), S(100), 120, 800, _dpi, 10);
-                numDpi.ValueChanged += (s, e) => { _dpi = (int)numDpi.Value; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
+                numDpi.ValueChanged += (s, e) => { _dpi = (int)numDpi.Value; };
                 numDpi.KeyDown += (s, e) =>
                 {
                     if (e.KeyCode == Keys.Enter)
@@ -723,7 +723,7 @@ namespace MobiladorStex
                         this.ActiveControl = null;
                     }
                 };
-                numDpi.Leave += (s, e) => { _dpi = (int)numDpi.Value; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
+                numDpi.Leave += (s, e) => { _dpi = (int)numDpi.Value; };
 
                 var lblDpiStatus = new Label()
                 {
@@ -742,7 +742,7 @@ namespace MobiladorStex
                     {
                         var (exito, dpi, _) = await adbManager.DetectarDPIAsync();
                         if (IsDisposed) return;
-                        if (exito) { _dpi = dpi; numDpi.Value = dpi; lblDpiActual.Text = $"DPI actual: {dpi}"; lblDpiActual.ForeColor = Color.FromArgb(16, 124, 16); MarcarCambiosSinGuardar(); }
+                        if (exito) { _dpi = dpi; numDpi.Value = dpi; lblDpiActual.Text = $"DPI actual: {dpi}"; lblDpiActual.ForeColor = Color.FromArgb(16, 124, 16); }
                         else { lblDpiActual.Text = "DPI actual: No detectado"; lblDpiActual.ForeColor = Color.FromArgb(255, 167, 38); }
                     }
                     finally
@@ -824,7 +824,7 @@ namespace MobiladorStex
                         Font = new Font("Segoe UI", 7.5f, FontStyle.Italic),
                         ForeColor = Color.FromArgb(107, 47, 196),
                         Left = S(24),
-                        Top = S(88),
+                        Top = S(212),
                         AutoSize = true
                     });
 
