@@ -2042,73 +2042,190 @@ namespace MobiladorStex
 
         private void LoadAcercaPage()
         {
-            var cardMain = CreateCard("MobiladorSteX × Morrigan", S(30), S(20), S(240));
+            var purpleLight = Color.FromArgb(180, 140, 220);
 
+            // ── Card 1: Encabezado ────────────────────────────────────────────────
+            var cardHeader = new Panel()
+            {
+                Left = S(30),
+                Top = S(20),
+                Width = contentPanel.Width - S(60),
+                Height = S(228),
+                BackColor = bgCard,
+                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
+            };
+
+            // Imagen: 110×110, centrada verticalmente respecto al bloque de texto (Top≈14..149 → centro≈82)
             var picBox = new PictureBox()
             {
-                Left = cardMain.Width - S(130),
-                Top = S(48),
-                Width = S(100),
-                Height = S(100),
-                BackColor = Color.FromArgb(60, 45, 80),
-                BorderStyle = BorderStyle.None,
+                Left = cardHeader.Width - S(132),
+                Top = S(27),
+                Width = S(110),
+                Height = S(110),
+                BackColor = Color.FromArgb(55, 40, 75),
                 SizeMode = PictureBoxSizeMode.Zoom,
                 Anchor = AnchorStyles.Top | AnchorStyles.Right
             };
-
             string logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logo.png");
             if (File.Exists(logoPath))
                 picBox.Image = Image.FromFile(logoPath);
             else
+                picBox.Paint += (s, e) => e.Graphics.DrawString("logo.png",
+                    new Font("Segoe UI", 7f), new SolidBrush(textSecondary),
+                    new RectangleF(0, 0, picBox.Width, picBox.Height),
+                    new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+
+            // Todos los botones de redes en estilo outline (fondo transparente, borde morado)
+            Guna2Button BtnOutline(string text, int left, int top, int width, string url)
             {
-                picBox.Paint += (s, e) =>
-                    e.Graphics.DrawString("logo.png", new Font("Segoe UI", 7f),
-                        new SolidBrush(textSecondary),
-                        new RectangleF(0, 0, picBox.Width, picBox.Height),
-                        new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+                var b = new Guna2Button()
+                {
+                    Text = text, Width = width, Height = S(36), Left = left, Top = top,
+                    Font = new Font("Segoe UI", 9f),
+                    FillColor = Color.Transparent, ForeColor = purpleLight,
+                    BorderColor = purpleLight, BorderThickness = 1, BorderRadius = 6
+                };
+                b.Click += (_, __) => System.Diagnostics.Process.Start(
+                    new System.Diagnostics.ProcessStartInfo() { FileName = url, UseShellExecute = true });
+                return b;
             }
 
-            cardMain.Controls.AddRange(new Control[]
+            cardHeader.Controls.AddRange(new Control[]
             {
                 picBox,
-                new Label() { Text = $"MobiladorSteX — MORRIGAN God's Apocalypse\n{ObtenerVersionApp()}", Font = new Font("Segoe UI", 10f, FontStyle.Bold), ForeColor = accentColor, Left = S(24), Top = S(52), AutoSize = true },
-                new Label() { Text = "Desarrollado por Dario (@nks_array)", Font = new Font("Segoe UI", 9f), ForeColor = textSecondary, Left = S(24), Top = S(92), AutoSize = true },
-                new Label() { Text = "\"No controlas el teléfono. Controlas la distancia.\"", Font = new Font("Segoe UI", 9f, FontStyle.Italic), ForeColor = Color.FromArgb(180, 140, 220), Left = S(24), Top = S(116), Width = cardMain.Width - S(160), AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
-                new Label() { Text = "Versión insignia de la comunidad Free Fire PC.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = S(24), Top = S(148), AutoSize = true },
-                CreateBtnSocial("🎵  TikTok — @nks_array", S(24), S(180), S(210), Color.FromArgb(55, 40, 75), "https://www.tiktok.com/@nks_array"),
-                CreateBtnSocial("💬  Discord — Unirse", S(244), S(180), S(185), Color.FromArgb(78, 28, 141), "https://discord.gg/CU5quVNyun")
+                new Label() { Text = "Edición especial", Font = new Font("Segoe UI", 7.5f), ForeColor = textSecondary, Left = S(24), Top = S(14), AutoSize = true },
+                new Label() { Text = "MobiladorSteX × Morrigan", Font = new Font("Segoe UI", 13f, FontStyle.Bold), ForeColor = textPrimary, Left = S(24), Top = S(30), AutoSize = true },
+                new Label() { Text = $"Dreadnought Patch — {ObtenerVersionApp()}", Font = new Font("Segoe UI", 9.5f), ForeColor = accentColor, Left = S(24), Top = S(60), AutoSize = true },
+                new Label() { Text = "Desarrollado por Dario (@nks_array)", Font = new Font("Segoe UI", 9f), ForeColor = textSecondary, Left = S(24), Top = S(84), AutoSize = true },
+                new Label() { Text = "\"No controlas el teléfono. Controlas la distancia.\"", Font = new Font("Segoe UI", 9f, FontStyle.Italic), ForeColor = purpleLight, Left = S(24), Top = S(107), Width = cardHeader.Width - S(158), AutoSize = false, Height = S(20), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
+                new Label() { Text = "Versión insignia de la comunidad Free Fire PC.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = S(24), Top = S(132), AutoSize = true },
+                // Fila única de 4 botones outline, step=S(130) (S(118) ancho + S(12) gap)
+                BtnOutline("TikTok — @nks_array", S(24),  S(172), S(118), "https://www.tiktok.com/@nks_array"),
+                BtnOutline("💬  Discord",          S(154), S(172), S(118), "https://discord.gg/CU5quVNyun"),
+                BtnOutline("▶  YouTube",           S(284), S(172), S(118), "https://www.youtube.com/@Nks_v1"),
+                BtnOutline("☕  Ko-fi",             S(414), S(172), S(118), "https://ko-fi.com/nks_array"),
             });
 
-            var cardCreditos = CreateCard("Créditos", S(30), S(280), S(140));
-            cardCreditos.Controls.Add(new Label()
+            // ── Card 2: Acerca del Proyecto — altura dinámica según contenido ────────
+            // lblProyecto.Height antes de tener parent devuelve una sola línea, por eso
+            // usamos TextRenderer.MeasureText que calcula el alto real con wrapping.
+            int cardW = contentPanel.Width - S(60);
+            int lblMaxW = cardW - S(48);
+            string proyectoText =
+                "MobiladorSteX nació de un uso personal — una herramienta para llevar la experiencia " +
+                "móvil a PC con la mayor fluidez y calidad posible, enfocada en usuarios que buscan " +
+                "control, precisión y estabilidad.\n\n" +
+                "Al ser un proyecto personal, puede presentar errores. Cualquier feedback es bienvenido " +
+                "y ayuda a mejorar la herramienta para toda la comunidad.\n\n" +
+                "Esta edición especial reorganiza la identidad visual del launcher, inspirada en " +
+                "Morrigan — una estética más distintiva que se convierte en el emblema de la herramienta.";
+            var proyectoFont = new Font("Segoe UI", 9f);
+            int textH = TextRenderer.MeasureText(proyectoText, proyectoFont,
+                new Size(lblMaxW, int.MaxValue),
+                TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height;
+
+            var cardProyecto = CreateCard("Acerca del Proyecto", S(30), cardHeader.Bottom + S(15),
+                S(52) + textH + S(24));
+            var lblProyecto = new Label()
             {
-                Text = "scrcpy — Genymobile  |  Licencia Apache 2.0\n" +
-                       "Guna UI2 — Guna Systems  |  Librería de controles WinForms\n" +
-                       "ini-parser — Ricardo Amores  |  MIT License",
-                Font = new Font("Segoe UI", 9f),
+                Text = proyectoText,
+                Font = proyectoFont,
                 ForeColor = textSecondary,
                 Left = S(24),
                 Top = S(52),
-                AutoSize = true
-            });
+                Width = lblMaxW,
+                Height = textH,
+                AutoSize = false
+            };
+            cardProyecto.Controls.Add(lblProyecto);
 
-            var cardProyecto = CreateCard("Acerca del Proyecto", S(30), S(440), S(200));
-            cardProyecto.Controls.Add(new Label()
+            // ── Card 3: Descargas oficiales ────────────────────────────────────────
+            var cardDescargas = CreateCard("Descargas oficiales", S(30), cardProyecto.Bottom + S(15), S(170));
+
+            // Badge de versión — solo informativo, en la misma fila que el título de card
+            var lblBadge = new Label()
             {
-                Text = "MobiladorSteX está diseñado para llevar la experiencia móvil a PC con la mayor fluidez\n" +
-                       "y calidad posible, enfocado en usuarios que buscan control, precisión y estabilidad.\n\n" +
-                       "Esta edición especial introduce una identidad visual inspirada en Morrigan, integrando\n" +
-                       "una estética distintiva con una experiencia optimizada, sin perder el enfoque en\n" +
-                       "rendimiento y claridad.\n\n" +
-                       "Más que una herramienta, es una forma de transformar cómo ves y controlas tu dispositivo.",
-                Font = new Font("Segoe UI", 9f),
-                ForeColor = textSecondary,
-                Left = S(24),
-                Top = S(50),
-                AutoSize = true
-            });
+                Text = $"Versión actual: {ObtenerVersionApp()}",
+                Font = new Font("Segoe UI", 8f),
+                ForeColor = purpleLight,
+                BackColor = Color.FromArgb(50, 30, 75),
+                AutoSize = false,
+                Width = S(165),
+                Height = S(22),
+                TextAlign = ContentAlignment.MiddleCenter,
+                Top = S(22),
+                Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                Cursor = Cursors.Default
+            };
+            lblBadge.Left = cardDescargas.Width - S(24) - S(165);
 
-            contentPanel.Controls.AddRange(new Control[] { cardMain, cardCreditos, cardProyecto });
+            var lblDescDescargas = new Label()
+            {
+                Text = "Aquí encontrarás todas las versiones oficiales del launcher — desde las más recientes " +
+                       "hasta versiones anteriores. Siempre descarga desde fuentes oficiales para garantizar " +
+                       "seguridad y estabilidad.",
+                Font = new Font("Segoe UI", 8.5f),
+                ForeColor = textPrimary,
+                Left = S(24),
+                Top = S(52),
+                AutoSize = true,
+                MaximumSize = new Size(cardDescargas.Width - S(48), 0)
+            };
+
+            var btnDescargas = new Guna2Button()
+            {
+                Text = "⬇  Ver todas las versiones",
+                Width = S(222),
+                Height = S(38),
+                Left = S(24),
+                Top = S(115),
+                Font = new Font("Segoe UI", 9.5f),
+                FillColor = accentColor,
+                ForeColor = Color.White,
+                BorderRadius = 6
+            };
+            btnDescargas.Click += (s, e) => System.Diagnostics.Process.Start(
+                new System.Diagnostics.ProcessStartInfo() { FileName = "https://app.mediafire.com/folder/mbedorlh3gugg", UseShellExecute = true });
+
+            cardDescargas.Controls.AddRange(new Control[] { lblBadge, lblDescDescargas, btnDescargas });
+
+            // ── Card 4: Créditos ──────────────────────────────────────────────────
+            var cardCreditos = CreateCard("Créditos", S(30), cardDescargas.Bottom + S(15), S(168));
+            var creditRows = new (string name, string license)[]
+            {
+                ("scrcpy — Genymobile",        "Apache 2.0"),
+                ("Guna UI2 — Guna Systems",    "Librería WinForms"),
+                ("ini-parser — Ricardo Amores","MIT License"),
+            };
+            int rowTop = S(52);
+            foreach (var (name, license) in creditRows)
+            {
+                cardCreditos.Controls.Add(new Label()
+                {
+                    Text = name,
+                    Font = new Font("Segoe UI", 9f),
+                    ForeColor = textPrimary,
+                    Left = S(24),
+                    Top = rowTop,
+                    AutoSize = true
+                });
+                var lblLic = new Label()
+                {
+                    Text = license,
+                    Font = new Font("Segoe UI", 9f),
+                    ForeColor = textSecondary,
+                    Top = rowTop,
+                    Width = S(180),
+                    Height = S(22),
+                    TextAlign = ContentAlignment.MiddleRight,
+                    Anchor = AnchorStyles.Top | AnchorStyles.Right
+                };
+                lblLic.Left = cardCreditos.Width - S(24) - S(180);
+                cardCreditos.Controls.Add(lblLic);
+                rowTop += S(32);
+            }
+
+            contentPanel.Controls.AddRange(new Control[] { cardHeader, cardProyecto, cardDescargas, cardCreditos });
         }
 
         private Guna2Button CreateBtnSocial(string text, int left, int top, int width, Color fill, string url)
