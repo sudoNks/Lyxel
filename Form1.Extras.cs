@@ -72,17 +72,41 @@ namespace MobiladorStex
                     UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
-                togFlotante.CheckedChanged += (s, e) => { _mostrarFlotante = togFlotante.Checked; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
 
                 var togPrintFps = new Guna2ToggleSwitch()
                 {
                     Left = cardDebug.Width - S(70),
                     Top = S(128),
                     Checked = _printFps,
+                    Enabled = _mostrarFlotante,
                     CheckedState = { FillColor = accentColor },
                     UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
+
+                var lblFpsDesc = new Label()
+                {
+                    Text = _mostrarFlotante
+                        ? "Muestra los FPS reales en la ventana flotante durante la sesión"
+                        : "Requiere ventana flotante activa",
+                    Font = new Font("Segoe UI", 8f),
+                    ForeColor = _mostrarFlotante ? textSecondary : Color.FromArgb(200, 100, 100),
+                    Left = S(24),
+                    Top = S(150),
+                    AutoSize = true
+                };
+
+                togFlotante.CheckedChanged += (s, e) =>
+                {
+                    _mostrarFlotante = togFlotante.Checked;
+                    togPrintFps.Enabled = _mostrarFlotante;
+                    lblFpsDesc.Text = _mostrarFlotante
+                        ? "Muestra los FPS reales en la ventana flotante durante la sesión"
+                        : "Requiere ventana flotante activa";
+                    lblFpsDesc.ForeColor = _mostrarFlotante ? textSecondary : Color.FromArgb(200, 100, 100);
+                    if (!_cargandoPagina) MarcarCambiosSinGuardar();
+                };
+
                 togPrintFps.CheckedChanged += (s, e) => { _printFps = togPrintFps.Checked; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
 
                 cardDebug.Controls.AddRange(new Control[]
@@ -91,7 +115,7 @@ namespace MobiladorStex
                 new Label() { Text = "Muestra el panel flotante con info de la sesión al iniciar scrcpy", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = S(24), Top = S(80), AutoSize = true },
                 togFlotante,
                 new Label() { Text = "Mostrar FPS", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(130), AutoSize = true },
-                new Label() { Text = "Muestra los FPS reales en la ventana flotante durante la sesión", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = S(24), Top = S(150), AutoSize = true },
+                lblFpsDesc,
                 togPrintFps,
                 new Label() { Text = "ℹ El contador aparecerá al iniciar scrcpy, no al activar esta opción.", Font = new Font("Segoe UI", 8f, FontStyle.Bold), ForeColor = Color.FromArgb(255, 167, 38), Left = S(24), Top = S(180), Width = cardDebug.Width - S(48), AutoSize = false, Height = S(20), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right }
                 });

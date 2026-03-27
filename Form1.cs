@@ -1492,7 +1492,7 @@ namespace MobiladorStex
             CustomRatioW = _customRatioW,
             CustomRatioH = _customRatioH,
             Dpi = _dpi,
-            PrintFps = _printFps,
+            PrintFps = _printFps && _mostrarFlotante,
             ForwardAllClicks = _forwardAllClicks,
             MostrarFlotante = _mostrarFlotante,
             WmSizeActivo = _wmSizeActivo,
