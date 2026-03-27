@@ -489,6 +489,7 @@ namespace MobiladorStex
 
             navButtons[paginaActiva].Checked = true;
             navButtons[paginaActiva].FillColor = Color.FromArgb(60, 40, 80);
+            navButtons[paginaActiva].ForeColor = Color.White;
 
             btnToggle = new Guna2Button()
             {
@@ -614,9 +615,11 @@ namespace MobiladorStex
             {
                 btn.Checked = false;
                 btn.FillColor = Color.Transparent;
+                btn.ForeColor = textSecondary;
             }
             navButtons[index].Checked = true;
             navButtons[index].FillColor = Color.FromArgb(60, 40, 80);
+            navButtons[index].ForeColor = Color.White;
 
             lblTituloPagina.Text = title;
             contentPanel.Controls.Clear();
