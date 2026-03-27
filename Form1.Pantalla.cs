@@ -351,14 +351,14 @@ namespace MobiladorStex
                 });
 
                 // ── CARD: Resolución ADB ──────────────────────────────────
-                var cardAdb = CreateCard("Modificar Resolución ADB — Opción 2 (Avanzado)", S(30), S(700), S(238));
+                var cardAdb = CreateCard("Modificar Resolución ADB — Opción 2 (Avanzado)", S(30), S(700), S(202));
 
                 var lblAdbAdvertencia = new Label()
                 {
-                    Text = "ℹ Modifica cómo el teléfono renderiza la imagen. Puede mejorar la experiencia en algunos " +
-                           "dispositivos, pero en otros (especialmente Qualcomm/Snapdragon) puede causar caída de FPS y " +
-                           "aumento de latencia. En ciertos modelos el fabricante puede bloquear este comando vía ADB. " +
-                           "Si experimentas problemas, desactívala — los bordes son preferibles a un mal rendimiento.",
+                    Text = "Modifica cómo el teléfono renderiza la imagen. Puede mejorar la experiencia en algunos " +
+                           "dispositivos, pero en Qualcomm/Snapdragon puede causar caídas de FPS y latencia. " +
+                           "En ciertos modelos el fabricante puede bloquear este comando vía ADB. " +
+                           "Si experimentas problemas, desactívalo — los bordes son preferibles a un mal rendimiento.",
                     Font = new Font("Segoe UI", 8f),
                     ForeColor = Color.FromArgb(120, 120, 120),
                     Left = S(24),
@@ -388,7 +388,7 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 8f, FontStyle.Italic),
                     ForeColor = textSecondary,
                     Left = S(24),
-                    Top = S(152),
+                    Top = S(116),
                     AutoSize = true
                 };
 
@@ -398,7 +398,7 @@ namespace MobiladorStex
                     Width = S(180),
                     Height = S(36),
                     Left = S(24),
-                    Top = S(182),
+                    Top = S(146),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
@@ -411,7 +411,7 @@ namespace MobiladorStex
                     Width = S(100),
                     Height = S(36),
                     Left = S(214),
-                    Top = S(182),
+                    Top = S(146),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
@@ -517,7 +517,6 @@ namespace MobiladorStex
                 {
                 lblAdbAdvertencia,
                 lblAdbConflicto,
-                new Label() { Text = "Modifica la resolución física del dispositivo via ADB.\n⚠ Xiaomi/MIUI y Oppo/ColorOS pueden bloquear este comando.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = S(24), Top = S(116), AutoSize = true },
                 lblAdbStatus, btnAplicarRes, btnResetearRes
                 });
 
