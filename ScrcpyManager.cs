@@ -276,6 +276,7 @@ namespace MobiladorStex
             catch (Exception ex)
             {
                 Console.WriteLine($"Error lanzando scrcpy: {ex.Message}");
+                _proceso = null;
                 return false;
             }
         }
