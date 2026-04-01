@@ -377,7 +377,7 @@ namespace MobiladorStex
                     Enabled = _useAdvancedEncoder,
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
-                btnDetectarEncoders.Image = IconHelper.Get("ic_sync");
+                btnDetectarEncoders.Image = IconMap.Sync;
 
                 var lblEncoderStatus = new Label()
                 {

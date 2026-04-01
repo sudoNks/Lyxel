@@ -16,7 +16,17 @@
       "Bash(cp C:/Users/Admin/Downloads/Assets/wifi_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_wifi.png)",
       "Bash(cp C:/Users/Admin/Downloads/Assets/settings_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_extras.png)",
       "Bash(powershell -Command ':*)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(cp \"C:/Users/Admin/Downloads/delete_24dp_FFFFFF.png\" \"C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_delete.png\")",
+      "Bash(cp \"C:/Users/Admin/Downloads/file_download_24dp_FFFFFF.png\" \"C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_download.png\")",
+      "Bash(cp \"C:/Users/Admin/Downloads/import_export_24dp_FFFFFF.png\" \"C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_import_export.png\")",
+      "Bash(cp \"C:/Users/Admin/Downloads/upload_file_24dp_FFFFFF.png\" \"C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_upload.png\")",
+      "Bash(cp \"C:/Users/Admin/Downloads/save_24dp_FFFFFF.png\" \"C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_save2.png\")",
+      "Bash(cp \"C:/Users/Admin/Downloads/discord.png\" \"C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_discord.png\")",
+      "Bash(cp \"C:/Users/Admin/Downloads/tiktok.png\" \"C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_tiktok.png\")",
+      "Bash(cp \"C:/Users/Admin/Downloads/youtube.png\" \"C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_youtube.png\")",
+      "Bash(cp \"C:/Users/Admin/Downloads/kofi.png\" \"C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_kofi.png\")",
+      "Bash(sed:*)"
     ]
   }
 }

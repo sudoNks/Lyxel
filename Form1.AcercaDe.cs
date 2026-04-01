@@ -1,4 +1,5 @@
 using Guna.UI2.WinForms;
+using MobiladorStex.Helpers;
 using System;
 using System.Drawing;
 using System.IO;
@@ -48,15 +49,18 @@ namespace MobiladorStex
                     new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
 
             // Todos los botones de redes en estilo outline (fondo transparente, borde morado)
-            Guna2Button BtnOutline(string text, int left, int top, int width, string url)
+            Guna2Button BtnOutline(string text, int left, int top, int width, string url, Image? icon)
             {
                 var b = new Guna2Button()
                 {
                     Text = text, Width = width, Height = S(36), Left = left, Top = top,
                     Font = new Font("Segoe UI", 9f),
                     FillColor = Color.Transparent, ForeColor = purpleLight,
-                    BorderColor = purpleLight, BorderThickness = 1, BorderRadius = 6
+                    BorderColor = purpleLight, BorderThickness = 1, BorderRadius = 6,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left
                 };
+                b.Image = icon;
                 b.Click += (_, __) => System.Diagnostics.Process.Start(
                     new System.Diagnostics.ProcessStartInfo() { FileName = url, UseShellExecute = true });
                 return b;
@@ -72,10 +76,10 @@ namespace MobiladorStex
                 new Label() { Text = "\"No controlas el teléfono. Controlas la distancia.\"", Font = new Font("Segoe UI", 9f, FontStyle.Italic), ForeColor = purpleLight, Left = S(24), Top = S(107), Width = cardHeader.Width - S(158), AutoSize = false, Height = S(20), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
                 new Label() { Text = "Versión insignia de la comunidad Free Fire PC.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = S(24), Top = S(132), AutoSize = true },
                 // Fila única de 4 botones outline, step=S(130) (S(118) ancho + S(12) gap)
-                BtnOutline("TikTok — @nks_array", S(24),  S(172), S(118), "https://www.tiktok.com/@nks_array"),
-                BtnOutline("💬  Discord",          S(154), S(172), S(118), "https://discord.gg/CU5quVNyun"),
-                BtnOutline("▶  YouTube",           S(284), S(172), S(118), "https://www.youtube.com/@Nks_v1"),
-                BtnOutline("☕  Ko-fi",             S(414), S(172), S(118), "https://ko-fi.com/nks_array"),
+                BtnOutline("  TikTok",   S(24),  S(172), S(118), "https://www.tiktok.com/@nks_array", IconMap.TikTok),
+                BtnOutline("  Discord",  S(154), S(172), S(118), "https://discord.gg/CU5quVNyun",     IconMap.Discord),
+                BtnOutline("  YouTube",  S(284), S(172), S(118), "https://www.youtube.com/@Nks_v1",   IconMap.YouTube),
+                BtnOutline("  Ko-fi",    S(414), S(172), S(118), "https://ko-fi.com/nks_array",       IconMap.Kofi),
             });
 
             // ── Card 2: Acerca del Proyecto — altura dinámica según contenido ────────
@@ -131,6 +135,18 @@ namespace MobiladorStex
             };
             lblBadge.Left = cardDescargas.Width - S(24) - S(165);
 
+            var picVerified = new PictureBox()
+            {
+                Width = S(16),
+                Height = S(16),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Image = IconMap.Verified,
+                BackColor = Color.Transparent,
+                Top = S(22) + (S(22) - S(16)) / 2,
+                Anchor = AnchorStyles.Top | AnchorStyles.Right
+            };
+            picVerified.Left = cardDescargas.Width - S(24) - S(165) - S(4) - S(16);
+
             var lblDescDescargas = new Label()
             {
                 Text = "Aquí encontrarás todas las versiones oficiales del launcher — desde las más recientes " +
@@ -146,7 +162,7 @@ namespace MobiladorStex
 
             var btnDescargas = new Guna2Button()
             {
-                Text = "⬇  Ver todas las versiones",
+                Text = "  Ver todas las versiones",
                 Width = S(222),
                 Height = S(38),
                 Left = S(24),
@@ -154,12 +170,15 @@ namespace MobiladorStex
                 Font = new Font("Segoe UI", 9.5f),
                 FillColor = accentColor,
                 ForeColor = Color.White,
-                BorderRadius = 6
+                BorderRadius = 6,
+                ImageSize = new Size(S(18), S(18)),
+                ImageAlign = HorizontalAlignment.Left
             };
+            btnDescargas.Image = IconMap.Download;
             btnDescargas.Click += (s, e) => System.Diagnostics.Process.Start(
                 new System.Diagnostics.ProcessStartInfo() { FileName = "https://app.mediafire.com/folder/mbedorlh3gugg", UseShellExecute = true });
 
-            cardDescargas.Controls.AddRange(new Control[] { lblBadge, lblDescDescargas, btnDescargas });
+            cardDescargas.Controls.AddRange(new Control[] { picVerified, lblBadge, lblDescDescargas, btnDescargas });
 
             // ── Card 4: Créditos ──────────────────────────────────────────────────
             var cardCreditos = CreateCard("Créditos", S(30), cardDescargas.Bottom + S(15), S(168));

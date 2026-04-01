@@ -267,7 +267,7 @@ namespace MobiladorStex
                     ImageSize = new Size(S(18), S(18)),
                     ImageAlign = HorizontalAlignment.Left
                 };
-                btnAplicarCursor.Image = IconHelper.Get("ic_apply");
+                btnAplicarCursor.Image = IconMap.Apply;
 
                 var btnResetCursor = new Guna2Button()
                 {
@@ -285,7 +285,7 @@ namespace MobiladorStex
                     ImageSize = new Size(S(18), S(18)),
                     ImageAlign = HorizontalAlignment.Left
                 };
-                btnResetCursor.Image = IconHelper.Get("ic_reset");
+                btnResetCursor.Image = IconMap.Reset;
 
                 var lblCursorStatus = new Label()
                 {

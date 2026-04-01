@@ -71,5 +71,15 @@
     <EmbeddedResource Include="Assets\Icons\ic_wifi_close.png" />
     <EmbeddedResource Include="Assets\Icons\ic_apply.png" />
     <EmbeddedResource Include="Assets\Icons\ic_reset.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_delete.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_download.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_import_export.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_upload.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_save2.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_discord.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_tiktok.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_youtube.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_kofi.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_clear.png" />
   </ItemGroup>
 </Project>

@@ -89,7 +89,7 @@ namespace MobiladorStex
                 ImageSize = new Size(S(18), S(18)),
                 ImageAlign = HorizontalAlignment.Left
             };
-            btnReconectar.Image = IconHelper.Get("ic_refresh");
+            btnReconectar.Image = IconMap.Refresh;
             btnReconectar.Click += async (s, e) =>
             {
                 btnReconectar.Text = "Reconectando...";
@@ -116,12 +116,12 @@ namespace MobiladorStex
                 ForeColor = AppTheme.TextDimmer,
                 BorderRadius = 6,
                 ImageSize = new Size(S(22), S(22)),
-                ImageAlign = HorizontalAlignment.Left,
-                Padding = new Padding(S(40), 0, 0, 0),
+                ImageAlign = HorizontalAlignment.Center,
+                Padding = new Padding(0),
                 Enabled = false, // deshabilitado hasta confirmar dispositivo
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
             };
-            btnIniciarScrcpy.Image = IconHelper.Get("ic_power_dark");
+            btnIniciarScrcpy.Image = IconMap.PowerDark;
             btnIniciarScrcpy.Click += (s, e) => LanzarScrcpy();
 
             btnDetenerScrcpy = new Guna2Button()
@@ -138,12 +138,12 @@ namespace MobiladorStex
                 BorderThickness = 1,
                 BorderRadius = 4,
                 ImageSize = new Size(S(22), S(22)),
-                ImageAlign = HorizontalAlignment.Left,
-                Padding = new Padding(S(24), 0, 0, 0),
+                ImageAlign = HorizontalAlignment.Center,
+                Padding = new Padding(0),
                 Enabled = false,
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
             };
-            btnDetenerScrcpy.Image = IconHelper.Get("ic_power_dark");
+            btnDetenerScrcpy.Image = IconMap.PowerDark;
             btnDetenerScrcpy.Click += (s, e) => DetenerScrcpy();
 
             lblUltimoPerfil = new Label()

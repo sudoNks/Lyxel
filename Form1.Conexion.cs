@@ -42,7 +42,7 @@ namespace MobiladorStex
                     ImageSize = new Size(S(18), S(18)),
                     ImageAlign = HorizontalAlignment.Left
                 };
-                btnReiniciarAdb.Image = IconHelper.Get("ic_sync");
+                btnReiniciarAdb.Image = IconMap.Sync;
 
                 var btnLimpiarHuerfanas = new Guna2Button()
                 {
@@ -58,7 +58,7 @@ namespace MobiladorStex
                     ImageSize = new Size(S(18), S(18)),
                     ImageAlign = HorizontalAlignment.Left
                 };
-                btnLimpiarHuerfanas.Image = IconHelper.Get("ic_clean");
+                btnLimpiarHuerfanas.Image = IconMap.Clean;
 
                 btnReiniciarAdb.Click += async (s, e) =>
                 {
@@ -195,7 +195,7 @@ namespace MobiladorStex
                     ImageSize = new Size(S(18), S(18)),
                     ImageAlign = HorizontalAlignment.Left
                 };
-                btnDetectarOtg.Image = IconHelper.Get("ic_sync");
+                btnDetectarOtg.Image = IconMap.Sync;
 
                 // Rellena cmbSerial con los dispositivos ADB actuales.
                 // silencioso=true solo rellena sin mostrar estado en consola.
@@ -428,7 +428,7 @@ namespace MobiladorStex
                     ImageSize = new Size(S(18), S(18)),
                     Enabled = _hayDispositivo
                 };
-                btnDetectarIp.Image = IconHelper.Get("ic_sync");
+                btnDetectarIp.Image = IconMap.Sync;
 
                 // Estado inicial del label de status según flags persistidos
                 string wifiStatusTextoInicial;
@@ -479,7 +479,7 @@ namespace MobiladorStex
                     ImageSize = new Size(S(18), S(18)),
                     ImageAlign = HorizontalAlignment.Left
                 };
-                btnHabilitarPuerto.Image = IconHelper.Get("ic_wifi_add");
+                btnHabilitarPuerto.Image = IconMap.WifiAdd;
 
                 var btnConectarWifi = new Guna2Button()
                 {
@@ -498,7 +498,7 @@ namespace MobiladorStex
                     ImageSize = new Size(S(18), S(18)),
                     ImageAlign = HorizontalAlignment.Left
                 };
-                btnConectarWifi.Image = IconHelper.Get("ic_wifi_connect");
+                btnConectarWifi.Image = IconMap.WifiConnect;
 
                 var btnCerrarPuerto = new Guna2Button()
                 {
@@ -515,7 +515,7 @@ namespace MobiladorStex
                     ImageSize = new Size(S(18), S(18)),
                     ImageAlign = HorizontalAlignment.Left
                 };
-                btnCerrarPuerto.Image = IconHelper.Get("ic_wifi_close");
+                btnCerrarPuerto.Image = IconMap.WifiClose;
 
                 togWifi.CheckedChanged += async (s, e) =>
                 {

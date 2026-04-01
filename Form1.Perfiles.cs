@@ -182,11 +182,11 @@ namespace MobiladorStex
                 ImageAlign = HorizontalAlignment.Left,
                 Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
             };
-            btnNuevoPerfil.Image = IconHelper.Get("ic_add_profile");
+            btnNuevoPerfil.Image = IconMap.AddProfile;
 
             var btnImportar = new Guna2Button()
             {
-                Text = "📂 Importar",
+                Text = "Importar",
                 Left = S(12),
                 Top = panelIzq.Height - S(42),
                 Width = (panelIzq.Width - S(30)) / 2,
@@ -197,12 +197,15 @@ namespace MobiladorStex
                 BorderColor = AppTheme.BorderNeutral,
                 BorderThickness = 1,
                 BorderRadius = 4,
-                Anchor = AnchorStyles.Bottom | AnchorStyles.Left
+                Anchor = AnchorStyles.Bottom | AnchorStyles.Left,
+                ImageSize = new Size(S(18), S(18)),
+                ImageAlign = HorizontalAlignment.Left
             };
+            btnImportar.Image = IconMap.ImportExport;
 
             var btnExportarLista = new Guna2Button()
             {
-                Text = "💾 Exportar",
+                Text = "Exportar",
                 Left = S(18) + (panelIzq.Width - S(30)) / 2,
                 Top = panelIzq.Height - S(42),
                 Width = (panelIzq.Width - S(30)) / 2,
@@ -213,8 +216,11 @@ namespace MobiladorStex
                 BorderColor = AppTheme.BorderNeutral,
                 BorderThickness = 1,
                 BorderRadius = 4,
-                Anchor = AnchorStyles.Bottom | AnchorStyles.Right
+                Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
+                ImageSize = new Size(S(18), S(18)),
+                ImageAlign = HorizontalAlignment.Left
             };
+            btnExportarLista.Image = IconMap.ImportExport;
 
             RefrescarListaPerfiles();
             if (!string.IsNullOrEmpty(_perfilSeleccionado) &&
@@ -338,22 +344,85 @@ namespace MobiladorStex
                 AutoSize = true
             });
 
-            var lblValores = new Label()
+            var panelValores = new Panel()
             {
-                Text = FormatearValoresPerfil(perfil),
-                Font = new Font("Segoe UI", 8.5f),
-                ForeColor = textSecondary,
                 Left = S(24),
                 Top = S(128),
                 Width = _panelDetalle.Width - S(48),
-                Height = S(160),
-                AutoSize = false,
+                Height = S(154),
+                BackColor = Color.Transparent,
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
             };
 
+            void FillValoresPanel(Panel panel, ScrcpyConfig cfg)
+            {
+                panel.Controls.Clear();
+                if (cfg == null) return;
+                var rows = new (string name, string val, bool? good)[]
+                {
+                    ("Video",      cfg.Video ? "Activo" : "Inactivo",                        cfg.Video),
+                    ("Audio",      cfg.Audio ? "Activo" : "Inactivo",                        cfg.Audio),
+                    ("FPS",        cfg.Fps.ToString(),                                        null),
+                    ("Bitrate",    $"{cfg.Bitrate} Mb",                                       null),
+                    ("Codec",      cfg.VideoCodec ?? "h264",                                  null),
+                    ("Fullscreen", cfg.Fullscreen ? "Sí" : "No",                             cfg.Fullscreen),
+                    ("Max Size",   cfg.MaxSize > 0 ? cfg.MaxSize.ToString() : "Auto",         null),
+                    ("MOD",        cfg.ShortcutMod ?? "lalt",                                 null),
+                    ("WiFi",       cfg.UsarWifi ? $"{cfg.WifiIp}:{cfg.WifiPuerto}" : "No",   cfg.UsarWifi ? (bool?)null : false),
+                    ("OTG",        cfg.ModoOtg ? "Sí" : "No",                                cfg.ModoOtg),
+                    ("Stay Awake", cfg.StayAwake ? "Sí" : "No",                              cfg.StayAwake),
+                    ("Screen Off", cfg.TurnScreenOff ? "Sí" : "No",                          cfg.TurnScreenOff),
+                    ("Input Mode", (cfg.InputMode ?? "uhid").ToUpper(),                       null),
+                };
+                int leftCount = 7;
+                int colW = panel.Width / 2;
+                int rowH = S(22);
+                for (int i = 0; i < rows.Length; i++)
+                {
+                    bool isRight = i >= leftCount;
+                    int colX = isRight ? colW : 0;
+                    int rowY = (isRight ? i - leftCount : i) * rowH;
+                    var (name, val, good) = rows[i];
+                    Image? ico = (good == false) ? IconMap.Clear : IconMap.Check;
+                    Color valColor = good == true ? AppTheme.Success
+                                   : good == false ? AppTheme.Error
+                                   : accentColor;
+                    panel.Controls.Add(new PictureBox()
+                    {
+                        Width = S(12), Height = S(12),
+                        Left = colX, Top = rowY + (rowH - S(12)) / 2,
+                        SizeMode = PictureBoxSizeMode.Zoom,
+                        Image = ico,
+                        BackColor = Color.Transparent
+                    });
+                    panel.Controls.Add(new Label()
+                    {
+                        Text = name + ":",
+                        Font = new Font("Segoe UI", 8f),
+                        ForeColor = textSecondary,
+                        Left = colX + S(16), Top = rowY,
+                        Width = S(62), Height = rowH,
+                        AutoSize = false,
+                        TextAlign = ContentAlignment.MiddleLeft
+                    });
+                    panel.Controls.Add(new Label()
+                    {
+                        Text = val,
+                        Font = new Font("Segoe UI", 8f),
+                        ForeColor = valColor,
+                        Left = colX + S(78), Top = rowY,
+                        Width = colW - S(82), Height = rowH,
+                        AutoSize = false,
+                        TextAlign = ContentAlignment.MiddleLeft
+                    });
+                }
+            }
+
+            FillValoresPanel(panelValores, perfil);
+
             var btnCargar = new Guna2Button()
             {
-                Text = "▶ Cargar en App",
+                Text = "  Cargar en App",
                 Left = S(24),
                 Top = S(300),
                 Width = S(160),
@@ -361,12 +430,15 @@ namespace MobiladorStex
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
                 FillColor = accentColor,
                 ForeColor = Color.White,
-                BorderRadius = 4
+                BorderRadius = 4,
+                ImageSize = new Size(S(18), S(18)),
+                ImageAlign = HorizontalAlignment.Left
             };
+            btnCargar.Image = IconMap.Upload;
 
             var btnGuardar = new Guna2Button()
             {
-                Text = "Guardar Cambios",
+                Text = "  Guardar Cambios",
                 Left = S(194),
                 Top = S(300),
                 Width = S(170),
@@ -380,11 +452,11 @@ namespace MobiladorStex
                 ImageSize = new Size(S(18), S(18)),
                 ImageAlign = HorizontalAlignment.Left
             };
-            btnGuardar.Image = IconHelper.Get("ic_save");
+            btnGuardar.Image = IconMap.Save2;
 
             var btnEliminar = new Guna2Button()
             {
-                Text = "🗑 Eliminar",
+                Text = "  Eliminar",
                 Left = S(24),
                 Top = S(348),
                 Width = S(130),
@@ -392,12 +464,15 @@ namespace MobiladorStex
                 Font = new Font("Segoe UI", 9f),
                 FillColor = AppTheme.BtnDanger,
                 ForeColor = Color.White,
-                BorderRadius = 4
+                BorderRadius = 4,
+                ImageSize = new Size(S(18), S(18)),
+                ImageAlign = HorizontalAlignment.Left
             };
+            btnEliminar.Image = IconMap.Delete;
 
             var btnExportar = new Guna2Button()
             {
-                Text = "📤 Exportar este Perfil",
+                Text = "  Exportar este Perfil",
                 Left = S(164),
                 Top = S(348),
                 Width = S(190),
@@ -407,8 +482,11 @@ namespace MobiladorStex
                 ForeColor = textSecondary,
                 BorderColor = AppTheme.BorderNeutral,
                 BorderThickness = 1,
-                BorderRadius = 4
+                BorderRadius = 4,
+                ImageSize = new Size(S(18), S(18)),
+                ImageAlign = HorizontalAlignment.Left
             };
+            btnExportar.Image = IconMap.ImportExport;
 
             var lblAccionStatus = new Label()
             {
@@ -461,7 +539,7 @@ namespace MobiladorStex
                 {
                     RefrescarListaPerfiles();
                     if (_lstPerfiles != null) _lstPerfiles.SelectedItem = nombre;
-                    lblValores.Text = FormatearValoresPerfil(perfilManager.ObtenerPerfil(nombre));
+                    FillValoresPanel(panelValores, perfilManager.ObtenerPerfil(nombre));
                     lblAccionStatus.Text = $"✓ Perfil '{nombre}' guardado";
                     lblAccionStatus.ForeColor = AppTheme.Success;
                     LimpiarIndicadorCambios();
@@ -501,7 +579,7 @@ namespace MobiladorStex
 
             _panelDetalle.Controls.AddRange(new Control[]
             {
-                txtNombre, lblNombreError, lblValores,
+                txtNombre, lblNombreError, panelValores,
                 btnCargar, btnGuardar, btnEliminar, btnExportar, lblAccionStatus
             });
         }

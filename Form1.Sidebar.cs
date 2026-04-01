@@ -70,13 +70,13 @@ namespace MobiladorStex
 
 
             navButtons = new Guna2Button[7];
-            navButtons[0] = CreateNavButton("Inicio",         "ic_home",     0);
-            navButtons[1] = CreateNavButton("Video y Audio",  "ic_video",    1);
-            navButtons[2] = CreateNavButton("Pantalla",       "ic_screen",   2);
-            navButtons[3] = CreateNavButton("Conexión",       "ic_wifi",     3);
-            navButtons[4] = CreateNavButton("Opciones Extras","ic_extras",   4);
-            navButtons[5] = CreateNavButton("Perfiles",       "ic_perfiles", 5);
-            navButtons[6] = CreateNavButton("Acerca de",      "ic_acerca",   6);
+            navButtons[0] = CreateNavButton("Inicio",          IconMap.Home,     0);
+            navButtons[1] = CreateNavButton("Video y Audio",  IconMap.Video,    1);
+            navButtons[2] = CreateNavButton("Pantalla",       IconMap.Screen,   2);
+            navButtons[3] = CreateNavButton("Conexión",       IconMap.Wifi,     3);
+            navButtons[4] = CreateNavButton("Opciones Extras",IconMap.Extras,   4);
+            navButtons[5] = CreateNavButton("Perfiles",       IconMap.Perfiles, 5);
+            navButtons[6] = CreateNavButton("Acerca de",      IconMap.Acerca,   6);
 
             navButtons[paginaActiva].Checked = true;
             navButtons[paginaActiva].FillColor = AppTheme.BtnNavActive;
@@ -85,7 +85,7 @@ namespace MobiladorStex
             btnToggle = new Guna2Button()
             {
                 Text = "",
-                Image = IconHelper.Get("ic_menu"),
+                Image = IconMap.Menu,
                 ImageSize = new Size(S(20), S(20)),
                 Width = S(40),
                 Height = S(40),
@@ -323,7 +323,7 @@ namespace MobiladorStex
                 btnGuardadoRapido.Visible = false;
         }
 
-        private Guna2Button CreateNavButton(string text, string iconName, int index)
+        private Guna2Button CreateNavButton(string text, Image? icon, int index)
         {
             var btn = new Guna2Button()
             {
@@ -345,8 +345,7 @@ namespace MobiladorStex
                 Padding = new Padding(S(8), 0, 0, 0),
                 ButtonMode = Guna.UI2.WinForms.Enums.ButtonMode.RadioButton
             };
-            var img = IconHelper.Get(iconName);
-            if (img != null) btn.Image = img;
+            if (icon != null) btn.Image = icon;
             btn.MouseEnter += (s, e) =>
             {
                 if (!btn.Checked)

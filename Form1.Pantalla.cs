@@ -110,7 +110,7 @@ namespace MobiladorStex
                     BorderRadius = 4,
                     ImageSize = new Size(S(18), S(18))
                 };
-                btnDetectarRes.Image = IconHelper.Get("ic_sync");
+                btnDetectarRes.Image = IconMap.Sync;
                 btnDetectarRes.Click += async (s, e) =>
                 {
                     btnDetectarRes.Enabled = false;
@@ -278,7 +278,7 @@ namespace MobiladorStex
 
                 var btnCalcularCrop = new Guna2Button()
                 {
-                    Text = "Calcular Crop",
+                    Text = "  Calcular Crop",
                     Width = S(140),
                     Height = S(36),
                     Left = S(24),
@@ -286,13 +286,17 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
-                    BorderRadius = 4
+                    BorderRadius = 4,
+                    ImageSize = new Size(S(16), S(16)),
+                    ImageAlign = HorizontalAlignment.Left,
+                    Padding = new Padding(S(8), 0, 0, 0)
                 };
+                btnCalcularCrop.Image = IconMap.Apply;
                 btnCalcularCropRef = btnCalcularCrop;
 
                 btnRestablecerCrop = new Guna2Button()
                 {
-                    Text = "Restablecer",
+                    Text = "  Restablecer",
                     Width = S(110),
                     Height = S(36),
                     Left = S(174),
@@ -301,10 +305,11 @@ namespace MobiladorStex
                     FillColor = accentColor,
                     ForeColor = Color.White,
                     BorderRadius = 4,
-                    ImageSize = new Size(S(18), S(18)),
-                    ImageAlign = HorizontalAlignment.Left
+                    ImageSize = new Size(S(16), S(16)),
+                    ImageAlign = HorizontalAlignment.Left,
+                    Padding = new Padding(S(8), 0, 0, 0)
                 };
-                btnRestablecerCrop.Image = IconHelper.Get("ic_reset");
+                btnRestablecerCrop.Image = IconMap.Reset;
 
                 btnCalcularCrop.Click += (s, e) =>
                 {
@@ -356,7 +361,7 @@ namespace MobiladorStex
                 });
 
                 // ── CARD: Resolución ADB ──────────────────────────────────
-                var cardAdb = CreateCard("Modificar Resolución ADB — Opción 2 (Avanzado)", S(30), S(700), S(202));
+                var cardAdb = CreateCard("Modificar Resolución ADB — Opción 2 (Avanzado)", S(30), S(700), S(176));
 
                 var lblAdbAdvertencia = new Label()
                 {
@@ -393,41 +398,43 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 8f, FontStyle.Italic),
                     ForeColor = textSecondary,
                     Left = S(24),
-                    Top = S(116),
+                    Top = S(98),
                     AutoSize = true
                 };
 
                 btnAplicarRes = new Guna2Button()
                 {
-                    Text = "Aplicar Resolución",
+                    Text = "  Aplicar Resolución",
                     Width = S(180),
                     Height = S(36),
                     Left = S(24),
-                    Top = S(146),
+                    Top = S(124),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
                     BorderRadius = 4,
-                    ImageSize = new Size(S(18), S(18)),
-                    ImageAlign = HorizontalAlignment.Left
+                    ImageSize = new Size(S(16), S(16)),
+                    ImageAlign = HorizontalAlignment.Left,
+                    Padding = new Padding(S(8), 0, 0, 0)
                 };
-                btnAplicarRes.Image = IconHelper.Get("ic_apply");
+                btnAplicarRes.Image = IconMap.Apply;
 
                 btnResetearRes = new Guna2Button()
                 {
-                    Text = "Resetear",
+                    Text = "  Resetear",
                     Width = S(100),
                     Height = S(36),
                     Left = S(214),
-                    Top = S(146),
+                    Top = S(124),
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
                     BorderRadius = 4,
-                    ImageSize = new Size(S(18), S(18)),
-                    ImageAlign = HorizontalAlignment.Left
+                    ImageSize = new Size(S(16), S(16)),
+                    ImageAlign = HorizontalAlignment.Left,
+                    Padding = new Padding(S(8), 0, 0, 0)
                 };
-                btnResetearRes.Image = IconHelper.Get("ic_reset");
+                btnResetearRes.Image = IconMap.Reset;
 
                 btnAplicarRes.Click += async (s, e) =>
                 {
@@ -533,7 +540,7 @@ namespace MobiladorStex
 
 
                 // ── CARD: Resolución Personalizada wm size ────────────────
-                var cardWmSize = CreateCard("Resolución Personalizada — Opción 3 (Recomendado)", S(30), S(960), S(218));
+                var cardWmSize = CreateCard("Resolución Personalizada — Opción 3 (Recomendado)", S(30), S(896), S(218));
 
                 var lblWmSizeInfo = new Label()
                 {
@@ -583,7 +590,7 @@ namespace MobiladorStex
 
                 btnAplicarWm = new Guna2Button()
                 {
-                    Text = "Aplicar",
+                    Text = "  Aplicar",
                     Width = S(100),
                     Height = S(34),
                     Left = S(24),
@@ -592,14 +599,15 @@ namespace MobiladorStex
                     FillColor = accentColor,
                     ForeColor = Color.White,
                     BorderRadius = 4,
-                    ImageSize = new Size(S(18), S(18)),
-                    ImageAlign = HorizontalAlignment.Left
+                    ImageSize = new Size(S(16), S(16)),
+                    ImageAlign = HorizontalAlignment.Left,
+                    Padding = new Padding(S(8), 0, 0, 0)
                 };
-                btnAplicarWm.Image = IconHelper.Get("ic_apply");
+                btnAplicarWm.Image = IconMap.Apply;
 
                 btnRevertirWm = new Guna2Button()
                 {
-                    Text = "Revertir",
+                    Text = "  Revertir",
                     Width = S(100),
                     Height = S(34),
                     Left = S(134),
@@ -608,10 +616,11 @@ namespace MobiladorStex
                     FillColor = accentColor,
                     ForeColor = Color.White,
                     BorderRadius = 4,
-                    ImageSize = new Size(S(18), S(18)),
-                    ImageAlign = HorizontalAlignment.Left
+                    ImageSize = new Size(S(16), S(16)),
+                    ImageAlign = HorizontalAlignment.Left,
+                    Padding = new Padding(S(8), 0, 0, 0)
                 };
-                btnRevertirWm.Image = IconHelper.Get("ic_reset");
+                btnRevertirWm.Image = IconMap.Reset;
 
                 btnAplicarWm.Click += async (s, e) =>
                 {
@@ -704,7 +713,7 @@ namespace MobiladorStex
                 });
 
                 // ── CARD: DPI ─────────────────────────────────────────────
-                var cardDpi = CreateCard("Control de DPI — Opción 4 (Avanzado)", S(30), S(1198), S(234));
+                var cardDpi = CreateCard("Control de DPI — Opción 4 (Avanzado)", S(30), S(1134), S(234));
 
                 var lblDpiActual = new Label()
                 {
@@ -728,7 +737,7 @@ namespace MobiladorStex
                     BorderRadius = 4,
                     ImageSize = new Size(S(18), S(18))
                 };
-                btnDetectarDpi.Image = IconHelper.Get("ic_sync");
+                btnDetectarDpi.Image = IconMap.Sync;
 
                 var numDpi = CreateNumeric(S(160), S(100), S(100), 120, 800, _dpi, 10);
                 numDpi.ValueChanged += (s, e) => { _dpi = (int)numDpi.Value; };
@@ -770,7 +779,7 @@ namespace MobiladorStex
 
                 var btnAplicarDpi = new Guna2Button()
                 {
-                    Text = "Aplicar DPI",
+                    Text = "  Aplicar DPI",
                     Width = S(140),
                     Height = S(36),
                     Left = S(24),
@@ -779,10 +788,11 @@ namespace MobiladorStex
                     FillColor = accentColor,
                     ForeColor = Color.White,
                     BorderRadius = 4,
-                    ImageSize = new Size(S(18), S(18)),
-                    ImageAlign = HorizontalAlignment.Left
+                    ImageSize = new Size(S(16), S(16)),
+                    ImageAlign = HorizontalAlignment.Left,
+                    Padding = new Padding(S(8), 0, 0, 0)
                 };
-                btnAplicarDpi.Image = IconHelper.Get("ic_apply");
+                btnAplicarDpi.Image = IconMap.Apply;
                 btnAplicarDpi.Click += async (s, e) =>
                 {
                     if (MessageBox.Show($"¿Aplicar DPI {_dpi}?\n\nUsa 'Resetear' si algo sale mal.", "⚠ Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes) return;
@@ -803,7 +813,7 @@ namespace MobiladorStex
 
                 var btnResetearDpi = new Guna2Button()
                 {
-                    Text = "Resetear DPI",
+                    Text = "  Resetear DPI",
                     Width = S(120),
                     Height = S(36),
                     Left = S(174),
@@ -812,10 +822,11 @@ namespace MobiladorStex
                     FillColor = accentColor,
                     ForeColor = Color.White,
                     BorderRadius = 4,
-                    ImageSize = new Size(S(18), S(18)),
-                    ImageAlign = HorizontalAlignment.Left
+                    ImageSize = new Size(S(16), S(16)),
+                    ImageAlign = HorizontalAlignment.Left,
+                    Padding = new Padding(S(8), 0, 0, 0)
                 };
-                btnResetearDpi.Image = IconHelper.Get("ic_reset");
+                btnResetearDpi.Image = IconMap.Reset;
                 btnResetearDpi.Click += async (s, e) =>
                 {
                     btnResetearDpi.Enabled = false;
