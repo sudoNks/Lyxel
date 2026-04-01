@@ -219,9 +219,7 @@ namespace MobiladorStex
             return (true, seriales, stdout);
         }
 
-        // Devuelve lista de (serial, modelo) usando "adb devices -l" (un solo llamado).
-        // El modelo se extrae del campo "model:" en la salida extendida.
-        // Dispositivos offline/unauthorized se incluyen con modelo vacío.
+        // Devuelve (serial, modelo) via "adb devices -l"; offline/unauthorized tienen modelo vacío.
         public List<(string serial, string modelo)> ListarDispositivosDetallado()
         {
             var (exito, stdout, _) = EjecutarComando(new List<string> { "devices", "-l" }, 5000);
@@ -499,13 +497,10 @@ namespace MobiladorStex
         // TRACK DEVICES — detección event-driven sin polling
         // ══════════════════════════════════════════════════════════════
 
-        // Se dispara en hilo background — usar Invoke en la UI
-        // bool = true: hay al menos un dispositivo conectado
-        // bool = false: sin dispositivos
+        // Disparado en hilo background — usar Invoke en la UI
         public event Action<bool>? OnDispositivoCambio;
 
-        // Igual que OnDispositivoCambio pero solo para dispositivos USB (serial sin ':').
-        // No se ve afectado por conexiones WiFi (adb connect ip:puerto).
+        // Solo dispositivos USB (serial sin ':'), no afectado por WiFi
         public event Action<bool>? OnDispositivoUsbCambio;
 
         private System.Diagnostics.Process? _trackProcess;
@@ -545,8 +540,6 @@ namespace MobiladorStex
         {
             try
             {
-                // Paso 1: kill-server limpio — el daemon se cierra solo y libera el puerto
-                // Esto deja ADB usable para otras apps después de cerrar MobiladorSteX
                 var startInfo = new System.Diagnostics.ProcessStartInfo
                 {
                     FileName = _adbPath,
@@ -562,8 +555,7 @@ namespace MobiladorStex
 
             try
             {
-                // Paso 2: por si acaso, matar cualquier proceso adb de nuestra carpeta
-                // que no haya cerrado con kill-server
+                // Matar procesos adb de nuestra carpeta que kill-server no cerró
                 string carpetaAdb = Path.GetDirectoryName(_adbPath) ?? "";
                 foreach (var proceso in System.Diagnostics.Process.GetProcessesByName("adb"))
                 {
@@ -610,8 +602,7 @@ namespace MobiladorStex
                         _trackProcess = new System.Diagnostics.Process { StartInfo = startInfo };
                         _trackProcess.Start();
 
-                        // Guardar referencia local para evitar condición de carrera
-                        var proceso = _trackProcess;
+                        var proceso = _trackProcess; // referencia local para evitar condición de carrera
 
                         while (_trackActivo)
                         {
@@ -625,24 +616,17 @@ namespace MobiladorStex
 
                             if (linea == null) break;
 
-                            // track-devices emite líneas con el serial y estado
-                            // Ej: "R3XN204LBPB\tdevice"   (USB)
-                            //     "192.168.1.5:5555\tdevice" (WiFi)
                             bool hayDispositivo = linea.Contains("device") &&
                                                   !linea.Contains("offline") &&
                                                   !linea.Contains("unauthorized");
-
-                            // Dispositivo USB: serial sin ':' (los WiFi tienen formato ip:puerto)
                             bool esUsb = hayDispositivo && !linea.Contains(':');
 
-                            // Solo disparar si cambió el estado general
                             if (hayDispositivo != _ultimoEstadoDispositivo)
                             {
                                 _ultimoEstadoDispositivo = hayDispositivo;
                                 OnDispositivoCambio?.Invoke(hayDispositivo);
                             }
 
-                            // Disparar evento USB-específico si cambió
                             if (esUsb != _ultimoEstadoDispositivoUsb)
                             {
                                 _ultimoEstadoDispositivoUsb = esUsb;
@@ -650,14 +634,13 @@ namespace MobiladorStex
                             }
                         }
                     }
-                    catch { /* proceso terminado, reintentar */ }
+                    catch { }
                     finally
                     {
                         _trackProcess?.Dispose();
                         _trackProcess = null;
                     }
 
-                    // Si se cayó el proceso, esperar un poco y reintentar
                     if (_trackActivo)
                         System.Threading.Thread.Sleep(2000);
                 }

@@ -48,19 +48,42 @@ namespace MobiladorStex
                     new RectangleF(0, 0, picBox.Width, picBox.Height),
                     new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
 
-            // Todos los botones de redes en estilo outline (fondo transparente, borde morado)
+            // Convierte ícono oscuro a blanco preservando canal alfa
+            static Image? TintWhite(Image? source)
+            {
+                if (source == null) return null;
+                var bmp = new Bitmap(source.Width, source.Height);
+                using var g = Graphics.FromImage(bmp);
+                var cm = new System.Drawing.Imaging.ColorMatrix(new float[][]
+                {
+                    new float[] { 0, 0, 0, 0, 0 },
+                    new float[] { 0, 0, 0, 0, 0 },
+                    new float[] { 0, 0, 0, 0, 0 },
+                    new float[] { 0, 0, 0, 1, 0 },
+                    new float[] { 1, 1, 1, 0, 1 },
+                });
+                var ia = new System.Drawing.Imaging.ImageAttributes();
+                ia.SetColorMatrix(cm);
+                g.DrawImage(source, new Rectangle(0, 0, bmp.Width, bmp.Height),
+                    0, 0, source.Width, source.Height, GraphicsUnit.Pixel, ia);
+                return bmp;
+            }
+
+            var btnSocialBase = Color.FromArgb(60, 30, 40);
             Guna2Button BtnOutline(string text, int left, int top, int width, string url, Image? icon)
             {
                 var b = new Guna2Button()
                 {
                     Text = text, Width = width, Height = S(36), Left = left, Top = top,
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.Transparent, ForeColor = purpleLight,
+                    FillColor = btnSocialBase, ForeColor = purpleLight,
                     BorderColor = purpleLight, BorderThickness = 1, BorderRadius = 6,
                     ImageSize = new Size(S(18), S(18)),
                     ImageAlign = HorizontalAlignment.Left
                 };
-                b.Image = icon;
+                b.Image = TintWhite(icon);
+                b.MouseEnter += (_, __) => b.FillColor = AppTheme.AccentLight;
+                b.MouseLeave += (_, __) => b.FillColor = btnSocialBase;
                 b.Click += (_, __) => System.Diagnostics.Process.Start(
                     new System.Diagnostics.ProcessStartInfo() { FileName = url, UseShellExecute = true });
                 return b;

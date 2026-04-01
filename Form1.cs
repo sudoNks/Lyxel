@@ -16,7 +16,7 @@ namespace MobiladorStex
     public partial class Form1 : Form
     {
         // ══════════════════════════════════════════════════════════════
-        // SISTEMA DE TEMAS — Solo Azul/Verde + Oscuro/Claro
+        // TEMA
         // ══════════════════════════════════════════════════════════════
 
         private Color accentColor;
@@ -155,30 +155,18 @@ namespace MobiladorStex
 
             _ = IniciarDeteccionDispositivoAsync();
 
-            // Track devices event-driven — detecta conexión/desconexión sin polling
             adbManager.OnDispositivoCambio += hayDispositivo =>
             {
                 InvokeSeguro(() =>
                 {
                     _hayDispositivo = hayDispositivo;
-                    // Durante setup WiFi (habilitar puerto / detectar IP), adb tcpip reinicia el
-                    // daemon del dispositivo causando una desconexión USB transitoria. Suprimimos
-                    // las actualizaciones visuales para evitar que el indicador parpadee en rojo y
-                    // que aparezcan toasts de "conectado/desconectado" fuera de contexto.
+                    // Suprimido durante setup WiFi para evitar toasts y parpadeos transitorios
                     if (_operacionWifiEnCurso) return;
                     ActualizarIndicadorDispositivo(hayDispositivo);
                     ActualizarBotonesScrcpy();
-                    if (!_inicializacionCompleta)
-                    {
-                        // Evento transitorio antes de que la detección inicial termine — ignorar.
-                    }
-                    // Los toasts de conexión/desconexión USB se gestionan en OnDispositivoUsbCambio.
-                    // OnDispositivoCambio solo maneja el estado general del indicador.
                 });
             };
 
-            // Evento USB-específico: cuando NO hay WiFi activo, maneja toasts normales.
-            // Cuando WiFi está activo, los cambios USB se detectan por MonitorearUsbConWifiAsync.
             adbManager.OnDispositivoUsbCambio += hayUsb =>
             {
                 System.Diagnostics.Debug.WriteLine($"[USB] OnDispositivoUsbCambio: hayUsb={hayUsb} | _wifiConectado={_wifiConectado} | _operacionWifiEnCurso={_operacionWifiEnCurso} | _inicializacionCompleta={_inicializacionCompleta}");
@@ -189,9 +177,8 @@ namespace MobiladorStex
 
                     if (hayUsb)
                     {
-                        if (!_puertotcpActivo)
+                        if (!_puertotcpActivo) // reconexión post-tcpip — silencioso
                             ToastNotification.Mostrar(this, "Dispositivo conectado", ToastNotification.ToastTipo.Exito, 2500);
-                        // Si _puertotcpActivo: reconexión transitoria post-tcpip — silencioso
                     }
                     else
                     {
@@ -213,35 +200,25 @@ namespace MobiladorStex
                 });
             };
 
-            // IniciarTrackDevices() se llama al final de IniciarDeteccionDispositivoAsync,
-            // una vez que _inicializacionCompleta = true y el estado ADB está estable.
-
             this.FormClosing += (s, e) =>
             {
-                // 1. Detener scrcpy primero — bloqueante:
-                //    CloseMainWindow → WaitForExit(2s) → Kill() si sigue vivo
-                //    Garantiza que el proceso esté muerto antes de continuar
                 scrcpyManager.Detener();
-
-                // 2. Cerrar ventana flotante DESPUÉS de que scrcpy terminó,
-                //    para que su timer no dispare _onDetener sobre recursos liberados
                 try { _flotante?.Close(); } catch { }
                 _flotante = null;
 
                 adbManager.DetenerTrackDevices();
 
-                // 3. OTG: desconectar serial ADB si tenía USB debug activo
                 if (_modoOtg && !string.IsNullOrEmpty(_otgSerial))
                     adbManager.DesconectarTodo();
 
                 bool hayDispositivo = _hayDispositivo;
 
-                // ── WiFi / TCP cleanup (sync — no fire-and-forget) ────────
+                // ── WiFi / TCP cleanup ────────────────────────────────────
                 if (_puertotcpActivo || _usarWifi)
                 {
-                    adbManager.DesconectarTodo();                    // adb disconnect — rápido
+                    adbManager.DesconectarTodo();
                     if (hayDispositivo && _puertotcpActivo)
-                        adbManager.AplicarUsb();                     // revierte tcpip → USB, sin kill-server
+                        adbManager.AplicarUsb();
                 }
 
                 // ── Resolución — revertir si fue modificada ───────────────
@@ -256,11 +233,8 @@ namespace MobiladorStex
                             _resAdbActiva = false;
                         }
                     }
-                    // Si no hay dispositivo o falló, el flag queda activo →
-                    // se persiste en config.ini y se limpia en el próximo arranque
                 }
 
-                // Persistir estado (incluye resolucion_pendiente_reset actualizado)
                 GuardarConfigTema();
 
                 adbManager.CerrarDaemonLocal();
@@ -302,7 +276,7 @@ namespace MobiladorStex
                 if (data["Tema"].ContainsKey("aviso_wmsize_visto"))
                     bool.TryParse(data["Tema"]["aviso_wmsize_visto"], out _avisoWmSizeVisto);
 
-                // Recuperación post-kill: resolución modificada sin revertir en sesión anterior
+                // Resolución modificada sin revertir en sesión anterior
                 if (data.Sections.ContainsSection("Dispositivo") &&
                     data["Dispositivo"].ContainsKey("resolucion_pendiente_reset"))
                     bool.TryParse(data["Dispositivo"]["resolucion_pendiente_reset"], out _resolucionPendienteReset);
@@ -316,8 +290,7 @@ namespace MobiladorStex
                     if (cfg != null) CargarPerfilEnApp(cfg);
                 }
 
-                // Encoders detectados — persisten entre sesiones
-                // Formato: nombres separados por '|', paralelos a los display labels
+                // Encoders — separados por '|', paralelos a display labels
                 string encDet = data["Video"]["encoders_detectados"] ?? "";
                 string encLbl = data["Video"]["encoders_display_labels"] ?? "";
 
@@ -365,17 +338,13 @@ namespace MobiladorStex
                 data["Tema"]["aviso_adb_visto"] = _avisoAdbVisto.ToString().ToLower();
                 data["Tema"]["aviso_wmsize_visto"] = _avisoWmSizeVisto.ToString().ToLower();
 
-                // Encoders — guardamos la lista detectada para no tener que volver a detectar
                 data.Sections.AddSection("Video");
                 data["Video"]["encoders_detectados"] = string.Join("|", _encodersDetectados);
                 data["Video"]["encoders_display_labels"] = string.Join("|", _encodersDisplayLabels);
 
-                // Estado de recuperación: si la resolución quedó modificada sin revertir
-                // (cierre normal fallido o kill forzado), se limpia en el próximo arranque
                 data.Sections.AddSection("Dispositivo");
                 data["Dispositivo"]["resolucion_pendiente_reset"] = (_wmSizeActivo || _resAdbActiva).ToString().ToLower();
 
-                // Sesión anterior — para indicadores visuales y restauración parcial de estado
                 data.Sections.AddSection("Sesion");
                 data["Sesion"]["ultima_sesion_wifi"] = _ultimaSesionWifi.ToString().ToLower();
                 data["Sesion"]["ultima_sesion_otg"] = _ultimaSesionOtg.ToString().ToLower();
@@ -396,13 +365,12 @@ namespace MobiladorStex
 
         private void ApplyTheme()
         {
-            // ── Paleta fija MobiladorSteX ─────────────────────────────
-            accentColor = AppTheme.Accent;   // #6b2fc4 morado brillante
-            bgPrimary = AppTheme.BgPrimary;     // #212023 fondo general
-            bgSecondary = AppTheme.BgSecondary;     // #1a1a1c sidebar
-            bgCard = AppTheme.BgCard;     // #2a2a2d cards
-            textPrimary = AppTheme.TextPrimary;  // #eeeeee texto principal
-            textSecondary = AppTheme.TextSecondary;  // #787878 texto secundario
+            accentColor   = AppTheme.Accent;
+            bgPrimary     = AppTheme.BgPrimary;
+            bgSecondary   = AppTheme.BgSecondary;
+            bgCard        = AppTheme.BgCard;
+            textPrimary   = AppTheme.TextPrimary;
+            textSecondary = AppTheme.TextSecondary;
         }
 
 
@@ -491,7 +459,7 @@ namespace MobiladorStex
                 .GetExecutingAssembly()
                 .GetName()
                 .Version;
-            return v != null ? $"v{v.Major}.{v.Minor}.{v.Build}" : "v1.1.0";
+            return v != null ? $"v{v.Major}.{v.Minor}.{v.Build}" : "v1.3.0";
         }
 
         // Parpadeo en taskbar — llama la atención sin forzar el foco

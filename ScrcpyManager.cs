@@ -107,12 +107,8 @@ namespace MobiladorStex
                 if (!string.IsNullOrEmpty(config.OtgSerial))
                     cmd.AddRange(new[] { "-s", config.OtgSerial });
                 else
-                    cmd.Add("-d"); // --select-usb: usar el único dispositivo USB físico disponible
-                // Opciones de comportamiento compatibles con OTG
-                // --stay-awake requiere video activo — incompatible con --otg, no se incluye
+                    cmd.Add("-d");
                 if (config.DisableScreensaver) cmd.Add("--disable-screensaver");
-                // DPI y velocidad de cursor son comandos ADB, no argumentos de scrcpy
-                // Video, audio, input mode y turn-screen-off no aplican en modo OTG
                 cmd.AddRange(new[] { "--window-title", "Mobilador_SteX_OTG" });
                 return LanzarProceso(cmd, config);
             }
@@ -198,7 +194,6 @@ namespace MobiladorStex
             }
 
             // ── INPUT ─────────────────────────────────────────────────
-            // OTG ya fuerza aoa implícitamente — no agregar flags manuales
             if (!config.ModoOtg)
             {
                 string mode = config.InputMode switch
@@ -222,8 +217,7 @@ namespace MobiladorStex
             return LanzarProceso(cmd, config);
         }
 
-        // Evento FPS — FloatingWindow se suscribe si PrintFps está activo
-        // IMPORTANTE: se dispara en hilo de fondo, usar Invoke en la UI
+        // Disparado en hilo de fondo — usar Invoke en la UI
         public event Action<string>? OnFpsUpdate;
 
         private bool LanzarProceso(List<string> cmd, ScrcpyConfig config)
@@ -245,8 +239,6 @@ namespace MobiladorStex
                 _proceso.Start();
                 Program.AsignarAlJob(_proceso.Handle);
 
-                // Leer stderr en hilo separado siempre (evita bloqueo del proceso)
-                // Solo dispara el evento si PrintFps está activo
                 bool capturarFps = config.PrintFps;
                 Task.Run(() =>
                 {
@@ -259,7 +251,6 @@ namespace MobiladorStex
 
                             if (!capturarFps) continue;
 
-                            // scrcpy 3.x formato: "[server] INFO: 60 fps"
                             var match = System.Text.RegularExpressions.Regex.Match(
                                 linea, @"(\d+)\s*fps",
                                 System.Text.RegularExpressions.RegexOptions.IgnoreCase);
@@ -309,9 +300,6 @@ namespace MobiladorStex
         // DETECTAR ENCODERS
         // ══════════════════════════════════════════════════════════════
 
-        // Devuelve: (exito, lista de nombres de encoder, lista de etiquetas display, output raw)
-        // - encoders:      ["c2.exynos.h264.encoder", "c2.android.avc.encoder", ...]
-        // - displayLabels: ["c2.exynos.h264.encoder  (hw) h264", "c2.android.avc.encoder  (sw) h264", ...]
         public async Task<(bool exito, List<string> encoders, List<string> displayLabels, string output)> DetectarEncodersAsync()
         {
             return await Task.Run(() =>
@@ -351,13 +339,6 @@ namespace MobiladorStex
             });
         }
 
-        // Formato confirmado scrcpy 3.3.4:
-        // [server] INFO: List of video encoders:
-        //     --video-codec=h264 --video-encoder=c2.exynos.h264.encoder   (hw) [vendor]
-        //     --video-codec=h264 --video-encoder=c2.android.avc.encoder   (sw)
-        //     --video-codec=h265 --video-encoder=c2.exynos.hevc.encoder   (hw) [vendor]
-        // [server] INFO: List of audio encoders:
-        //     ...
         private (List<string> encoders, List<string> displayLabels) ParsearEncoders(string output)
         {
             var encoders = new List<string>();
@@ -377,7 +358,6 @@ namespace MobiladorStex
 
                 if (!enVideo) continue;
 
-                // Extraer codec: "--video-codec=h264 ..."
                 string codec = "h264";
                 int idxCodec = linea.IndexOf("--video-codec=", StringComparison.Ordinal);
                 if (idxCodec >= 0)
@@ -386,7 +366,6 @@ namespace MobiladorStex
                     codec = restoCodec.Split(' ')[0].Trim();
                 }
 
-                // Extraer encoder: "... --video-encoder=c2.exynos.h264.encoder ..."
                 int idxEnc = linea.IndexOf("--video-encoder=", StringComparison.Ordinal);
                 if (idxEnc < 0) continue;
                 string restoEnc = linea.Substring(idxEnc + "--video-encoder=".Length).Trim();

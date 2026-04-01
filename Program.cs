@@ -67,8 +67,7 @@ namespace MobiladorStex
         [STAThread]
         static void Main()
         {
-            // Crear Job Object: todos los procesos asignados mueren cuando el último
-            // handle del job se cierra — incluso si el launcher es forzado a terminar.
+            // Job Object: procesos hijos mueren junto con el launcher
             _hJob = CreateJobObject(IntPtr.Zero, null);
             if (_hJob != IntPtr.Zero)
             {
@@ -77,7 +76,6 @@ namespace MobiladorStex
                 SetInformationJobObject(_hJob, JobObjectExtendedLimitInformation,
                     ref info, Marshal.SizeOf<JOBOBJECT_EXTENDED_LIMIT_INFORMATION>());
 
-                // Asignar el proceso actual al job
                 AssignProcessToJobObject(_hJob, System.Diagnostics.Process.GetCurrentProcess().Handle);
             }
 
