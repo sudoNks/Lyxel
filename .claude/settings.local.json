@@ -5,7 +5,11 @@
       "Bash(dotnet build:*)",
       "Bash(\"bin/scrcpy/scrcpy.exe\" --help)",
       "Bash(grep -v \"^$\")",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(powershell -Command \"Get-ChildItem -Filter ''*.cs'' | Select-Object Name, @{N=''Líneas'';E={\\(Get-Content $_.FullName\\).Count}} | Sort-Object Líneas -Descending | Format-Table -AutoSize\")",
+      "Bash(powershell -Command \":*)",
+      "Bash(Select-String -Pattern \"error|Error|warning CS|Build succeeded|Build FAILED\")",
+      "Bash(powershell -Command \"Get-ChildItem -Filter ''Form1*.cs'' | Select-Object Name, @{N=''Líneas'';E={\\(Get-Content $_.FullName\\).Count}} | Sort-Object Líneas -Descending | Format-Table -AutoSize\")"
     ]
   }
 }
