@@ -91,7 +91,7 @@ namespace MobiladorStex
             this.FormBorderStyle = FormBorderStyle.None;
             this.TopMost = true;
             this.StartPosition = FormStartPosition.Manual;
-            this.BackColor = Color.FromArgb(33, 32, 35);
+            this.BackColor = AppTheme.BgPrimary;
             this.Opacity = 0.92;
             this.ShowInTaskbar = false;
 
@@ -115,7 +115,7 @@ namespace MobiladorStex
                 {
                     Text = "● esperando fps...",
                     Font = new Font("Segoe UI", 8f, FontStyle.Bold),
-                    ForeColor = Color.FromArgb(147, 90, 220),
+                    ForeColor = AppTheme.AccentLight,
                     Left = S(12),
                     Top = S(10),
                     Width = S(196),
@@ -132,7 +132,7 @@ namespace MobiladorStex
             {
                 Text = "▶  scrcpy corriendo",
                 Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
-                ForeColor = Color.FromArgb(147, 90, 220),
+                ForeColor = AppTheme.AccentLight,
                 Left = S(12),
                 Top = S(10) + oy,
                 AutoSize = true
@@ -142,7 +142,7 @@ namespace MobiladorStex
             {
                 Text = infoText,
                 Font = new Font("Segoe UI", 7.5f),
-                ForeColor = Color.FromArgb(200, 200, 200),
+                ForeColor = AppTheme.TextLight,
                 Left = S(12),
                 Top = S(30) + oy,
                 Width = S(196),
@@ -155,7 +155,7 @@ namespace MobiladorStex
                 Top = S(72) + oy,
                 Width = S(220),
                 Height = 1,
-                BackColor = Color.FromArgb(78, 28, 141)
+                BackColor = AppTheme.AccentDark
             };
 
             var btnDetener = new Guna2Button()
@@ -166,7 +166,7 @@ namespace MobiladorStex
                 Left = S(12),
                 Top = S(82) + oy,
                 Font = new Font("Segoe UI", 8.5f),
-                FillColor = Color.FromArgb(160, 30, 30),
+                FillColor = AppTheme.BtnDangerDark,
                 ForeColor = Color.White,
                 BorderRadius = 4
             };
@@ -179,9 +179,9 @@ namespace MobiladorStex
                 Left = S(114),
                 Top = S(82) + oy,
                 Font = new Font("Segoe UI", 8.5f),
-                FillColor = Color.FromArgb(55, 28, 100),
-                ForeColor = Color.FromArgb(220, 200, 255),
-                BorderColor = Color.FromArgb(107, 47, 196),
+                FillColor = AppTheme.AccentDeep,
+                ForeColor = AppTheme.AccentPale,
+                BorderColor = AppTheme.Accent,
                 BorderThickness = 1,
                 BorderRadius = 4
             };
@@ -252,7 +252,7 @@ namespace MobiladorStex
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            using var pen = new System.Drawing.Pen(Color.FromArgb(78, 28, 141), 1);
+            using var pen = new System.Drawing.Pen(AppTheme.AccentDark, 1);
             e.Graphics.DrawRectangle(pen, 0, 0, this.Width - 1, this.Height - 1);
         }
     }

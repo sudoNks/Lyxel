@@ -1,4 +1,4 @@
-using Guna.UI2.WinForms;
+﻿using Guna.UI2.WinForms;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Threading.Tasks;
@@ -32,7 +32,7 @@ namespace MobiladorStex
                     Top = S(48),
                     Checked = _fullscreen,
                     CheckedState = { FillColor = accentColor },
-                    UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
+                    UncheckedState = { FillColor = AppTheme.BorderNeutral },
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
                 togFullscreen.CheckedChanged += (s, e) => { _fullscreen = togFullscreen.Checked; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
@@ -72,7 +72,7 @@ namespace MobiladorStex
                 {
                     Text = _resolucionAncho.ToString(),
                     Font = new Font("Segoe UI", 11f, FontStyle.Bold),
-                    ForeColor = Color.FromArgb(107, 47, 196),
+                    ForeColor = AppTheme.Accent,
                     Left = S(160),
                     Top = S(60),
                     AutoSize = true
@@ -81,7 +81,7 @@ namespace MobiladorStex
                 {
                     Text = _resolucionAlto.ToString(),
                     Font = new Font("Segoe UI", 11f, FontStyle.Bold),
-                    ForeColor = Color.FromArgb(107, 47, 196),
+                    ForeColor = AppTheme.Accent,
                     Left = S(290),
                     Top = S(60),
                     AutoSize = true
@@ -105,7 +105,7 @@ namespace MobiladorStex
                     Left = S(400),
                     Top = S(58),
                     Font = new Font("Segoe UI", 11f),
-                    FillColor = Color.FromArgb(107, 47, 196),
+                    FillColor = AppTheme.Accent,
                     ForeColor = Color.White,
                     BorderRadius = 4
                 };
@@ -113,7 +113,7 @@ namespace MobiladorStex
                 {
                     btnDetectarRes.Enabled = false;
                     lblResStatus.Text = "Detectando...";
-                    lblResStatus.ForeColor = Color.FromArgb(255, 167, 38);
+                    lblResStatus.ForeColor = AppTheme.Warning;
                     try
                     {
                         var (exito, ancho, alto, mensaje) = await adbManager.DetectarResolucionAsync();
@@ -124,14 +124,14 @@ namespace MobiladorStex
                             lblResAncho.Text = ancho.ToString();
                             lblResAlto.Text = alto.ToString();
                             lblResStatus.Text = $"✓ {mensaje}";
-                            lblResStatus.ForeColor = Color.FromArgb(16, 124, 16);
+                            lblResStatus.ForeColor = AppTheme.Success;
                             ActualizarEstados();
                             MarcarCambiosSinGuardar();
                         }
                         else
                         {
                             lblResStatus.Text = $"⚠ {mensaje}";
-                            lblResStatus.ForeColor = Color.FromArgb(255, 167, 38);
+                            lblResStatus.ForeColor = AppTheme.Warning;
                         }
                     }
                     finally
@@ -170,7 +170,7 @@ namespace MobiladorStex
                 {
                     Text = "⚠ Resolución ADB activa. Resetea la resolución para usar crop.",
                     Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
-                    ForeColor = Color.FromArgb(255, 167, 38),
+                    ForeColor = AppTheme.Warning,
                     Left = S(24),
                     Top = S(100),
                     Width = cardCrop.Width - S(48),
@@ -185,9 +185,9 @@ namespace MobiladorStex
                     Top = S(118),
                     Width = S(130),
                     Height = S(32),
-                    FillColor = Color.FromArgb(42, 42, 45),
+                    FillColor = AppTheme.BgCard,
                     ForeColor = textPrimary,
-                    BorderColor = Color.FromArgb(107, 47, 196),
+                    BorderColor = AppTheme.Accent,
                     BorderRadius = 4,
                     DropDownStyle = ComboBoxStyle.DropDownList,
                     Font = new Font("Segoe UI", 9f)
@@ -238,7 +238,7 @@ namespace MobiladorStex
                          : !string.IsNullOrEmpty(_fullscreenCrop) ? $"Crop en perfil: {_fullscreenCrop} (no activo)"
                          : "Sin crop aplicado",
                     Font = new Font("Segoe UI", 8.5f, FontStyle.Italic),
-                    ForeColor = _cropActivo ? Color.FromArgb(16, 124, 16) : textSecondary,
+                    ForeColor = _cropActivo ? AppTheme.Success : textSecondary,
                     Left = S(24),
                     Top = S(166),
                     AutoSize = true
@@ -317,7 +317,7 @@ namespace MobiladorStex
                         _fullscreenCrop = $"{_resolucionAncho}:{altoIdeal}:0:{offset}";
                         _cropActivo = true;
                         lblCropAplicado.Text = $"✓ Crop activo: {_fullscreenCrop}";
-                        lblCropAplicado.ForeColor = Color.FromArgb(16, 124, 16);
+                        lblCropAplicado.ForeColor = AppTheme.Success;
                         ActualizarEstados();
                         MarcarCambiosSinGuardar();
                         MessageBox.Show($"Crop calculado para {_aspectRatio}:\n{_fullscreenCrop}\n\nAlto ideal: {altoIdeal}px  |  Offset: {offset}px", "Crop Calculado", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -360,7 +360,7 @@ namespace MobiladorStex
                            "En ciertos modelos el fabricante puede bloquear este comando vía ADB. " +
                            "Si experimentas problemas, desactívalo — los bordes son preferibles a un mal rendimiento.",
                     Font = new Font("Segoe UI", 8f),
-                    ForeColor = Color.FromArgb(120, 120, 120),
+                    ForeColor = AppTheme.TextSecondary,
                     Left = S(24),
                     Top = S(40),
                     Width = cardAdb.Width - S(48),
@@ -373,7 +373,7 @@ namespace MobiladorStex
                 {
                     Text = "⚠ Tienes un crop activo. Restablece el crop para usar esta opción.",
                     Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
-                    ForeColor = Color.FromArgb(255, 167, 38),
+                    ForeColor = AppTheme.Warning,
                     Left = S(24),
                     Top = S(100),
                     Width = cardAdb.Width - S(48),
@@ -447,7 +447,7 @@ namespace MobiladorStex
                     if (_resolucionAncho == 0 || _resolucionAlto == 0)
                     {
                         lblAdbStatus.Text = "⚠ Resolución sin detectar — presiona 🔄 primero";
-                        lblAdbStatus.ForeColor = Color.FromArgb(220, 50, 50);
+                        lblAdbStatus.ForeColor = AppTheme.Error;
                         return;
                     }
                     btnAplicarRes.Enabled = false;
@@ -462,7 +462,7 @@ namespace MobiladorStex
                         {
                             lblAdbStatus.Text = $"✓ Resolución aplicada: {wmSize}";
                             _resAdbActiva = true;
-                            lblAdbStatus.ForeColor = Color.FromArgb(16, 124, 16);
+                            lblAdbStatus.ForeColor = AppTheme.Success;
                             ActualizarEstados();
                             lblCropConflicto.Visible = true;
                             MarcarCambiosSinGuardar();
@@ -474,7 +474,7 @@ namespace MobiladorStex
                                 ? "⚠ Tu dispositivo no permite cambiar la resolución vía ADB.\nEsta función no es compatible con todos los modelos."
                                 : $"✗ Error: {error}";
                             lblAdbStatus.Text = mensajeError;
-                            lblAdbStatus.ForeColor = Color.FromArgb(220, 50, 50);
+                            lblAdbStatus.ForeColor = AppTheme.Error;
                             btnAplicarRes.Enabled = true;
                         }
                     }
@@ -494,7 +494,7 @@ namespace MobiladorStex
                         completadoReset = true;
                         if (IsDisposed) return;
                         lblAdbStatus.Text = exito ? "✓ Resolución restaurada" : $"✗ {error}";
-                        lblAdbStatus.ForeColor = exito ? Color.FromArgb(16, 124, 16) : Color.FromArgb(220, 50, 50);
+                        lblAdbStatus.ForeColor = exito ? AppTheme.Success : AppTheme.Error;
                         if (exito)
                         {
                             _resAdbActiva = false;
@@ -549,9 +549,9 @@ namespace MobiladorStex
                     Text = _wmSizeValor,
                     PlaceholderText = "ej. 1280x720",
                     Font = new Font("Segoe UI", 10f),
-                    FillColor = Color.FromArgb(42, 42, 45),
-                    ForeColor = Color.FromArgb(238, 238, 238),
-                    BorderColor = Color.FromArgb(107, 47, 196),
+                    FillColor = AppTheme.BgCard,
+                    ForeColor = AppTheme.TextPrimary,
+                    BorderColor = AppTheme.Accent,
                     BorderRadius = 4
                 };
                 txtWmSize.TextChanged += (s, e) =>
@@ -564,7 +564,7 @@ namespace MobiladorStex
                 {
                     Text = _wmSizeActivo ? "✓ Activo" : "",
                     Font = new Font("Segoe UI", 8f, FontStyle.Italic),
-                    ForeColor = _wmSizeActivo ? Color.FromArgb(16, 124, 16) : textSecondary,
+                    ForeColor = _wmSizeActivo ? AppTheme.Success : textSecondary,
                     Left = S(214),
                     Top = S(98),
                     AutoSize = true
@@ -602,7 +602,7 @@ namespace MobiladorStex
                     if (string.IsNullOrEmpty(valor) || !System.Text.RegularExpressions.Regex.IsMatch(valor, @"^\d+x\d+$"))
                     {
                         lblWmSizeStatus.Text = "⚠ Formato inválido. Usa: 1280x720";
-                        lblWmSizeStatus.ForeColor = Color.FromArgb(220, 50, 50);
+                        lblWmSizeStatus.ForeColor = AppTheme.Error;
                         return;
                     }
                     if (!_avisoWmSizeVisto)
@@ -643,13 +643,13 @@ namespace MobiladorStex
                             _resAdbActiva = false;
                             ActualizarEstados();
                             lblWmSizeStatus.Text = "✓ Aplicado";
-                            lblWmSizeStatus.ForeColor = Color.FromArgb(16, 124, 16);
+                            lblWmSizeStatus.ForeColor = AppTheme.Success;
                             MarcarCambiosSinGuardar();
                         }
                         else
                         {
                             lblWmSizeStatus.Text = $"✗ {(string.IsNullOrEmpty(error) ? "Sin dispositivo conectado" : error)}";
-                            lblWmSizeStatus.ForeColor = Color.FromArgb(220, 50, 50);
+                            lblWmSizeStatus.ForeColor = AppTheme.Error;
                             btnAplicarWm.Enabled = true;
                         }
                     }
@@ -670,7 +670,7 @@ namespace MobiladorStex
                         if (IsDisposed) return;
                         _wmSizeActivo = false;
                         lblWmSizeStatus.Text = exito ? "✓ Revertido" : "Guardado — sin dispositivo";
-                        lblWmSizeStatus.ForeColor = exito ? textSecondary : Color.FromArgb(255, 167, 38);
+                        lblWmSizeStatus.ForeColor = exito ? textSecondary : AppTheme.Warning;
                         ActualizarEstados();
                         if (btnAplicarRes != null) btnAplicarRes.FillColor = accentColor;
                         MarcarCambiosSinGuardar();
@@ -707,7 +707,7 @@ namespace MobiladorStex
                     Left = S(220),
                     Top = S(54),
                     Font = new Font("Segoe UI", 11f),
-                    FillColor = Color.FromArgb(107, 47, 196),
+                    FillColor = AppTheme.Accent,
                     ForeColor = Color.White,
                     BorderRadius = 4
                 };
@@ -741,8 +741,8 @@ namespace MobiladorStex
                     {
                         var (exito, dpi, _) = await adbManager.DetectarDPIAsync();
                         if (IsDisposed) return;
-                        if (exito) { _dpi = dpi; numDpi.Value = dpi; lblDpiActual.Text = $"DPI actual: {dpi}"; lblDpiActual.ForeColor = Color.FromArgb(16, 124, 16); }
-                        else { lblDpiActual.Text = "DPI actual: No detectado"; lblDpiActual.ForeColor = Color.FromArgb(255, 167, 38); }
+                        if (exito) { _dpi = dpi; numDpi.Value = dpi; lblDpiActual.Text = $"DPI actual: {dpi}"; lblDpiActual.ForeColor = AppTheme.Success; }
+                        else { lblDpiActual.Text = "DPI actual: No detectado"; lblDpiActual.ForeColor = AppTheme.Warning; }
                     }
                     finally
                     {
@@ -771,7 +771,7 @@ namespace MobiladorStex
                         var (exito, mensaje, _) = await adbManager.AplicarDPIAsync(_dpi);
                         if (IsDisposed) return;
                         lblDpiStatus.Text = exito ? $"✓ {mensaje}" : $"✗ {mensaje}";
-                        lblDpiStatus.ForeColor = exito ? Color.FromArgb(16, 124, 16) : Color.FromArgb(220, 50, 50);
+                        lblDpiStatus.ForeColor = exito ? AppTheme.Success : AppTheme.Error;
                         if (exito) { _ultimoDpiAplicado = _dpi; GuardarConfigTema(); }
                     }
                     finally
@@ -800,7 +800,7 @@ namespace MobiladorStex
                         var (exito, mensaje, _) = await adbManager.ResetearDPIAsync();
                         if (IsDisposed) return;
                         lblDpiStatus.Text = exito ? $"✓ {mensaje}" : $"✗ {mensaje}";
-                        lblDpiStatus.ForeColor = exito ? Color.FromArgb(16, 124, 16) : Color.FromArgb(220, 50, 50);
+                        lblDpiStatus.ForeColor = exito ? AppTheme.Success : AppTheme.Error;
                         if (exito) { var (eD, dpi, _2) = await adbManager.DetectarDPIAsync(); if (!IsDisposed && eD) { _dpi = dpi; numDpi.Value = dpi; lblDpiActual.Text = $"DPI actual: {dpi}"; } }
                     }
                     finally
@@ -821,7 +821,7 @@ namespace MobiladorStex
                     {
                         Text = $"Último DPI aplicado: {_ultimoDpiAplicado}",
                         Font = new Font("Segoe UI", 7.5f, FontStyle.Italic),
-                        ForeColor = Color.FromArgb(107, 47, 196),
+                        ForeColor = AppTheme.Accent,
                         Left = S(24),
                         Top = S(212),
                         AutoSize = true
@@ -839,7 +839,7 @@ namespace MobiladorStex
                 if (_hayDispositivo && _resolucionAncho == 0)
                 {
                     lblResStatus.Text = "⏳ Detectando...";
-                    lblResStatus.ForeColor = Color.FromArgb(255, 167, 38);
+                    lblResStatus.ForeColor = AppTheme.Warning;
                     btnDetectarRes.Enabled = false;
 
                     async Task DetectarResolucionAlCargar()
@@ -852,13 +852,13 @@ namespace MobiladorStex
                             lblResAncho.Text = ancho.ToString();
                             lblResAlto.Text = alto.ToString();
                             lblResStatus.Text = $"✓ {mensaje}";
-                            lblResStatus.ForeColor = Color.FromArgb(16, 124, 16);
+                            lblResStatus.ForeColor = AppTheme.Success;
                             ActualizarEstados();
                         }
                         else
                         {
                             lblResStatus.Text = "⚠ No detectado — conecta el cable y presiona 🔄";
-                            lblResStatus.ForeColor = Color.FromArgb(255, 167, 38);
+                            lblResStatus.ForeColor = AppTheme.Warning;
                         }
                         if (!btnDetectarRes.IsDisposed) btnDetectarRes.Enabled = true;
                     }
@@ -867,7 +867,7 @@ namespace MobiladorStex
 
                 // Aplicar estado inicial de todos los botones según flags actuales
                 ActualizarEstados();
-                if (btnAplicarRes != null) btnAplicarRes.FillColor = Color.FromArgb(180, 80, 0);
+                if (btnAplicarRes != null) btnAplicarRes.FillColor = AppTheme.BtnWarning;
 
             }
             finally { _cargandoPagina = false; }

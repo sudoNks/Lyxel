@@ -1,4 +1,4 @@
-using Guna.UI2.WinForms;
+﻿using Guna.UI2.WinForms;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -57,11 +57,11 @@ namespace MobiladorStex
         private Guna2Button _btnDown;
 
         // ── Colores de la paleta ──────────────────────────────────────
-        private static readonly Color COLOR_FONDO = Color.FromArgb(42, 42, 45);
-        private static readonly Color COLOR_TEXTO = Color.FromArgb(238, 238, 238);
-        private static readonly Color COLOR_BOTON = Color.FromArgb(78, 28, 141);
-        private static readonly Color COLOR_HOVER = Color.FromArgb(107, 47, 196);
-        private static readonly Color COLOR_BORDE = Color.FromArgb(107, 47, 196);
+        private static readonly Color COLOR_FONDO = AppTheme.BgCard;
+        private static readonly Color COLOR_TEXTO = AppTheme.TextPrimary;
+        private static readonly Color COLOR_BOTON = AppTheme.AccentDark;
+        private static readonly Color COLOR_HOVER = AppTheme.Accent;
+        private static readonly Color COLOR_BORDE = AppTheme.Accent;
 
         public StexNumericUpDown()
         {

@@ -1,4 +1,4 @@
-using Guna.UI2.WinForms;
+﻿using Guna.UI2.WinForms;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -58,7 +58,7 @@ namespace MobiladorStex
                     btnReiniciarAdb.Enabled = false;
                     btnReiniciarAdb.Text = "Reiniciando...";
                     lblAdbEstado.Text = "●  Reiniciando servidor ADB...";
-                    lblAdbEstado.ForeColor = Color.FromArgb(255, 167, 38);
+                    lblAdbEstado.ForeColor = AppTheme.Warning;
                     try
                     {
                         await adbManager.ReiniciarServidorAsync();
@@ -110,7 +110,7 @@ namespace MobiladorStex
                     Checked = _modoOtg,
                     Enabled = !otgBloqueadoPorWifi,
                     CheckedState = { FillColor = accentColor },
-                    UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
+                    UncheckedState = { FillColor = AppTheme.BorderNeutral },
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
 
@@ -141,9 +141,9 @@ namespace MobiladorStex
                     Width = cardOtg.Width - S(48),
                     Height = S(34),
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.FromArgb(42, 42, 45),
+                    FillColor = AppTheme.BgCard,
                     ForeColor = textPrimary,
-                    BorderColor = Color.FromArgb(107, 47, 196),
+                    BorderColor = AppTheme.Accent,
                     BorderRadius = 4,
                     DropDownStyle = ComboBoxStyle.DropDownList,
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
@@ -167,8 +167,8 @@ namespace MobiladorStex
                     Top = S(162) + otgTopOffset,
                     Width = cardOtg.Width - S(48),
                     Height = S(42),
-                    BackColor = Color.FromArgb(42, 42, 45),
-                    ForeColor = Color.FromArgb(0, 200, 0),
+                    BackColor = AppTheme.BgCard,
+                    ForeColor = AppTheme.SuccessBright,
                     Font = new Font("Consolas", 8f),
                     Text = "Presiona 'Detectar' para listar dispositivos",
                     AutoSize = false
@@ -254,7 +254,7 @@ namespace MobiladorStex
                             Text = "",
                             FormBorderStyle = FormBorderStyle.None,
                             StartPosition = FormStartPosition.CenterParent,
-                            BackColor = Color.FromArgb(33, 32, 35),
+                            BackColor = AppTheme.BgPrimary,
                             Size = new Size(460, 154),
                             ShowInTaskbar = false
                         })
@@ -263,19 +263,19 @@ namespace MobiladorStex
                             {
                                 Text = $"Sesión anterior: OTG (Serial: {_otgSerial}).",
                                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
-                                ForeColor = Color.FromArgb(238, 238, 238),
+                                ForeColor = AppTheme.TextPrimary,
                                 Left = 20, Top = 18, Width = 420, Height = 20, AutoSize = false
                             });
                             dlg.Controls.Add(new Label()
                             {
                                 Text = "¿Qué deseas hacer?",
                                 Font = new Font("Segoe UI", 9f),
-                                ForeColor = Color.FromArgb(180, 180, 180),
+                                ForeColor = AppTheme.TextModerate,
                                 Left = 20, Top = 42, Width = 420, Height = 18, AutoSize = false
                             });
-                            var btnUsar = new Guna2Button() { Text = "Usar serial guardado", Left = 20, Top = 84, Width = 130, Height = 36, Font = new Font("Segoe UI", 9f), FillColor = Color.FromArgb(107, 47, 196), ForeColor = Color.White, BorderRadius = 4 };
-                            var btnSel = new Guna2Button() { Text = "Seleccionar de la lista", Left = 162, Top = 84, Width = 138, Height = 36, Font = new Font("Segoe UI", 9f), FillColor = Color.FromArgb(55, 40, 75), ForeColor = Color.FromArgb(200, 200, 200), BorderColor = Color.FromArgb(80, 60, 110), BorderThickness = 1, BorderRadius = 4 };
-                            var btnCanc = new Guna2Button() { Text = "Cancelar", Left = 312, Top = 84, Width = 130, Height = 36, Font = new Font("Segoe UI", 9f), FillColor = Color.FromArgb(42, 42, 45), ForeColor = Color.FromArgb(160, 160, 160), BorderColor = Color.FromArgb(60, 60, 60), BorderThickness = 1, BorderRadius = 4 };
+                            var btnUsar = new Guna2Button() { Text = "Usar serial guardado", Left = 20, Top = 84, Width = 130, Height = 36, Font = new Font("Segoe UI", 9f), FillColor = AppTheme.Accent, ForeColor = Color.White, BorderRadius = 4 };
+                            var btnSel = new Guna2Button() { Text = "Seleccionar de la lista", Left = 162, Top = 84, Width = 138, Height = 36, Font = new Font("Segoe UI", 9f), FillColor = AppTheme.BtnSecondary, ForeColor = AppTheme.TextLight, BorderColor = AppTheme.BorderSecondary2, BorderThickness = 1, BorderRadius = 4 };
+                            var btnCanc = new Guna2Button() { Text = "Cancelar", Left = 312, Top = 84, Width = 130, Height = 36, Font = new Font("Segoe UI", 9f), FillColor = AppTheme.BgCard, ForeColor = AppTheme.TextTertiary, BorderColor = AppTheme.BorderNeutral, BorderThickness = 1, BorderRadius = 4 };
                             btnUsar.Click += (bs, be) => { opcionOtg = 1; dlg.Close(); };
                             btnSel.Click += (bs, be) => { opcionOtg = 2; dlg.Close(); };
                             btnCanc.Click += (bs, be) => { dlg.Close(); };
@@ -312,19 +312,19 @@ namespace MobiladorStex
                     {
                         Left = 24, Top = 46, Height = 34,
                         Width = cardOtg.Width - 48,
-                        BackColor = Color.FromArgb(30, 107, 47, 196),
+                        BackColor = AppTheme.AccentHoverBg,
                         Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                     };
                     panelSesionOtg.Paint += (ps, pe) =>
                     {
-                        using var pen = new Pen(Color.FromArgb(150, 107, 47, 196), 1);
+                        using var pen = new Pen(AppTheme.AccentBorderPen, 1);
                         pe.Graphics.DrawRectangle(pen, 0, 0, panelSesionOtg.Width - 1, panelSesionOtg.Height - 1);
                     };
                     panelSesionOtg.Controls.Add(new Label()
                     {
                         Text = $"📡 Sesión anterior: OTG (Serial: {_otgSerial}) — activa el toggle para reconectar.",
                         Font = new Font("Segoe UI", 8f, FontStyle.Bold),
-                        ForeColor = Color.FromArgb(210, 190, 245),
+                        ForeColor = AppTheme.AccentText,
                         Left = 8, Top = 7, Width = panelSesionOtg.Width - 16, Height = 18,
                         AutoSize = false,
                         Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
@@ -360,7 +360,7 @@ namespace MobiladorStex
                     Top = S(70) + wifiTopOffset,
                     Checked = wifiActivoAlCargar,
                     CheckedState = { FillColor = accentColor },
-                    UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
+                    UncheckedState = { FillColor = AppTheme.BorderNeutral },
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
 
@@ -372,9 +372,9 @@ namespace MobiladorStex
                     Height = S(32),
                     Text = _wifiPuerto.ToString(),
                     Font = new Font("Segoe UI", 9.5f),
-                    FillColor = Color.FromArgb(42, 42, 45),
-                    ForeColor = Color.FromArgb(238, 238, 238),
-                    BorderColor = Color.FromArgb(107, 47, 196),
+                    FillColor = AppTheme.BgCard,
+                    ForeColor = AppTheme.TextPrimary,
+                    BorderColor = AppTheme.Accent,
                     BorderRadius = 4,
                     MaxLength = 5
                 };
@@ -396,9 +396,9 @@ namespace MobiladorStex
                     Text = _wifiIp,
                     PlaceholderText = "192.168.1.X",
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.FromArgb(42, 42, 45),
+                    FillColor = AppTheme.BgCard,
                     ForeColor = textPrimary,
-                    BorderColor = Color.FromArgb(107, 47, 196),
+                    BorderColor = AppTheme.Accent,
                     BorderRadius = 4
                 };
                 txtIp.TextChanged += (s, e) => { _wifiIp = txtIp.Text; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
@@ -425,17 +425,17 @@ namespace MobiladorStex
                 if (_wifiConectado)
                 {
                     wifiStatusTextoInicial = $"🟢 Conectado a {_wifiIp}:{_wifiPuerto}";
-                    wifiStatusColorInicial = Color.FromArgb(16, 124, 16);
+                    wifiStatusColorInicial = AppTheme.Success;
                 }
                 else if (_puertotcpActivo)
                 {
                     wifiStatusTextoInicial = $"🔵 Puerto {_wifiPuerto} habilitado — Ingresa la IP y pulsa Conectar WiFi";
-                    wifiStatusColorInicial = Color.FromArgb(33, 150, 243);
+                    wifiStatusColorInicial = AppTheme.Info;
                 }
                 else if (!_hayDispositivo)
                 {
                     wifiStatusTextoInicial = "⚪ Sin dispositivo — Conecta el cable USB para empezar";
-                    wifiStatusColorInicial = Color.FromArgb(255, 167, 38);
+                    wifiStatusColorInicial = AppTheme.Warning;
                 }
                 else
                 {
@@ -475,9 +475,9 @@ namespace MobiladorStex
                     Left = S(204),
                     Top = S(238) + wifiTopOffset,
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.FromArgb(55, 40, 75),
+                    FillColor = AppTheme.BtnSecondary,
                     ForeColor = textSecondary,
-                    BorderColor = Color.FromArgb(60, 60, 60),
+                    BorderColor = AppTheme.BorderNeutral,
                     BorderThickness = 1,
                     BorderRadius = 4,
                     Enabled = _puertotcpActivo && !_wifiConectado
@@ -508,7 +508,7 @@ namespace MobiladorStex
                         togWifi.Checked = false;
                         _cargandoPagina = false;
                         lblWifiStatus.Text = "⚪ Sin dispositivo — Conecta el cable USB primero";
-                        lblWifiStatus.ForeColor = Color.FromArgb(255, 167, 38);
+                        lblWifiStatus.ForeColor = AppTheme.Warning;
                         MessageBox.Show(this, "Necesitas conectar el teléfono por cable USB antes de activar el modo WiFi.\n\nEl cable es necesario para el primer paso de configuración.", "Cable USB requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
@@ -528,7 +528,7 @@ namespace MobiladorStex
                                 Text = "",
                                 FormBorderStyle = FormBorderStyle.None,
                                 StartPosition = FormStartPosition.CenterParent,
-                                BackColor = Color.FromArgb(33, 32, 35),
+                                BackColor = AppTheme.BgPrimary,
                                 Size = new Size(460, 154),
                                 ShowInTaskbar = false
                             })
@@ -537,7 +537,7 @@ namespace MobiladorStex
                                 {
                                     Text = $"Se encontraron datos de sesión anterior (IP: {ipMostrar}).",
                                     Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
-                                    ForeColor = Color.FromArgb(238, 238, 238),
+                                    ForeColor = AppTheme.TextPrimary,
                                     Left = 20, Top = 18, Width = 400, Height = 20,
                                     AutoSize = false
                                 });
@@ -545,7 +545,7 @@ namespace MobiladorStex
                                 {
                                     Text = "¿Qué deseas hacer?",
                                     Font = new Font("Segoe UI", 9f),
-                                    ForeColor = Color.FromArgb(180, 180, 180),
+                                    ForeColor = AppTheme.TextModerate,
                                     Left = 20, Top = 42, Width = 400, Height = 18,
                                     AutoSize = false
                                 });
@@ -554,7 +554,7 @@ namespace MobiladorStex
                                     Text = "Usar datos guardados",
                                     Left = 20, Top = 84, Width = 130, Height = 36,
                                     Font = new Font("Segoe UI", 9f),
-                                    FillColor = Color.FromArgb(107, 47, 196),
+                                    FillColor = AppTheme.Accent,
                                     ForeColor = Color.White,
                                     BorderRadius = 4
                                 };
@@ -563,9 +563,9 @@ namespace MobiladorStex
                                     Text = "Configurar de nuevo",
                                     Left = 162, Top = 84, Width = 130, Height = 36,
                                     Font = new Font("Segoe UI", 9f),
-                                    FillColor = Color.FromArgb(55, 40, 75),
-                                    ForeColor = Color.FromArgb(200, 200, 200),
-                                    BorderColor = Color.FromArgb(80, 60, 110),
+                                    FillColor = AppTheme.BtnSecondary,
+                                    ForeColor = AppTheme.TextLight,
+                                    BorderColor = AppTheme.BorderSecondary2,
                                     BorderThickness = 1,
                                     BorderRadius = 4
                                 };
@@ -574,9 +574,9 @@ namespace MobiladorStex
                                     Text = "Cancelar",
                                     Left = 304, Top = 84, Width = 130, Height = 36,
                                     Font = new Font("Segoe UI", 9f),
-                                    FillColor = Color.FromArgb(42, 42, 45),
-                                    ForeColor = Color.FromArgb(160, 160, 160),
-                                    BorderColor = Color.FromArgb(60, 60, 60),
+                                    FillColor = AppTheme.BgCard,
+                                    ForeColor = AppTheme.TextTertiary,
+                                    BorderColor = AppTheme.BorderNeutral,
                                     BorderThickness = 1,
                                     BorderRadius = 4
                                 };
@@ -605,7 +605,7 @@ namespace MobiladorStex
                                 btnConectarWifi.Enabled = true;
                                 // btnCerrarPuerto solo se habilita al completar la conexión WiFi (_wifiConectado = true)
                                 lblWifiStatus.Text = $"🔵 Datos cargados ({ipMostrar}) — pulsa ⑤ Conectar WiFi";
-                                lblWifiStatus.ForeColor = Color.FromArgb(33, 150, 243);
+                                lblWifiStatus.ForeColor = AppTheme.Info;
                                 return;
                             }
                         }
@@ -616,7 +616,7 @@ namespace MobiladorStex
                             ? $"🔵 Puerto {_wifiPuerto} habilitado — continúa con Conectar WiFi"
                             : "⚪ Listo — pulsa ③ Habilitar Puerto para comenzar";
                         lblWifiStatus.ForeColor = _puertotcpActivo
-                            ? Color.FromArgb(33, 150, 243)
+                            ? AppTheme.Info
                             : textSecondary;
                     }
                     else
@@ -624,7 +624,7 @@ namespace MobiladorStex
                         // Pequeño delay para que la animación del toggle termine antes de la operación async
                         await Task.Delay(150);
                         lblWifiStatus.Text = "⏳ Desconectando WiFi...";
-                        lblWifiStatus.ForeColor = Color.FromArgb(255, 167, 38);
+                        lblWifiStatus.ForeColor = AppTheme.Warning;
                         togWifi.Enabled = false;
                         await adbManager.DesconectarTodoAsync();
                         togWifi.Enabled = true;
@@ -645,10 +645,10 @@ namespace MobiladorStex
                 {
                     btnDetectarIp.Enabled = false;
                     lblWifiStatus.Text = "⏳ Detectando IP del teléfono...";
-                    lblWifiStatus.ForeColor = Color.FromArgb(255, 167, 38);
+                    lblWifiStatus.ForeColor = AppTheme.Warning;
                     var (exito, ip, _) = await adbManager.DetectarIPDispositivoAsync();
-                    if (exito) { _wifiIp = ip; txtIp.Text = ip; lblWifiStatus.Text = $"✓ IP detectada: {ip} — ahora pulsa Conectar WiFi"; lblWifiStatus.ForeColor = Color.FromArgb(16, 124, 16); }
-                    else { lblWifiStatus.Text = "⚠ No se pudo detectar la IP — escríbela en el campo de arriba"; lblWifiStatus.ForeColor = Color.FromArgb(255, 167, 38); }
+                    if (exito) { _wifiIp = ip; txtIp.Text = ip; lblWifiStatus.Text = $"✓ IP detectada: {ip} — ahora pulsa Conectar WiFi"; lblWifiStatus.ForeColor = AppTheme.Success; }
+                    else { lblWifiStatus.Text = "⚠ No se pudo detectar la IP — escríbela en el campo de arriba"; lblWifiStatus.ForeColor = AppTheme.Warning; }
                     btnDetectarIp.Enabled = true;
                 };
 
@@ -657,7 +657,7 @@ namespace MobiladorStex
                     btnHabilitarPuerto.Enabled = false;
                     btnHabilitarPuerto.Text = "Habilitando...";
                     lblWifiStatus.Text = "⏳ Habilitando puerto...";
-                    lblWifiStatus.ForeColor = Color.FromArgb(255, 167, 38);
+                    lblWifiStatus.ForeColor = AppTheme.Warning;
 
                     // Suprimir actualizaciones visuales de track-devices durante la operación.
                     // adb tcpip reinicia el daemon del dispositivo → desconexión USB transitoria →
@@ -670,7 +670,7 @@ namespace MobiladorStex
                         if (IsDisposed) return;
                         if (!exitoList || seriales.Count == 0)
                         {
-                            lblWifiStatus.Text = "❌ Conecta el USB primero"; lblWifiStatus.ForeColor = Color.FromArgb(220, 50, 50);
+                            lblWifiStatus.Text = "❌ Conecta el USB primero"; lblWifiStatus.ForeColor = AppTheme.Error;
                             btnHabilitarPuerto.Text = "③ Habilitar Puerto"; btnHabilitarPuerto.Enabled = true;
                             MessageBox.Show("Conecta el teléfono por USB antes de habilitar el puerto WiFi.", "USB Requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
@@ -700,13 +700,13 @@ namespace MobiladorStex
                                 lblWifiStatus.Text = $"🔵 Puerto {_wifiPuerto} habilitado.\n" +
                                     "La IP se detecta automáticamente. Si no aparece, usa el botón morado (🔄) para detectarla.";
                             }
-                            lblWifiStatus.ForeColor = Color.FromArgb(33, 150, 243);
+                            lblWifiStatus.ForeColor = AppTheme.Info;
                             // Habilitamos "Conectar WiFi" solo cuando la detección de IP ya terminó
                             btnConectarWifi.Enabled = true;
                         }
                         else
                         {
-                            lblWifiStatus.Text = "❌ Error habilitando puerto"; lblWifiStatus.ForeColor = Color.FromArgb(220, 50, 50);
+                            lblWifiStatus.Text = "❌ Error habilitando puerto"; lblWifiStatus.ForeColor = AppTheme.Error;
                             btnHabilitarPuerto.Text = "③ Habilitar Puerto"; btnHabilitarPuerto.Enabled = true;
                         }
                     }
@@ -727,7 +727,7 @@ namespace MobiladorStex
                 {
                     if (string.IsNullOrWhiteSpace(_wifiIp)) { MessageBox.Show(this, "Ingresa o detecta la IP del dispositivo primero.", "IP Requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
                     btnConectarWifi.Enabled = false; btnConectarWifi.Text = "Conectando...";
-                    lblWifiStatus.Text = "⏳ Conectando via WiFi..."; lblWifiStatus.ForeColor = Color.FromArgb(255, 167, 38);
+                    lblWifiStatus.Text = "⏳ Conectando via WiFi..."; lblWifiStatus.ForeColor = AppTheme.Warning;
                     _operacionWifiEnCurso = true;
                     try
                     {
@@ -735,7 +735,7 @@ namespace MobiladorStex
                         if (IsDisposed) return;
                         if (!alcanzable)
                         {
-                            lblWifiStatus.Text = "❌ No se pudo alcanzar el dispositivo"; lblWifiStatus.ForeColor = Color.FromArgb(220, 50, 50);
+                            lblWifiStatus.Text = "❌ No se pudo alcanzar el dispositivo"; lblWifiStatus.ForeColor = AppTheme.Error;
                             btnConectarWifi.Text = "⑤ Conectar WiFi"; btnConectarWifi.Enabled = true;
                             MessageBox.Show(this,
                                 $"No se puede alcanzar el dispositivo en {_wifiIp}:{_wifiPuerto}.\n\n" +
@@ -751,7 +751,7 @@ namespace MobiladorStex
                         {
                             _wifiConectado = true;
                             _ = MonitorearUsbConWifiAsync();
-                            lblWifiStatus.Text = $"🟢 Conectado a {_wifiIp}:{_wifiPuerto}"; lblWifiStatus.ForeColor = Color.FromArgb(16, 124, 16);
+                            lblWifiStatus.Text = $"🟢 Conectado a {_wifiIp}:{_wifiPuerto}"; lblWifiStatus.ForeColor = AppTheme.Success;
                             btnConectarWifi.Text = "✓ Conectado"; btnConectarWifi.Enabled = false;
                             btnCerrarPuerto.Enabled = true;
                             // Actualizar el estado ADB inmediatamente para que el label de la card
@@ -765,7 +765,7 @@ namespace MobiladorStex
                         }
                         else
                         {
-                            lblWifiStatus.Text = "❌ Error de conexión"; lblWifiStatus.ForeColor = Color.FromArgb(220, 50, 50);
+                            lblWifiStatus.Text = "❌ Error de conexión"; lblWifiStatus.ForeColor = AppTheme.Error;
                             btnConectarWifi.Text = "⑤ Conectar WiFi"; btnConectarWifi.Enabled = true;
                         }
                     }
@@ -788,7 +788,7 @@ namespace MobiladorStex
                             "Necesitarás conectar el cable USB nuevamente para seguir usando la app.",
                             "Confirmar cierre WiFi", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
                     btnCerrarPuerto.Enabled = false; btnCerrarPuerto.Text = "Cerrando...";
-                    lblWifiStatus.Text = "⏳ Cerrando puerto, por favor espera..."; lblWifiStatus.ForeColor = Color.FromArgb(255, 167, 38);
+                    lblWifiStatus.Text = "⏳ Cerrando puerto, por favor espera..."; lblWifiStatus.ForeColor = AppTheme.Warning;
                     _operacionWifiEnCurso = true;
                     try
                     {
@@ -835,12 +835,12 @@ namespace MobiladorStex
                     {
                         Left = 24, Top = 46, Height = 34,
                         Width = cardWifi.Width - 48,
-                        BackColor = Color.FromArgb(30, 107, 47, 196),
+                        BackColor = AppTheme.AccentHoverBg,
                         Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                     };
                     panelSesionWifi.Paint += (ps, pe) =>
                     {
-                        using var pen = new Pen(Color.FromArgb(150, 107, 47, 196), 1);
+                        using var pen = new Pen(AppTheme.AccentBorderPen, 1);
                         pe.Graphics.DrawRectangle(pen, 0, 0, panelSesionWifi.Width - 1, panelSesionWifi.Height - 1);
                     };
                     string ipGuardada = !string.IsNullOrEmpty(_wifiIp) ? $" · {_wifiIp}" : "";
@@ -848,7 +848,7 @@ namespace MobiladorStex
                     {
                         Text = $"📡 Sesión anterior guardada{ipGuardada} — activa el toggle para reconectar rápido.",
                         Font = new Font("Segoe UI", 8f, FontStyle.Bold),
-                        ForeColor = Color.FromArgb(210, 190, 245),
+                        ForeColor = AppTheme.AccentText,
                         Left = 8, Top = 7,
                         Width = panelSesionWifi.Width - 16, Height = 18,
                         AutoSize = false,
@@ -861,15 +861,15 @@ namespace MobiladorStex
                 controlsWifi.AddRange(new Control[]
                 {
                 // Paso 1 — Conectar cable (informativo)
-                new Label() { Text = "① Conecta el cable USB primero", Font = new Font("Segoe UI", 8f), ForeColor = Color.FromArgb(107, 47, 196), Left = S(24), Top = S(50) + wifiTopOffset, AutoSize = true },
+                new Label() { Text = "① Conecta el cable USB primero", Font = new Font("Segoe UI", 8f), ForeColor = AppTheme.Accent, Left = S(24), Top = S(50) + wifiTopOffset, AutoSize = true },
                 // Paso 2 — Activar WiFi
                 new Label() { Text = "② Activar WiFi", Font = new Font("Segoe UI", 10f, FontStyle.Bold), ForeColor = textPrimary, Left = S(24), Top = S(74) + wifiTopOffset, AutoSize = true },
                 togWifi,
-                new Label() { Text = "⚠ Solo usar en redes privadas — No en redes públicas", Font = new Font("Segoe UI", 8f, FontStyle.Bold), ForeColor = Color.FromArgb(255, 167, 38), Left = S(24), Top = S(102) + wifiTopOffset, AutoSize = true },
+                new Label() { Text = "⚠ Solo usar en redes privadas — No en redes públicas", Font = new Font("Segoe UI", 8f, FontStyle.Bold), ForeColor = AppTheme.Warning, Left = S(24), Top = S(102) + wifiTopOffset, AutoSize = true },
                 new Label() { Text = "Puerto:", Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = S(24), Top = S(130) + wifiTopOffset, AutoSize = true },
                 numPuerto,
                 // IP — se rellena automáticamente al habilitar el puerto o se introduce a mano
-                new Label() { Text = "IP del dispositivo:", Font = new Font("Segoe UI", 9.5f, FontStyle.Bold), ForeColor = Color.FromArgb(107, 47, 196), Left = S(24), Top = S(170) + wifiTopOffset, AutoSize = true },
+                new Label() { Text = "IP del dispositivo:", Font = new Font("Segoe UI", 9.5f, FontStyle.Bold), ForeColor = AppTheme.Accent, Left = S(24), Top = S(170) + wifiTopOffset, AutoSize = true },
                 txtIp, btnDetectarIp,
                 lblWifiStatus, btnHabilitarPuerto, btnConectarWifi, btnCerrarPuerto,
                 new Label() {
@@ -877,7 +877,7 @@ namespace MobiladorStex
                            "  → La IP se detecta sola. Si no, escríbela arriba  →  ④ Conectar WiFi\n" +
                            "  → ¡Listo! Ya puedes quitar el cable  ·  Para volver: Cerrar Puerto",
                     Font = new Font("Segoe UI", 8f),
-                    ForeColor = Color.FromArgb(160, 140, 190),
+                    ForeColor = AppTheme.AccentSubtle,
                     Left = S(24), Top = S(330) + wifiTopOffset, Width = cardWifi.Width - S(48), Height = S(52),
                     AutoSize = false,
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right

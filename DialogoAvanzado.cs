@@ -1,4 +1,4 @@
-using Guna.UI2.WinForms;
+﻿using Guna.UI2.WinForms;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,12 +12,12 @@ namespace MobiladorStex
     {
         public bool NoVolverMostrar { get; private set; } = false;
 
-        private static readonly Color BG        = Color.FromArgb(33, 32, 35);
-        private static readonly Color BG_CARD   = Color.FromArgb(42, 42, 45);
-        private static readonly Color ACCENT    = Color.FromArgb(107, 47, 196);
-        private static readonly Color TEXTO     = Color.FromArgb(238, 238, 238);
-        private static readonly Color SECUNDARIO = Color.FromArgb(120, 120, 120);
-        private static readonly Color NARANJA   = Color.FromArgb(255, 167, 38);
+        private static readonly Color BG        = AppTheme.BgPrimary;
+        private static readonly Color BG_CARD   = AppTheme.BgCard;
+        private static readonly Color ACCENT    = AppTheme.Accent;
+        private static readonly Color TEXTO     = AppTheme.TextPrimary;
+        private static readonly Color SECUNDARIO = AppTheme.TextSecondary;
+        private static readonly Color NARANJA   = AppTheme.Warning;
 
         private Guna2Button _btnContinuar;
         private CheckBox[]  _chkObligatorios;
@@ -44,7 +44,7 @@ namespace MobiladorStex
             var pnlTitulo = new Panel()
             {
                 Left = 0, Top = 0, Width = this.Width, Height = S(48),
-                BackColor = Color.FromArgb(78, 28, 141)
+                BackColor = AppTheme.AccentDark
             };
             var lblTitulo = new Label()
             {
@@ -78,7 +78,7 @@ namespace MobiladorStex
             var linea = new Panel()
             {
                 Left = S(20), Top = y, Width = this.Width - S(40), Height = 1,
-                BackColor = Color.FromArgb(78, 28, 141)
+                BackColor = AppTheme.AccentDark
             };
             this.Controls.Add(linea);
             y += S(12);
@@ -135,9 +135,9 @@ namespace MobiladorStex
                 Text = "Cancelar", Width = S(110), Height = S(36),
                 Left = this.Width - S(244), Top = y,
                 Font = new Font("Segoe UI", 9f),
-                FillColor = Color.FromArgb(55, 40, 75),
+                FillColor = AppTheme.BtnSecondary,
                 ForeColor = SECUNDARIO,
-                BorderColor = Color.FromArgb(80, 60, 100),
+                BorderColor = AppTheme.BorderSecondary,
                 BorderThickness = 1, BorderRadius = 6
             };
             btnCancelar.Click += (s, e) =>
@@ -152,8 +152,8 @@ namespace MobiladorStex
                 Text = "Continuar →", Width = S(120), Height = S(36),
                 Left = this.Width - S(130), Top = y,
                 Font = new Font("Segoe UI", 9f, FontStyle.Bold),
-                FillColor = Color.FromArgb(60, 60, 65), // deshabilitado inicialmente
-                ForeColor = Color.FromArgb(100, 100, 100),
+                FillColor = AppTheme.BtnDisabled, // deshabilitado inicialmente
+                ForeColor = AppTheme.TextDisabled,
                 BorderRadius = 6, Enabled = false
             };
             _btnContinuar.Click += (s, e) =>
@@ -170,7 +170,7 @@ namespace MobiladorStex
             // ── Borde sutil ───────────────────────────────────────────
             this.Paint += (s, e) =>
             {
-                using var pen = new System.Drawing.Pen(Color.FromArgb(78, 28, 141), 1);
+                using var pen = new System.Drawing.Pen(AppTheme.AccentDark, 1);
                 e.Graphics.DrawRectangle(pen, 0, 0, this.Width - 1, this.Height - 1);
             };
 
@@ -193,8 +193,8 @@ namespace MobiladorStex
                 if (!chk.Checked) { todos = false; break; }
 
             _btnContinuar.Enabled   = todos;
-            _btnContinuar.FillColor = todos ? Color.FromArgb(107, 47, 196) : Color.FromArgb(60, 60, 65);
-            _btnContinuar.ForeColor = todos ? Color.FromArgb(238, 238, 238) : Color.FromArgb(100, 100, 100);
+            _btnContinuar.FillColor = todos ? AppTheme.Accent : AppTheme.BtnDisabled;
+            _btnContinuar.ForeColor = todos ? AppTheme.TextPrimary : AppTheme.TextDisabled;
         }
     }
 }

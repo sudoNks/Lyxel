@@ -1,4 +1,4 @@
-using Guna.UI2.WinForms;
+﻿using Guna.UI2.WinForms;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -23,7 +23,7 @@ namespace MobiladorStex
                     Top = S(58),
                     Checked = _disableScreensaver,
                     CheckedState = { FillColor = accentColor },
-                    UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
+                    UncheckedState = { FillColor = AppTheme.BorderNeutral },
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
                 togScreensaver.CheckedChanged += (s, e) => { _disableScreensaver = togScreensaver.Checked; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
@@ -34,7 +34,7 @@ namespace MobiladorStex
                     Top = S(108),
                     Checked = _stayAwake,
                     CheckedState = { FillColor = accentColor },
-                    UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
+                    UncheckedState = { FillColor = AppTheme.BorderNeutral },
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
                 togStayAwake.CheckedChanged += (s, e) => { _stayAwake = togStayAwake.Checked; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
@@ -45,7 +45,7 @@ namespace MobiladorStex
                     Top = S(158),
                     Checked = _turnScreenOff,
                     CheckedState = { FillColor = accentColor },
-                    UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
+                    UncheckedState = { FillColor = AppTheme.BorderNeutral },
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
                 togScreenOff.CheckedChanged += (s, e) => { _turnScreenOff = togScreenOff.Checked; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
@@ -69,7 +69,7 @@ namespace MobiladorStex
                     Top = S(58),
                     Checked = _mostrarFlotante,
                     CheckedState = { FillColor = accentColor },
-                    UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
+                    UncheckedState = { FillColor = AppTheme.BorderNeutral },
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
 
@@ -80,7 +80,7 @@ namespace MobiladorStex
                     Checked = _printFps,
                     Enabled = _mostrarFlotante,
                     CheckedState = { FillColor = accentColor },
-                    UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
+                    UncheckedState = { FillColor = AppTheme.BorderNeutral },
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
 
@@ -90,7 +90,7 @@ namespace MobiladorStex
                         ? "Muestra los FPS reales en la ventana flotante durante la sesión"
                         : "Requiere ventana flotante activa",
                     Font = new Font("Segoe UI", 8f),
-                    ForeColor = _mostrarFlotante ? textSecondary : Color.FromArgb(200, 100, 100),
+                    ForeColor = _mostrarFlotante ? textSecondary : AppTheme.TextError,
                     Left = S(24),
                     Top = S(150),
                     AutoSize = true
@@ -103,7 +103,7 @@ namespace MobiladorStex
                     lblFpsDesc.Text = _mostrarFlotante
                         ? "Muestra los FPS reales en la ventana flotante durante la sesión"
                         : "Requiere ventana flotante activa";
-                    lblFpsDesc.ForeColor = _mostrarFlotante ? textSecondary : Color.FromArgb(200, 100, 100);
+                    lblFpsDesc.ForeColor = _mostrarFlotante ? textSecondary : AppTheme.TextError;
                     if (!_cargandoPagina) MarcarCambiosSinGuardar();
                 };
 
@@ -117,7 +117,7 @@ namespace MobiladorStex
                 new Label() { Text = "Mostrar FPS", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(130), AutoSize = true },
                 lblFpsDesc,
                 togPrintFps,
-                new Label() { Text = "ℹ El contador aparecerá al iniciar scrcpy, no al activar esta opción.", Font = new Font("Segoe UI", 8f, FontStyle.Bold), ForeColor = Color.FromArgb(255, 167, 38), Left = S(24), Top = S(180), Width = cardDebug.Width - S(48), AutoSize = false, Height = S(20), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right }
+                new Label() { Text = "ℹ El contador aparecerá al iniciar scrcpy, no al activar esta opción.", Font = new Font("Segoe UI", 8f, FontStyle.Bold), ForeColor = AppTheme.Warning, Left = S(24), Top = S(180), Width = cardDebug.Width - S(48), AutoSize = false, Height = S(20), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right }
                 });
 
                 // ── CARD: Mouse y Teclado ─────────────────────────────────
@@ -129,7 +129,7 @@ namespace MobiladorStex
                     Top = S(58),
                     Checked = _forwardAllClicks,
                     CheckedState = { FillColor = accentColor },
-                    UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
+                    UncheckedState = { FillColor = AppTheme.BorderNeutral },
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
                 togForwardClicks.CheckedChanged += (s, e) => { _forwardAllClicks = togForwardClicks.Checked; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
@@ -141,9 +141,9 @@ namespace MobiladorStex
                     Width = S(160),
                     Height = S(32),
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.FromArgb(42, 42, 45),
+                    FillColor = AppTheme.BgCard,
                     ForeColor = textPrimary,
-                    BorderColor = Color.FromArgb(107, 47, 196),
+                    BorderColor = AppTheme.Accent,
                     BorderRadius = 4,
                     DropDownStyle = ComboBoxStyle.DropDownList
                 };
@@ -157,7 +157,7 @@ namespace MobiladorStex
                         ? "UHID — Simula teclado/mouse físico. Recomendado."
                         : "SDK — Inyección vía API Android. Más compatible.",
                     Font = new Font("Segoe UI", 8.5f),
-                    ForeColor = Color.FromArgb(210, 210, 210),
+                    ForeColor = AppTheme.TextLighter,
                     Left = S(24),
                     Top = S(172),
                     Width = S(280),
@@ -194,9 +194,9 @@ namespace MobiladorStex
                     Width = S(200),
                     Height = S(32),
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.FromArgb(42, 42, 45),
+                    FillColor = AppTheme.BgCard,
                     ForeColor = textPrimary,
-                    BorderColor = Color.FromArgb(107, 47, 196),
+                    BorderColor = AppTheme.Accent,
                     BorderRadius = 4,
                     DropDownStyle = ComboBoxStyle.DropDownList
                 };
@@ -222,7 +222,7 @@ namespace MobiladorStex
                 cardMod.Controls.AddRange(new Control[]
                 {
                 cmbMod,
-                new Label() { Text = "Tecla para atajos: MOD+F fullscreen, MOD+M menú, MOD+P power", Font = new Font("Segoe UI", 8f), ForeColor = Color.FromArgb(210, 210, 210), Left = S(24), Top = S(104), Width = cardMod.Width - S(48), AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right }
+                new Label() { Text = "Tecla para atajos: MOD+F fullscreen, MOD+M menú, MOD+P power", Font = new Font("Segoe UI", 8f), ForeColor = AppTheme.TextLighter, Left = S(24), Top = S(104), Width = cardMod.Width - S(48), AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right }
                 });
 
                 // ── CARD: Velocidad del Cursor ────────────────────────────
@@ -237,8 +237,8 @@ namespace MobiladorStex
                     Minimum = -7,
                     Maximum = 7,
                     Value = _pointerSpeed,
-                    ThumbColor = Color.FromArgb(107, 47, 196),
-                    FillColor = Color.FromArgb(55, 40, 75),
+                    ThumbColor = AppTheme.Accent,
+                    FillColor = AppTheme.BtnSecondary,
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                 };
 
@@ -246,7 +246,7 @@ namespace MobiladorStex
                 {
                     Text = _pointerSpeed == 0 ? "0 (default)" : _pointerSpeed.ToString("+0;-0"),
                     Font = new Font("Segoe UI", 10f, FontStyle.Bold),
-                    ForeColor = Color.FromArgb(107, 47, 196),
+                    ForeColor = AppTheme.Accent,
                     Left = S(310),
                     Top = S(62),
                     AutoSize = true
@@ -273,9 +273,9 @@ namespace MobiladorStex
                     Left = S(174),
                     Top = S(118),
                     Font = new Font("Segoe UI", 8.5f),
-                    FillColor = Color.FromArgb(55, 40, 75),
+                    FillColor = AppTheme.BtnSecondary,
                     ForeColor = textSecondary,
-                    BorderColor = Color.FromArgb(80, 60, 100),
+                    BorderColor = AppTheme.BorderSecondary,
                     BorderThickness = 1,
                     BorderRadius = 4
                 };
@@ -284,7 +284,7 @@ namespace MobiladorStex
                 {
                     Text = "",
                     Font = new Font("Segoe UI", 8f, FontStyle.Italic),
-                    ForeColor = Color.FromArgb(16, 124, 16),
+                    ForeColor = AppTheme.Success,
                     Left = S(334),
                     Top = S(126),
                     AutoSize = true
@@ -301,7 +301,7 @@ namespace MobiladorStex
                     btnAplicarCursor.Enabled = false; btnAplicarCursor.Text = "Aplicando...";
                     var (exito, error) = await adbManager.AplicarPointerSpeedAsync(_pointerSpeed);
                     lblCursorStatus.Text = exito ? "✓ Aplicado" : "✗ Sin dispositivo conectado";
-                    lblCursorStatus.ForeColor = exito ? Color.FromArgb(16, 124, 16) : Color.FromArgb(220, 50, 50);
+                    lblCursorStatus.ForeColor = exito ? AppTheme.Success : AppTheme.Error;
                     if (exito) { _ultimaVelocidadCursor = _pointerSpeed; GuardarConfigTema(); }
                     btnAplicarCursor.Text = "✓ Aplicar ahora"; btnAplicarCursor.Enabled = true;
                     await Task.Delay(2500);
@@ -314,14 +314,14 @@ namespace MobiladorStex
                     lblCursorValor.Text = "0 (default)";
                     var (exito, _) = await adbManager.AplicarPointerSpeedAsync(0);
                     lblCursorStatus.Text = exito ? "✓ Restablecido a 0" : "Guardado — se aplicará al conectar";
-                    lblCursorStatus.ForeColor = exito ? Color.FromArgb(16, 124, 16) : textSecondary;
+                    lblCursorStatus.ForeColor = exito ? AppTheme.Success : textSecondary;
                     await Task.Delay(2500);
                     if (!lblCursorStatus.IsDisposed) lblCursorStatus.Text = "";
                 };
 
                 cardCursor.Controls.AddRange(new Control[]
                 {
-                new Label() { Text = "Ajusta la velocidad del cursor del mouse en Android.", Font = new Font("Segoe UI", 8.5f), ForeColor = Color.FromArgb(210, 210, 210), Left = S(24), Top = S(40), AutoSize = true },
+                new Label() { Text = "Ajusta la velocidad del cursor del mouse en Android.", Font = new Font("Segoe UI", 8.5f), ForeColor = AppTheme.TextLighter, Left = S(24), Top = S(40), AutoSize = true },
                 trackCursor, lblCursorValor,
                 new Label() { Text = "-7 = más lento   |   0 = default   |   +7 = más rápido", Font = new Font("Segoe UI", 7.5f), ForeColor = textSecondary, Left = S(24), Top = S(94), AutoSize = true },
                 btnAplicarCursor, btnResetCursor, lblCursorStatus
@@ -332,7 +332,7 @@ namespace MobiladorStex
                     {
                         Text = $"Última velocidad aplicada: {(_ultimaVelocidadCursor == 0 ? "0 (default)" : _ultimaVelocidadCursor.ToString("+0;-0"))}",
                         Font = new Font("Segoe UI", 7.5f, FontStyle.Italic),
-                        ForeColor = Color.FromArgb(107, 47, 196),
+                        ForeColor = AppTheme.Accent,
                         Left = S(24),
                         Top = S(158),
                         AutoSize = true

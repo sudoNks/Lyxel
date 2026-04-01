@@ -397,12 +397,12 @@ namespace MobiladorStex
         private void ApplyTheme()
         {
             // ── Paleta fija MobiladorSteX ─────────────────────────────
-            accentColor = Color.FromArgb(107, 47, 196);   // #6b2fc4 morado brillante
-            bgPrimary = Color.FromArgb(33, 32, 35);     // #212023 fondo general
-            bgSecondary = Color.FromArgb(26, 26, 28);     // #1a1a1c sidebar
-            bgCard = Color.FromArgb(42, 42, 45);     // #2a2a2d cards
-            textPrimary = Color.FromArgb(238, 238, 238);  // #eeeeee texto principal
-            textSecondary = Color.FromArgb(120, 120, 120);  // #787878 texto secundario
+            accentColor = AppTheme.Accent;   // #6b2fc4 morado brillante
+            bgPrimary = AppTheme.BgPrimary;     // #212023 fondo general
+            bgSecondary = AppTheme.BgSecondary;     // #1a1a1c sidebar
+            bgCard = AppTheme.BgCard;     // #2a2a2d cards
+            textPrimary = AppTheme.TextPrimary;  // #eeeeee texto principal
+            textSecondary = AppTheme.TextSecondary;  // #787878 texto secundario
         }
 
 
@@ -471,7 +471,7 @@ namespace MobiladorStex
             {
                 Text = ObtenerVersionApp(),
                 Font = new Font("Segoe UI", 9f, FontStyle.Bold),
-                ForeColor = Color.FromArgb(147, 90, 220),
+                ForeColor = AppTheme.AccentLight,
                 Left = S(18),
                 Top = S(48),
                 AutoSize = true
@@ -488,7 +488,7 @@ namespace MobiladorStex
             navButtons[6] = CreateNavButton("ℹ️  Acerca de", 6);
 
             navButtons[paginaActiva].Checked = true;
-            navButtons[paginaActiva].FillColor = Color.FromArgb(60, 40, 80);
+            navButtons[paginaActiva].FillColor = AppTheme.BtnNavActive;
             navButtons[paginaActiva].ForeColor = Color.White;
 
             btnToggle = new Guna2Button()
@@ -500,7 +500,7 @@ namespace MobiladorStex
                 Top = this.ClientSize.Height - S(170),
                 Font = new Font("Segoe UI", 13f),
                 FillColor = Color.Transparent,
-                ForeColor = Color.FromArgb(150, 150, 150),
+                ForeColor = AppTheme.TextDimmer,
                 BorderColor = Color.Transparent,
                 BorderThickness = 0,
                 BorderRadius = 6,
@@ -570,7 +570,7 @@ namespace MobiladorStex
                 Text = "",
                 Name = "lblAvisoHeader",
                 Font = new Font("Segoe UI", 9f, FontStyle.Italic),
-                ForeColor = Color.FromArgb(255, 167, 38),
+                ForeColor = AppTheme.Warning,
                 Left = S(30),
                 Top = S(52),
                 AutoSize = true
@@ -618,7 +618,7 @@ namespace MobiladorStex
                 btn.ForeColor = textSecondary;
             }
             navButtons[index].Checked = true;
-            navButtons[index].FillColor = Color.FromArgb(60, 40, 80);
+            navButtons[index].FillColor = AppTheme.BtnNavActive;
             navButtons[index].ForeColor = Color.White;
 
             lblTituloPagina.Text = title;
@@ -783,7 +783,7 @@ namespace MobiladorStex
             {
                 Text = "●",
                 Font = new Font("Segoe UI", 12f),
-                ForeColor = Color.FromArgb(120, 120, 120), // gris mientras verifica
+                ForeColor = AppTheme.TextSecondary, // gris mientras verifica
                 Left = S(24),
                 Top = S(62),
                 AutoSize = true
@@ -807,9 +807,9 @@ namespace MobiladorStex
                 Left = S(24),
                 Top = S(100),
                 Font = new Font("Segoe UI", 9f),
-                FillColor = Color.FromArgb(55, 40, 75),
+                FillColor = AppTheme.BtnSecondary,
                 ForeColor = textSecondary,
-                BorderColor = Color.FromArgb(80, 60, 100),
+                BorderColor = AppTheme.BorderSecondary,
                 BorderThickness = 1,
                 BorderRadius = 4
             };
@@ -835,8 +835,8 @@ namespace MobiladorStex
                 Left = S(24),
                 Top = S(56),
                 Font = new Font("Segoe UI", 11f, FontStyle.Bold),
-                FillColor = Color.FromArgb(60, 45, 80),
-                ForeColor = Color.FromArgb(150, 150, 150),
+                FillColor = AppTheme.BtnInactive,
+                ForeColor = AppTheme.TextDimmer,
                 BorderRadius = 6,
                 Enabled = false, // deshabilitado hasta confirmar dispositivo
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
@@ -851,9 +851,9 @@ namespace MobiladorStex
                 Left = S(24),
                 Top = S(114),
                 Font = new Font("Segoe UI", 9.5f),
-                FillColor = Color.FromArgb(55, 40, 75),
+                FillColor = AppTheme.BtnSecondary,
                 ForeColor = textSecondary,
-                BorderColor = Color.FromArgb(80, 60, 100),
+                BorderColor = AppTheme.BorderSecondary,
                 BorderThickness = 1,
                 BorderRadius = 4,
                 Enabled = false,
@@ -1078,8 +1078,8 @@ namespace MobiladorStex
 
             bool puedeIniciar = _inicializacionCompleta && !corriendo && (hayDispositivo || _usarWifi);
             btnIniciarScrcpy.Enabled = puedeIniciar;
-            btnIniciarScrcpy.FillColor = puedeIniciar ? accentColor : Color.FromArgb(60, 45, 80);
-            btnIniciarScrcpy.ForeColor = puedeIniciar ? Color.White : Color.FromArgb(150, 150, 150);
+            btnIniciarScrcpy.FillColor = puedeIniciar ? accentColor : AppTheme.BtnInactive;
+            btnIniciarScrcpy.ForeColor = puedeIniciar ? Color.White : AppTheme.TextDimmer;
             if (!_inicializacionCompleta)
                 btnIniciarScrcpy.Text = "Detectando dispositivo...";
             else if (corriendo)
@@ -1104,12 +1104,12 @@ namespace MobiladorStex
             if (lblEstadoIndicador == null || lblEstadoTexto == null) return;
             if (hayDispositivo)
             {
-                lblEstadoIndicador.ForeColor = Color.FromArgb(16, 124, 16);
+                lblEstadoIndicador.ForeColor = AppTheme.Success;
                 lblEstadoTexto.Text = "Dispositivo conectado";
             }
             else
             {
-                lblEstadoIndicador.ForeColor = Color.FromArgb(220, 50, 50);
+                lblEstadoIndicador.ForeColor = AppTheme.Error;
                 lblEstadoTexto.Text = "Sin dispositivo detectado";
             }
         }
@@ -1175,7 +1175,7 @@ namespace MobiladorStex
             if (exito && seriales.Count > 0)
             {
                 _hayDispositivo = true;
-                lblEstadoIndicador.ForeColor = Color.FromArgb(16, 124, 16);
+                lblEstadoIndicador.ForeColor = AppTheme.Success;
                 lblEstadoTexto.Text = seriales.Count == 1
                     ? $"Conectado: {seriales[0]}"
                     : $"{seriales.Count} dispositivos conectados";
@@ -1195,7 +1195,7 @@ namespace MobiladorStex
             else
             {
                 _hayDispositivo = false;
-                lblEstadoIndicador.ForeColor = Color.FromArgb(220, 50, 50);
+                lblEstadoIndicador.ForeColor = AppTheme.Error;
                 lblEstadoTexto.Text = "Sin dispositivo detectado";
             }
             _inicializacionCompleta = true;
@@ -1236,7 +1236,7 @@ namespace MobiladorStex
             btn.MouseEnter += (s, e) =>
             {
                 if (!btn.Checked)
-                    btn.FillColor = Color.FromArgb(50, 35, 70);
+                    btn.FillColor = AppTheme.BtnNavIdle;
             };
             btn.MouseLeave += (s, e) =>
             {
@@ -1383,12 +1383,12 @@ namespace MobiladorStex
             if (exito && seriales.Count > 0)
             {
                 lblEstado.Text = $"●  {seriales.Count} dispositivo(s): {string.Join(", ", seriales)}";
-                lblEstado.ForeColor = Color.FromArgb(16, 124, 16);
+                lblEstado.ForeColor = AppTheme.Success;
             }
             else
             {
                 lblEstado.Text = "●  Sin dispositivo detectado";
-                lblEstado.ForeColor = Color.FromArgb(220, 50, 50);
+                lblEstado.ForeColor = AppTheme.Error;
             }
         }
 
@@ -1511,7 +1511,7 @@ namespace MobiladorStex
                 _dpi = dpi;
                 numDpi.Value = dpi;
                 lblDpiActual.Text = $"DPI actual: {dpi}";
-                lblDpiActual.ForeColor = Color.FromArgb(16, 124, 16);
+                lblDpiActual.ForeColor = AppTheme.Success;
             }
         }
 
@@ -1569,7 +1569,7 @@ namespace MobiladorStex
                 Top = S(48),
                 Width = panelIzq.Width - S(24),
                 Height = panelIzq.Height - S(140),
-                BackColor = Color.FromArgb(33, 32, 35),
+                BackColor = AppTheme.BgPrimary,
                 ForeColor = textPrimary,
                 BorderStyle = BorderStyle.None,
                 Font = new Font("Segoe UI", 9.5f),
@@ -1583,13 +1583,13 @@ namespace MobiladorStex
                 bool selected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
                 e.Graphics.FillRectangle(
                     new System.Drawing.SolidBrush(selected
-                        ? Color.FromArgb(78, 28, 141)
-                        : Color.FromArgb(33, 32, 35)),
+                        ? AppTheme.AccentDark
+                        : AppTheme.BgPrimary),
                     e.Bounds);
                 e.Graphics.DrawString(
                     _lstPerfiles.Items[e.Index].ToString(),
                     e.Font ?? new Font("Segoe UI", 9.5f),
-                    new System.Drawing.SolidBrush(Color.FromArgb(238, 238, 238)),
+                    new System.Drawing.SolidBrush(AppTheme.TextPrimary),
                     e.Bounds.X + 8, e.Bounds.Y + 4);
             };
 
@@ -1615,9 +1615,9 @@ namespace MobiladorStex
                 Width = (panelIzq.Width - S(30)) / 2,
                 Height = S(32),
                 Font = new Font("Segoe UI", 8.5f),
-                FillColor = Color.FromArgb(55, 40, 75),
+                FillColor = AppTheme.BtnSecondary,
                 ForeColor = textSecondary,
-                BorderColor = Color.FromArgb(60, 60, 60),
+                BorderColor = AppTheme.BorderNeutral,
                 BorderThickness = 1,
                 BorderRadius = 4,
                 Anchor = AnchorStyles.Bottom | AnchorStyles.Left
@@ -1631,9 +1631,9 @@ namespace MobiladorStex
                 Width = (panelIzq.Width - S(30)) / 2,
                 Height = S(32),
                 Font = new Font("Segoe UI", 8.5f),
-                FillColor = Color.FromArgb(55, 40, 75),
+                FillColor = AppTheme.BtnSecondary,
                 ForeColor = textSecondary,
-                BorderColor = Color.FromArgb(60, 60, 60),
+                BorderColor = AppTheme.BorderNeutral,
                 BorderThickness = 1,
                 BorderRadius = 4,
                 Anchor = AnchorStyles.Bottom | AnchorStyles.Right
@@ -1735,9 +1735,9 @@ namespace MobiladorStex
                 Height = S(36),
                 Text = nombre,
                 Font = new Font("Segoe UI", 10f),
-                FillColor = Color.FromArgb(42, 42, 45),
+                FillColor = AppTheme.BgCard,
                 ForeColor = textPrimary,
-                BorderColor = Color.FromArgb(60, 60, 60),
+                BorderColor = AppTheme.BorderNeutral,
                 BorderRadius = 4
             };
 
@@ -1745,7 +1745,7 @@ namespace MobiladorStex
             {
                 Text = "",
                 Font = new Font("Segoe UI", 8f),
-                ForeColor = Color.FromArgb(220, 50, 50),
+                ForeColor = AppTheme.Error,
                 Left = S(24),
                 Top = S(88),
                 AutoSize = true
@@ -1795,9 +1795,9 @@ namespace MobiladorStex
                 Width = S(170),
                 Height = S(38),
                 Font = new Font("Segoe UI", 9.5f),
-                FillColor = Color.FromArgb(55, 40, 75),
+                FillColor = AppTheme.BtnSecondary,
                 ForeColor = textSecondary,
-                BorderColor = Color.FromArgb(60, 60, 60),
+                BorderColor = AppTheme.BorderNeutral,
                 BorderThickness = 1,
                 BorderRadius = 4
             };
@@ -1810,7 +1810,7 @@ namespace MobiladorStex
                 Width = S(130),
                 Height = S(34),
                 Font = new Font("Segoe UI", 9f),
-                FillColor = Color.FromArgb(180, 40, 40),
+                FillColor = AppTheme.BtnDanger,
                 ForeColor = Color.White,
                 BorderRadius = 4
             };
@@ -1823,9 +1823,9 @@ namespace MobiladorStex
                 Width = S(190),
                 Height = S(34),
                 Font = new Font("Segoe UI", 9f),
-                FillColor = Color.FromArgb(55, 40, 75),
+                FillColor = AppTheme.BtnSecondary,
                 ForeColor = textSecondary,
-                BorderColor = Color.FromArgb(60, 60, 60),
+                BorderColor = AppTheme.BorderNeutral,
                 BorderThickness = 1,
                 BorderRadius = 4
             };
@@ -1834,7 +1834,7 @@ namespace MobiladorStex
             {
                 Text = "",
                 Font = new Font("Segoe UI", 8.5f, FontStyle.Italic),
-                ForeColor = Color.FromArgb(16, 124, 16),
+                ForeColor = AppTheme.Success,
                 Left = S(24),
                 Top = S(392),
                 AutoSize = true
@@ -1851,7 +1851,7 @@ namespace MobiladorStex
                 _perfilSeleccionado = nombre;
                 GuardarConfigTema();
                 lblAccionStatus.Text = $"✓ Perfil '{nombre}' cargado y guardado como activo";
-                lblAccionStatus.ForeColor = Color.FromArgb(16, 124, 16);
+                lblAccionStatus.ForeColor = AppTheme.Success;
             };
 
             btnGuardar.Click += (s, e) =>
@@ -1861,11 +1861,11 @@ namespace MobiladorStex
                 if (!string.IsNullOrEmpty(errorNombre))
                 {
                     lblNombreError.Text = errorNombre;
-                    txtNombre.BorderColor = Color.FromArgb(220, 50, 50);
+                    txtNombre.BorderColor = AppTheme.Error;
                     return;
                 }
                 lblNombreError.Text = "";
-                txtNombre.BorderColor = Color.FromArgb(60, 60, 60);
+                txtNombre.BorderColor = AppTheme.BorderNeutral;
 
                 if (nuevoNombre != nombre)
                 {
@@ -1883,13 +1883,13 @@ namespace MobiladorStex
                     if (_lstPerfiles != null) _lstPerfiles.SelectedItem = nombre;
                     lblValores.Text = FormatearValoresPerfil(perfilManager.ObtenerPerfil(nombre));
                     lblAccionStatus.Text = $"✓ Perfil '{nombre}' guardado";
-                    lblAccionStatus.ForeColor = Color.FromArgb(16, 124, 16);
+                    lblAccionStatus.ForeColor = AppTheme.Success;
                     LimpiarIndicadorCambios();
                 }
                 else
                 {
                     lblAccionStatus.Text = $"✗ Error: {error}";
-                    lblAccionStatus.ForeColor = Color.FromArgb(220, 50, 50);
+                    lblAccionStatus.ForeColor = AppTheme.Error;
                 }
             };
 
@@ -1916,7 +1916,7 @@ namespace MobiladorStex
             txtNombre.TextChanged += (s, e) =>
             {
                 lblNombreError.Text = "";
-                txtNombre.BorderColor = Color.FromArgb(60, 60, 60);
+                txtNombre.BorderColor = AppTheme.BorderNeutral;
             };
 
             _panelDetalle.Controls.AddRange(new Control[]
@@ -1957,9 +1957,9 @@ namespace MobiladorStex
                 Height = 34,
                 PlaceholderText = "Ej: Perfil Gaming, Alta Calidad...",
                 Font = new Font("Segoe UI", 9.5f),
-                FillColor = Color.FromArgb(42, 42, 45),
+                FillColor = AppTheme.BgCard,
                 ForeColor = textPrimary,
-                BorderColor = Color.FromArgb(60, 60, 60),
+                BorderColor = AppTheme.BorderNeutral,
                 BorderRadius = 4,
                 MaxLength = 30
             };
@@ -1968,7 +1968,7 @@ namespace MobiladorStex
             {
                 Text = "",
                 Font = new Font("Segoe UI", 8f),
-                ForeColor = Color.FromArgb(220, 50, 50),
+                ForeColor = AppTheme.Error,
                 Left = 20,
                 Top = 82,
                 AutoSize = true
@@ -1995,9 +1995,9 @@ namespace MobiladorStex
                 Width = 100,
                 Height = 34,
                 Font = new Font("Segoe UI", 9.5f),
-                FillColor = Color.FromArgb(55, 40, 75),
+                FillColor = AppTheme.BtnSecondary,
                 ForeColor = textSecondary,
-                BorderColor = Color.FromArgb(60, 60, 60),
+                BorderColor = AppTheme.BorderNeutral,
                 BorderThickness = 1,
                 BorderRadius = 4
             };
@@ -2009,7 +2009,7 @@ namespace MobiladorStex
                 if (!string.IsNullOrEmpty(errorNombre))
                 {
                     lblError.Text = errorNombre;
-                    txtNuevo.BorderColor = Color.FromArgb(220, 50, 50);
+                    txtNuevo.BorderColor = AppTheme.Error;
                     return;
                 }
                 var config = ObtenerConfigActual();
@@ -2042,7 +2042,7 @@ namespace MobiladorStex
 
         private void LoadAcercaPage()
         {
-            var purpleLight = Color.FromArgb(180, 140, 220);
+            var purpleLight = AppTheme.AccentLighter;
 
             // ── Card 1: Encabezado ────────────────────────────────────────────────
             var cardHeader = new Panel()
@@ -2062,7 +2062,7 @@ namespace MobiladorStex
                 Top = S(27),
                 Width = S(110),
                 Height = S(110),
-                BackColor = Color.FromArgb(55, 40, 75),
+                BackColor = AppTheme.BtnSecondary,
                 SizeMode = PictureBoxSizeMode.Zoom,
                 Anchor = AnchorStyles.Top | AnchorStyles.Right
             };
@@ -2148,7 +2148,7 @@ namespace MobiladorStex
                 Text = $"Versión actual: {ObtenerVersionApp()}",
                 Font = new Font("Segoe UI", 8f),
                 ForeColor = purpleLight,
-                BackColor = Color.FromArgb(50, 30, 75),
+                BackColor = AppTheme.BgTabActive,
                 AutoSize = false,
                 Width = S(165),
                 Height = S(22),

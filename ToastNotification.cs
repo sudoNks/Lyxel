@@ -144,7 +144,7 @@ namespace MobiladorStex
             // Borde sutil
             this.Paint += (s, e) =>
             {
-                using var pen = new Pen(Color.FromArgb(60, 255, 255, 255), 1);
+                using var pen = new Pen(AppTheme.WhiteBorderPen, 1);
                 e.Graphics.DrawRectangle(pen, 0, 0, this.Width - 1, this.Height - 1);
             };
         }
@@ -196,18 +196,18 @@ namespace MobiladorStex
 
         private static Color ObtenerColorFondo(ToastTipo tipo) => tipo switch
         {
-            ToastTipo.Exito => Color.FromArgb(20, 80, 20),
-            ToastTipo.Advertencia => Color.FromArgb(90, 60, 10),
-            ToastTipo.Error => Color.FromArgb(90, 20, 20),
-            _ => Color.FromArgb(25, 50, 80)   // Info
+            ToastTipo.Exito => AppTheme.ToastBgSuccess,
+            ToastTipo.Advertencia => AppTheme.ToastBgWarning,
+            ToastTipo.Error => AppTheme.ToastBgError,
+            _ => AppTheme.ToastBgInfo   // Info
         };
 
         private static Color ObtenerColorBarra(ToastTipo tipo) => tipo switch
         {
-            ToastTipo.Exito => Color.FromArgb(16, 185, 16),
-            ToastTipo.Advertencia => Color.FromArgb(255, 167, 38),
-            ToastTipo.Error => Color.FromArgb(220, 50, 50),
-            _ => Color.FromArgb(0, 120, 212)   // Info
+            ToastTipo.Exito => AppTheme.ToastBarSuccess,
+            ToastTipo.Advertencia => AppTheme.Warning,
+            ToastTipo.Error => AppTheme.Error,
+            _ => AppTheme.ToastBarInfo   // Info
         };
 
         private static string ObtenerIcono(ToastTipo tipo) => tipo switch

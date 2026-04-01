@@ -1,4 +1,4 @@
-using Guna.UI2.WinForms;
+﻿using Guna.UI2.WinForms;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -29,7 +29,7 @@ namespace MobiladorStex
                     Top = S(58),
                     Checked = _video,
                     CheckedState = { FillColor = accentColor },
-                    UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
+                    UncheckedState = { FillColor = AppTheme.BorderNeutral },
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
                 togVideo.CheckedChanged += (s, e) => { _video = togVideo.Checked; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
@@ -44,7 +44,7 @@ namespace MobiladorStex
                     Width = cardVideo.Width - S(300),
                     Height = S(28),
                     ThumbColor = accentColor,
-                    FillColor = Color.FromArgb(40, 40, 40),
+                    FillColor = AppTheme.BgDarkMid2,
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                 };
                 var lblFpsVal = new Label()
@@ -75,7 +75,7 @@ namespace MobiladorStex
                     Width = cardVideo.Width - S(300),
                     Height = S(28),
                     ThumbColor = accentColor,
-                    FillColor = Color.FromArgb(40, 40, 40),
+                    FillColor = AppTheme.BgDarkMid2,
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                 };
                 var lblBitrateVal = new Label()
@@ -116,9 +116,9 @@ namespace MobiladorStex
                     Top = S(318),
                     Width = S(120),
                     Height = S(32),
-                    FillColor = Color.FromArgb(42, 42, 45),
+                    FillColor = AppTheme.BgCard,
                     ForeColor = textPrimary,
-                    BorderColor = Color.FromArgb(107, 47, 196),
+                    BorderColor = AppTheme.Accent,
                     BorderRadius = 4,
                     DropDownStyle = ComboBoxStyle.DropDownList,
                     Font = new Font("Segoe UI", 9f),
@@ -133,14 +133,14 @@ namespace MobiladorStex
                     if (!_cargandoPagina) MarcarCambiosSinGuardar();
                 };
                 if (_useAdvancedEncoder)
-                    cmbCodec.FillColor = Color.FromArgb(20, 20, 20);
+                    cmbCodec.FillColor = AppTheme.BgDark;
 
                 // Aviso de codec desactivado — debajo del combo, separado, nunca encima
                 var lblCodecDesactivado = new Label()
                 {
                     Text = "⚠ Desactivado — usando encoder avanzado",
                     Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
-                    ForeColor = Color.FromArgb(255, 140, 0),
+                    ForeColor = AppTheme.WarningOrange,
                     Left = S(292),
                     Top = S(322),   // a la derecha del combo (160+120+12)
                     Width = S(340),
@@ -187,7 +187,7 @@ namespace MobiladorStex
                 trackFps, lblFpsVal,
                 new Label() { Text = "Bitrate (Mb)",      Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = S(24), Top = S(160), AutoSize = true },
                 trackBitrate, lblBitrateVal,
-                new Label() { Text = "⚠ Si la pantalla no abre, reduce FPS o Bitrate. Depende del dispositivo y cable.", Font = new Font("Segoe UI", 7.5f), ForeColor = Color.FromArgb(200, 140, 40), Left = S(24), Top = S(186), Width = cardVideo.Width - S(48), AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
+                new Label() { Text = "⚠ Si la pantalla no abre, reduce FPS o Bitrate. Depende del dispositivo y cable.", Font = new Font("Segoe UI", 7.5f), ForeColor = AppTheme.WarningText, Left = S(24), Top = S(186), Width = cardVideo.Width - S(48), AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
                 new Label() { Text = "Max Size",          Font = new Font("Segoe UI", 9.5f), ForeColor = textPrimary, Left = S(24), Top = S(215), AutoSize = true },
                 new Label() { Text = "Limita la resolución transmitida (menor = más rendimiento)", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = S(24), Top = S(235), Width = cardVideo.Width - S(48), AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
                 numMaxSize,
@@ -208,7 +208,7 @@ namespace MobiladorStex
                     Top = S(58),
                     Checked = _audio,
                     CheckedState = { FillColor = accentColor },
-                    UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
+                    UncheckedState = { FillColor = AppTheme.BorderNeutral },
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
                 togAudio.CheckedChanged += (s, e) => { _audio = togAudio.Checked; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
@@ -219,7 +219,7 @@ namespace MobiladorStex
                     Top = S(108),
                     Checked = _audioDoble,
                     CheckedState = { FillColor = accentColor },
-                    UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
+                    UncheckedState = { FillColor = AppTheme.BorderNeutral },
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
                 togAudioDoble.CheckedChanged += (s, e) => { _audioDoble = togAudioDoble.Checked; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
@@ -232,9 +232,9 @@ namespace MobiladorStex
                     Width = S(120),
                     Height = S(32),
                     Font = new Font("Segoe UI", 9f),
-                    FillColor = Color.FromArgb(42, 42, 45),
+                    FillColor = AppTheme.BgCard,
                     ForeColor = textPrimary,
-                    BorderColor = Color.FromArgb(107, 47, 196),
+                    BorderColor = AppTheme.Accent,
                     BorderRadius = 4,
                     DropDownStyle = ComboBoxStyle.DropDownList
                 };
@@ -336,7 +336,7 @@ namespace MobiladorStex
                     Top = S(48),
                     Checked = _useAdvancedEncoder,
                     CheckedState = { FillColor = accentColor },
-                    UncheckedState = { FillColor = Color.FromArgb(60, 60, 60) },
+                    UncheckedState = { FillColor = AppTheme.BorderNeutral },
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
 
@@ -346,9 +346,9 @@ namespace MobiladorStex
                     Top = S(110),
                     Width = cardEncoder.Width - S(90) - S(136),
                     Height = S(34),
-                    FillColor = Color.FromArgb(42, 42, 45),
+                    FillColor = AppTheme.BgCard,
                     ForeColor = textPrimary,
-                    BorderColor = Color.FromArgb(107, 47, 196),
+                    BorderColor = AppTheme.Accent,
                     BorderRadius = 4,
                     DropDownStyle = ComboBoxStyle.DropDownList,
                     Font = new Font("Segoe UI", 8.5f),
@@ -391,7 +391,7 @@ namespace MobiladorStex
                         : "Encoder avanzado desactivado — usando codec genérico",
                     Font = new Font("Segoe UI", 8f, FontStyle.Italic),
                     ForeColor = _useAdvancedEncoder && !string.IsNullOrEmpty(_videoEncoder)
-                        ? Color.FromArgb(16, 124, 16) : textSecondary,
+                        ? AppTheme.Success : textSecondary,
                     Left = S(24),
                     Top = S(178),
                     Width = cardEncoder.Width - S(48),
@@ -410,7 +410,7 @@ namespace MobiladorStex
                     int idx = _encodersDetectados.IndexOf(_videoEncoder ?? "");
                     cmbEncoders.SelectedIndex = idx >= 0 ? idx : 0;
                     lblEncoderStatus.Text = $"✓ {_encodersDetectados.Count} encoder(s) disponibles";
-                    lblEncoderStatus.ForeColor = Color.FromArgb(16, 124, 16);
+                    lblEncoderStatus.ForeColor = AppTheme.Success;
                 }
                 else if (!string.IsNullOrEmpty(_videoEncoder))
                 {
@@ -436,8 +436,8 @@ namespace MobiladorStex
                     cmbCodec.Enabled = !_useAdvancedEncoder;
                     lblCodecDesactivado.Visible = _useAdvancedEncoder;
                     cmbCodec.FillColor = !_useAdvancedEncoder
-                        ? (Color.FromArgb(42, 42, 45))
-                        : (Color.FromArgb(20, 20, 20));
+                        ? (AppTheme.BgCard)
+                        : (AppTheme.BgDark);
 
                     if (!_useAdvancedEncoder)
                     {
@@ -452,12 +452,12 @@ namespace MobiladorStex
                             ? $"✓ {_encodersDetectados.Count} encoder(s) disponibles"
                             : "Presiona Detectar para cargar los encoders del dispositivo";
                         lblEncoderStatus.ForeColor = _encodersDetectados.Count > 0
-                            ? Color.FromArgb(16, 124, 16) : textSecondary;
+                            ? AppTheme.Success : textSecondary;
                         lblEncoderActivo.Text = string.IsNullOrEmpty(_videoEncoder)
                             ? "⚠ Selecciona un encoder después de detectar"
                             : $"✓ Encoder: {_videoEncoder}  |  Codec: {InferirCodecDeEncoderUI(_videoEncoder)}";
                         lblEncoderActivo.ForeColor = string.IsNullOrEmpty(_videoEncoder)
-                            ? Color.FromArgb(255, 167, 38) : Color.FromArgb(16, 124, 16);
+                            ? AppTheme.Warning : AppTheme.Success;
                     }
 
                     if (!_cargandoPagina) MarcarCambiosSinGuardar();
@@ -468,7 +468,7 @@ namespace MobiladorStex
                     btnDetectarEncoders.Enabled = false;
                     btnDetectarEncoders.Text = "Detectando...";
                     lblEncoderStatus.Text = "⏳ Consultando encoders...";
-                    lblEncoderStatus.ForeColor = Color.FromArgb(255, 167, 38);
+                    lblEncoderStatus.ForeColor = AppTheme.Warning;
                     try {
                     var (exito, nombres, displayLabels, rawOutput) = await scrcpyManager.DetectarEncodersAsync();
                     if (IsDisposed) return;
@@ -486,12 +486,12 @@ namespace MobiladorStex
                         cmbEncoders.SelectedIndex = prevIdx >= 0 ? prevIdx : 0;
 
                         lblEncoderStatus.Text = $"✓ {nombres.Count} encoder(s) detectado(s)";
-                        lblEncoderStatus.ForeColor = Color.FromArgb(16, 124, 16);
+                        lblEncoderStatus.ForeColor = AppTheme.Success;
                     }
                     else
                     {
                         lblEncoderStatus.Text = "⚠ Sin encoders — verifica que el dispositivo esté conectado";
-                        lblEncoderStatus.ForeColor = Color.FromArgb(255, 167, 38);
+                        lblEncoderStatus.ForeColor = AppTheme.Warning;
 
                         var diagResult = MessageBox.Show(
                             "No se pudieron detectar encoders.\n\n¿Ver el output de scrcpy para depurar?",
@@ -505,7 +505,7 @@ namespace MobiladorStex
                                 Width = 640,
                                 Height = 400,
                                 StartPosition = FormStartPosition.CenterParent,
-                                BackColor = Color.FromArgb(20, 20, 20)
+                                BackColor = AppTheme.BgDark
                             };
                             var txt = new TextBox()
                             {
@@ -513,8 +513,8 @@ namespace MobiladorStex
                                 ReadOnly = true,
                                 ScrollBars = ScrollBars.Both,
                                 Dock = DockStyle.Fill,
-                                BackColor = Color.FromArgb(30, 30, 30),
-                                ForeColor = Color.FromArgb(0, 220, 0),
+                                BackColor = AppTheme.BgDarkMid,
+                                ForeColor = AppTheme.TextGreenTerm,
                                 Font = new Font("Consolas", 9f),
                                 Text = string.IsNullOrWhiteSpace(rawOutput) ? "(Output vacío)" : rawOutput
                             };
@@ -547,7 +547,7 @@ namespace MobiladorStex
 
                     _videoEncoder = sel;
                     lblEncoderActivo.Text = $"✓ Encoder: {sel}  |  Codec: {InferirCodecDeEncoderUI(sel)}";
-                    lblEncoderActivo.ForeColor = Color.FromArgb(16, 124, 16);
+                    lblEncoderActivo.ForeColor = AppTheme.Success;
                     if (!_cargandoPagina) MarcarCambiosSinGuardar();
                 };
 
