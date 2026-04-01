@@ -44,4 +44,32 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Icons\ic_home.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_video.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_wifi.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_extras.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_perfiles.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_acerca.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_menu.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_power.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_refresh.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_sync.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_arrow_next.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_arrow_back.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_check.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_verified.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_save.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_more.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_expand.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_screen.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_add_profile.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_power_dark.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_clean.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_wifi_add.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_wifi_connect.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_wifi_close.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_apply.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_reset.png" />
+  </ItemGroup>
 </Project>

@@ -1,4 +1,5 @@
 ﻿using Guna.UI2.WinForms;
+using MobiladorStex.Helpers;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -29,7 +30,7 @@ namespace MobiladorStex
 
                 var btnReiniciarAdb = new Guna2Button()
                 {
-                    Text = "🔌 Reiniciar ADB",
+                    Text = "Reiniciar ADB",
                     Width = S(160),
                     Height = S(36),
                     Left = S(24),
@@ -37,12 +38,15 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
-                    BorderRadius = 4
+                    BorderRadius = 4,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left
                 };
+                btnReiniciarAdb.Image = IconHelper.Get("ic_sync");
 
                 var btnLimpiarHuerfanas = new Guna2Button()
                 {
-                    Text = "🧹 Limpiar WiFi Huérfanas",
+                    Text = "Limpiar WiFi Huérfanas",
                     Width = S(200),
                     Height = S(36),
                     Left = S(194),
@@ -50,8 +54,11 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
-                    BorderRadius = 4
+                    BorderRadius = 4,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left
                 };
+                btnLimpiarHuerfanas.Image = IconHelper.Get("ic_clean");
 
                 btnReiniciarAdb.Click += async (s, e) =>
                 {
@@ -68,7 +75,7 @@ namespace MobiladorStex
                     {
                         if (!IsDisposed)
                         {
-                            btnReiniciarAdb.Text = "🔌 Reiniciar ADB";
+                            btnReiniciarAdb.Text = "Reiniciar ADB";
                             btnReiniciarAdb.Enabled = true;
                         }
                     }
@@ -88,7 +95,7 @@ namespace MobiladorStex
                     {
                         if (!IsDisposed)
                         {
-                            btnLimpiarHuerfanas.Text = "🧹 Limpiar WiFi Huérfanas";
+                            btnLimpiarHuerfanas.Text = "Limpiar WiFi Huérfanas";
                             btnLimpiarHuerfanas.Enabled = true;
                         }
                     }
@@ -176,7 +183,7 @@ namespace MobiladorStex
 
                 var btnDetectarOtg = new Guna2Button()
                 {
-                    Text = "🔄 Detectar Dispositivos",
+                    Text = "Detectar Dispositivos",
                     Width = S(200),
                     Height = S(36),
                     Left = S(24),
@@ -184,8 +191,11 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
-                    BorderRadius = 4
+                    BorderRadius = 4,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left
                 };
+                btnDetectarOtg.Image = IconHelper.Get("ic_sync");
 
                 // Rellena cmbSerial con los dispositivos ADB actuales.
                 // silencioso=true solo rellena sin mostrar estado en consola.
@@ -405,19 +415,20 @@ namespace MobiladorStex
 
                 var btnDetectarIp = new Guna2Button()
                 {
-                    Text = "🔄",
+                    Text = "",
                     Width = S(36),
                     Height = S(34),
                     Left = S(350),
                     Top = S(166) + wifiTopOffset,
-                    Font = new Font("Segoe UI", 11f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
                     BorderColor = accentColor,
                     BorderThickness = 1,
                     BorderRadius = 4,
+                    ImageSize = new Size(S(18), S(18)),
                     Enabled = _hayDispositivo
                 };
+                btnDetectarIp.Image = IconHelper.Get("ic_sync");
 
                 // Estado inicial del label de status según flags persistidos
                 string wifiStatusTextoInicial;
@@ -455,7 +466,7 @@ namespace MobiladorStex
 
                 var btnHabilitarPuerto = new Guna2Button()
                 {
-                    Text = _puertotcpActivo ? "✓ Puerto Habilitado" : "③ Habilitar Puerto",
+                    Text = _puertotcpActivo ? "Puerto Habilitado" : "Habilitar Puerto",
                     Width = S(170),
                     Height = S(36),
                     Left = S(24),
@@ -464,12 +475,15 @@ namespace MobiladorStex
                     FillColor = accentColor,
                     ForeColor = Color.White,
                     BorderRadius = 4,
-                    Enabled = wifiActivoAlCargar && !_puertotcpActivo
+                    Enabled = wifiActivoAlCargar && !_puertotcpActivo,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left
                 };
+                btnHabilitarPuerto.Image = IconHelper.Get("ic_wifi_add");
 
                 var btnConectarWifi = new Guna2Button()
                 {
-                    Text = _wifiConectado ? "✓ Conectado" : "⑤ Conectar WiFi",
+                    Text = _wifiConectado ? "Conectado" : "Conectar WiFi",
                     Width = S(150),
                     Height = S(36),
                     Left = S(204),
@@ -480,12 +494,15 @@ namespace MobiladorStex
                     BorderColor = AppTheme.BorderNeutral,
                     BorderThickness = 1,
                     BorderRadius = 4,
-                    Enabled = _puertotcpActivo && !_wifiConectado
+                    Enabled = _puertotcpActivo && !_wifiConectado,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left
                 };
+                btnConectarWifi.Image = IconHelper.Get("ic_wifi_connect");
 
                 var btnCerrarPuerto = new Guna2Button()
                 {
-                    Text = "🔒 Cerrar Puerto",
+                    Text = "Cerrar Puerto",
                     Width = S(160),
                     Height = S(36),
                     Left = S(24),
@@ -494,8 +511,11 @@ namespace MobiladorStex
                     FillColor = accentColor,
                     ForeColor = Color.White,
                     BorderRadius = 4,
-                    Enabled = _puertotcpActivo
+                    Enabled = _puertotcpActivo,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left
                 };
+                btnCerrarPuerto.Image = IconHelper.Get("ic_wifi_close");
 
                 togWifi.CheckedChanged += async (s, e) =>
                 {
@@ -600,11 +620,11 @@ namespace MobiladorStex
                             {
                                 txtIp.Text = _wifiIp;
                                 _puertotcpActivo = true;
-                                btnHabilitarPuerto.Text = "✓ Puerto Habilitado";
+                                btnHabilitarPuerto.Text = "Puerto Habilitado";
                                 btnHabilitarPuerto.Enabled = false;
                                 btnConectarWifi.Enabled = true;
                                 // btnCerrarPuerto solo se habilita al completar la conexión WiFi (_wifiConectado = true)
-                                lblWifiStatus.Text = $"🔵 Datos cargados ({ipMostrar}) — pulsa ⑤ Conectar WiFi";
+                                lblWifiStatus.Text = $"🔵 Datos cargados ({ipMostrar}) — pulsa Conectar WiFi";
                                 lblWifiStatus.ForeColor = AppTheme.Info;
                                 return;
                             }
@@ -614,7 +634,7 @@ namespace MobiladorStex
                         btnHabilitarPuerto.Enabled = !_puertotcpActivo;
                         lblWifiStatus.Text = _puertotcpActivo
                             ? $"🔵 Puerto {_wifiPuerto} habilitado — continúa con Conectar WiFi"
-                            : "⚪ Listo — pulsa ③ Habilitar Puerto para comenzar";
+                            : "⚪ Listo — pulsa Habilitar Puerto para comenzar";
                         lblWifiStatus.ForeColor = _puertotcpActivo
                             ? AppTheme.Info
                             : textSecondary;
@@ -630,8 +650,8 @@ namespace MobiladorStex
                         togWifi.Enabled = true;
                         _puertotcpActivo = false; _wifiConectado = false;
                         // Toggle apagado → deshabilitar todos los botones del flujo WiFi
-                        btnHabilitarPuerto.Text = "③ Habilitar Puerto"; btnHabilitarPuerto.Enabled = false;
-                        btnConectarWifi.Text = "⑤ Conectar WiFi"; btnConectarWifi.Enabled = false;
+                        btnHabilitarPuerto.Text = "Habilitar Puerto"; btnHabilitarPuerto.Enabled = false;
+                        btnConectarWifi.Text = "Conectar WiFi"; btnConectarWifi.Enabled = false;
                         btnCerrarPuerto.Enabled = false;
                         lblWifiStatus.Text = _hayDispositivo
                             ? "⚪ WiFi desactivado — Activa el toggle para volver a conectar"
@@ -671,7 +691,7 @@ namespace MobiladorStex
                         if (!exitoList || seriales.Count == 0)
                         {
                             lblWifiStatus.Text = "❌ Conecta el USB primero"; lblWifiStatus.ForeColor = AppTheme.Error;
-                            btnHabilitarPuerto.Text = "③ Habilitar Puerto"; btnHabilitarPuerto.Enabled = true;
+                            btnHabilitarPuerto.Text = "Habilitar Puerto"; btnHabilitarPuerto.Enabled = true;
                             MessageBox.Show("Conecta el teléfono por USB antes de habilitar el puerto WiFi.", "USB Requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
@@ -680,7 +700,7 @@ namespace MobiladorStex
                         if (exito)
                         {
                             _puertotcpActivo = true;
-                            btnHabilitarPuerto.Text = "✓ Puerto Habilitado"; btnHabilitarPuerto.Enabled = false;
+                            btnHabilitarPuerto.Text = "Puerto Habilitado"; btnHabilitarPuerto.Enabled = false;
                             btnCerrarPuerto.Enabled = true;
                             // Detectar IP antes de habilitar "Conectar WiFi" para que el usuario
                             // no pueda pulsar el botón con la IP vacía. El delay da tiempo al
@@ -707,7 +727,7 @@ namespace MobiladorStex
                         else
                         {
                             lblWifiStatus.Text = "❌ Error habilitando puerto"; lblWifiStatus.ForeColor = AppTheme.Error;
-                            btnHabilitarPuerto.Text = "③ Habilitar Puerto"; btnHabilitarPuerto.Enabled = true;
+                            btnHabilitarPuerto.Text = "Habilitar Puerto"; btnHabilitarPuerto.Enabled = true;
                         }
                     }
                     finally
@@ -736,7 +756,7 @@ namespace MobiladorStex
                         if (!alcanzable)
                         {
                             lblWifiStatus.Text = "❌ No se pudo alcanzar el dispositivo"; lblWifiStatus.ForeColor = AppTheme.Error;
-                            btnConectarWifi.Text = "⑤ Conectar WiFi"; btnConectarWifi.Enabled = true;
+                            btnConectarWifi.Text = "Conectar WiFi"; btnConectarWifi.Enabled = true;
                             MessageBox.Show(this,
                                 $"No se puede alcanzar el dispositivo en {_wifiIp}:{_wifiPuerto}.\n\n" +
                                 "• Verifica que el teléfono y el PC estén en la misma red WiFi\n" +
@@ -752,7 +772,7 @@ namespace MobiladorStex
                             _wifiConectado = true;
                             _ = MonitorearUsbConWifiAsync();
                             lblWifiStatus.Text = $"🟢 Conectado a {_wifiIp}:{_wifiPuerto}"; lblWifiStatus.ForeColor = AppTheme.Success;
-                            btnConectarWifi.Text = "✓ Conectado"; btnConectarWifi.Enabled = false;
+                            btnConectarWifi.Text = "Conectado"; btnConectarWifi.Enabled = false;
                             btnCerrarPuerto.Enabled = true;
                             // Actualizar el estado ADB inmediatamente para que el label de la card
                             // refleje la nueva conexión sin necesidad de cambiar de pestaña.
@@ -766,7 +786,7 @@ namespace MobiladorStex
                         else
                         {
                             lblWifiStatus.Text = "❌ Error de conexión"; lblWifiStatus.ForeColor = AppTheme.Error;
-                            btnConectarWifi.Text = "⑤ Conectar WiFi"; btnConectarWifi.Enabled = true;
+                            btnConectarWifi.Text = "Conectar WiFi"; btnConectarWifi.Enabled = true;
                         }
                     }
                     finally
@@ -798,9 +818,9 @@ namespace MobiladorStex
                         if (IsDisposed) return;
                         _puertotcpActivo = false; _wifiConectado = false;
                         lblWifiStatus.Text = "⚪ Puerto cerrado — reconecta el cable USB para continuar"; lblWifiStatus.ForeColor = textSecondary;
-                        btnHabilitarPuerto.Text = "③ Habilitar Puerto"; btnHabilitarPuerto.Enabled = false;
-                        btnConectarWifi.Text = "⑤ Conectar WiFi"; btnConectarWifi.Enabled = false;
-                        btnCerrarPuerto.Text = "🔒 Cerrar Puerto"; btnCerrarPuerto.Enabled = false;
+                        btnHabilitarPuerto.Text = "Habilitar Puerto"; btnHabilitarPuerto.Enabled = false;
+                        btnConectarWifi.Text = "Conectar WiFi"; btnConectarWifi.Enabled = false;
+                        btnCerrarPuerto.Text = "Cerrar Puerto"; btnCerrarPuerto.Enabled = false;
                         MessageBox.Show(this,
                             exito ? "Puerto cerrado correctamente.\n\nSi quieres volver a conectar por WiFi, pulsa ③ Habilitar Puerto."
                                    : $"No se pudo cerrar automáticamente.\nPuedes reiniciar el teléfono para cerrar el puerto.\n\nError: {error}",

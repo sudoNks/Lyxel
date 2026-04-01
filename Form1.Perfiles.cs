@@ -1,4 +1,5 @@
 using Guna.UI2.WinForms;
+using MobiladorStex.Helpers;
 using System;
 using System.Drawing;
 using System.IO;
@@ -168,7 +169,7 @@ namespace MobiladorStex
 
             var btnNuevoPerfil = new Guna2Button()
             {
-                Text = "＋ Nuevo Perfil",
+                Text = "Nuevo Perfil",
                 Left = S(12),
                 Top = panelIzq.Height - S(84),
                 Width = panelIzq.Width - S(24),
@@ -177,8 +178,11 @@ namespace MobiladorStex
                 FillColor = accentColor,
                 ForeColor = Color.White,
                 BorderRadius = 4,
+                ImageSize = new Size(S(18), S(18)),
+                ImageAlign = HorizontalAlignment.Left,
                 Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
             };
+            btnNuevoPerfil.Image = IconHelper.Get("ic_add_profile");
 
             var btnImportar = new Guna2Button()
             {
@@ -362,7 +366,7 @@ namespace MobiladorStex
 
             var btnGuardar = new Guna2Button()
             {
-                Text = "💾 Guardar Cambios",
+                Text = "Guardar Cambios",
                 Left = S(194),
                 Top = S(300),
                 Width = S(170),
@@ -372,8 +376,11 @@ namespace MobiladorStex
                 ForeColor = textSecondary,
                 BorderColor = AppTheme.BorderNeutral,
                 BorderThickness = 1,
-                BorderRadius = 4
+                BorderRadius = 4,
+                ImageSize = new Size(S(18), S(18)),
+                ImageAlign = HorizontalAlignment.Left
             };
+            btnGuardar.Image = IconHelper.Get("ic_save");
 
             var btnEliminar = new Guna2Button()
             {

@@ -1,4 +1,5 @@
 ﻿using Guna.UI2.WinForms;
+using MobiladorStex.Helpers;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -110,6 +111,10 @@ namespace MobiladorStex
 
 
                 // Video Codec — en fila 435, label arriba, combo + aviso debajo
+                // Nota: Guna2ComboBox no expone ninguna propiedad pública (DrawDropDownIcon,
+                // ArrowImage, etc.) para asignar un ícono personalizado a la flecha del dropdown.
+                // La flecha se renderiza internamente via DrawArrow/DrawTriangle; no es customizable
+                // sin subclasificar o recurrir a reflection privada. Se omite ic_expand en combos.
                 var cmbCodec = new Guna2ComboBox()
                 {
                     Left = S(160),
@@ -358,7 +363,7 @@ namespace MobiladorStex
 
                 var btnDetectarEncoders = new Guna2Button()
                 {
-                    Text = "🔄 Detectar",
+                    Text = "Detectar",
                     Width = S(120),
                     Height = S(34),
                     Left = cardEncoder.Width - S(144),
@@ -367,9 +372,12 @@ namespace MobiladorStex
                     FillColor = accentColor,
                     ForeColor = Color.White,
                     BorderRadius = 4,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left,
                     Enabled = _useAdvancedEncoder,
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
+                btnDetectarEncoders.Image = IconHelper.Get("ic_sync");
 
                 var lblEncoderStatus = new Label()
                 {
@@ -524,7 +532,7 @@ namespace MobiladorStex
                     }
 
                     } finally {
-                        if (!IsDisposed) { btnDetectarEncoders.Text = "🔄 Detectar"; btnDetectarEncoders.Enabled = true; }
+                        if (!IsDisposed) { btnDetectarEncoders.Text = "Detectar"; btnDetectarEncoders.Enabled = true; }
                     }
                 };
 

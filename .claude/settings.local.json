@@ -9,7 +9,14 @@
       "Bash(powershell -Command \"Get-ChildItem -Filter ''*.cs'' | Select-Object Name, @{N=''Líneas'';E={\\(Get-Content $_.FullName\\).Count}} | Sort-Object Líneas -Descending | Format-Table -AutoSize\")",
       "Bash(powershell -Command \":*)",
       "Bash(Select-String -Pattern \"error|Error|warning CS|Build succeeded|Build FAILED\")",
-      "Bash(powershell -Command \"Get-ChildItem -Filter ''Form1*.cs'' | Select-Object Name, @{N=''Líneas'';E={\\(Get-Content $_.FullName\\).Count}} | Sort-Object Líneas -Descending | Format-Table -AutoSize\")"
+      "Bash(powershell -Command \"Get-ChildItem -Filter ''Form1*.cs'' | Select-Object Name, @{N=''Líneas'';E={\\(Get-Content $_.FullName\\).Count}} | Sort-Object Líneas -Descending | Format-Table -AutoSize\")",
+      "Bash(mkdir -p C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons)",
+      "Bash(cp C:/Users/Admin/Downloads/Assets/ic_home.png C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_home.png)",
+      "Bash(cp C:/Users/Admin/Downloads/Assets/video_settings_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_video.png)",
+      "Bash(cp C:/Users/Admin/Downloads/Assets/wifi_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_wifi.png)",
+      "Bash(cp C:/Users/Admin/Downloads/Assets/settings_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_extras.png)",
+      "Bash(powershell -Command ':*)",
+      "Bash(powershell:*)"
     ]
   }
 }

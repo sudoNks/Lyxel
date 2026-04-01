@@ -1,4 +1,5 @@
 using Guna.UI2.WinForms;
+using MobiladorStex.Helpers;
 using System;
 using System.Drawing;
 using System.Threading.Tasks;
@@ -69,13 +70,13 @@ namespace MobiladorStex
 
 
             navButtons = new Guna2Button[7];
-            navButtons[0] = CreateNavButton("🏠  Inicio", 0);
-            navButtons[1] = CreateNavButton("🎬  Video y Audio", 1);
-            navButtons[2] = CreateNavButton("🖥️  Pantalla", 2);
-            navButtons[3] = CreateNavButton("📶  Conexión", 3);
-            navButtons[4] = CreateNavButton("⚙️  Opciones Extras", 4);
-            navButtons[5] = CreateNavButton("💾  Perfiles", 5);
-            navButtons[6] = CreateNavButton("ℹ️  Acerca de", 6);
+            navButtons[0] = CreateNavButton("Inicio",         "ic_home",     0);
+            navButtons[1] = CreateNavButton("Video y Audio",  "ic_video",    1);
+            navButtons[2] = CreateNavButton("Pantalla",       "ic_screen",   2);
+            navButtons[3] = CreateNavButton("Conexión",       "ic_wifi",     3);
+            navButtons[4] = CreateNavButton("Opciones Extras","ic_extras",   4);
+            navButtons[5] = CreateNavButton("Perfiles",       "ic_perfiles", 5);
+            navButtons[6] = CreateNavButton("Acerca de",      "ic_acerca",   6);
 
             navButtons[paginaActiva].Checked = true;
             navButtons[paginaActiva].FillColor = AppTheme.BtnNavActive;
@@ -83,7 +84,9 @@ namespace MobiladorStex
 
             btnToggle = new Guna2Button()
             {
-                Text = "☰",
+                Text = "",
+                Image = IconHelper.Get("ic_menu"),
+                ImageSize = new Size(S(20), S(20)),
                 Width = S(40),
                 Height = S(40),
                 Left = S(8),
@@ -258,14 +261,8 @@ namespace MobiladorStex
 
                 foreach (var btn in navButtons)
                 {
-                    if (sidebarExpanded)
-                        btn.Text = btn.Tag?.ToString() ?? btn.Text;
-                    else
-                    {
-                        string full = btn.Tag?.ToString() ?? "";
-                        btn.Text = full.Length >= 2 ? full.Substring(0, 2) : "●";
-                    }
-                    btn.Width = sidebarExpanded ? S(200) : S(40);
+                    btn.Text = sidebarExpanded ? (btn.Tag?.ToString() ?? "") : "";
+                    btn.Width = sidebarExpanded ? S(200) : S(SIDEBAR_COLLAPSED);
                     btn.Left = sidebarExpanded ? S(10) : S(8);
                 }
 
@@ -293,8 +290,8 @@ namespace MobiladorStex
             if (lbl != null) lbl.Text = "⚠ Cambios sin guardar — ve a Perfiles para guardarlos";
             if (navButtons != null)
             {
-                navButtons[5].Text = sidebarExpanded ? "💾  Perfiles ●" : "💾";
-                navButtons[5].Tag = "💾  Perfiles ●";
+                navButtons[5].Text = sidebarExpanded ? "Perfiles ●" : "";
+                navButtons[5].Tag = "Perfiles ●";
             }
             // Diferir la visibilidad del botón para no interrumpir renders en curso
             if (btnGuardadoRapido != null && !string.IsNullOrEmpty(_perfilSeleccionado))
@@ -319,14 +316,14 @@ namespace MobiladorStex
             if (lbl != null) lbl.Text = "";
             if (navButtons != null)
             {
-                navButtons[5].Text = sidebarExpanded ? "💾  Perfiles" : "💾";
-                navButtons[5].Tag = "💾  Perfiles";
+                navButtons[5].Text = sidebarExpanded ? "Perfiles" : "";
+                navButtons[5].Tag = "Perfiles";
             }
             if (btnGuardadoRapido != null)
                 btnGuardadoRapido.Visible = false;
         }
 
-        private Guna2Button CreateNavButton(string text, int index)
+        private Guna2Button CreateNavButton(string text, string iconName, int index)
         {
             var btn = new Guna2Button()
             {
@@ -343,8 +340,13 @@ namespace MobiladorStex
                 BorderThickness = 0,
                 BorderRadius = 6,
                 TextAlign = HorizontalAlignment.Left,
+                ImageSize = new Size(S(20), S(20)),
+                ImageAlign = HorizontalAlignment.Left,
+                Padding = new Padding(S(8), 0, 0, 0),
                 ButtonMode = Guna.UI2.WinForms.Enums.ButtonMode.RadioButton
             };
+            var img = IconHelper.Get(iconName);
+            if (img != null) btn.Image = img;
             btn.MouseEnter += (s, e) =>
             {
                 if (!btn.Checked)

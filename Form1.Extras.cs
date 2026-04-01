@@ -1,4 +1,5 @@
 ﻿using Guna.UI2.WinForms;
+using MobiladorStex.Helpers;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -254,7 +255,7 @@ namespace MobiladorStex
 
                 var btnAplicarCursor = new Guna2Button()
                 {
-                    Text = "✓ Aplicar ahora",
+                    Text = "Aplicar ahora",
                     Width = S(140),
                     Height = S(32),
                     Left = S(24),
@@ -262,12 +263,15 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 8.5f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
-                    BorderRadius = 4
+                    BorderRadius = 4,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left
                 };
+                btnAplicarCursor.Image = IconHelper.Get("ic_apply");
 
                 var btnResetCursor = new Guna2Button()
                 {
-                    Text = "↺ Restablecer (0)",
+                    Text = "Restablecer (0)",
                     Width = S(150),
                     Height = S(32),
                     Left = S(174),
@@ -277,8 +281,11 @@ namespace MobiladorStex
                     ForeColor = textSecondary,
                     BorderColor = AppTheme.BorderSecondary,
                     BorderThickness = 1,
-                    BorderRadius = 4
+                    BorderRadius = 4,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left
                 };
+                btnResetCursor.Image = IconHelper.Get("ic_reset");
 
                 var lblCursorStatus = new Label()
                 {
@@ -303,7 +310,7 @@ namespace MobiladorStex
                     lblCursorStatus.Text = exito ? "✓ Aplicado" : "✗ Sin dispositivo conectado";
                     lblCursorStatus.ForeColor = exito ? AppTheme.Success : AppTheme.Error;
                     if (exito) { _ultimaVelocidadCursor = _pointerSpeed; GuardarConfigTema(); }
-                    btnAplicarCursor.Text = "✓ Aplicar ahora"; btnAplicarCursor.Enabled = true;
+                    btnAplicarCursor.Text = "Aplicar ahora"; btnAplicarCursor.Enabled = true;
                     await Task.Delay(2500);
                     if (!lblCursorStatus.IsDisposed) lblCursorStatus.Text = "";
                 };

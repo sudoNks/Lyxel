@@ -1,4 +1,5 @@
 using Guna.UI2.WinForms;
+using MobiladorStex.Helpers;
 using System;
 using System.Drawing;
 using System.Linq;
@@ -84,8 +85,11 @@ namespace MobiladorStex
                 ForeColor = textSecondary,
                 BorderColor = AppTheme.BorderSecondary,
                 BorderThickness = 1,
-                BorderRadius = 4
+                BorderRadius = 4,
+                ImageSize = new Size(S(18), S(18)),
+                ImageAlign = HorizontalAlignment.Left
             };
+            btnReconectar.Image = IconHelper.Get("ic_refresh");
             btnReconectar.Click += async (s, e) =>
             {
                 btnReconectar.Text = "Reconectando...";
@@ -111,14 +115,18 @@ namespace MobiladorStex
                 FillColor = AppTheme.BtnInactive,
                 ForeColor = AppTheme.TextDimmer,
                 BorderRadius = 6,
+                ImageSize = new Size(S(22), S(22)),
+                ImageAlign = HorizontalAlignment.Left,
+                Padding = new Padding(S(40), 0, 0, 0),
                 Enabled = false, // deshabilitado hasta confirmar dispositivo
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
             };
+            btnIniciarScrcpy.Image = IconHelper.Get("ic_power_dark");
             btnIniciarScrcpy.Click += (s, e) => LanzarScrcpy();
 
             btnDetenerScrcpy = new Guna2Button()
             {
-                Text = "⏹  DETENER SCRCPY",
+                Text = "DETENER SCRCPY",
                 Width = cardRapido.Width - S(48),
                 Height = S(36),
                 Left = S(24),
@@ -129,9 +137,13 @@ namespace MobiladorStex
                 BorderColor = AppTheme.BorderSecondary,
                 BorderThickness = 1,
                 BorderRadius = 4,
+                ImageSize = new Size(S(22), S(22)),
+                ImageAlign = HorizontalAlignment.Left,
+                Padding = new Padding(S(24), 0, 0, 0),
                 Enabled = false,
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
             };
+            btnDetenerScrcpy.Image = IconHelper.Get("ic_power_dark");
             btnDetenerScrcpy.Click += (s, e) => DetenerScrcpy();
 
             lblUltimoPerfil = new Label()
@@ -356,9 +368,9 @@ namespace MobiladorStex
             if (!_inicializacionCompleta)
                 btnIniciarScrcpy.Text = "Detectando dispositivo...";
             else if (corriendo)
-                btnIniciarScrcpy.Text = "▶  INICIAR SCRCPY";
+                btnIniciarScrcpy.Text = "INICIAR SCRCPY";
             else
-                btnIniciarScrcpy.Text = puedeIniciar ? "▶  INICIAR SCRCPY" : "Sin dispositivo";
+                btnIniciarScrcpy.Text = puedeIniciar ? "INICIAR SCRCPY" : "Sin dispositivo";
             btnDetenerScrcpy.Enabled = corriendo;
         }
 

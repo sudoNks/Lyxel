@@ -1,4 +1,5 @@
 ﻿using Guna.UI2.WinForms;
+using MobiladorStex.Helpers;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Threading.Tasks;
@@ -99,16 +100,17 @@ namespace MobiladorStex
 
                 var btnDetectarRes = new Guna2Button()
                 {
-                    Text = "🔄",
+                    Text = "",
                     Width = S(36),
                     Height = S(34),
                     Left = S(400),
                     Top = S(58),
-                    Font = new Font("Segoe UI", 11f),
                     FillColor = AppTheme.Accent,
                     ForeColor = Color.White,
-                    BorderRadius = 4
+                    BorderRadius = 4,
+                    ImageSize = new Size(S(18), S(18))
                 };
+                btnDetectarRes.Image = IconHelper.Get("ic_sync");
                 btnDetectarRes.Click += async (s, e) =>
                 {
                     btnDetectarRes.Enabled = false;
@@ -298,8 +300,11 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
-                    BorderRadius = 4
+                    BorderRadius = 4,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left
                 };
+                btnRestablecerCrop.Image = IconHelper.Get("ic_reset");
 
                 btnCalcularCrop.Click += (s, e) =>
                 {
@@ -402,8 +407,11 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
-                    BorderRadius = 4
+                    BorderRadius = 4,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left
                 };
+                btnAplicarRes.Image = IconHelper.Get("ic_apply");
 
                 btnResetearRes = new Guna2Button()
                 {
@@ -415,8 +423,11 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
-                    BorderRadius = 4
+                    BorderRadius = 4,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left
                 };
+                btnResetearRes.Image = IconHelper.Get("ic_reset");
 
                 btnAplicarRes.Click += async (s, e) =>
                 {
@@ -580,8 +591,11 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
-                    BorderRadius = 4
+                    BorderRadius = 4,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left
                 };
+                btnAplicarWm.Image = IconHelper.Get("ic_apply");
 
                 btnRevertirWm = new Guna2Button()
                 {
@@ -593,8 +607,11 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
-                    BorderRadius = 4
+                    BorderRadius = 4,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left
                 };
+                btnRevertirWm.Image = IconHelper.Get("ic_reset");
 
                 btnAplicarWm.Click += async (s, e) =>
                 {
@@ -701,16 +718,17 @@ namespace MobiladorStex
 
                 var btnDetectarDpi = new Guna2Button()
                 {
-                    Text = "🔄",
+                    Text = "",
                     Width = S(36),
                     Height = S(32),
                     Left = S(220),
                     Top = S(54),
-                    Font = new Font("Segoe UI", 11f),
                     FillColor = AppTheme.Accent,
                     ForeColor = Color.White,
-                    BorderRadius = 4
+                    BorderRadius = 4,
+                    ImageSize = new Size(S(18), S(18))
                 };
+                btnDetectarDpi.Image = IconHelper.Get("ic_sync");
 
                 var numDpi = CreateNumeric(S(160), S(100), S(100), 120, 800, _dpi, 10);
                 numDpi.ValueChanged += (s, e) => { _dpi = (int)numDpi.Value; };
@@ -760,8 +778,11 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
-                    BorderRadius = 4
+                    BorderRadius = 4,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left
                 };
+                btnAplicarDpi.Image = IconHelper.Get("ic_apply");
                 btnAplicarDpi.Click += async (s, e) =>
                 {
                     if (MessageBox.Show($"¿Aplicar DPI {_dpi}?\n\nUsa 'Resetear' si algo sale mal.", "⚠ Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes) return;
@@ -790,8 +811,11 @@ namespace MobiladorStex
                     Font = new Font("Segoe UI", 9f),
                     FillColor = accentColor,
                     ForeColor = Color.White,
-                    BorderRadius = 4
+                    BorderRadius = 4,
+                    ImageSize = new Size(S(18), S(18)),
+                    ImageAlign = HorizontalAlignment.Left
                 };
+                btnResetearDpi.Image = IconHelper.Get("ic_reset");
                 btnResetearDpi.Click += async (s, e) =>
                 {
                     btnResetearDpi.Enabled = false;

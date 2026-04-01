@@ -1,4 +1,5 @@
 ﻿using Guna.UI2.WinForms;
+using MobiladorStex.Helpers;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -99,7 +100,9 @@ namespace MobiladorStex
                 Top = 0,
                 Width = btnW,
                 Height = this.Height,
-                Font = new Font("Consolas", 14f, FontStyle.Bold),
+                Text = "",
+                Image = IconHelper.Get("ic_arrow_back"),
+                ImageSize = new Size(14, 14),
                 FillColor = COLOR_BOTON,
                 ForeColor = COLOR_TEXTO,
                 BorderRadius = 0,
@@ -115,42 +118,15 @@ namespace MobiladorStex
                 Top = 0,
                 Width = btnW,
                 Height = this.Height,
-                Font = new Font("Consolas", 14f, FontStyle.Bold),
+                Text = "",
+                Image = IconHelper.Get("ic_arrow_next"),
+                ImageSize = new Size(14, 14),
                 FillColor = COLOR_BOTON,
                 ForeColor = COLOR_TEXTO,
                 BorderRadius = 0,
                 BorderColor = COLOR_BORDE,
                 BorderThickness = 1,
                 Anchor = AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom
-            };
-
-            // ── Dibujar texto manualmente sobre los botones ──────────
-            _btnUp.Paint += (s, e) =>
-            {
-                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                using var brush = new SolidBrush(COLOR_TEXTO);
-                using var font = new Font("Arial", 14f, FontStyle.Bold);
-                var rect = new RectangleF(0, 0, _btnUp.Width, _btnUp.Height);
-                var fmt = new StringFormat()
-                {
-                    Alignment = StringAlignment.Center,
-                    LineAlignment = StringAlignment.Center
-                };
-                e.Graphics.DrawString(">", font, brush, rect, fmt);
-            };
-
-            _btnDown.Paint += (s, e) =>
-            {
-                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                using var brush = new SolidBrush(COLOR_TEXTO);
-                using var font = new Font("Arial", 14f, FontStyle.Bold);
-                var rect = new RectangleF(0, 0, _btnDown.Width, _btnDown.Height);
-                var fmt = new StringFormat()
-                {
-                    Alignment = StringAlignment.Center,
-                    LineAlignment = StringAlignment.Center
-                };
-                e.Graphics.DrawString("<", font, brush, rect, fmt);
             };
 
             // ── Eventos ───────────────────────────────────────────────
