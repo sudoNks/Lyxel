@@ -56,7 +56,10 @@ namespace MobiladorStex
             }
             catch (Exception ex)
             {
-                return (false, "", ex.Message);
+                string stderr = (ex is UnauthorizedAccessException || ex is System.ComponentModel.Win32Exception)
+                    ? $"[PERMISOS] {ex.Message}"
+                    : ex.Message;
+                return (false, "", stderr);
             }
         }
 

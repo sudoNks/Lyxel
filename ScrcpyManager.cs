@@ -240,13 +240,14 @@ namespace MobiladorStex
                 Program.AsignarAlJob(_proceso.Handle);
 
                 bool capturarFps = config.PrintFps;
+                var procesoFps = _proceso;
                 Task.Run(() =>
                 {
                     try
                     {
-                        while (!_proceso.StandardOutput.EndOfStream)
+                        while (!procesoFps.StandardOutput.EndOfStream)
                         {
-                            string? linea = _proceso.StandardOutput.ReadLine();
+                            string? linea = procesoFps.StandardOutput.ReadLine();
                             if (linea == null) break;
 
                             if (!capturarFps) continue;
@@ -266,7 +267,19 @@ namespace MobiladorStex
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error lanzando scrcpy: {ex.Message}");
+                bool esPermisos = ex is UnauthorizedAccessException
+                    || ex is System.ComponentModel.Win32Exception
+                    || ex.Message.Contains("Access", StringComparison.OrdinalIgnoreCase)
+                    || ex.Message.Contains("denied", StringComparison.OrdinalIgnoreCase);
+
+                string mensaje = esPermisos
+                    ? "scrcpy no pudo iniciarse. Intenta ejecutar la app como administrador."
+                    : $"Error al iniciar scrcpy: {ex.Message}";
+
+                System.Windows.Forms.MessageBox.Show(mensaje, "Error al iniciar scrcpy",
+                    System.Windows.Forms.MessageBoxButtons.OK,
+                    System.Windows.Forms.MessageBoxIcon.Error);
+
                 _proceso = null;
                 return false;
             }
