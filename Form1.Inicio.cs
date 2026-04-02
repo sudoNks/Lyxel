@@ -1,18 +1,16 @@
 using Guna.UI2.WinForms;
-using MobiladorStex.Helpers;
+using LyXel.Helpers;
 using System;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MobiladorStex
+namespace LyXel
 {
     public partial class Form1
     {
-        // ══════════════════════════════════════════════════════════════
-        // INICIO
-        // ══════════════════════════════════════════════════════════════
+        // Página de inicio: estado del dispositivo y acceso rápido a scrcpy
 
         private void CargarUltimoPerfilSiExiste()
         {
@@ -21,19 +19,18 @@ namespace MobiladorStex
             if (cfg != null) CargarPerfilEnApp(cfg);
         }
 
-        // Limpia conexiones WiFi residuales de sesiones anteriores antes de la
-        // detección inicial, evitando falsos positivos cuando solo hay USB conectado.
-        // El monitor ADB se pausa durante toda la limpieza y se reactiva al final,
-        // cuando _inicializacionCompleta = true y el estado es estable.
+        // Limpio conexiones WiFi residuales antes de la detección inicial para evitar
+        // falsos positivos cuando solo hay USB. Pauso el monitor ADB durante la limpieza
+        // y lo reactivo cuando el estado ya es estable.
         private async Task IniciarDeteccionDispositivoAsync()
         {
-            adbManager.DetenerTrackDevices(); // silenciar eventos durante la limpieza
+            adbManager.DetenerTrackDevices(); // silencio eventos mientras limpio
 
             await adbManager.DesconectarTodoAsync();
             await Task.Delay(1500);
 
-            // Verificar que no queden dispositivos WiFi residuales tras el primer disconnect.
-            // Si aún hay seriales con ':' (formato ip:puerto), reintentar una vez más.
+            // Verifico que no queden WiFi residuales tras el disconnect.
+            // Si hay seriales con ':' (formato ip:puerto) reintento una vez más.
             var (_, seriales, _) = await Task.Run(() => adbManager.ListarDispositivos());
             if (seriales.Any(s => s.Contains(':')))
             {
@@ -42,10 +39,10 @@ namespace MobiladorStex
                 await Task.Delay(500);
             }
 
-            // ActualizarEstadoDispositivoAsync pone _inicializacionCompleta = true al final.
+            // Esta llamada pone _inicializacionCompleta = true al terminar
             await ActualizarEstadoDispositivoAsync(mostrarToast: true);
 
-            // Reanudar el monitor solo cuando el estado ya es definitivo.
+            // Reactivo el monitor solo cuando el estado ya es definitivo
             if (!IsDisposed) adbManager.IniciarTrackDevices();
         }
 
@@ -102,7 +99,7 @@ namespace MobiladorStex
 
             cardEstado.Controls.AddRange(new Control[] { lblEstadoIndicador, lblEstadoTexto, btnReconectar });
 
-            var cardRapido = CreateCard("Acceso Rápido", S(30), S(200), S(180));
+            var cardRapido = CreateCard("Acceso Rápido", S(30), S(200), S(200));
 
             btnIniciarScrcpy = new Guna2Button()
             {
@@ -146,21 +143,24 @@ namespace MobiladorStex
             btnDetenerScrcpy.Image = IconMap.PowerDark;
             btnDetenerScrcpy.Click += (s, e) => DetenerScrcpy();
 
-            lblUltimoPerfil = new Label()
+            lblUltimoPerfil = new FlowLayoutPanel()
             {
-                Text = ObtenerTextoUltimoPerfil(),
-                Font = new Font("Segoe UI", 8.5f),
-                ForeColor = textSecondary,
                 Left = S(24),
-                Top = S(158),
-                AutoSize = true
+                Top = S(161),
+                Width = cardRapido.Width - S(48),
+                Height = S(26),
+                BackColor = bgCard,
+                FlowDirection = FlowDirection.LeftToRight,
+                WrapContents = false,
+                Padding = new Padding(0),
+                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
             };
+            ActualizarChipsPerfil();
 
             cardRapido.Controls.AddRange(new Control[] { btnIniciarScrcpy, btnDetenerScrcpy, lblUltimoPerfil });
             contentPanel.Controls.AddRange(new Control[] { cardEstado, cardRapido });
 
-            // Solo refrescar estado al navegar aquí después de la init — durante el arranque
-            // IniciarDeteccionDispositivoAsync es el responsable de la primera detección.
+            // Solo refresco el estado si la init ya terminó — durante el arranque se encarga IniciarDeteccionDispositivoAsync
             if (_inicializacionCompleta) _ = ActualizarEstadoDispositivoAsync();
             IniciarLoopEstadoScrcpy();
         }
@@ -171,7 +171,7 @@ namespace MobiladorStex
             {
                 if (!_modoOtg)
                 {
-                    // Modo normal: ADB requerido para verificar el dispositivo
+                    // Modo normal: necesito ADB para verificar que hay dispositivo
                     var (hayDispositivo, serialesAdb, _) = await Task.Run(() => adbManager.ListarDispositivos());
 
                     if (!hayDispositivo || serialesAdb.Count == 0)
@@ -188,8 +188,8 @@ namespace MobiladorStex
                 }
                 else
                 {
-                    // Modo OTG: si no hay serial seleccionado, intentar obtenerlo via ADB
-                    // para pasar -s [serial] y evitar ambigüedad con múltiples conexiones activas
+                    // Modo OTG: si no hay serial guardado, intento obtenerlo via ADB
+                    // para pasar -s [serial] y evitar ambigüedad si hay varios dispositivos
                     if (string.IsNullOrWhiteSpace(_otgSerial))
                     {
                         var (_, serialesAdb, _) = await Task.Run(() => adbManager.ListarDispositivos());
@@ -207,8 +207,7 @@ namespace MobiladorStex
                                 "OTG — Selecciona dispositivo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
-                        // Si ADB no detecta nada (adaptador OTG sin USB debug),
-                        // scrcpy --otg identifica el dispositivo por USB físico — continuar sin serial
+                        // Si ADB no detecta nada (sin depuración USB), scrcpy --otg se arregla solo por USB físico
                     }
                 }
 
@@ -231,7 +230,7 @@ namespace MobiladorStex
                 ActualizarBotonesScrcpy();
                 this.WindowState = FormWindowState.Minimized;
 
-                // OTG: detectar cierre rápido por fallo de compatibilidad
+                // Si OTG cerró en menos de 3 segundos, probablemente fue un error de compatibilidad
                 if (_modoOtg)
                 {
                     _ = Task.Run(async () =>
@@ -346,7 +345,7 @@ namespace MobiladorStex
         {
             scrcpyManager.Detener();
             _scrcpyEstabaActivo = false;
-            // Revertir wm size y resolución ADB si hay dispositivo conectado
+            // Si hay dispositivo conectado revierto wm size y resolución ADB
             if (adbManager.HayDispositivoConectado())
             {
                 if (_wmSizeActivo) _ = adbManager.ResetearResolucionAsync();
@@ -383,7 +382,7 @@ namespace MobiladorStex
             _timerScrcpy.Start();
         }
 
-        // Actualización inmediata desde evento TrackDevices — sin consulta ADB
+        // Actualización rápida del indicador desde el evento de TrackDevices, sin consulta ADB
         private void ActualizarIndicadorDispositivo(bool hayDispositivo)
         {
             if (lblEstadoIndicador == null || lblEstadoTexto == null) return;
@@ -399,16 +398,13 @@ namespace MobiladorStex
             }
         }
 
-        // ──────────────────────────────────────────────────────────────────────────
-        // Monitorea la presencia de USB mientras WiFi está activo.
-        // track-devices no distingue USB de WiFi de forma fiable cuando ambos
-        // están presentes. Esta tarea hace polling de `adb devices` para detectar
-        // cambios reales en el cable USB.
+        // Monitoreo USB mientras WiFi está activo porque track-devices no distingue USB de WiFi
+        // de forma fiable cuando ambos están presentes. Hago polling de `adb devices` cada 2s.
         private async Task MonitorearUsbConWifiAsync()
         {
             System.Diagnostics.Debug.WriteLine("[WiFiMonitor] Iniciado");
 
-            // Capturar estado inicial para no tostar por USB ya conectado
+            // Capturo el estado inicial para no tostar por USB que ya estaba conectado
             var (_, serialesInicio, _) = await Task.Run(() => adbManager.ListarDispositivos());
             if (IsDisposed || !_wifiConectado) return;
             _hayUsbDispositivo = serialesInicio.Any(s => !s.Contains(':'));
@@ -465,16 +461,15 @@ namespace MobiladorStex
                     ? $"Conectado: {seriales[0]}"
                     : $"{seriales.Count} dispositivos conectados";
 
-                // Recuperación post-kill: si la sesión anterior terminó con resolución
-                // modificada (cierre forzado por Task Manager u otro crash), revertirla
-                // ahora silenciosamente antes de que el usuario empiece a usar la app.
+                // Si la sesión anterior terminó con resolución modificada (crash o Task Manager),
+                // la revierto silenciosamente antes de que el usuario empiece a usar la app
                 if (_resolucionPendienteReset)
                 {
                     await Task.Run(() => adbManager.ResetearResolucion());
                     _wmSizeActivo = false;
                     _resAdbActiva = false;
                     _resolucionPendienteReset = false;
-                    GuardarConfigTema(); // limpiar el flag persistido
+                    GuardarConfigTema(); // limpio el flag persistido en config.ini
                 }
             }
             else

@@ -1,19 +1,16 @@
 ﻿using Guna.UI2.WinForms;
-using MobiladorStex.Helpers;
+using LyXel.Helpers;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System;
 
-namespace MobiladorStex
+namespace LyXel
 {
     public partial class Form1
     {
-        // ── CAMPO DE CLASE ────────────────────────────────────────────────────────
-        // Persiste entre navegaciones — se llena al detectar y se reutiliza al volver
-        // IMPORTANTE: declarar también en Form1.cs junto al resto de campos:
-        //   private List<string> _encodersDetectados      = new();
-        //   private List<string> _encodersDisplayLabels   = new();
+        // _encodersDetectados y _encodersDisplayLabels persisten entre navegaciones
+        // para no tener que volver a detectar cada vez que el usuario cambia de página
 
         private void LoadVideoPage()
         {
@@ -21,7 +18,7 @@ namespace MobiladorStex
             try
             {
 
-                // ── CARD: Video ───────────────────────────────────────────
+                // Card de configuración de video
                 var cardVideo = CreateCard("Configuración de Video", S(30), S(20), S(470));
 
                 var togVideo = new Guna2ToggleSwitch()
@@ -110,11 +107,8 @@ namespace MobiladorStex
                 numMaxSize.Leave += (s, e) => { _maxSize = (int)numMaxSize.Value; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
 
 
-                // Video Codec — en fila 435, label arriba, combo + aviso debajo
-                // Nota: Guna2ComboBox no expone ninguna propiedad pública (DrawDropDownIcon,
-                // ArrowImage, etc.) para asignar un ícono personalizado a la flecha del dropdown.
-                // La flecha se renderiza internamente via DrawArrow/DrawTriangle; no es customizable
-                // sin subclasificar o recurrir a reflection privada. Se omite ic_expand en combos.
+                // Combo de codec de video — no le puse ícono personalizado en la flecha porque
+                // Guna2ComboBox renderiza la flecha internamente y no hay propiedad pública para cambiarla
                 var cmbCodec = new Guna2ComboBox()
                 {
                     Left = S(160),
@@ -140,7 +134,7 @@ namespace MobiladorStex
                 if (_useAdvancedEncoder)
                     cmbCodec.FillColor = AppTheme.BgDark;
 
-                // Aviso de codec desactivado — debajo del combo, separado, nunca encima
+                // Aviso de codec desactivado cuando encoder avanzado está activo
                 var lblCodecDesactivado = new Label()
                 {
                     Text = "⚠ Desactivado — usando encoder avanzado",
@@ -153,7 +147,7 @@ namespace MobiladorStex
                     Visible = _useAdvancedEncoder
                 };
 
-                // ── Video Buffer ──────────────────────────────────────────
+                // Control de video buffer
                 var numVideoBuffer = new StexNumericUpDown()
                 {
                     Left = S(160),
@@ -204,7 +198,7 @@ namespace MobiladorStex
                 numVideoBuffer
                 });
 
-                // ── CARD: Audio ───────────────────────────────────────────
+                // Card de configuración de audio
                 var cardAudio = CreateCard("Configuración de Audio", S(30), S(510), S(400));
 
                 var togAudio = new Guna2ToggleSwitch()
@@ -229,7 +223,7 @@ namespace MobiladorStex
                 };
                 togAudioDoble.CheckedChanged += (s, e) => { _audioDoble = togAudioDoble.Checked; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
 
-                // ── Audio Codec ───────────────────────────────────────────
+                // Combo de codec de audio
                 var cmbAudioCodec = new Guna2ComboBox()
                 {
                     Left = S(160),
@@ -252,7 +246,7 @@ namespace MobiladorStex
                     if (!_cargandoPagina) MarcarCambiosSinGuardar();
                 };
 
-                // ── Audio Bitrate ─────────────────────────────────────────
+                // Control de bitrate de audio
                 var numAudioBitrate = new StexNumericUpDown()
                 {
                     Left = S(160),
@@ -283,7 +277,7 @@ namespace MobiladorStex
                     if (!_cargandoPagina) MarcarCambiosSinGuardar();
                 };
 
-                // ── Audio Buffer ──────────────────────────────────────────
+                // Control de buffer de audio
                 var numAudioBuffer = new StexNumericUpDown()
                 {
                     Left = S(160),
@@ -332,7 +326,7 @@ namespace MobiladorStex
                 numAudioBuffer
                 });
 
-                // ── CARD: Encoder Avanzado ────────────────────────────────
+                // Card de encoder avanzado
                 var cardEncoder = CreateCard("Encoder Avanzado", S(30), S(930), S(210));
 
                 var togEncoder = new Guna2ToggleSwitch()
@@ -408,9 +402,7 @@ namespace MobiladorStex
                     Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                 };
 
-                // ── Llenar combo al cargar usando la lista persistida ─────
-                // _encodersDetectados persiste entre navegaciones (campo de Form1)
-                // Si ya había detectado antes, recarga la lista completa sin volver a detectar
+                // Si ya había detectado encoders antes, recargo la lista sin volver a consultar scrcpy
                 if (_encodersDetectados.Count > 0)
                 {
                     cmbEncoders.Items.Clear();
@@ -422,7 +414,7 @@ namespace MobiladorStex
                 }
                 else if (!string.IsNullOrEmpty(_videoEncoder))
                 {
-                    // Primera carga con encoder guardado: mostrar solo el activo con etiqueta inferida
+                    // Primera carga con encoder guardado — muestro solo el activo hasta que el usuario detecte
                     string tipo = InferirTipoEncoder(_videoEncoder);
                     string codec = InferirCodecDeEncoderUI(_videoEncoder);
                     cmbEncoders.Items.Add($"{_videoEncoder}  [{tipo}] [{codec}]");
@@ -483,7 +475,7 @@ namespace MobiladorStex
 
                     if (exito && nombres.Count > 0)
                     {
-                        // Persistir en campos de clase para que sobrevivan la navegación
+                        // Persisto los encoders en campos de clase para que sobrevivan la navegación
                         _encodersDetectados = nombres;
                         _encodersDisplayLabels = displayLabels;
 
@@ -539,15 +531,15 @@ namespace MobiladorStex
                 cmbEncoders.SelectedIndexChanged += (s, e) =>
                 {
                     int idx = cmbEncoders.SelectedIndex;
-                    // Usar lista persistida si está disponible, sino usar SelectedItem
+                    // Uso la lista persistida si está disponible, si no uso SelectedItem directamente
                     string sel = (_encodersDetectados.Count > idx && idx >= 0)
                         ? _encodersDetectados[idx]
                         : cmbEncoders.SelectedItem?.ToString() ?? "";
 
-                    // Ignorar placeholders
+                    // Ignoro los placeholders del combo para no guardar basura
                     if (string.IsNullOrWhiteSpace(sel) || sel.StartsWith("—") || sel.StartsWith("⏳")) return;
 
-                    // Si sel es un display label (contiene "["), extraer solo el nombre
+                    // Si es un display label (tiene "["), extraigo solo el nombre real del encoder
                     if (sel.Contains("["))
                         sel = sel.Split(new[] { "  [" }, StringSplitOptions.None)[0].Trim();
 
@@ -578,9 +570,7 @@ namespace MobiladorStex
             finally { _cargandoPagina = false; }
         }
 
-        // ── HELPERS PRIVADOS ─────────────────────────────────────────
-
-        // Inferir hw/sw del nombre del encoder
+        // Helpers para inferir tipo y codec del encoder a partir de su nombre
         // hw: chips de fabricante (exynos, qcom, mtk, mediatek, mali, vendor)
         // sw: implementaciones de software (android, google, omx.google)
         private string InferirTipoEncoder(string encoderName)
@@ -594,7 +584,7 @@ namespace MobiladorStex
             return "sw";
         }
 
-        // Inferir codec del nombre del encoder
+        // Infiero el codec del nombre del encoder mirando si contiene hevc, av1, etc.
         private string InferirCodecDeEncoderUI(string encoderName)
         {
             if (string.IsNullOrEmpty(encoderName)) return "h264";

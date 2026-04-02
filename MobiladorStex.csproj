@@ -8,6 +8,10 @@
     <ApplicationIcon>LogoApp.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
 
+    <AssemblyName>LyXel</AssemblyName>
+    <RootNamespace>LyXel</RootNamespace>
+    <Product>LyXel</Product>
+
     <!-- ── Versión — solo cambiar aquí, se propaga a toda la app ── -->
     <Version>1.3.0</Version>
     <AssemblyVersion>1.3.0.0</AssemblyVersion>

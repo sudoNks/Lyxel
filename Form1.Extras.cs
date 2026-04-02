@@ -1,11 +1,11 @@
 ﻿using Guna.UI2.WinForms;
-using MobiladorStex.Helpers;
+using LyXel.Helpers;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System;
 
-namespace MobiladorStex
+namespace LyXel
 {
     public partial class Form1
     {
@@ -15,7 +15,7 @@ namespace MobiladorStex
             try
             {
 
-                // ── CARD: Comportamiento del dispositivo ──────────────────
+                // Card de comportamiento del dispositivo (screensaver, stay awake, screen off)
                 var cardComport = CreateCard("Comportamiento del Dispositivo", S(30), S(20), S(220));
 
                 var togScreensaver = new Guna2ToggleSwitch()
@@ -61,7 +61,7 @@ namespace MobiladorStex
                 togScreenOff
                 });
 
-                // ── CARD: Depuración ──────────────────────────────────────
+                // Card de depuración: ventana flotante y contador de FPS
                 var cardDebug = CreateCard("Depuración", S(30), S(260), S(230));
 
                 var togFlotante = new Guna2ToggleSwitch()
@@ -121,7 +121,7 @@ namespace MobiladorStex
                 new Label() { Text = "ℹ El contador aparecerá al iniciar scrcpy, no al activar esta opción.", Font = new Font("Segoe UI", 8f, FontStyle.Bold), ForeColor = AppTheme.Warning, Left = S(24), Top = S(180), Width = cardDebug.Width - S(48), AutoSize = false, Height = S(20), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right }
                 });
 
-                // ── CARD: Mouse y Teclado ─────────────────────────────────
+                // Card de configuración de mouse y teclado
                 var cardInput = CreateCard("Mouse y Teclado", S(30), S(510), S(240));
 
                 var togForwardClicks = new Guna2ToggleSwitch()
@@ -185,7 +185,7 @@ namespace MobiladorStex
                 lblInputDesc
                 });
 
-                // ── CARD: Tecla de Atajos (MOD) ───────────────────────────
+                // Card para configurar la tecla MOD de scrcpy
                 var cardMod = CreateCard("Tecla de Atajos (MOD)", S(30), S(770), S(140));
 
                 var cmbMod = new Guna2ComboBox()
@@ -226,7 +226,7 @@ namespace MobiladorStex
                 new Label() { Text = "Tecla para atajos: MOD+F fullscreen, MOD+M menú, MOD+P power", Font = new Font("Segoe UI", 8f), ForeColor = AppTheme.TextLighter, Left = S(24), Top = S(104), Width = cardMod.Width - S(48), AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right }
                 });
 
-                // ── CARD: Velocidad del Cursor ────────────────────────────
+                // Card de velocidad del cursor — experimental, aplica via ADB
                 var cardCursor = CreateCard("Velocidad del Cursor (Mouse)  —  Experimental", S(30), S(930), S(185));
 
                 var trackCursor = new Guna2TrackBar()

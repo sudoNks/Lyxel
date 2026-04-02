@@ -4,11 +4,11 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace MobiladorStex
+namespace LyXel
 {
     public class FloatingWindowOtg : Form
     {
-        // ── WinAPI ────────────────────────────────────────────────────
+        // WinAPI para el arrastre nativo de la ventana
         [DllImport("user32.dll")]
         private static extern bool ReleaseCapture();
 
@@ -24,7 +24,7 @@ namespace MobiladorStex
             SendMessage(this.Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
         }
 
-        // ── Campos ────────────────────────────────────────────────────
+        // Campos de la ventana flotante OTG
         private readonly ScrcpyManager _scrcpyManager;
         private readonly Action _onDetener;
         private readonly Action _onMostrarApp;
@@ -63,7 +63,7 @@ namespace MobiladorStex
 
             var lblTitulo = new Label()
             {
-                Text      = "MobiladorSteX — Modo OTG",
+                Text      = "LyXel — Modo OTG",
                 Font      = new Font("Segoe UI", 8.5f, FontStyle.Bold),
                 ForeColor = AppTheme.AccentLight,
                 Left = S(12), Top = S(10), Width = S(240), Height = S(20),
@@ -148,7 +148,7 @@ namespace MobiladorStex
                 this.Hide();
             };
 
-            // Propagar arrastre a controles estáticos
+            // Propago el arrastre a todos los controles estáticos para que toda la ventana sea arrastrable
             foreach (Control c in new Control[] { lblTitulo, lblEstado, lblDispositivo, lblMod, linea })
                 c.MouseDown += (s, e) => { if (e.Button == MouseButtons.Left) IniciarArrastre(); };
 
@@ -180,7 +180,7 @@ namespace MobiladorStex
             base.OnFormClosed(e);
         }
 
-        // Borde sutil morado
+        // Borde morado sutil para que no flote sin contorno
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);

@@ -1,12 +1,12 @@
 using Guna.UI2.WinForms;
-using MobiladorStex.Helpers;
+using LyXel.Helpers;
 using System;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Panel = System.Windows.Forms.Panel;
 
-namespace MobiladorStex
+namespace LyXel
 {
     public partial class Form1
     {
@@ -22,13 +22,11 @@ namespace MobiladorStex
             _ => LoadInicioPage
         };
 
-        // ══════════════════════════════════════════════════════════════
-        // BUILD UI
-        // ══════════════════════════════════════════════════════════════
+        // Construyo toda la UI: sidebar, main panel, header y cargo la página inicial
 
         private void BuildUI()
         {
-            this.Text = "MobiladorSteX";
+            this.Text = "LyXel";
             this.Size = new Size(S(1100), S(720));
             this.BackColor = bgPrimary;
             this.ForeColor = textPrimary;
@@ -37,7 +35,7 @@ namespace MobiladorStex
             this.FormBorderStyle = FormBorderStyle.Sizable;
             this.MinimumSize = new Size(S(900), S(600));
 
-            // ── SIDEBAR ──────────────────────────────────────────────
+            // Panel del sidebar izquierdo
             sidePanel = new Panel()
             {
                 Left = 0,
@@ -50,7 +48,7 @@ namespace MobiladorStex
 
             lblLogo = new Label()
             {
-                Text = "MobiladorSteX",
+                Text = "LyXel",
                 Font = new Font("Segoe UI", 14f, FontStyle.Bold),
                 ForeColor = textPrimary,
                 Left = S(16),
@@ -101,7 +99,7 @@ namespace MobiladorStex
             };
             btnToggle.Click += (s, e) => ToggleSidebar();
 
-            // Botón guardado rápido — solo visible cuando hay cambios sin guardar
+            // Botón de guardado rápido, solo aparece cuando hay cambios pendientes y hay un perfil seleccionado
             btnGuardadoRapido = new Guna2Button()
             {
                 Text = "💾 Guardar",
@@ -126,7 +124,7 @@ namespace MobiladorStex
                 btnToggle, btnGuardadoRapido
             });
 
-            // ── MAIN PANEL ───────────────────────────────────────────
+            // Panel principal a la derecha del sidebar
             mainPanel = new Panel()
             {
                 Left = S(SIDEBAR_WIDTH),
@@ -197,7 +195,7 @@ namespace MobiladorStex
 
         private void LoadPage(int index, string title, System.Action loadContent)
         {
-            // Guardar scroll solo si es la misma página
+            // Guardo el scroll solo si estoy volviendo a la misma página para restaurarlo
             int scrollY = (index == paginaActiva && contentPanel.AutoScrollPosition.Y != 0)
                 ? -contentPanel.AutoScrollPosition.Y : 0;
 
@@ -218,7 +216,7 @@ namespace MobiladorStex
             contentPanel.Controls.Clear();
             loadContent();
 
-            // Restaurar scroll si era la misma página
+            // Restauro el scroll si era la misma página
             if (scrollY > 0)
                 contentPanel.AutoScrollPosition = new System.Drawing.Point(0, scrollY);
         }
@@ -239,7 +237,7 @@ namespace MobiladorStex
                 mainPanel.Width = this.ClientSize.Width - targetWidth;
 
                 lblLogo.Visible = sidebarExpanded;
-                // lblVersion siempre visible pero texto cambia
+                // lblVersion siempre visible, pero el texto cambia según el estado del sidebar
                 if (sidebarExpanded)
                 {
                     lblVersion.Text = ObtenerVersionApp();
@@ -251,7 +249,7 @@ namespace MobiladorStex
                     lblVersion.Left = S(4);
                 }
 
-                // Botón guardado rápido: ajustar tamaño igual que navButtons
+                // Ajusto el botón de guardado rápido al mismo tamaño que los navButtons
                 if (btnGuardadoRapido != null && btnGuardadoRapido.Visible)
                 {
                     btnGuardadoRapido.Width = sidebarExpanded ? S(200) : S(40);
@@ -284,8 +282,7 @@ namespace MobiladorStex
         private void MarcarCambiosSinGuardar()
         {
             _haysCambiosSinGuardar = true;
-            if (lblUltimoPerfil != null)
-                lblUltimoPerfil.Text = "⚠ Cambios sin guardar — ve a Perfiles";
+            MostrarAdvertenciaChips();
             var lbl = ObtenerLblAvisoHeader();
             if (lbl != null) lbl.Text = "⚠ Cambios sin guardar — ve a Perfiles para guardarlos";
             if (navButtons != null)
@@ -293,7 +290,7 @@ namespace MobiladorStex
                 navButtons[5].Text = sidebarExpanded ? "Perfiles ●" : "";
                 navButtons[5].Tag = "Perfiles ●";
             }
-            // Diferir la visibilidad del botón para no interrumpir renders en curso
+            // Difiero la visibilidad del botón para no interrumpir renders en curso
             if (btnGuardadoRapido != null && !string.IsNullOrEmpty(_perfilSeleccionado))
             {
                 this.BeginInvoke(() =>
@@ -310,8 +307,7 @@ namespace MobiladorStex
         private void LimpiarIndicadorCambios()
         {
             _haysCambiosSinGuardar = false;
-            if (lblUltimoPerfil != null)
-                lblUltimoPerfil.Text = ObtenerTextoUltimoPerfil();
+            ActualizarChipsPerfil();
             var lbl = ObtenerLblAvisoHeader();
             if (lbl != null) lbl.Text = "";
             if (navButtons != null)

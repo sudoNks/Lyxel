@@ -1,23 +1,21 @@
 using Guna.UI2.WinForms;
-using MobiladorStex.Helpers;
+using LyXel.Helpers;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-namespace MobiladorStex
+namespace LyXel
 {
     public partial class Form1
     {
-        // ══════════════════════════════════════════════════════════════
-        // ACERCA DE
-        // ══════════════════════════════════════════════════════════════
+        // Página Acerca de: encabezado, descripción, descargas y créditos
 
         private void LoadAcercaPage()
         {
             var purpleLight = AppTheme.AccentLighter;
 
-            // ── Card 1: Encabezado ────────────────────────────────────────────────
+            // Card 1: encabezado con logo, nombre y botones de redes sociales
             var cardHeader = new Panel()
             {
                 Left = S(30),
@@ -28,7 +26,7 @@ namespace MobiladorStex
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
             };
 
-            // Imagen: 110×110, centrada verticalmente respecto al bloque de texto (Top≈14..149 → centro≈82)
+            // PictureBox del logo: 110×110, centrado verticalmente respecto al bloque de texto
             var picBox = new PictureBox()
             {
                 Left = cardHeader.Width - S(132),
@@ -48,7 +46,7 @@ namespace MobiladorStex
                     new RectangleF(0, 0, picBox.Width, picBox.Height),
                     new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
 
-            // Convierte ícono oscuro a blanco preservando canal alfa
+            // Convierto el ícono oscuro a blanco preservando el canal alfa para los botones de redes
             static Image? TintWhite(Image? source)
             {
                 if (source == null) return null;
@@ -93,25 +91,24 @@ namespace MobiladorStex
             {
                 picBox,
                 new Label() { Text = "Edición especial", Font = new Font("Segoe UI", 7.5f), ForeColor = textSecondary, Left = S(24), Top = S(14), AutoSize = true },
-                new Label() { Text = "MobiladorSteX × Morrigan", Font = new Font("Segoe UI", 13f, FontStyle.Bold), ForeColor = textPrimary, Left = S(24), Top = S(30), AutoSize = true },
+                new Label() { Text = "LyXel", Font = new Font("Segoe UI", 13f, FontStyle.Bold), ForeColor = textPrimary, Left = S(24), Top = S(30), AutoSize = true },
                 new Label() { Text = $"Dreadnought Patch — {ObtenerVersionApp()}", Font = new Font("Segoe UI", 9.5f), ForeColor = accentColor, Left = S(24), Top = S(60), AutoSize = true },
                 new Label() { Text = "Desarrollado por Dario (@nks_array)", Font = new Font("Segoe UI", 9f), ForeColor = textSecondary, Left = S(24), Top = S(84), AutoSize = true },
                 new Label() { Text = "\"No controlas el teléfono. Controlas la distancia.\"", Font = new Font("Segoe UI", 9f, FontStyle.Italic), ForeColor = purpleLight, Left = S(24), Top = S(107), Width = cardHeader.Width - S(158), AutoSize = false, Height = S(20), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
                 new Label() { Text = "Versión insignia de la comunidad Free Fire PC.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = S(24), Top = S(132), AutoSize = true },
-                // Fila única de 4 botones outline, step=S(130) (S(118) ancho + S(12) gap)
+                // Fila de 4 botones sociales, cada uno separado S(12) del anterior
                 BtnOutline("  TikTok",   S(24),  S(172), S(118), "https://www.tiktok.com/@nks_array", IconMap.TikTok),
                 BtnOutline("  Discord",  S(154), S(172), S(118), "https://discord.gg/CU5quVNyun",     IconMap.Discord),
                 BtnOutline("  YouTube",  S(284), S(172), S(118), "https://www.youtube.com/@Nks_v1",   IconMap.YouTube),
                 BtnOutline("  Ko-fi",    S(414), S(172), S(118), "https://ko-fi.com/nks_array",       IconMap.Kofi),
             });
 
-            // ── Card 2: Acerca del Proyecto — altura dinámica según contenido ────────
-            // lblProyecto.Height antes de tener parent devuelve una sola línea, por eso
-            // usamos TextRenderer.MeasureText que calcula el alto real con wrapping.
+            // Card 2: descripción del proyecto con altura dinámica
+            // Uso TextRenderer.MeasureText porque lblProyecto sin parent devuelve una sola línea
             int cardW = contentPanel.Width - S(60);
             int lblMaxW = cardW - S(48);
             string proyectoText =
-                "MobiladorSteX nació de un uso personal — una herramienta para llevar la experiencia " +
+                "LyXel nació de un uso personal — una herramienta para llevar la experiencia " +
                 "móvil a PC con la mayor fluidez y calidad posible, enfocada en usuarios que buscan " +
                 "control, precisión y estabilidad.\n\n" +
                 "Al ser un proyecto personal, puede presentar errores. Cualquier feedback es bienvenido " +
@@ -138,10 +135,10 @@ namespace MobiladorStex
             };
             cardProyecto.Controls.Add(lblProyecto);
 
-            // ── Card 3: Descargas oficiales ────────────────────────────────────────
+            // Card 3: descargas oficiales con badge de versión
             var cardDescargas = CreateCard("Descargas oficiales", S(30), cardProyecto.Bottom + S(15), S(170));
 
-            // Badge de versión — solo informativo, en la misma fila que el título de card
+            // Badge de versión actual, solo informativo
             var lblBadge = new Label()
             {
                 Text = $"Versión actual: {ObtenerVersionApp()}",
@@ -203,7 +200,7 @@ namespace MobiladorStex
 
             cardDescargas.Controls.AddRange(new Control[] { picVerified, lblBadge, lblDescDescargas, btnDescargas });
 
-            // ── Card 4: Créditos ──────────────────────────────────────────────────
+            // Card 4: créditos de dependencias usadas
             var cardCreditos = CreateCard("Créditos", S(30), cardDescargas.Bottom + S(15), S(168));
             var creditRows = new (string name, string license)[]
             {

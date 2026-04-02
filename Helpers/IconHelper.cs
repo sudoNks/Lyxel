@@ -2,7 +2,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 
-namespace MobiladorStex.Helpers
+namespace LyXel.Helpers
 {
     internal static class IconHelper
     {
@@ -13,10 +13,10 @@ namespace MobiladorStex.Helpers
         public static Image? Get(string name)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            string resourceName = $"MobiladorStex.Assets.Icons.{name}.png";
+            string resourceName = $"LyXel.Assets.Icons.{name}.png";
             using Stream? stream = assembly.GetManifestResourceStream(resourceName);
             if (stream == null) return null;
-            // Copiar a MemoryStream para no depender del stream original
+            // Copio a MemoryStream para no depender del stream del assembly que se cierra
             var ms = new MemoryStream();
             stream.CopyTo(ms);
             ms.Position = 0;

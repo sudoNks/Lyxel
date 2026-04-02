@@ -1,11 +1,11 @@
 ﻿using Guna.UI2.WinForms;
-using MobiladorStex.Helpers;
+using LyXel.Helpers;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System;
 
-namespace MobiladorStex
+namespace LyXel
 {
     public partial class Form1
     {
@@ -14,8 +14,8 @@ namespace MobiladorStex
             _cargandoPagina = true;
             try
             {
-                // Forward-declarations necesarias por ActualizarEstados() — deben estar
-                // asignadas antes de que se registre cualquier delegate que la llame.
+                // Forward-declarations necesarias porque ActualizarEstados() las usa
+                // y debe estar definida antes de que se registre cualquier delegate
                 Guna2Button btnAplicarRes = null!;
                 Guna2Button btnResetearRes = null!;
                 Guna2Button btnAplicarWm = null!;
@@ -24,7 +24,7 @@ namespace MobiladorStex
                 Label lblAdbConflicto = null!;
                 Guna2Button? btnCalcularCropRef = null;
 
-                // ── CARD: Fullscreen ──────────────────────────────────────
+                // Card de pantalla completa
                 var cardFullscreen = CreateCard("Pantalla Completa", S(30), S(20), S(100));
 
                 var togFullscreen = new Guna2ToggleSwitch()
@@ -45,8 +45,7 @@ namespace MobiladorStex
                 togFullscreen
                 });
 
-                // ── CARD: Resolución del Dispositivo ─────────────────────
-                // ── CARD: Window Size ────────────────────────────────────
+                // Card de tamaño de ventana
                 var cardWindowSize = CreateCard("Tamaño de Ventana", S(30), S(140), S(120));
 
                 var numWindowW = CreateNumeric(S(160), S(64), S(100), 0, 3840, _windowWidth, 10);
@@ -68,7 +67,7 @@ namespace MobiladorStex
 
                 var cardResolucion = CreateCard("Resolución Nativa del Dispositivo", S(30), S(280), S(140));
 
-                // Resolución como label solo lectura — se detecta automáticamente
+                // Resolución de solo lectura, se rellena al detectar
                 var lblResAncho = new Label()
                 {
                     Text = _resolucionAncho.ToString(),
@@ -150,7 +149,7 @@ namespace MobiladorStex
                 lblResAlto, btnDetectarRes, lblResStatus
                 });
 
-                // ── CARD: Crop ────────────────────────────────────────────
+                // Card de crop de imagen (Opción 1)
                 var cardCrop = CreateCard("Recorte de Imagen — Opción 1 (Recomendado)", S(30), S(440), S(254));
 
                 var lblCropDesc = new Label()
@@ -246,8 +245,7 @@ namespace MobiladorStex
                     AutoSize = true
                 };
 
-                // ── Función central de estados ────────────────────────────
-                // Lee los flags y configura TODOS los botones de una vez
+                // Función central que lee los flags y configura todos los botones de una vez
                 void ActualizarEstados()
                 {
                     bool cropActivo = _cropActivo;
@@ -256,23 +254,21 @@ namespace MobiladorStex
                     bool hayDev = _hayDispositivo;
                     bool resValida = _resolucionAncho > 0 && _resolucionAlto > 0;
 
-                    // Solo una opción activa a la vez.
-                    // Además, las acciones destructivas requieren dispositivo conectado
-                    // y resolución nativa detectada (> 0) para no enviar comandos inválidos.
+                    // Solo una opción activa a la vez, y las destructivas requieren dispositivo y resolución detectada
 
                     // Botones Crop — requieren resolución válida para calcular el offset
                     if (btnCalcularCropRef != null) btnCalcularCropRef.Enabled = hayDev && resValida && !adbActivo && !wmActivo && !cropActivo;
                     if (btnRestablecerCrop != null) btnRestablecerCrop.Enabled = cropActivo;
 
-                    // Botones ADB — requieren resolución válida (usan _resolucionAncho/_Alto)
+                    // Botones ADB — usan _resolucionAncho/_Alto así que necesito que estén detectados
                     if (btnAplicarRes != null) btnAplicarRes.Enabled = hayDev && resValida && !cropActivo && !wmActivo && !adbActivo;
                     if (btnResetearRes != null) btnResetearRes.Enabled = hayDev && adbActivo;
 
-                    // Botones WmSize — el campo es texto libre, no depende de resolución
+                    // Botones WmSize — el campo es texto libre, no dependo de la resolución detectada
                     if (btnAplicarWm != null) btnAplicarWm.Enabled = hayDev && !cropActivo && !adbActivo && !wmActivo;
                     if (btnRevertirWm != null) btnRevertirWm.Enabled = wmActivo;
 
-                    // Aviso visual
+                    // Aviso visual de conflicto entre crop y ADB
                     if (lblAdbConflicto != null) lblAdbConflicto.Visible = cropActivo;
                 }
 
@@ -360,7 +356,7 @@ namespace MobiladorStex
                 lblCropAplicado, btnCalcularCrop, btnRestablecerCrop
                 });
 
-                // ── CARD: Resolución ADB ──────────────────────────────────
+                // Card de resolución ADB (Opción 2)
                 var cardAdb = CreateCard("Modificar Resolución ADB — Opción 2 (Avanzado)", S(30), S(700), S(176));
 
                 var lblAdbAdvertencia = new Label()
@@ -487,7 +483,7 @@ namespace MobiladorStex
                         }
                         else
                         {
-                            // Detectar error de permisos — dispositivo no compatible
+                            // Si el error menciona permisos, el fabricante lo bloqueó
                             string mensajeError = error.Contains("WRITE_SECURE_SETTINGS") || error.Contains("SecurityException")
                                 ? "⚠ Tu dispositivo no permite cambiar la resolución vía ADB.\nEsta función no es compatible con todos los modelos."
                                 : $"✗ Error: {error}";
@@ -539,7 +535,7 @@ namespace MobiladorStex
                 });
 
 
-                // ── CARD: Resolución Personalizada wm size ────────────────
+                // Card de resolución personalizada wm size (Opción 3)
                 var cardWmSize = CreateCard("Resolución Personalizada — Opción 3 (Recomendado)", S(30), S(896), S(218));
 
                 var lblWmSizeInfo = new Label()
@@ -712,7 +708,7 @@ namespace MobiladorStex
                 lblWmSizeInfo, txtWmSize, lblWmSizeStatus, btnAplicarWm, btnRevertirWm
                 });
 
-                // ── CARD: DPI ─────────────────────────────────────────────
+                // Card de control de DPI (Opción 4)
                 var cardDpi = CreateCard("Control de DPI — Opción 4 (Avanzado)", S(30), S(1134), S(234));
 
                 var lblDpiActual = new Label()
@@ -869,8 +865,8 @@ namespace MobiladorStex
 
                 _ = DetectarDpiAlCargarAsync(lblDpiActual, numDpi);
 
-                // Auto-detectar resolución nativa si hay dispositivo y aún no se conoce.
-                // Se hace inline (no en método separado) para tener acceso a ActualizarEstados().
+                // Auto-detecto la resolución nativa al cargar si hay dispositivo y aún no la conozco.
+                // Lo hago inline para tener acceso directo a ActualizarEstados().
                 if (_hayDispositivo && _resolucionAncho == 0)
                 {
                     lblResStatus.Text = "⏳ Detectando...";
@@ -900,7 +896,7 @@ namespace MobiladorStex
                     _ = DetectarResolucionAlCargar();
                 }
 
-                // Aplicar estado inicial de todos los botones según flags actuales
+                // Aplico el estado inicial de todos los botones según los flags actuales
                 ActualizarEstados();
                 if (btnAplicarRes != null) btnAplicarRes.FillColor = AppTheme.BtnWarning;
 

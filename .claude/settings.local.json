@@ -26,7 +26,8 @@
       "Bash(cp \"C:/Users/Admin/Downloads/tiktok.png\" \"C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_tiktok.png\")",
       "Bash(cp \"C:/Users/Admin/Downloads/youtube.png\" \"C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_youtube.png\")",
       "Bash(cp \"C:/Users/Admin/Downloads/kofi.png\" \"C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_kofi.png\")",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(ls:*)"
     ]
   }
 }

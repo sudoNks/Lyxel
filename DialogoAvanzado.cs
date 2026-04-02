@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace MobiladorStex
+namespace LyXel
 {
     /// <summary>
     /// Diálogo de advertencia para funciones avanzadas (Opción 2 y 3).
@@ -40,7 +40,7 @@ namespace MobiladorStex
         {
             int y = 0;
 
-            // ── Barra de título ───────────────────────────────────────
+            // Barra de título con ícono de advertencia
             var pnlTitulo = new Panel()
             {
                 Left = 0, Top = 0, Width = this.Width, Height = S(48),
@@ -56,7 +56,7 @@ namespace MobiladorStex
             this.Controls.Add(pnlTitulo);
             y = S(48);
 
-            // ── Descripción ───────────────────────────────────────────
+            // Descripción del diálogo
             var lblDesc = new Label()
             {
                 Text = descripcion,
@@ -66,7 +66,7 @@ namespace MobiladorStex
                 Width = this.Width - S(40),
                 AutoSize = false
             };
-            // Calcular altura necesaria — MeasureString devuelve píxeles DPI-aware
+            // MeasureString devuelve píxeles DPI-aware, así que no aplico escala extra
             var g = this.CreateGraphics();
             var sz = g.MeasureString(descripcion, lblDesc.Font, lblDesc.Width);
             lblDesc.Height = (int)sz.Height + S(4);
@@ -74,7 +74,7 @@ namespace MobiladorStex
             this.Controls.Add(lblDesc);
             y = lblDesc.Top + lblDesc.Height + S(16);
 
-            // ── Línea divisoria ───────────────────────────────────────
+            // Línea divisoria
             var linea = new Panel()
             {
                 Left = S(20), Top = y, Width = this.Width - S(40), Height = 1,
@@ -83,7 +83,7 @@ namespace MobiladorStex
             this.Controls.Add(linea);
             y += S(12);
 
-            // ── Checkboxes obligatorios ───────────────────────────────
+            // Checkboxes que el usuario debe marcar todos para poder continuar
             var lblPara = new Label()
             {
                 Text = "Para continuar, confirma que entiendes lo siguiente:",
@@ -114,7 +114,7 @@ namespace MobiladorStex
 
             y += S(8);
 
-            // ── Checkbox opcional ─────────────────────────────────────
+            // Checkbox opcional para no volver a mostrar
             var chkNoMostrar = new CheckBox()
             {
                 Text      = "No volver a mostrar este mensaje",
@@ -128,7 +128,7 @@ namespace MobiladorStex
             this.Controls.Add(chkNoMostrar);
             y += S(32);
 
-            // ── Botones ───────────────────────────────────────────────
+            // Botones de acción
             y += S(8);
             var btnCancelar = new Guna2Button()
             {
@@ -164,17 +164,17 @@ namespace MobiladorStex
             this.Controls.Add(_btnContinuar);
             y += S(36) + S(20);
 
-            // ── Ajustar altura del form ───────────────────────────────
+            // Ajusto la altura del form al contenido real
             this.Height = y;
 
-            // ── Borde sutil ───────────────────────────────────────────
+            // Borde sutil pintado a mano en OnPaint
             this.Paint += (s, e) =>
             {
                 using var pen = new System.Drawing.Pen(AppTheme.AccentDark, 1);
                 e.Graphics.DrawRectangle(pen, 0, 0, this.Width - 1, this.Height - 1);
             };
 
-            // Arrastrar por la barra de título
+            // Arrastre nativo de Windows para mover el diálogo por la barra de título
             pnlTitulo.MouseDown += (s, e) =>
             {
                 if (e.Button == MouseButtons.Left)

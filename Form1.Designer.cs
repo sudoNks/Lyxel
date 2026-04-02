@@ -1,4 +1,4 @@
-﻿namespace MobiladorStex
+﻿namespace LyXel
 {
     partial class Form1
     {

@@ -1,19 +1,19 @@
 ﻿using Guna.UI2.WinForms;
-using MobiladorStex.Helpers;
+using LyXel.Helpers;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace MobiladorStex
+namespace LyXel
 {
     /// <summary>
-    /// Control numérico personalizado con paleta MobiladorSteX.
+    /// Control numérico personalizado con paleta LyXel.
     /// Reemplaza Guna2NumericUpDown con control total sobre colores.
     /// Uso: igual que NumericUpDown — Value, Minimum, Maximum, Increment
     /// </summary>
     public class StexNumericUpDown : UserControl
     {
-        // ── Propiedades públicas ──────────────────────────────────────
+        // Propiedades públicas que expongo al exterior
         private decimal _value = 0;
         private decimal _minimum = 0;
         private decimal _maximum = 100;
@@ -52,12 +52,12 @@ namespace MobiladorStex
             set { _increment = Math.Max(1, value); }
         }
 
-        // ── Controles internos ────────────────────────────────────────
+        // Controles internos del composite
         private Guna2TextBox _txtValue;
         private Guna2Button _btnUp;
         private Guna2Button _btnDown;
 
-        // ── Colores de la paleta ──────────────────────────────────────
+        // Colores hardcodeados de la paleta — si cambio el tema los actualizo aquí
         private static readonly Color COLOR_FONDO = AppTheme.BgCard;
         private static readonly Color COLOR_TEXTO = AppTheme.TextPrimary;
         private static readonly Color COLOR_BOTON = AppTheme.AccentDark;
@@ -77,7 +77,7 @@ namespace MobiladorStex
         {
             int btnW = 26;
 
-            // ── TextBox central ───────────────────────────────────────
+            // TextBox central donde va el número
             _txtValue = new Guna2TextBox()
             {
                 Left = 0,
@@ -93,7 +93,7 @@ namespace MobiladorStex
                 Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom
             };
 
-            // ── Botón bajar - (izquierda del par) ────────────────────
+            // Botón de decremento, a la izquierda del botón de incremento
             _btnDown = new Guna2Button()
             {
                 Left = _txtValue.Width + 1,
@@ -111,7 +111,7 @@ namespace MobiladorStex
                 Anchor = AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom
             };
 
-            // ── Botón subir + (derecha del par) ──────────────────────
+            // Botón de incremento, a la derecha
             _btnUp = new Guna2Button()
             {
                 Left = _txtValue.Width + btnW + 2,
@@ -129,7 +129,7 @@ namespace MobiladorStex
                 Anchor = AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom
             };
 
-            // ── Eventos ───────────────────────────────────────────────
+            // Eventos de los botones y del textbox
             _btnUp.Click += (s, e) => Value += _increment;
             _btnDown.Click += (s, e) => Value -= _increment;
 
@@ -138,7 +138,7 @@ namespace MobiladorStex
             _btnDown.MouseEnter += (s, e) => _btnDown.FillColor = COLOR_HOVER;
             _btnDown.MouseLeave += (s, e) => _btnDown.FillColor = COLOR_BOTON;
 
-            // Confirmar valor al salir del textbox
+            // Confirmo el valor cuando el usuario sale del textbox o presiona Enter
             _txtValue.Leave += (s, e) => ConfirmarTexto();
             _txtValue.KeyDown += (s, e) =>
             {
@@ -148,7 +148,7 @@ namespace MobiladorStex
                     ConfirmarTexto();
                     this.Parent?.Focus();
                 }
-                // Solo permitir números, backspace, delete y teclas de navegación
+                // Solo dejo pasar números y teclas de navegación, el resto lo bloqueo
                 bool esNumero = (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
                                 || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9);
                 bool esControl = e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete
@@ -159,7 +159,7 @@ namespace MobiladorStex
                     e.SuppressKeyPress = true;
             };
 
-            // Scroll del mouse para subir/bajar — solo si el control tiene el foco
+            // El scroll del mouse funciona solo si el control tiene el foco, para no interferir con el scroll de la página
             this.MouseWheel += (s, e) =>
             {
                 if (!this.ContainsFocus) return;
@@ -178,7 +178,7 @@ namespace MobiladorStex
                 _txtValue.Text = _value.ToString(); // revertir si inválido
         }
 
-        // Propagar evento Leave del control completo
+        // Recalculo el layout de los controles internos al redimensionar
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);

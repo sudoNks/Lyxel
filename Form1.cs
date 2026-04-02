@@ -11,13 +11,11 @@ using System;
 using System.Linq;
 using Panel = System.Windows.Forms.Panel;
 
-namespace MobiladorStex
+namespace LyXel
 {
     public partial class Form1 : Form
     {
-        // ══════════════════════════════════════════════════════════════
-        // TEMA
-        // ══════════════════════════════════════════════════════════════
+        // Variables de tema — las cargo de AppTheme en ApplyTheme()
 
         private Color accentColor;
         private Color bgPrimary;
@@ -26,7 +24,7 @@ namespace MobiladorStex
         private Color textPrimary;
         private Color textSecondary;
 
-        // Referencias globales
+        // Referencias globales a controles que necesito desde múltiples partials
         private Panel sidePanel;
         private Panel mainPanel;
         private Panel contentPanel;
@@ -42,13 +40,13 @@ namespace MobiladorStex
         private PerfilManager perfilManager;
         private Label lblEstadoIndicador;
         private Label lblEstadoTexto;
-        private Label lblUltimoPerfil;
+        private FlowLayoutPanel lblUltimoPerfil;
         private Guna2Button btnIniciarScrcpy;
         private Guna2Button btnDetenerScrcpy;
         private System.Windows.Forms.Timer _timerScrcpy;
         private Form? _flotante;
 
-        // ── VIDEO Y AUDIO — Estado persistente ───────────────────────
+        // Estado persistente de video y audio — estos campos viajan al ScrcpyConfig al lanzar
         private bool _video = true;
         private bool _audio = true;
         private bool _audioDoble = false;
@@ -87,7 +85,7 @@ namespace MobiladorStex
         private List<string> _encodersDetectados = new();
         private List<string> _encodersDisplayLabels = new();
 
-        // PANTALLA
+        // Estado de pantalla
         private bool _fullscreen = false;
         private string _fullscreenCrop = "";
         private bool _cropActivo = false;
@@ -100,20 +98,20 @@ namespace MobiladorStex
         private int _customRatioH = 9;
         private int _dpi = 420;
 
-        // CONEXIÓN
+        // Estado de conexión
         private bool _usarWifi = false;
         private string _wifiIp = "";
         private int _wifiPuerto = 5555;
         private bool _modoOtg = false;
         private string _otgSerial = "";
 
-        // INDICADORES DE SESIÓN ANTERIOR
+        // Datos que persisto entre sesiones para saber qué había activo la última vez
         private bool _ultimaSesionWifi = false;
         private bool _ultimaSesionOtg = false;
         private int _ultimoDpiAplicado = 0;            // 0 = nunca aplicado
         private int _ultimaVelocidadCursor = int.MinValue; // MinValue = nunca aplicado
 
-        // PERFILES
+        // Estado de la página de perfiles
         private string _perfilSeleccionado = "";
         private ListBox _lstPerfiles;
         private Panel _panelDetalle;
@@ -160,7 +158,7 @@ namespace MobiladorStex
                 InvokeSeguro(() =>
                 {
                     _hayDispositivo = hayDispositivo;
-                    // Suprimido durante setup WiFi para evitar toasts y parpadeos transitorios
+                    // Durante el setup de WiFi suprimo estos eventos para evitar toasts y parpadeos transitorios
                     if (_operacionWifiEnCurso) return;
                     ActualizarIndicadorDispositivo(hayDispositivo);
                     ActualizarBotonesScrcpy();
@@ -173,11 +171,11 @@ namespace MobiladorStex
                 InvokeSeguro(() =>
                 {
                     if (_operacionWifiEnCurso || !_inicializacionCompleta) return;
-                    if (_wifiConectado) return; // WiFi activo: gestionado por MonitorearUsbConWifiAsync
+                    if (_wifiConectado) return; // si WiFi está activo, lo maneja MonitorearUsbConWifiAsync
 
                     if (hayUsb)
                     {
-                        if (!_puertotcpActivo) // reconexión post-tcpip — silencioso
+                        if (!_puertotcpActivo) // post-tcpip: ya sé que se va a reconectar, lo ignoro
                             ToastNotification.Mostrar(this, "Dispositivo conectado", ToastNotification.ToastTipo.Exito, 2500);
                     }
                     else
@@ -213,7 +211,7 @@ namespace MobiladorStex
 
                 bool hayDispositivo = _hayDispositivo;
 
-                // ── WiFi / TCP cleanup ────────────────────────────────────
+                // Al cerrar limpio las conexiones WiFi/TCP y restauro USB si es necesario
                 if (_puertotcpActivo || _usarWifi)
                 {
                     adbManager.DesconectarTodo();
@@ -221,7 +219,7 @@ namespace MobiladorStex
                         adbManager.AplicarUsb();
                 }
 
-                // ── Resolución — revertir si fue modificada ───────────────
+                // Si la resolución fue modificada la revierto al cerrar para no dejar el teléfono raro
                 if (_wmSizeActivo || _resAdbActiva)
                 {
                     if (hayDispositivo)
@@ -258,9 +256,7 @@ namespace MobiladorStex
             }
         }
 
-        // ══════════════════════════════════════════════════════════════
-        // CONFIG — CARGAR Y GUARDAR
-        // ══════════════════════════════════════════════════════════════
+        // Carga y guardado de config.ini (estado de sesión, no perfiles)
 
         private void CargarConfigTema()
         {
@@ -270,18 +266,18 @@ namespace MobiladorStex
                 var parser = new FileIniDataParser();
                 var data = parser.ReadFile(_configPath);
 
-                // Avisos avanzados vistos
+                // Flags de avisos ya vistos por el usuario
                 if (data["Tema"].ContainsKey("aviso_adb_visto"))
                     bool.TryParse(data["Tema"]["aviso_adb_visto"], out _avisoAdbVisto);
                 if (data["Tema"].ContainsKey("aviso_wmsize_visto"))
                     bool.TryParse(data["Tema"]["aviso_wmsize_visto"], out _avisoWmSizeVisto);
 
-                // Resolución modificada sin revertir en sesión anterior
+                // Si la sesión anterior terminó con resolución modificada, marco para revertir al inicio
                 if (data.Sections.ContainsSection("Dispositivo") &&
                     data["Dispositivo"].ContainsKey("resolucion_pendiente_reset"))
                     bool.TryParse(data["Dispositivo"]["resolucion_pendiente_reset"], out _resolucionPendienteReset);
 
-                // Último perfil activo
+                // Cargo el último perfil activo para que la app arranque con la misma config
                 string ultimoPerfil = data["Tema"]["ultimo_perfil"];
                 if (!string.IsNullOrEmpty(ultimoPerfil))
                 {
@@ -290,7 +286,7 @@ namespace MobiladorStex
                     if (cfg != null) CargarPerfilEnApp(cfg);
                 }
 
-                // Encoders — separados por '|', paralelos a display labels
+                // Los encoders detectados los persisto separados por '|', paralelos a los display labels
                 string encDet = data["Video"]["encoders_detectados"] ?? "";
                 string encLbl = data["Video"]["encoders_display_labels"] ?? "";
 
@@ -302,7 +298,7 @@ namespace MobiladorStex
                     ? new List<string>()
                     : new List<string>(encLbl.Split('|').Where(x => !string.IsNullOrWhiteSpace(x)));
 
-                // Sesión anterior — WiFi, OTG, DPI aplicado, velocidad cursor
+                // Recupero datos de sesión anterior: WiFi, OTG, DPI y velocidad del cursor
                 if (data.Sections.ContainsSection("Sesion"))
                 {
                     var s = data["Sesion"];
@@ -332,7 +328,7 @@ namespace MobiladorStex
                 var parser = new FileIniDataParser();
                 var data = new IniData();
 
-                // Tema
+                // Sección de tema y config general
                 data.Sections.AddSection("Tema");
                 data["Tema"]["ultimo_perfil"] = _perfilSeleccionado ?? "";
                 data["Tema"]["aviso_adb_visto"] = _avisoAdbVisto.ToString().ToLower();
@@ -359,9 +355,7 @@ namespace MobiladorStex
             catch { }
         }
 
-        // ══════════════════════════════════════════════════════════════
-        // TEMAS
-        // ══════════════════════════════════════════════════════════════
+        // ApplyTheme copia los colores de AppTheme a variables locales para acceso rápido
 
         private void ApplyTheme()
         {
@@ -390,9 +384,7 @@ namespace MobiladorStex
 
 
 
-        // ══════════════════════════════════════════════════════════════
-        // HELPERS
-        // ══════════════════════════════════════════════════════════════
+        // Helpers varios usados por los partials
 
 
         private Panel CreateCard(string title, int left, int top, int height = 150)
@@ -462,7 +454,7 @@ namespace MobiladorStex
             return v != null ? $"v{v.Major}.{v.Minor}.{v.Build}" : "v1.3.0";
         }
 
-        // Parpadeo en taskbar — llama la atención sin forzar el foco
+        // Hago parpadear la taskbar para llamar la atención sin robar el foco
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern bool FlashWindow(IntPtr hwnd, bool bInvert);
 
@@ -519,6 +511,80 @@ namespace MobiladorStex
             string modo = _modoOtg ? "OTG" : _usarWifi ? "WiFi"
                           : (!_video && !_audio) ? "Control Only" : "USB";
             return $"Perfil: {perfil}  |  {_fps} FPS  |  {_bitrate} Mb  |  {_videoCodec}  |  {modo}";
+        }
+
+        private void ActualizarChipsPerfil()
+        {
+            if (lblUltimoPerfil == null) return;
+            lblUltimoPerfil.Controls.Clear();
+            string perfil = !string.IsNullOrEmpty(_perfilSeleccionado) ? _perfilSeleccionado : "Sin perfil";
+            string modo = _modoOtg ? "OTG" : _usarWifi ? "WiFi"
+                          : (!_video && !_audio) ? "Control Only" : "USB";
+            Color modoColor = _modoOtg     ? Color.FromArgb(255, 180, 80)
+                            : _usarWifi   ? Color.FromArgb(100, 220, 150)
+                            : (!_video && !_audio) ? AppTheme.Warning
+                            : Color.FromArgb(200, 80, 110);
+            var chips = new (string key, string val, Color valColor)[]
+            {
+                ("Perfil", perfil,        Color.FromArgb(200, 80, 110)),
+                ("FPS",    $"{_fps}",     Color.White),
+                ("Mb",     $"{_bitrate}", Color.White),
+                ("Codec",  _videoCodec,   Color.White),
+                ("Modo",   modo,          modoColor),
+            };
+            foreach (var (key, val, valColor) in chips)
+                lblUltimoPerfil.Controls.Add(MakeChip(key, val, valColor));
+        }
+
+        private void MostrarAdvertenciaChips()
+        {
+            if (lblUltimoPerfil == null) return;
+            lblUltimoPerfil.Controls.Clear();
+            lblUltimoPerfil.Controls.Add(new Label()
+            {
+                Text = "⚠  Cambios sin guardar — ve a Perfiles",
+                Font = new Font("Segoe UI", 8f),
+                ForeColor = AppTheme.Warning,
+                AutoSize = true,
+                Margin = new Padding(0, S(2), 0, 0)
+            });
+        }
+
+        private FlowLayoutPanel MakeChip(string key, string val, Color valColor)
+        {
+            var chip = new FlowLayoutPanel()
+            {
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                FlowDirection = FlowDirection.LeftToRight,
+                WrapContents = false,
+                BackColor = Color.FromArgb(45, 20, 30),
+                Padding = new Padding(S(6), S(2), S(6), S(2)),
+                Margin = new Padding(0, 0, S(6), 0)
+            };
+            chip.Paint += (s, e) =>
+            {
+                var c = (FlowLayoutPanel)s!;
+                using var pen = new Pen(Color.FromArgb(120, 60, 80));
+                e.Graphics.DrawRectangle(pen, 0, 0, c.Width - 1, c.Height - 1);
+            };
+            chip.Controls.Add(new Label()
+            {
+                Text = key + ":",
+                Font = new Font("Segoe UI", 7.5f),
+                ForeColor = Color.FromArgb(200, 200, 200),
+                AutoSize = true,
+                Margin = new Padding(0, 0, S(2), 0)
+            });
+            chip.Controls.Add(new Label()
+            {
+                Text = val,
+                Font = new Font("Segoe UI", 7.5f, FontStyle.Bold),
+                ForeColor = valColor,
+                AutoSize = true,
+                Margin = new Padding(0)
+            });
+            return chip;
         }
 
         private ScrcpyConfig ObtenerConfigActual() => new ScrcpyConfig

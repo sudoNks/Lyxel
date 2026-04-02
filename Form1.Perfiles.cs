@@ -1,12 +1,12 @@
 using Guna.UI2.WinForms;
-using MobiladorStex.Helpers;
+using LyXel.Helpers;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace MobiladorStex
+namespace LyXel
 {
     public partial class Form1
     {
@@ -65,11 +65,10 @@ namespace MobiladorStex
             _turnScreenOff = cfg.TurnScreenOff;
             _shortcutMod = cfg.ShortcutMod;
             _fullscreen = cfg.Fullscreen;
-            // _fullscreenCrop, _resolucion*, _aspectRatio, _cropActivo: temporales — no se cargan de perfil
-            _modoOtg = false; // siempre inicia apagado, independientemente del perfil
-            // _otgSerial: viene de config.ini (sesión anterior), no de perfiles
-            // WiFi no se carga del perfil — el modo de conexión lo determina
-            // exclusivamente el estado actual de _wifiConectado y la IP disponible.
+            // Estos campos son temporales de sesión, no los cargo del perfil
+            _modoOtg = false; // OTG siempre arranca apagado, independientemente del perfil
+            // _otgSerial viene de config.ini, no del perfil
+            // WiFi tampoco se carga del perfil, lo determina _wifiConectado y la IP activa
             _dpi = cfg.Dpi;
             _printFps = cfg.PrintFps;
             _forwardAllClicks = cfg.ForwardAllClicks;
@@ -100,9 +99,7 @@ namespace MobiladorStex
                 exito ? MessageBoxIcon.Information : MessageBoxIcon.Error);
         }
 
-        // ══════════════════════════════════════════════════════════════
-        // PERFILES
-        // ══════════════════════════════════════════════════════════════
+        // Página de perfiles: lista izquierda + panel de detalle derecho
 
         private void LoadPerfilesPage()
         {
@@ -358,21 +355,21 @@ namespace MobiladorStex
             {
                 panel.Controls.Clear();
                 if (cfg == null) return;
-                var rows = new (string name, string val, bool? good)[]
+                var rows = new (string name, string val, Color valColor, bool showClear)[]
                 {
-                    ("Video",      cfg.Video ? "Activo" : "Inactivo",                        cfg.Video),
-                    ("Audio",      cfg.Audio ? "Activo" : "Inactivo",                        cfg.Audio),
-                    ("FPS",        cfg.Fps.ToString(),                                        null),
-                    ("Bitrate",    $"{cfg.Bitrate} Mb",                                       null),
-                    ("Codec",      cfg.VideoCodec ?? "h264",                                  null),
-                    ("Fullscreen", cfg.Fullscreen ? "Sí" : "No",                             cfg.Fullscreen),
-                    ("Max Size",   cfg.MaxSize > 0 ? cfg.MaxSize.ToString() : "Auto",         null),
-                    ("MOD",        cfg.ShortcutMod ?? "lalt",                                 null),
-                    ("WiFi",       cfg.UsarWifi ? $"{cfg.WifiIp}:{cfg.WifiPuerto}" : "No",   cfg.UsarWifi ? (bool?)null : false),
-                    ("OTG",        cfg.ModoOtg ? "Sí" : "No",                                cfg.ModoOtg),
-                    ("Stay Awake", cfg.StayAwake ? "Sí" : "No",                              cfg.StayAwake),
-                    ("Screen Off", cfg.TurnScreenOff ? "Sí" : "No",                          cfg.TurnScreenOff),
-                    ("Input Mode", (cfg.InputMode ?? "uhid").ToUpper(),                       null),
+                    ("Video",      cfg.Video ? "Activo" : "Inactivo",                       cfg.Video  ? AppTheme.Success : AppTheme.Error, !cfg.Video),
+                    ("Audio",      cfg.Audio ? "Activo" : "Inactivo",                       cfg.Audio  ? AppTheme.Success : AppTheme.Error, !cfg.Audio),
+                    ("FPS",        cfg.Fps.ToString(),                                       AppTheme.AccentLight,                  false),
+                    ("Bitrate",    $"{cfg.Bitrate} Mb",                                      AppTheme.AccentLight,                  false),
+                    ("Codec",      cfg.VideoCodec ?? "h264",                                 AppTheme.AccentLight,                  false),
+                    ("Fullscreen", cfg.Fullscreen ? "Sí" : "No",                            cfg.Fullscreen ? AppTheme.Success : AppTheme.Error, !cfg.Fullscreen),
+                    ("Max Size",   cfg.MaxSize > 0 ? cfg.MaxSize.ToString() : "Auto",       AppTheme.AccentLight,                  false),
+                    ("MOD",        cfg.ShortcutMod ?? "lalt",                                AppTheme.AccentLight,                  false),
+                    ("WiFi",       cfg.UsarWifi ? $"{cfg.WifiIp}:{cfg.WifiPuerto}" : "No",  cfg.UsarWifi ? accentColor : AppTheme.Error,    !cfg.UsarWifi),
+                    ("OTG",        cfg.ModoOtg ? "Sí" : "No",                               cfg.ModoOtg ? AppTheme.Success : AppTheme.Error, !cfg.ModoOtg),
+                    ("Stay Awake", cfg.StayAwake ? "Sí" : "No",                             cfg.StayAwake ? AppTheme.Success : AppTheme.Error, !cfg.StayAwake),
+                    ("Screen Off", cfg.TurnScreenOff ? "Sí" : "No",                         cfg.TurnScreenOff ? AppTheme.Success : AppTheme.Error, !cfg.TurnScreenOff),
+                    ("Input Mode", (cfg.InputMode ?? "uhid").ToUpper(),                      AppTheme.AccentLight,                  false),
                 };
                 int leftCount = 7;
                 int colW = panel.Width / 2;
@@ -382,11 +379,8 @@ namespace MobiladorStex
                     bool isRight = i >= leftCount;
                     int colX = isRight ? colW : 0;
                     int rowY = (isRight ? i - leftCount : i) * rowH;
-                    var (name, val, good) = rows[i];
-                    Image? ico = (good == false) ? IconMap.Clear : IconMap.Check;
-                    Color valColor = good == true ? AppTheme.Success
-                                   : good == false ? AppTheme.Error
-                                   : accentColor;
+                    var (name, val, valColor, showClear) = rows[i];
+                    Image? ico = showClear ? IconMap.Clear : IconMap.Check;
                     panel.Controls.Add(new PictureBox()
                     {
                         Width = S(12), Height = S(12),

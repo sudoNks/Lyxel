@@ -4,7 +4,7 @@ using System.IO;
 using IniParser;
 using IniParser.Model;
 
-namespace MobiladorStex
+namespace LyXel
 {
     public class PerfilManager
     {
@@ -19,9 +19,7 @@ namespace MobiladorStex
             _data = CargarIni();
         }
 
-        // ══════════════════════════════════════════════════════════════
-        // CARGA Y GUARDADO
-        // ══════════════════════════════════════════════════════════════
+        // Carga y guardado del INI
 
         private IniData CargarIni()
         {
@@ -55,9 +53,7 @@ namespace MobiladorStex
             }
         }
 
-        // ══════════════════════════════════════════════════════════════
-        // OPERACIONES DE PERFIL
-        // ══════════════════════════════════════════════════════════════
+        // Operaciones de perfil
 
         public List<string> ListarPerfiles()
         {
@@ -179,9 +175,7 @@ namespace MobiladorStex
         public bool ExistePerfil(string nombre) =>
             _data.Sections.ContainsSection(nombre);
 
-        // ══════════════════════════════════════════════════════════════
-        // IMPORTAR / EXPORTAR
-        // ══════════════════════════════════════════════════════════════
+        // Importar y exportar perfiles
 
         public (bool exito, string nombre, string error) ImportarDesdeArchivo(string rutaArchivo)
         {
@@ -298,9 +292,7 @@ namespace MobiladorStex
             }
         }
 
-        // ══════════════════════════════════════════════════════════════
-        // HELPERS
-        // ══════════════════════════════════════════════════════════════
+        // Helpers de parseo
 
         private static int ParseInt(string valor, int defecto)
         {

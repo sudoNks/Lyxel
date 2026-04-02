@@ -1,10 +1,10 @@
 using System.Runtime.InteropServices;
 
-namespace MobiladorStex
+namespace LyXel
 {
     internal static class Program
     {
-        // ── Windows Job Object P/Invoke ────────────────────────────────────
+        // P/Invoke para el Job Object de Windows
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
         private static extern IntPtr CreateJobObject(IntPtr lpJobAttributes, string? lpName);
 
@@ -63,11 +63,11 @@ namespace MobiladorStex
                 AssignProcessToJobObject(_hJob, hProcess);
         }
 
-        // ── Entry point ───────────────────────────────────────────────────
+        // Entry point
         [STAThread]
         static void Main()
         {
-            // Job Object: procesos hijos mueren junto con el launcher
+            // El Job Object hace que si la app se cierra de golpe, scrcpy y adb también mueren
             _hJob = CreateJobObject(IntPtr.Zero, null);
             if (_hJob != IntPtr.Zero)
             {

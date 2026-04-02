@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 
-namespace MobiladorStex
+namespace LyXel
 {
     /// <summary>
     /// Bloquea WM_MOUSEWHEEL en controles de tipo ComboBox, TrackBar y NumericUpDown

@@ -1,11 +1,11 @@
 ﻿using Guna.UI2.WinForms;
-using MobiladorStex.Helpers;
+using LyXel.Helpers;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System;
 
-namespace MobiladorStex
+namespace LyXel
 {
     public partial class Form1
     {
@@ -15,7 +15,7 @@ namespace MobiladorStex
             try
             {
 
-                // ── CARD: Estado ADB ──────────────────────────────────────
+                // Card de estado de conexión ADB
                 var cardAdb = CreateCard("Estado de Conexión ADB", S(30), S(20), S(140));
 
                 var lblAdbEstado = new Label()
@@ -103,7 +103,7 @@ namespace MobiladorStex
 
                 cardAdb.Controls.AddRange(new Control[] { lblAdbEstado, btnReiniciarAdb, btnLimpiarHuerfanas });
 
-                // ── CARD: Modo OTG ────────────────────────────────────────
+                // Card del modo OTG
                 bool mostrarIndicadorOtg = !string.IsNullOrEmpty(_otgSerial);
                 int otgTopOffset = mostrarIndicadorOtg ? S(46) : 0;
                 var cardOtg = CreateCard("Modo OTG — Teclado y Mouse", S(30), S(180), S(260) + otgTopOffset);
@@ -197,8 +197,7 @@ namespace MobiladorStex
                 };
                 btnDetectarOtg.Image = IconMap.Sync;
 
-                // Rellena cmbSerial con los dispositivos ADB actuales.
-                // silencioso=true solo rellena sin mostrar estado en consola.
+                // Rellena cmbSerial — con silencioso=true no toco el estado de la consola
                 async Task PopularCmbSerial(bool silencioso = false)
                 {
                     btnDetectarOtg.Enabled = false;
@@ -214,7 +213,7 @@ namespace MobiladorStex
                         foreach (var ser in seriales)
                             cmbSerial.Items.Add(ser);
 
-                        // Restaurar serial guardado si sigue en la lista
+                        // Restauro el serial guardado si todavía aparece en la lista
                         bool seleccionado = false;
                         if (!string.IsNullOrEmpty(_otgSerial))
                         {
@@ -257,7 +256,7 @@ namespace MobiladorStex
 
                     if (togOtg.Checked && !string.IsNullOrEmpty(_otgSerial))
                     {
-                        // Sesión anterior detectada — mostrar opciones al usuario
+                        // Hay serial de sesión anterior — le pregunto al usuario qué quiere hacer
                         int opcionOtg = 0;
                         using (var dlg = new Form()
                         {
@@ -309,12 +308,12 @@ namespace MobiladorStex
                     }
 
                     _modoOtg = togOtg.Checked;
-                    // OTG es temporal — no pertenece al perfil, no marca cambios pendientes
+                    // OTG es estado de sesión, no del perfil, así que no marco cambios pendientes
                 };
 
                 btnDetectarOtg.Click += async (s, e) => await PopularCmbSerial(silencioso: false);
 
-                // Indicador de sesión anterior OTG
+                // Indicador de sesión OTG anterior
                 var controlsOtg = new System.Collections.Generic.List<Control>();
                 if (mostrarIndicadorOtg)
                 {
@@ -351,13 +350,11 @@ namespace MobiladorStex
                 });
                 cardOtg.Controls.AddRange(controlsOtg.ToArray());
 
-                // Poblar el ComboBox al abrir la página (silencioso — sin diálogos ni estado en consola)
+                // Poblo el combo al abrir la página sin mostrar nada en la consola
                 _ = PopularCmbSerial(silencioso: true);
 
-                // ── CARD: WiFi ────────────────────────────────────────────
-                // El toggle refleja si hay una sesión WiFi activa o en progreso.
-                // _usarWifi se persiste en config, pero puede quedar true sin sesión real
-                // (ej: app cerrada a mitad del setup). Se recalcula desde el estado real.
+                // Card de WiFi — recalculo _usarWifi desde el estado real porque
+                // puede quedar true en config si la app se cerró a mitad del setup
                 bool wifiActivoAlCargar = _wifiConectado || _puertotcpActivo;
                 _usarWifi = wifiActivoAlCargar;
                 bool mostrarIndicadorWifi = !string.IsNullOrEmpty(_wifiIp);
@@ -430,7 +427,7 @@ namespace MobiladorStex
                 };
                 btnDetectarIp.Image = IconMap.Sync;
 
-                // Estado inicial del label de status según flags persistidos
+                // El texto inicial del status depende del estado que quedó guardado
                 string wifiStatusTextoInicial;
                 Color wifiStatusColorInicial;
                 if (_wifiConectado)
@@ -521,7 +518,7 @@ namespace MobiladorStex
                 {
                     if (_cargandoPagina) return;
 
-                    // Bloquear activación si no hay dispositivo USB conectado
+                    // No dejo activar WiFi si no hay dispositivo USB — es necesario para el primer paso
                     if (togWifi.Checked && !_hayDispositivo)
                     {
                         _cargandoPagina = true;
@@ -537,11 +534,11 @@ namespace MobiladorStex
                     if (_usarWifi && _modoOtg) { _modoOtg = false; MessageBox.Show(this, "WiFi es incompatible con OTG. OTG desactivado.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information); }
                     if (_usarWifi)
                     {
-                        // Si hay datos de sesión anterior, ofrecer usarlos directamente
+                        // Si hay datos de sesión anterior le ofrezco usarlos directamente
                         if (!string.IsNullOrEmpty(_wifiIp) && !_puertotcpActivo)
                         {
                             string ipMostrar = _wifiPuerto > 0 ? $"{_wifiIp}:{_wifiPuerto}" : _wifiIp;
-                            // 0 = sin decisión/cancelado, 1 = usar guardados, 2 = configurar de nuevo
+                            // 0 = cancelado, 1 = usar guardados, 2 = configurar de nuevo
                             int opcionDlg = 0;
                             using (var dlg = new Form()
                             {
@@ -609,7 +606,7 @@ namespace MobiladorStex
                             bool usarGuardados = opcionDlg == 1;
                             if (opcionDlg == 0)
                             {
-                                // Cancelado — revertir el toggle sin disparar el handler
+                                // Cancelado — revierto el toggle sin disparar el handler de nuevo
                                 _cargandoPagina = true;
                                 togWifi.Checked = false;
                                 _usarWifi = false;
@@ -623,14 +620,14 @@ namespace MobiladorStex
                                 btnHabilitarPuerto.Text = "Puerto Habilitado";
                                 btnHabilitarPuerto.Enabled = false;
                                 btnConectarWifi.Enabled = true;
-                                // btnCerrarPuerto solo se habilita al completar la conexión WiFi (_wifiConectado = true)
+                                // btnCerrarPuerto se habilita solo cuando _wifiConectado = true
                                 lblWifiStatus.Text = $"🔵 Datos cargados ({ipMostrar}) — pulsa Conectar WiFi";
                                 lblWifiStatus.ForeColor = AppTheme.Info;
                                 return;
                             }
                         }
 
-                        // Flujo normal: habilitar el primer paso si el puerto aún no está activo
+                        // Flujo normal: habilito el primer paso si el puerto aún no está activo
                         btnHabilitarPuerto.Enabled = !_puertotcpActivo;
                         lblWifiStatus.Text = _puertotcpActivo
                             ? $"🔵 Puerto {_wifiPuerto} habilitado — continúa con Conectar WiFi"
@@ -641,7 +638,7 @@ namespace MobiladorStex
                     }
                     else
                     {
-                        // Pequeño delay para que la animación del toggle termine antes de la operación async
+                                // Pequeño delay para que la animación del toggle termine antes de la operación async
                         await Task.Delay(150);
                         lblWifiStatus.Text = "⏳ Desconectando WiFi...";
                         lblWifiStatus.ForeColor = AppTheme.Warning;
@@ -649,7 +646,7 @@ namespace MobiladorStex
                         await adbManager.DesconectarTodoAsync();
                         togWifi.Enabled = true;
                         _puertotcpActivo = false; _wifiConectado = false;
-                        // Toggle apagado → deshabilitar todos los botones del flujo WiFi
+                        // Toggle apagado — deshabilito todos los botones del flujo WiFi
                         btnHabilitarPuerto.Text = "Habilitar Puerto"; btnHabilitarPuerto.Enabled = false;
                         btnConectarWifi.Text = "Conectar WiFi"; btnConectarWifi.Enabled = false;
                         btnCerrarPuerto.Enabled = false;
@@ -658,7 +655,7 @@ namespace MobiladorStex
                             : "⚪ WiFi desactivado — Conecta el cable USB para continuar";
                         lblWifiStatus.ForeColor = textSecondary;
                     }
-                    // WiFi es una acción de conexión, no se guarda en perfil como cambio pendiente
+                    // WiFi es estado de sesión, no del perfil, así que no marco cambios pendientes
                 };
 
                 btnDetectarIp.Click += async (s, e) =>
@@ -679,10 +676,9 @@ namespace MobiladorStex
                     lblWifiStatus.Text = "⏳ Habilitando puerto...";
                     lblWifiStatus.ForeColor = AppTheme.Warning;
 
-                    // Suprimir actualizaciones visuales de track-devices durante la operación.
-                    // adb tcpip reinicia el daemon del dispositivo → desconexión USB transitoria →
-                    // track-devices dispara OnDispositivoCambio(false) que sin este guard haría
-                    // parpadear el indicador en rojo y mostraría toasts fuera de contexto.
+                    // Suprimo track-devices durante toda la operación porque adb tcpip
+                    // reinicia el daemon y dispara una desconexión transitoria que haría
+                    // parpadear el indicador en rojo y lanzar toasts fuera de contexto
                     _operacionWifiEnCurso = true;
                     try
                     {
@@ -702,9 +698,9 @@ namespace MobiladorStex
                             _puertotcpActivo = true;
                             btnHabilitarPuerto.Text = "Puerto Habilitado"; btnHabilitarPuerto.Enabled = false;
                             btnCerrarPuerto.Enabled = true;
-                            // Detectar IP antes de habilitar "Conectar WiFi" para que el usuario
-                            // no pueda pulsar el botón con la IP vacía. El delay da tiempo al
-                            // daemon ADB del dispositivo para reiniciarse en modo TCP.
+                            // Detecto la IP antes de habilitar "Conectar WiFi" para que el usuario
+                            // no pulse el botón con la IP vacía. El delay da tiempo al daemon ADB
+                            // del dispositivo para reiniciarse en modo TCP.
                             lblWifiStatus.Text = "⏳ Detectando IP del dispositivo...";
                             await Task.Delay(1200);
                             if (IsDisposed) return;
@@ -721,7 +717,7 @@ namespace MobiladorStex
                                     "La IP se detecta automáticamente. Si no aparece, usa el botón morado (🔄) para detectarla.";
                             }
                             lblWifiStatus.ForeColor = AppTheme.Info;
-                            // Habilitamos "Conectar WiFi" solo cuando la detección de IP ya terminó
+                            // Habilito "Conectar WiFi" solo cuando la detección de IP terminó
                             btnConectarWifi.Enabled = true;
                         }
                         else
@@ -735,8 +731,7 @@ namespace MobiladorStex
                         _operacionWifiEnCurso = false;
                         if (!IsDisposed)
                         {
-                            // Sincronizar el indicador de dispositivo con el estado real que
-                            // track-devices pudo haber actualizado mientras estaba suprimido.
+                            // Sincronizo el indicador con el estado real que track-devices pudo haber actualizado mientras estaba suprimido
                             ActualizarIndicadorDispositivo(_hayDispositivo);
                             ActualizarBotonesScrcpy();
                         }
@@ -774,8 +769,7 @@ namespace MobiladorStex
                             lblWifiStatus.Text = $"🟢 Conectado a {_wifiIp}:{_wifiPuerto}"; lblWifiStatus.ForeColor = AppTheme.Success;
                             btnConectarWifi.Text = "Conectado"; btnConectarWifi.Enabled = false;
                             btnCerrarPuerto.Enabled = true;
-                            // Actualizar el estado ADB inmediatamente para que el label de la card
-                            // refleje la nueva conexión sin necesidad de cambiar de pestaña.
+                            // Actualizo el estado ADB inmediatamente para que el label refleje la conexión sin cambiar de pestaña
                             _ = ActualizarEstadoAdbAsync(lblAdbEstado);
                             MessageBox.Show(this,
                                 $"✓ El teléfono está conectado por WiFi ({_wifiIp}:{_wifiPuerto}).\n\n" +
@@ -827,8 +821,7 @@ namespace MobiladorStex
                             exito ? "✓ Puerto Cerrado" : "⚠ Advertencia",
                             MessageBoxButtons.OK,
                             exito ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
-                        // Si el toggle sigue activo, restaurar el flujo para que el usuario pueda
-                        // volver a habilitar el puerto sin tener que apagar y reactivar el toggle.
+                        // Si el toggle sigue activo, restauro el flujo para que pueda habilitar el puerto otra vez
                         if (togWifi.Checked && _hayDispositivo)
                         {
                             btnHabilitarPuerto.Enabled = true;
@@ -847,7 +840,7 @@ namespace MobiladorStex
                     }
                 };
 
-                // Indicador de sesión anterior — se construye antes del AddRange para incluirlo
+                // Indicador de sesión WiFi anterior — lo construyo antes del AddRange
                 Panel panelSesionWifi = null;
                 if (mostrarIndicadorWifi)
                 {

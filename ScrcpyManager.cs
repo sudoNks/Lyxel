@@ -4,11 +4,10 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MobiladorStex
+namespace LyXel
 {
     public class ScrcpyConfig
     {
-        // ── Video ────────────────────────────────────────────────────
         public bool Video { get; set; } = true;
         public int Fps { get; set; } = 90;
         public int Bitrate { get; set; } = 32;
@@ -23,24 +22,20 @@ namespace MobiladorStex
         public bool WmSizeActivo { get; set; } = false;
         public string WmSizeValor { get; set; } = "";
 
-        // ── Encoder Avanzado ─────────────────────────────────────────
         public bool UseAdvancedEncoder { get; set; } = false;
         public string VideoEncoder { get; set; } = "";
 
-        // ── Audio ────────────────────────────────────────────────────
         public bool Audio { get; set; } = true;
         public bool AudioDoble { get; set; } = false;
         public int AudioBuffer { get; set; } = 50;
         public string AudioCodec { get; set; } = "opus";   // opus | aac | flac
         public int AudioBitrate { get; set; } = 128;       // Kbps (no aplica a raw)
 
-        // ── Comportamiento ───────────────────────────────────────────
         public bool DisableScreensaver { get; set; } = false;
         public bool StayAwake { get; set; } = false;
         public bool TurnScreenOff { get; set; } = false;
         public string ShortcutMod { get; set; } = "lalt";
 
-        // ── Pantalla ─────────────────────────────────────────────────
         public bool Fullscreen { get; set; } = false;
         public string FullscreenCrop { get; set; } = "";
         public int ResolucionAncho { get; set; } = 1080;
@@ -50,16 +45,12 @@ namespace MobiladorStex
         public int CustomRatioH { get; set; } = 9;
         public int Dpi { get; set; } = 420;
 
-        // ── Entrada (teclado + mouse juntos) ─────────────────────────
-        // sdk  = inyección API Android (default, más compatible)
-        // uhid = teclado/mouse HID físico vía kernel (recomendado)
-        // aoa  = HID físico vía protocolo AOA (solo USB)
+        // sdk = API Android (más compatible), uhid = HID físico vía kernel (lo recomiendo), aoa = HID via AOA (solo USB)
         public string InputMode { get; set; } = "uhid";
 
         // Velocidad del cursor Android (-7 a 7, 0 = default)
         public int PointerSpeed { get; set; } = 0;
 
-        // ── Conexión ─────────────────────────────────────────────────
         public bool ModoOtg { get; set; } = false;
         public string OtgSerial { get; set; } = "";
         public bool UsarWifi { get; set; } = false;
@@ -79,18 +70,10 @@ namespace MobiladorStex
             _adbPath = adbPath;
         }
 
-        // ══════════════════════════════════════════════════════════════
-        // ESTADO
-        // ══════════════════════════════════════════════════════════════
-
         public bool EstaCorriendo
         {
             get { var p = _proceso; return p != null && !p.HasExited; }
         }
-
-        // ══════════════════════════════════════════════════════════════
-        // LANZAR
-        // ══════════════════════════════════════════════════════════════
 
         public bool Lanzar(ScrcpyConfig config)
         {
@@ -100,7 +83,6 @@ namespace MobiladorStex
             if (!string.IsNullOrEmpty(config.ShortcutMod))
                 cmd.Add($"--shortcut-mod={config.ShortcutMod}");
 
-            // ── MODO OTG ─────────────────────────────────────────────
             if (config.ModoOtg)
             {
                 cmd.Add("--otg");
@@ -109,11 +91,10 @@ namespace MobiladorStex
                 else
                     cmd.Add("-d");
                 if (config.DisableScreensaver) cmd.Add("--disable-screensaver");
-                cmd.AddRange(new[] { "--window-title", "Mobilador_SteX_OTG" });
+                cmd.AddRange(new[] { "--window-title", "LyXel_OTG" });
                 return LanzarProceso(cmd, config);
             }
 
-            // ── WIFI ─────────────────────────────────────────────────
             if (config.UsarWifi)
             {
                 if (string.IsNullOrEmpty(config.WifiIp))
@@ -121,11 +102,9 @@ namespace MobiladorStex
                 cmd.Add($"--tcpip={config.WifiIp}:{config.WifiPuerto}");
             }
 
-            // ── TÍTULO DE VENTANA ────────────────────────────────────
             cmd.AddRange(new[] { "--window-title",
-                config.UsarWifi ? "Mobilador_SteX_WiFi" : "Mobilador_SteX" });
+                config.UsarWifi ? "LyXel_WiFi" : "LyXel" });
 
-            // ── VIDEO ─────────────────────────────────────────────────
             if (!config.Video)
             {
                 cmd.Add("--no-video");
@@ -172,7 +151,6 @@ namespace MobiladorStex
                     cmd.Add("--print-fps");
             }
 
-            // ── AUDIO ─────────────────────────────────────────────────
             if (!config.Audio)
             {
                 cmd.Add("--no-audio");
@@ -193,7 +171,6 @@ namespace MobiladorStex
                     cmd.Add($"--audio-bit-rate={config.AudioBitrate}K");
             }
 
-            // ── INPUT ─────────────────────────────────────────────────
             if (!config.ModoOtg)
             {
                 string mode = config.InputMode switch

@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MobiladorStex
+namespace LyXel
 {
     public class ADBManager
     {
@@ -18,10 +18,6 @@ namespace MobiladorStex
         {
             _adbPath = adbPath;
         }
-
-        // ══════════════════════════════════════════════════════════════
-        // CORE — Ejecutar comando ADB
-        // ══════════════════════════════════════════════════════════════
 
         private (bool exito, string stdout, string stderr) EjecutarComando(
             List<string> args, int timeoutMs = 10000)
@@ -62,10 +58,6 @@ namespace MobiladorStex
                 return (false, "", stderr);
             }
         }
-
-        // ══════════════════════════════════════════════════════════════
-        // RESOLUCIÓN
-        // ══════════════════════════════════════════════════════════════
 
         public (bool exito, int ancho, int alto, string mensaje) DetectarResolucion()
         {
@@ -140,10 +132,6 @@ namespace MobiladorStex
             catch { return false; }
         }
 
-        // ══════════════════════════════════════════════════════════════
-        // DPI
-        // ══════════════════════════════════════════════════════════════
-
         public (bool exito, int dpi, string mensaje) DetectarDPI()
         {
             var (exito, stdout, stderr) = EjecutarComando(
@@ -195,10 +183,6 @@ namespace MobiladorStex
                 : (false, "Error reseteando DPI", stderr);
         }
 
-        // ══════════════════════════════════════════════════════════════
-        // DISPOSITIVOS
-        // ══════════════════════════════════════════════════════════════
-
         public (bool exito, List<string> seriales, string output) ListarDispositivos()
         {
             var (exito, stdout, stderr) = EjecutarComando(new List<string> { "devices" });
@@ -222,7 +206,7 @@ namespace MobiladorStex
             return (true, seriales, stdout);
         }
 
-        // Devuelve (serial, modelo) via "adb devices -l"; offline/unauthorized tienen modelo vacío.
+        // El serial vacío en offline/unauthorized no es un bug, es lo que devuelve ADB
         public List<(string serial, string modelo)> ListarDispositivosDetallado()
         {
             var (exito, stdout, _) = EjecutarComando(new List<string> { "devices", "-l" }, 5000);
@@ -249,7 +233,7 @@ namespace MobiladorStex
         {
             try
             {
-                // Matar procesos ADB en Windows
+                // En Windows tengo que matar el proceso manualmente, de lo contrario el puerto queda ocupado
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     Process.Start(new ProcessStartInfo
@@ -278,10 +262,6 @@ namespace MobiladorStex
                 return (false, $"Error crítico al reiniciar ADB: {ex.Message}");
             }
         }
-
-        // ══════════════════════════════════════════════════════════════
-        // WIFI
-        // ══════════════════════════════════════════════════════════════
 
         public (bool exito, string mensaje, string error) HabilitarTcpip(int puerto = 5555)
         {
@@ -445,10 +425,6 @@ namespace MobiladorStex
             }
         }
 
-        // ══════════════════════════════════════════════════════════════
-        // ASYNC — Versiones Task para uso en UI sin bloquear
-        // ══════════════════════════════════════════════════════════════
-
         public Task<(bool, int, int, string)> DetectarResolucionAsync() =>
             Task.Run(() => DetectarResolucion());
 
@@ -496,24 +472,16 @@ namespace MobiladorStex
                 return (e, ip, m);
             });
 
-        // ══════════════════════════════════════════════════════════════
-        // TRACK DEVICES — detección event-driven sin polling
-        // ══════════════════════════════════════════════════════════════
-
-        // Disparado en hilo background — usar Invoke en la UI
+        // Este evento viene de un hilo background, acordarme de usar Invoke en la UI
         public event Action<bool>? OnDispositivoCambio;
 
-        // Solo dispositivos USB (serial sin ':'), no afectado por WiFi
+        // Solo USB — el serial WiFi tiene ':' así que es fácil distinguirlos
         public event Action<bool>? OnDispositivoUsbCambio;
 
         private System.Diagnostics.Process? _trackProcess;
         private volatile bool _ultimoEstadoDispositivo = false;
         private volatile bool _ultimoEstadoDispositivoUsb = false;
         private volatile bool _trackActivo = false;
-
-        // ══════════════════════════════════════════════════════════════
-        // POINTER SPEED — velocidad del cursor del mouse en Android
-        // ══════════════════════════════════════════════════════════════
 
         public (bool exito, string error) AplicarPointerSpeed(int speed)
         {
@@ -558,7 +526,7 @@ namespace MobiladorStex
 
             try
             {
-                // Matar procesos adb de nuestra carpeta que kill-server no cerró
+                // kill-server no siempre cierra todos los procesos, mato los que son de nuestra carpeta
                 string carpetaAdb = Path.GetDirectoryName(_adbPath) ?? "";
                 foreach (var proceso in System.Diagnostics.Process.GetProcessesByName("adb"))
                 {
@@ -605,7 +573,7 @@ namespace MobiladorStex
                         _trackProcess = new System.Diagnostics.Process { StartInfo = startInfo };
                         _trackProcess.Start();
 
-                        var proceso = _trackProcess; // referencia local para evitar condición de carrera
+                        var proceso = _trackProcess; // referencia local para no tener race condition si _trackProcess se nulea
 
                         while (_trackActivo)
                         {

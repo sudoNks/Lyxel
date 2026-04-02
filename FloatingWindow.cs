@@ -4,11 +4,11 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace MobiladorStex
+namespace LyXel
 {
     public class FloatingWindow : Form
     {
-        // ── WinAPI ────────────────────────────────────────────────────
+        // WinAPI para arrastre nativo y detección de fullscreen
         [DllImport("user32.dll")]
         private static extern IntPtr GetForegroundWindow();
 
@@ -27,7 +27,7 @@ namespace MobiladorStex
         [StructLayout(LayoutKind.Sequential)]
         private struct RECT { public int Left, Top, Right, Bottom; }
 
-        // Arrastre nativo — funciona sobre cualquier control hijo
+        // El arrastre nativo de Windows funciona mejor que el manual, lo propago a todos los hijos
         private void IniciarArrastre()
         {
             ReleaseCapture();
@@ -45,7 +45,7 @@ namespace MobiladorStex
                 && rect.Bottom >= screen.Height;
         }
 
-        // ── Campos ────────────────────────────────────────────────────
+        // Campos de la ventana flotante
         private ScrcpyManager _scrcpyManager;
         private Action _onDetener;
         private Action _onMostrarApp;
@@ -67,19 +67,19 @@ namespace MobiladorStex
             BuildUI(infoText);
             IniciarTimer();
 
-            // Suscribirse al evento solo si PrintFps está activo
+            // Me suscribo al evento de FPS solo si el usuario activó PrintFps
             if (_printFps)
             {
                 _fpsHandler = fps =>
                 {
-                    // El evento viene de un hilo de fondo — Invoke para tocar la UI
+                    // El evento viene de un hilo de fondo — necesito Invoke para tocar la UI
                     if (_lblFps == null || _lblFps.IsDisposed) return;
                     try
                     {
                         if (_lblFps.IsHandleCreated)
                             _lblFps.Invoke(() => _lblFps.Text = $"● {fps}");
                     }
-                    catch { /* ventana cerrada */ }
+                    catch { /* la ventana ya se cerró, ignoro */ }
                 };
                 _scrcpyManager.OnFpsUpdate += _fpsHandler;
             }
@@ -95,7 +95,7 @@ namespace MobiladorStex
             this.Opacity = 0.92;
             this.ShowInTaskbar = false;
 
-            // Altura: 130 base + 28 extra si hay FPS
+            // Si PrintFps está activo agrego espacio arriba para el contador
             int alturaExtra = _printFps ? S(28) : 0;
             this.Size = new Size(S(220), S(130) + alturaExtra);
 
@@ -104,11 +104,10 @@ namespace MobiladorStex
                 screen.Right - this.Width - S(24),
                 screen.Bottom / 2 - this.Height / 2);
 
-            // ── Arrastre nativo vía WinAPI ────────────────────────────
+            // Arrastre nativo vía WinAPI en el fondo de la ventana
             this.MouseDown += (s, e) => { if (e.Button == MouseButtons.Left) IniciarArrastre(); };
 
-            // ── Label FPS (visible solo si PrintFps activo) ───────────
-            // Se muestra en la parte superior con color verde brillante
+            // Label de FPS en la parte superior, solo si PrintFps está activo
             if (_printFps)
             {
                 _lblFps = new Label()
@@ -125,7 +124,7 @@ namespace MobiladorStex
                 _lblFps.MouseDown += (s, e) => { if (e.Button == MouseButtons.Left) IniciarArrastre(); };
             }
 
-            // Offset vertical: si hay FPS el resto baja 28px
+            // Si hay FPS arriba, bajo el resto del contenido 28px
             int oy = _printFps ? S(28) : 0;
 
             var lblTitulo = new Label()
@@ -199,7 +198,7 @@ namespace MobiladorStex
                 this.Hide();
             };
 
-            // Propagar arrastre a controles estáticos
+            // Propago el arrastre a los controles estáticos para que toda la ventana sea arrastrable
             foreach (Control c in new Control[] { lblTitulo, lblInfo, linea })
                 c.MouseDown += (s, e) => { if (e.Button == MouseButtons.Left) IniciarArrastre(); };
 
@@ -214,7 +213,7 @@ namespace MobiladorStex
             _timerEstado = new System.Windows.Forms.Timer { Interval = 500 };
             _timerEstado.Tick += (s, e) =>
             {
-                // Si scrcpy se cerró externamente
+                // Si el usuario cerró scrcpy por su cuenta, cierro la flotante también
                 if (!_scrcpyManager.EstaCorriendo)
                 {
                     _timerEstado.Stop();
@@ -223,7 +222,7 @@ namespace MobiladorStex
                     return;
                 }
 
-                // Ocultar en fullscreen, mostrar al salir
+                // Me oculto cuando scrcpy está en fullscreen y vuelvo a aparecer al salir
                 if (EstaEnFullscreen())
                 {
                     if (this.Visible) this.Hide();
@@ -248,7 +247,7 @@ namespace MobiladorStex
             base.OnFormClosed(e);
         }
 
-        // Borde sutil
+        // Borde sutil para que la ventana no flote sin contorno
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);

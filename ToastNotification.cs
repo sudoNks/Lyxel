@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace MobiladorStex
+namespace LyXel
 {
     /// <summary>
     /// Notificación flotante reutilizable que aparece en la esquina inferior derecha
@@ -18,7 +18,7 @@ namespace MobiladorStex
 
         private int S(int px) => (int)Math.Round(px * this.DeviceDpi / 96.0);
 
-        // ── Constructor privado — usar el método estático Mostrar ─────
+        // Constructor privado — hay que usar el método estático Mostrar, no instanciar directo
         private ToastNotification(string mensaje, ToastTipo tipo, int duracionMs)
         {
             _duracionMs = duracionMs;
@@ -26,11 +26,7 @@ namespace MobiladorStex
             IniciarFade();
         }
 
-        // ══════════════════════════════════════════════════════════════
-        // API PÚBLICA
-        // ══════════════════════════════════════════════════════════════
-
-        // Toast activo actual — solo uno a la vez
+        // Solo muestro un toast a la vez, si hay uno activo lo cierro primero
         private static ToastNotification? _toastActivo;
 
         /// <summary>
@@ -70,9 +66,6 @@ namespace MobiladorStex
             toast.Show(owner);
         }
 
-        // ══════════════════════════════════════════════════════════════
-        // UI
-        // ══════════════════════════════════════════════════════════════
 
         private void BuildUI(string mensaje, ToastTipo tipo)
         {
@@ -84,13 +77,13 @@ namespace MobiladorStex
             this.BackColor = ObtenerColorFondo(tipo);
             this.Size = new Size(S(400), 0); // altura dinámica
 
-            // Geometría explícita: icono con ancho fijo, mensaje deriva del icono
+            // Ancho del ícono fijo para que quede bien a cualquier DPI, el mensaje arranca después
             int iconLeft  = S(12);
             int iconWidth = S(24); // fijo: suficiente para cualquier carácter a cualquier DPI
             int msgLeft   = iconLeft + iconWidth + S(4);
             int msgWidth  = this.Width - msgLeft - S(12);
 
-            // ── Icono ─────────────────────────────────────────────────
+            // Ícono del tipo de toast
             var lblIcono = new Label()
             {
                 Text      = ObtenerIcono(tipo),
@@ -103,7 +96,7 @@ namespace MobiladorStex
                 TextAlign = ContentAlignment.MiddleCenter
             };
 
-            // ── Mensaje ───────────────────────────────────────────────
+            // Label del mensaje
             var lblMensaje = new Label()
             {
                 Text      = mensaje,
@@ -115,8 +108,7 @@ namespace MobiladorStex
                 AutoSize  = false
             };
 
-            // Calcular altura necesaria para el texto
-            // MeasureString devuelve píxeles ya DPI-aware — no aplicar S()
+            // MeasureString ya devuelve píxeles DPI-aware, no aplico S() aquí
             using var g = Graphics.FromHwnd(IntPtr.Zero);
             var size = g.MeasureString(mensaje, lblMensaje.Font,
                 new SizeF(msgWidth, 200));
@@ -129,7 +121,7 @@ namespace MobiladorStex
             lblIcono.Height  = alturaTotal; // MiddleCenter se ocupa del centrado vertical
             lblMensaje.Top   = (alturaTotal - lblMensaje.Height) / 2;
 
-            // ── Barra de color izquierda ──────────────────────────────
+            // Barra de color izquierda según el tipo
             var barraIzq = new Panel()
             {
                 Left      = 0,
@@ -141,7 +133,7 @@ namespace MobiladorStex
 
             this.Controls.AddRange(new Control[] { barraIzq, lblIcono, lblMensaje });
 
-            // Borde sutil
+            // Borde muy sutil para que no flote en el aire
             this.Paint += (s, e) =>
             {
                 using var pen = new Pen(AppTheme.WhiteBorderPen, 1);
@@ -151,7 +143,7 @@ namespace MobiladorStex
 
         private void IniciarFade()
         {
-            // Esperar duracionMs y luego hacer fade out
+            // Espero la duración configurada y después hago fade out gradual
             int pasoFade = 50;   // ms entre cada paso
             int pasoOpac = 5;    // reducción de opacidad por paso (0-100)
             int ticksEspera = _duracionMs / pasoFade;
@@ -164,9 +156,9 @@ namespace MobiladorStex
                 tickActual++;
 
                 if (tickActual < ticksEspera)
-                    return; // esperar antes de empezar fade
+                    return; // todavía en el tiempo de espera, aún no animar
 
-                // Fade out
+                // Reducir opacidad hasta cero y cerrar
                 double nuevaOpac = this.Opacity - (opacInicial / (1000.0 / pasoFade));
                 if (nuevaOpac <= 0 || this.IsDisposed)
                 {
@@ -181,7 +173,7 @@ namespace MobiladorStex
 
         private static void PosicionarSobreOwner(ToastNotification toast, Form owner)
         {
-            // Esquina inferior derecha del owner, con margen escalado por DPI
+            // Lo pongo en la esquina inferior derecha, escalado por DPI para que quede bien en monitores 4K
             float scale = owner.DeviceDpi / 96f;
             int margen = (int)(16 * scale);
             int margenBottom = (int)(40 * scale);
@@ -190,9 +182,7 @@ namespace MobiladorStex
             toast.Location = new Point(x, y);
         }
 
-        // ══════════════════════════════════════════════════════════════
-        // HELPERS DE COLOR E ICONO
-        // ══════════════════════════════════════════════════════════════
+        // Helpers de color e ícono según el tipo de toast
 
         private static Color ObtenerColorFondo(ToastTipo tipo) => tipo switch
         {
@@ -218,9 +208,7 @@ namespace MobiladorStex
             _ => "ℹ"
         };
 
-        // ══════════════════════════════════════════════════════════════
-        // LIMPIEZA
-        // ══════════════════════════════════════════════════════════════
+        // Limpieza del timer al cerrar
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
