@@ -373,14 +373,6 @@ namespace LyXel
             return (encoders, displayLabels);
         }
 
-        private void AgregarEncoder(List<string> lista, string encoder)
-        {
-            if (!string.IsNullOrWhiteSpace(encoder)
-                && encoder.Contains(".")
-                && !lista.Contains(encoder))
-                lista.Add(encoder);
-        }
-
         // ══════════════════════════════════════════════════════════════
         // ASYNC HELPERS
         // ══════════════════════════════════════════════════════════════

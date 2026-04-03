@@ -90,12 +90,12 @@ namespace LyXel
             cardHeader.Controls.AddRange(new Control[]
             {
                 picBox,
-                new Label() { Text = "Edición especial", Font = new Font("Segoe UI", 7.5f), ForeColor = textSecondary, Left = S(24), Top = S(14), AutoSize = true },
+                new Label() { Text = "Edición principal", Font = new Font("Segoe UI", 7.5f), ForeColor = textSecondary, Left = S(24), Top = S(14), AutoSize = true },
                 new Label() { Text = "LyXel", Font = new Font("Segoe UI", 13f, FontStyle.Bold), ForeColor = textPrimary, Left = S(24), Top = S(30), AutoSize = true },
-                new Label() { Text = $"Dreadnought Patch — {ObtenerVersionApp()}", Font = new Font("Segoe UI", 9.5f), ForeColor = accentColor, Left = S(24), Top = S(60), AutoSize = true },
+                new Label() { Text = $"LyXel Build — {ObtenerVersionApp()}", Font = new Font("Segoe UI", 9.5f), ForeColor = accentColor, Left = S(24), Top = S(60), AutoSize = true },
                 new Label() { Text = "Desarrollado por Dario (@nks_array)", Font = new Font("Segoe UI", 9f), ForeColor = textSecondary, Left = S(24), Top = S(84), AutoSize = true },
-                new Label() { Text = "\"No controlas el teléfono. Controlas la distancia.\"", Font = new Font("Segoe UI", 9f, FontStyle.Italic), ForeColor = purpleLight, Left = S(24), Top = S(107), Width = cardHeader.Width - S(158), AutoSize = false, Height = S(20), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
-                new Label() { Text = "Versión insignia de la comunidad Free Fire PC.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = S(24), Top = S(132), AutoSize = true },
+                new Label() { Text = "\"Eliminando a todos los que supieran la historia, según ellos, mejor para el mundo que no haya memoria.\"", Font = new Font("Segoe UI", 9f, FontStyle.Italic), ForeColor = purpleLight, Left = S(24), Top = S(107), Width = cardHeader.Width - S(158), AutoSize = false, Height = S(20), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
+                new Label() { Text = "Versión principal del launcher.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = S(24), Top = S(132), AutoSize = true },
                 // Fila de 4 botones sociales, cada uno separado S(12) del anterior
                 BtnOutline("  TikTok",   S(24),  S(172), S(118), "https://www.tiktok.com/@nks_array", IconMap.TikTok),
                 BtnOutline("  Discord",  S(154), S(172), S(118), "https://discord.gg/CU5quVNyun",     IconMap.Discord),
@@ -108,13 +108,10 @@ namespace LyXel
             int cardW = contentPanel.Width - S(60);
             int lblMaxW = cardW - S(48);
             string proyectoText =
-                "LyXel nació de un uso personal — una herramienta para llevar la experiencia " +
-                "móvil a PC con la mayor fluidez y calidad posible, enfocada en usuarios que buscan " +
-                "control, precisión y estabilidad.\n\n" +
-                "Al ser un proyecto personal, puede presentar errores. Cualquier feedback es bienvenido " +
-                "y ayuda a mejorar la herramienta para toda la comunidad.\n\n" +
-                "Esta edición especial reorganiza la identidad visual del launcher, inspirada en " +
-                "Morrigan — una estética más distintiva que se convierte en el emblema de la herramienta.";
+                "LyXel es una herramienta desarrollada para simplificar y mejorar la experiencia de usar scrcpy en PC, permitiendo conectar el teléfono y utilizar periféricos como teclado y mouse de forma más cómoda y controlada.\n" +
+                "Está orientada principalmente al ámbito gaming, integrando opciones que facilitan la personalización y adaptación según el dispositivo y las preferencias del usuario.\n" +
+                "El proyecto ha sido desarrollado de forma independiente, con enfoque en la funcionalidad, la estabilidad y la mejora continua, apoyándose en el uso real y el feedback de la comunidad.\n" +
+                "Actualmente, LyXel establece una identidad propia: una interfaz más limpia, consistente y neutral, dejando atrás elementos genéricos o referencias externas para consolidarse como una herramienta clara, reconocible y bien definida.";
             var proyectoFont = new Font("Segoe UI", 9f);
             int textH = TextRenderer.MeasureText(proyectoText, proyectoFont,
                 new Size(lblMaxW, int.MaxValue),
@@ -169,9 +166,9 @@ namespace LyXel
 
             var lblDescDescargas = new Label()
             {
-                Text = "Aquí encontrarás todas las versiones oficiales del launcher — desde las más recientes " +
-                       "hasta versiones anteriores. Siempre descarga desde fuentes oficiales para garantizar " +
-                       "seguridad y estabilidad.",
+                Text = "Aquí se encuentran todas las versiones oficiales del launcher, incluyendo las más recientes y versiones anteriores.\n" +
+                       "Se recomienda utilizar siempre la versión más reciente para evitar errores y contar con las últimas mejoras y funciones.\n" +
+                       "Descarga únicamente desde los enlaces oficiales para asegurar que obtienes la versión correcta, sin modificaciones ni intermediarios.",
                 Font = new Font("Segoe UI", 8.5f),
                 ForeColor = textPrimary,
                 Left = S(24),
@@ -204,9 +201,10 @@ namespace LyXel
             var cardCreditos = CreateCard("Créditos", S(30), cardDescargas.Bottom + S(15), S(168));
             var creditRows = new (string name, string license)[]
             {
-                ("scrcpy — Genymobile",        "Apache 2.0"),
-                ("Guna UI2 — Guna Systems",    "Librería WinForms"),
-                ("ini-parser — Ricardo Amores","MIT License"),
+                ("scrcpy (Genymobile)",        "Apache License 2.0"),
+                ("ADB (Android Debug Bridge)", "Google"),
+                ("Guna UI2",                   "Guna Systems"),
+                ("ini-parser",                 "MIT License"),
             };
             int rowTop = S(52);
             foreach (var (name, license) in creditRows)
@@ -239,23 +237,5 @@ namespace LyXel
             contentPanel.Controls.AddRange(new Control[] { cardHeader, cardProyecto, cardDescargas, cardCreditos });
         }
 
-        private Guna2Button CreateBtnSocial(string text, int left, int top, int width, Color fill, string url)
-        {
-            var btn = new Guna2Button()
-            {
-                Text = text,
-                Width = width,
-                Height = S(38),
-                Left = left,
-                Top = top,
-                Font = new Font("Segoe UI", 9.5f),
-                FillColor = fill,
-                ForeColor = Color.White,
-                BorderRadius = 6
-            };
-            btn.Click += (s, e) => System.Diagnostics.Process.Start(
-                new System.Diagnostics.ProcessStartInfo() { FileName = url, UseShellExecute = true });
-            return btn;
-        }
     }
 }

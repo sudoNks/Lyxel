@@ -268,7 +268,7 @@ namespace LyXel
                 btnToggle.Enabled = true;
                 _sidebarAnimating = false;
             }
-            catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"ToggleSidebar error: {ex.Message}"); }
+            catch { /* animación interrumpida — no requiere feedback al usuario */ }
         }
 
         private Label ObtenerLblAvisoHeader()

@@ -17,6 +17,11 @@ namespace LyXel
             if (string.IsNullOrEmpty(_perfilSeleccionado)) return;
             var cfg = perfilManager.ObtenerPerfil(_perfilSeleccionado);
             if (cfg != null) CargarPerfilEnApp(cfg);
+
+            if (!string.IsNullOrEmpty(PerfilManager.UltimoError))
+                ToastNotification.Mostrar(this,
+                    "El archivo de perfiles tuvo un problema al cargarse. Se usarán los valores por defecto.",
+                    ToastNotification.ToastTipo.Advertencia);
         }
 
         // Limpio conexiones WiFi residuales antes de la detección inicial para evitar
@@ -219,7 +224,7 @@ namespace LyXel
                 {
                     MessageBox.Show(
                         "No se pudo lanzar scrcpy.\n\nIntenta reconectar ADB e inténtalo de nuevo.",
-                        "Error al iniciar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        "Error al iniciar scrcpy", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 

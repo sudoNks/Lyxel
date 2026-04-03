@@ -54,6 +54,10 @@ namespace LyXel.Helpers
         public static Image? ImportExport => IconHelper.Get("ic_import_export");
         public static Image? Upload       => IconHelper.Get("ic_upload");
 
+        // Diálogos
+        public static Image? Done         => IconHelper.Get("ic_done");
+        public static Image? Redo         => IconHelper.Get("ic_redo");
+
         // Redes sociales
         public static Image? Discord      => IconHelper.Get("ic_discord");
         public static Image? TikTok       => IconHelper.Get("ic_tiktok");

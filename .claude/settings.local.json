@@ -27,7 +27,9 @@
       "Bash(cp \"C:/Users/Admin/Downloads/youtube.png\" \"C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_youtube.png\")",
       "Bash(cp \"C:/Users/Admin/Downloads/kofi.png\" \"C:/Users/Admin/source/repos/MobiladorStex/Assets/Icons/ic_kofi.png\")",
       "Bash(sed:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(cp \"C:\\\\Users\\\\Admin\\\\Downloads\\\\done_all_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png\" \"C:\\\\Users\\\\Admin\\\\source\\\\repos\\\\MobiladorStex\\\\Assets\\\\Icons\\\\ic_done.png\")",
+      "Bash(cp \"C:\\\\Users\\\\Admin\\\\Downloads\\\\redo_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png\" \"C:\\\\Users\\\\Admin\\\\source\\\\repos\\\\MobiladorStex\\\\Assets\\\\Icons\\\\ic_redo.png\")"
     ]
   }
 }

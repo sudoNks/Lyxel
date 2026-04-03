@@ -1,4 +1,5 @@
 ﻿using Guna.UI2.WinForms;
+using LyXel.Helpers;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -21,11 +22,19 @@ namespace LyXel
 
         private Guna2Button _btnContinuar;
         private CheckBox[]  _chkObligatorios;
+        private Color       _headerBg;
+        private Color       _btnEnabledColor;
+        private bool        _requireCheckbox;
 
         private int S(int px) => (int)Math.Round(px * this.DeviceDpi / 96.0);
 
-        public DialogoAvanzado(string titulo, string descripcion, string[] checks)
+        public DialogoAvanzado(string titulo, string descripcion, string[] checks,
+            Color? headerColor = null, Color? buttonColor = null, bool requireCheckbox = true)
         {
+            _headerBg        = headerColor ?? AppTheme.AccentDark;
+            _btnEnabledColor = buttonColor ?? AppTheme.Accent;
+            _requireCheckbox = requireCheckbox;
+
             this.Text            = "";
             this.FormBorderStyle = FormBorderStyle.None;
             this.StartPosition   = FormStartPosition.CenterParent;
@@ -44,7 +53,7 @@ namespace LyXel
             var pnlTitulo = new Panel()
             {
                 Left = 0, Top = 0, Width = this.Width, Height = S(48),
-                BackColor = AppTheme.AccentDark
+                BackColor = _headerBg
             };
             var lblTitulo = new Label()
             {
@@ -78,67 +87,78 @@ namespace LyXel
             var linea = new Panel()
             {
                 Left = S(20), Top = y, Width = this.Width - S(40), Height = 1,
-                BackColor = AppTheme.AccentDark
+                BackColor = _headerBg
             };
             this.Controls.Add(linea);
             y += S(12);
 
-            // Checkboxes que el usuario debe marcar todos para poder continuar
-            var lblPara = new Label()
+            if (_requireCheckbox)
             {
-                Text = "Para continuar, confirma que entiendes lo siguiente:",
-                Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
-                ForeColor = TEXTO, Left = S(20), Top = y, AutoSize = true
-            };
-            this.Controls.Add(lblPara);
-            y += S(24);
-
-            _chkObligatorios = new CheckBox[checks.Length];
-            for (int i = 0; i < checks.Length; i++)
-            {
-                var chk = new CheckBox()
+                // Checkboxes que el usuario debe marcar todos para poder continuar
+                var lblPara = new Label()
                 {
-                    Text      = checks[i],
-                    Font      = new Font("Segoe UI", 9f),
-                    ForeColor = TEXTO,
-                    BackColor = Color.Transparent,
-                    Left      = S(20), Top = y,
-                    Width     = this.Width - S(40),
-                    AutoSize  = false, Height = S(36)
+                    Text = "Para continuar, confirma que entiendes lo siguiente:",
+                    Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
+                    ForeColor = TEXTO, Left = S(20), Top = y, AutoSize = true
                 };
-                chk.CheckedChanged += (s, e) => ActualizarBoton();
-                this.Controls.Add(chk);
-                _chkObligatorios[i] = chk;
-                y += S(38);
+                this.Controls.Add(lblPara);
+                y += S(24);
+
+                _chkObligatorios = new CheckBox[checks.Length];
+                for (int i = 0; i < checks.Length; i++)
+                {
+                    var chk = new CheckBox()
+                    {
+                        Text      = checks[i],
+                        Font      = new Font("Segoe UI", 9f),
+                        ForeColor = TEXTO,
+                        BackColor = Color.Transparent,
+                        Left      = S(20), Top = y,
+                        Width     = this.Width - S(40),
+                        AutoSize  = false, Height = S(36)
+                    };
+                    chk.CheckedChanged += (s, e) => ActualizarBoton();
+                    this.Controls.Add(chk);
+                    _chkObligatorios[i] = chk;
+                    y += S(38);
+                }
+
+                y += S(8);
+
+                // Checkbox opcional para no volver a mostrar
+                var chkNoMostrar = new CheckBox()
+                {
+                    Text      = "No volver a mostrar este mensaje",
+                    Font      = new Font("Segoe UI", 8.5f),
+                    ForeColor = SECUNDARIO,
+                    BackColor = Color.Transparent,
+                    Left = S(20), Top = y, AutoSize = true
+                };
+                chkNoMostrar.CheckedChanged += (s, e) =>
+                    NoVolverMostrar = chkNoMostrar.Checked;
+                this.Controls.Add(chkNoMostrar);
+                y += S(32);
             }
-
-            y += S(8);
-
-            // Checkbox opcional para no volver a mostrar
-            var chkNoMostrar = new CheckBox()
+            else
             {
-                Text      = "No volver a mostrar este mensaje",
-                Font      = new Font("Segoe UI", 8.5f),
-                ForeColor = SECUNDARIO,
-                BackColor = Color.Transparent,
-                Left = S(20), Top = y, AutoSize = true
-            };
-            chkNoMostrar.CheckedChanged += (s, e) =>
-                NoVolverMostrar = chkNoMostrar.Checked;
-            this.Controls.Add(chkNoMostrar);
-            y += S(32);
+                _chkObligatorios = Array.Empty<CheckBox>();
+                y += S(8);
+            }
 
             // Botones de acción
             y += S(8);
             var btnCancelar = new Guna2Button()
             {
-                Text = "Cancelar", Width = S(110), Height = S(36),
+                Text = "  Cancelar", Width = S(110), Height = S(36),
                 Left = this.Width - S(244), Top = y,
                 Font = new Font("Segoe UI", 9f),
                 FillColor = AppTheme.BtnSecondary,
                 ForeColor = SECUNDARIO,
                 BorderColor = AppTheme.BorderSecondary,
-                BorderThickness = 1, BorderRadius = 6
+                BorderThickness = 1, BorderRadius = 6,
+                Image = IconMap.Redo,
+                ImageSize = new Size(S(18), S(18)),
+                ImageAlign = HorizontalAlignment.Left
             };
             btnCancelar.Click += (s, e) =>
             {
@@ -149,12 +169,15 @@ namespace LyXel
 
             _btnContinuar = new Guna2Button()
             {
-                Text = "Continuar →", Width = S(120), Height = S(36),
+                Text = "  Continuar", Width = S(120), Height = S(36),
                 Left = this.Width - S(130), Top = y,
                 Font = new Font("Segoe UI", 9f, FontStyle.Bold),
-                FillColor = AppTheme.BtnDisabled, // deshabilitado inicialmente
-                ForeColor = AppTheme.TextDisabled,
-                BorderRadius = 6, Enabled = false
+                FillColor = _requireCheckbox ? AppTheme.BtnDisabled : _btnEnabledColor,
+                ForeColor = _requireCheckbox ? AppTheme.TextDisabled : AppTheme.TextPrimary,
+                BorderRadius = 6, Enabled = !_requireCheckbox,
+                Image = IconMap.Done,
+                ImageSize = new Size(S(18), S(18)),
+                ImageAlign = HorizontalAlignment.Left
             };
             _btnContinuar.Click += (s, e) =>
             {
@@ -170,7 +193,7 @@ namespace LyXel
             // Borde sutil pintado a mano en OnPaint
             this.Paint += (s, e) =>
             {
-                using var pen = new System.Drawing.Pen(AppTheme.AccentDark, 1);
+                using var pen = new System.Drawing.Pen(_headerBg, 1);
                 e.Graphics.DrawRectangle(pen, 0, 0, this.Width - 1, this.Height - 1);
             };
 
@@ -193,7 +216,7 @@ namespace LyXel
                 if (!chk.Checked) { todos = false; break; }
 
             _btnContinuar.Enabled   = todos;
-            _btnContinuar.FillColor = todos ? AppTheme.Accent : AppTheme.BtnDisabled;
+            _btnContinuar.FillColor = todos ? _btnEnabledColor : AppTheme.BtnDisabled;
             _btnContinuar.ForeColor = todos ? AppTheme.TextPrimary : AppTheme.TextDisabled;
         }
     }

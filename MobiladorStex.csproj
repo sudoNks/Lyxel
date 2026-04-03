@@ -27,6 +27,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="LogoApp.ico" />
+    <!-- Form1.AcercaDe.resx fue creado vacío por el IDE; excluirlo evita colisión de nombre con Form1.resx -->
+    <EmbeddedResource Remove="Form1.AcercaDe.resx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LogoApp.ico" />
@@ -85,5 +87,7 @@
     <EmbeddedResource Include="Assets\Icons\ic_youtube.png" />
     <EmbeddedResource Include="Assets\Icons\ic_kofi.png" />
     <EmbeddedResource Include="Assets\Icons\ic_clear.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_done.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_redo.png" />
   </ItemGroup>
 </Project>

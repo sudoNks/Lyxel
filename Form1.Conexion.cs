@@ -89,7 +89,7 @@ namespace LyXel
                     {
                         var (exito, cantidad, mensaje) = await adbManager.LimpiarConexionesWifiAsync(true);
                         if (!IsDisposed)
-                            MessageBox.Show(mensaje, exito ? "✓ Limpieza completada" : "Error", MessageBoxButtons.OK, exito ? MessageBoxIcon.Information : MessageBoxIcon.Error);
+                            MessageBox.Show(mensaje, exito ? "✓ Limpieza completada" : "Error al limpiar conexión WiFi", MessageBoxButtons.OK, exito ? MessageBoxIcon.Information : MessageBoxIcon.Error);
                     }
                     finally
                     {

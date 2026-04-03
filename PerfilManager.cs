@@ -12,6 +12,12 @@ namespace LyXel
         private IniData _data;
         private readonly FileIniDataParser _parser;
 
+        /// <summary>
+        /// Contiene el mensaje del último error ocurrido en CargarIni(), o null si no hubo error.
+        /// El llamador puede consultarlo tras construir la instancia.
+        /// </summary>
+        public static string? UltimoError { get; private set; }
+
         public PerfilManager(string perfilesPath)
         {
             _perfilesPath = perfilesPath;
@@ -23,6 +29,7 @@ namespace LyXel
 
         private IniData CargarIni()
         {
+            UltimoError = null;
             if (File.Exists(_perfilesPath))
             {
                 try
@@ -31,7 +38,7 @@ namespace LyXel
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error cargando perfiles: {ex.Message}");
+                    UltimoError = ex.Message;
                 }
             }
             return new IniData();

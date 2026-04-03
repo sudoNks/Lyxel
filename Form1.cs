@@ -318,7 +318,13 @@ namespace LyXel
                         _ultimaVelocidadCursor = uvc;
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"CargarConfigTema error: {ex.Message}");
+                ToastNotification.Mostrar(this,
+                    "No se pudo cargar la configuración guardada. Se usarán los valores por defecto.",
+                    ToastNotification.ToastTipo.Advertencia);
+            }
         }
 
         private void GuardarConfigTema()
@@ -503,14 +509,6 @@ namespace LyXel
                 MessageBox.Show($"No se pudo guardar:\n{error}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private string ObtenerTextoUltimoPerfil()
-        {
-            string perfil = !string.IsNullOrEmpty(_perfilSeleccionado) ? _perfilSeleccionado : "Sin perfil";
-            string modo = _modoOtg ? "OTG" : _usarWifi ? "WiFi"
-                          : (!_video && !_audio) ? "Control Only" : "USB";
-            return $"Perfil: {perfil}  |  {_fps} FPS  |  {_bitrate} Mb  |  {_videoCodec}  |  {modo}";
         }
 
         private void ActualizarChipsPerfil()

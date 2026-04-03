@@ -33,17 +33,6 @@ namespace LyXel
             return "";
         }
 
-        private string FormatearValoresPerfil(ScrcpyConfig cfg)
-        {
-            if (cfg == null) return "Sin datos";
-            return $"Video: {(cfg.Video ? "✓" : "✗")}  |  FPS: {cfg.Fps}  |  Bitrate: {cfg.Bitrate} Mb  |  Codec: {cfg.VideoCodec}\n" +
-                   $"Audio: {(cfg.Audio ? "✓" : "✗")}  |  Codec: {cfg.AudioCodec ?? "opus"}  |  Bitrate: {cfg.AudioBitrate} Kbps  |  Doble: {(cfg.AudioDoble ? "✓" : "✗")}\n" +
-                   $"Fullscreen: {(cfg.Fullscreen ? "✓" : "✗")}  |  Max Size: {cfg.MaxSize}  |  MOD: {cfg.ShortcutMod}\n" +
-                   $"WiFi: {(cfg.UsarWifi ? $"{cfg.WifiIp}:{cfg.WifiPuerto}" : "✗")}  |  OTG: {(cfg.ModoOtg ? "✓" : "✗")}\n" +
-                   $"Stay Awake: {(cfg.StayAwake ? "✓" : "✗")}  |  Screen Off: {(cfg.TurnScreenOff ? "✓" : "✗")}\n" +
-                   $"Input Mode: {(cfg.InputMode ?? "uhid").ToUpper()}";
-        }
-
         private void CargarPerfilEnApp(ScrcpyConfig cfg)
         {
             if (cfg == null) return;
@@ -95,7 +84,7 @@ namespace LyXel
             var (exito, error) = perfilManager.ExportarPerfil(nombre, dlg.FileName);
             MessageBox.Show(
                 exito ? $"Perfil '{nombre}' exportado correctamente." : $"Error al exportar:\n{error}",
-                exito ? "✓ Exportado" : "Error", MessageBoxButtons.OK,
+                exito ? "✓ Exportado" : "Error al exportar perfil", MessageBoxButtons.OK,
                 exito ? MessageBoxIcon.Information : MessageBoxIcon.Error);
         }
 
@@ -252,7 +241,7 @@ namespace LyXel
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
-                    MessageBox.Show($"Error:\n{error}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Error:\n{error}", "Error al importar perfil", MessageBoxButtons.OK, MessageBoxIcon.Error);
             };
 
             btnExportarLista.Click += (s, e) =>
@@ -494,11 +483,12 @@ namespace LyXel
 
             btnCargar.Click += (s, e) =>
             {
-                var confirm = MessageBox.Show(
-                    $"¿Cargar el perfil '{nombre}' en la app?\n\n" +
-                    "Esto reemplazará la configuración actual.",
-                    "Cargar Perfil", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (confirm != DialogResult.Yes) return;
+                using var dlg = new DialogoAvanzado(
+                    "Cargar Perfil",
+                    $"¿Cargar el perfil '{nombre}' en la app?\n\nEsto reemplazará la configuración actual.",
+                    Array.Empty<string>(),
+                    requireCheckbox: false);
+                if (dlg.ShowDialog(this) != DialogResult.OK) return;
                 CargarPerfilEnApp(perfil);
                 _perfilSeleccionado = nombre;
                 GuardarConfigTema();
@@ -547,10 +537,12 @@ namespace LyXel
 
             btnEliminar.Click += (s, e) =>
             {
-                var confirm = MessageBox.Show(
-                    $"¿Eliminar el perfil '{nombre}'?\n\nEsta acción no se puede deshacer.",
-                    "Eliminar Perfil", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                if (confirm != DialogResult.Yes) return;
+                using var dlg = new DialogoAvanzado(
+                    "Eliminar Perfil",
+                    $"¿Eliminar el perfil '{nombre}'?\n\nEsta acción es permanente y no se puede deshacer.",
+                    Array.Empty<string>(),
+                    requireCheckbox: false);
+                if (dlg.ShowDialog(this) != DialogResult.OK) return;
                 var (exito, error) = perfilManager.EliminarPerfil(nombre);
                 if (exito)
                 {

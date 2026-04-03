@@ -206,28 +206,6 @@ namespace LyXel
             return (true, seriales, stdout);
         }
 
-        // El serial vacío en offline/unauthorized no es un bug, es lo que devuelve ADB
-        public List<(string serial, string modelo)> ListarDispositivosDetallado()
-        {
-            var (exito, stdout, _) = EjecutarComando(new List<string> { "devices", "-l" }, 5000);
-            var resultado = new List<(string serial, string modelo)>();
-            if (!exito) return resultado;
-
-            foreach (var linea in stdout.Split('\n').Skip(1))
-            {
-                if (!linea.Contains('\t')) continue;
-                var serial = linea.Split('\t')[0].Trim();
-                if (string.IsNullOrEmpty(serial)) continue;
-
-                string modelo = "";
-                var m = Regex.Match(linea, @"model:(\S+)");
-                if (m.Success)
-                    modelo = m.Groups[1].Value.Replace('_', ' ').Trim();
-
-                resultado.Add((serial, modelo));
-            }
-            return resultado;
-        }
 
         public (bool exito, string mensaje) ReiniciarServidor()
         {
