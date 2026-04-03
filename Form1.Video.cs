@@ -62,6 +62,17 @@ namespace LyXel
                     lblFpsVal.Text = _fps.ToString();
                     if (!_cargandoPagina) MarcarCambiosSinGuardar();
                 };
+                trackFps.MouseWheel += (s, e) =>
+                {
+                    if (trackFps.ContainsFocus)
+                    {
+                        if (e is HandledMouseEventArgs he) he.Handled = true;
+                    }
+                    else
+                    {
+                        PropagateWheelToContent(e);
+                    }
+                };
 
                 var trackBitrate = new Guna2TrackBar()
                 {
@@ -92,6 +103,17 @@ namespace LyXel
                     _bitrate = trackBitrate.Value;
                     lblBitrateVal.Text = _bitrate.ToString();
                     if (!_cargandoPagina) MarcarCambiosSinGuardar();
+                };
+                trackBitrate.MouseWheel += (s, e) =>
+                {
+                    if (trackBitrate.ContainsFocus)
+                    {
+                        if (e is HandledMouseEventArgs he) he.Handled = true;
+                    }
+                    else
+                    {
+                        PropagateWheelToContent(e);
+                    }
                 };
 
                 var numMaxSize = CreateNumeric(S(160), S(265), S(120), 0, 4000, _maxSize, 100);

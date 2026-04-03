@@ -376,6 +376,13 @@ namespace LyXel
             else
                 btnIniciarScrcpy.Text = puedeIniciar ? "INICIAR SCRCPY" : "Sin dispositivo";
             btnDetenerScrcpy.Enabled = corriendo;
+
+            // Ajustar intervalo del timer: más frecuente mientras corre, más lento en espera
+            if (_timerScrcpy != null)
+            {
+                if (corriendo  && _timerScrcpy.Interval != 500)  _timerScrcpy.Interval = 500;
+                else if (!corriendo && _timerScrcpy.Interval != 2000) _timerScrcpy.Interval = 2000;
+            }
         }
 
         private void IniciarLoopEstadoScrcpy()
@@ -487,6 +494,7 @@ namespace LyXel
             InvokeSeguro(() =>
             {
                 ActualizarBotonesScrcpy();
+                ActualizarLabelOptAdvertencia();
                 if (!mostrarToast) return;
                 if (_hayDispositivo)
                     ToastNotification.Mostrar(this, "Dispositivo conectado", ToastNotification.ToastTipo.Exito, 2500);

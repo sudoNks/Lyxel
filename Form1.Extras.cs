@@ -302,6 +302,17 @@ namespace LyXel
                     _pointerSpeed = trackCursor.Value;
                     lblCursorValor.Text = _pointerSpeed == 0 ? "0 (default)" : _pointerSpeed.ToString("+0;-0");
                 };
+                trackCursor.MouseWheel += (s, e) =>
+                {
+                    if (trackCursor.ContainsFocus)
+                    {
+                        if (e is HandledMouseEventArgs he) he.Handled = true;
+                    }
+                    else
+                    {
+                        PropagateWheelToContent(e);
+                    }
+                };
 
                 btnAplicarCursor.Click += async (s, e) =>
                 {

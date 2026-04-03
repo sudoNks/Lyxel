@@ -159,15 +159,23 @@ namespace LyXel
                     e.SuppressKeyPress = true;
             };
 
-            // El scroll del mouse funciona solo si el control tiene el foco, para no interferir con el scroll de la página
-            this.MouseWheel += (s, e) =>
-            {
-                if (!this.ContainsFocus) return;
-                if (e.Delta > 0) Value += _increment;
-                else Value -= _increment;
-            };
+            // El scroll del mouse funciona solo si el control tiene el foco, para no interferir con el scroll de la página.
+            // Los handlers se registran también en los controles hijos porque WM_MOUSEWHEEL se despacha
+            // al control que está bajo el cursor, no al UserControl, cuando este tiene foco.
+            this.MouseWheel    += (s, e) => AjustarValorPorRueda(e);
+            _txtValue.MouseWheel += (s, e) => AjustarValorPorRueda(e);
+            _btnUp.MouseWheel    += (s, e) => AjustarValorPorRueda(e);
+            _btnDown.MouseWheel  += (s, e) => AjustarValorPorRueda(e);
 
             this.Controls.AddRange(new Control[] { _txtValue, _btnUp, _btnDown });
+        }
+
+        private void AjustarValorPorRueda(MouseEventArgs e)
+        {
+            if (!this.ContainsFocus) return; // ScrollFocusFilter ya redirige al panel cuando no hay foco
+            if (e.Delta > 0) Value += _increment;
+            else             Value -= _increment;
+            if (e is HandledMouseEventArgs he) he.Handled = true; // evita que el panel también haga scroll
         }
 
         private void ConfirmarTexto()

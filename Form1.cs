@@ -269,28 +269,32 @@ namespace LyXel
                 var data = parser.ReadFile(_configPath);
 
                 // Flags de avisos ya vistos por el usuario
-                if (data["Tema"].ContainsKey("aviso_adb_visto"))
-                    bool.TryParse(data["Tema"]["aviso_adb_visto"], out _avisoAdbVisto);
-                if (data["Tema"].ContainsKey("aviso_wmsize_visto"))
-                    bool.TryParse(data["Tema"]["aviso_wmsize_visto"], out _avisoWmSizeVisto);
+                var secTema = data.Sections.ContainsSection("Tema") ? data["Tema"] : null;
+                if (secTema != null)
+                {
+                    if (secTema.ContainsKey("aviso_adb_visto"))
+                        bool.TryParse(secTema["aviso_adb_visto"], out _avisoAdbVisto);
+                    if (secTema.ContainsKey("aviso_wmsize_visto"))
+                        bool.TryParse(secTema["aviso_wmsize_visto"], out _avisoWmSizeVisto);
+
+                    string ultimoPerfil = secTema.ContainsKey("ultimo_perfil") ? secTema["ultimo_perfil"] : "";
+                    if (!string.IsNullOrEmpty(ultimoPerfil))
+                    {
+                        _perfilSeleccionado = ultimoPerfil;
+                        var cfg = perfilManager?.ObtenerPerfil(ultimoPerfil);
+                        if (cfg != null) CargarPerfilEnApp(cfg);
+                    }
+                }
 
                 // Si la sesión anterior terminó con resolución modificada, marco para revertir al inicio
                 if (data.Sections.ContainsSection("Dispositivo") &&
                     data["Dispositivo"].ContainsKey("resolucion_pendiente_reset"))
                     bool.TryParse(data["Dispositivo"]["resolucion_pendiente_reset"], out _resolucionPendienteReset);
 
-                // Cargo el último perfil activo para que la app arranque con la misma config
-                string ultimoPerfil = data["Tema"]["ultimo_perfil"];
-                if (!string.IsNullOrEmpty(ultimoPerfil))
-                {
-                    _perfilSeleccionado = ultimoPerfil;
-                    var cfg = perfilManager?.ObtenerPerfil(ultimoPerfil);
-                    if (cfg != null) CargarPerfilEnApp(cfg);
-                }
-
                 // Los encoders detectados los persisto separados por '|', paralelos a los display labels
-                string encDet = data["Video"]["encoders_detectados"] ?? "";
-                string encLbl = data["Video"]["encoders_display_labels"] ?? "";
+                var secVideo = data.Sections.ContainsSection("Video") ? data["Video"] : null;
+                string encDet = secVideo?.ContainsKey("encoders_detectados") == true ? secVideo["encoders_detectados"] : "";
+                string encLbl = secVideo?.ContainsKey("encoders_display_labels") == true ? secVideo["encoders_display_labels"] : "";
 
                 _encodersDetectados = string.IsNullOrWhiteSpace(encDet)
                     ? new List<string>()
@@ -323,6 +327,15 @@ namespace LyXel
                 if (data.Sections.ContainsSection("optimizacion") &&
                     data["optimizacion"].ContainsKey("aceptado"))
                     bool.TryParse(data["optimizacion"]["aceptado"], out _optimizacionAceptada);
+
+                if (data.Sections.ContainsSection("optimizacion_estado"))
+                {
+                    foreach (var kv in data["optimizacion_estado"])
+                    {
+                        if (bool.TryParse(kv.Value, out bool val))
+                            _optimizacionEstado[kv.KeyName] = val;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -364,6 +377,10 @@ namespace LyXel
 
                 data.Sections.AddSection("optimizacion");
                 data["optimizacion"]["aceptado"] = _optimizacionAceptada.ToString().ToLower();
+
+                data.Sections.AddSection("optimizacion_estado");
+                foreach (var kvp in _optimizacionEstado)
+                    data["optimizacion_estado"][kvp.Key] = kvp.Value.ToString().ToLower();
 
                 parser.WriteFile(_configPath, data);
             }

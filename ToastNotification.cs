@@ -49,11 +49,15 @@ namespace LyXel
             // No mostrar si la app está minimizada, salvo forzar=true
             if (!forzar && owner.WindowState == FormWindowState.Minimized) return;
 
-            // Cerrar toast anterior si existe
+            // Cerrar toast anterior si existe — Hide() primero para que desaparezca de
+            // pantalla inmediatamente y no se superponga visualmente al nuevo toast
             if (_toastActivo != null && !_toastActivo.IsDisposed)
             {
-                _toastActivo.Close();
+                var anterior = _toastActivo;
                 _toastActivo = null;
+                anterior._timerFade?.Stop();
+                anterior.Hide();
+                anterior.Close();
             }
 
             var toast = new ToastNotification(mensaje, tipo, duracionMs);

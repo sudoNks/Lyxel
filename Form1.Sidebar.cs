@@ -357,5 +357,12 @@ namespace LyXel
             };
             return btn;
         }
+
+        private void PropagateWheelToContent(MouseEventArgs e)
+        {
+            int scrollAmount = -(e.Delta / 120) * SystemInformation.MouseWheelScrollLines * 40;
+            int newY = Math.Max(0, -contentPanel.AutoScrollPosition.Y + scrollAmount);
+            contentPanel.AutoScrollPosition = new System.Drawing.Point(-contentPanel.AutoScrollPosition.X, newY);
+        }
     }
 }

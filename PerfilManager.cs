@@ -30,18 +30,21 @@ namespace LyXel
         private IniData CargarIni()
         {
             UltimoError = null;
-            if (File.Exists(_perfilesPath))
+            if (!File.Exists(_perfilesPath)) return new IniData();
+            try
             {
-                try
-                {
+                var info = new FileInfo(_perfilesPath);
+                if (info.Length > 100 * 1024)
+                    // Archivo grande: delegar la lectura al ThreadPool para no saturar el hilo llamante
+                    return Task.Run(() => _parser.ReadFile(_perfilesPath)).GetAwaiter().GetResult();
+                else
                     return _parser.ReadFile(_perfilesPath);
-                }
-                catch (Exception ex)
-                {
-                    UltimoError = ex.Message;
-                }
             }
-            return new IniData();
+            catch (Exception ex)
+            {
+                UltimoError = ex.Message;
+                return new IniData();
+            }
         }
 
         private void GuardarIni()
