@@ -116,6 +116,8 @@ namespace LyXel
         private ListBox _lstPerfiles;
         private Panel _panelDetalle;
 
+        private bool _optimizacionAceptada = false;
+
         private string _configPath;
         private bool _sidebarAnimating = false;
         private bool _haysCambiosSinGuardar = false;
@@ -317,6 +319,10 @@ namespace LyXel
                     if (s.ContainsKey("ultima_velocidad_cursor") && int.TryParse(s["ultima_velocidad_cursor"], out int uvc))
                         _ultimaVelocidadCursor = uvc;
                 }
+
+                if (data.Sections.ContainsSection("optimizacion") &&
+                    data["optimizacion"].ContainsKey("aceptado"))
+                    bool.TryParse(data["optimizacion"]["aceptado"], out _optimizacionAceptada);
             }
             catch (Exception ex)
             {
@@ -355,6 +361,9 @@ namespace LyXel
                 data["Sesion"]["otg_serial"] = _otgSerial ?? "";
                 data["Sesion"]["ultimo_dpi_aplicado"] = _ultimoDpiAplicado > 0 ? _ultimoDpiAplicado.ToString() : "";
                 data["Sesion"]["ultima_velocidad_cursor"] = _ultimaVelocidadCursor != int.MinValue ? _ultimaVelocidadCursor.ToString() : "";
+
+                data.Sections.AddSection("optimizacion");
+                data["optimizacion"]["aceptado"] = _optimizacionAceptada.ToString().ToLower();
 
                 parser.WriteFile(_configPath, data);
             }

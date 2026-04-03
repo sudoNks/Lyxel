@@ -474,6 +474,16 @@ namespace LyXel
             Task.Run(() => AplicarPointerSpeed(speed));
 
         /// <summary>
+        /// Ejecuta un comando arbitrario en la shell del dispositivo.
+        /// Devuelve (exito, stdout, stderr). Usar para comandos de optimización y diagnóstico.
+        /// </summary>
+        public (bool exito, string stdout, string stderr) EjecutarShell(string comando)
+            => EjecutarComando(new List<string> { "shell", comando }, 15000);
+
+        public Task<(bool, string, string)> EjecutarShellAsync(string comando)
+            => Task.Run(() => EjecutarShell(comando));
+
+        /// <summary>
         /// Ordena al dispositivo salir del modo tcpip y volver a escuchar por USB.
         /// Mucho más rápido que kill-server + start-server para el cierre de la app.
         /// </summary>

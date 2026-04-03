@@ -89,5 +89,7 @@
     <EmbeddedResource Include="Assets\Icons\ic_clear.png" />
     <EmbeddedResource Include="Assets\Icons\ic_done.png" />
     <EmbeddedResource Include="Assets\Icons\ic_redo.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_bolt.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_history.png" />
   </ItemGroup>
 </Project>

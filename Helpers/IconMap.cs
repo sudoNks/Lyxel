@@ -57,6 +57,8 @@ namespace LyXel.Helpers
         // Diálogos
         public static Image? Done         => IconHelper.Get("ic_done");
         public static Image? Redo         => IconHelper.Get("ic_redo");
+        public static Image? Bolt         => IconHelper.Get("ic_bolt");
+        public static Image? History      => IconHelper.Get("ic_history");
 
         // Redes sociales
         public static Image? Discord      => IconHelper.Get("ic_discord");
