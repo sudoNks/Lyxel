@@ -9,8 +9,20 @@ namespace LyXel
 {
     public partial class Form1
     {
+        // Referencias a controles de la página Pantalla para actualización reactiva
+        private Label? _pantalla_lblDpiActual;
+        private Label? _pantalla_lblResAncho;
+        private Label? _pantalla_lblResAlto;
+        private StexNumericUpDown? _pantalla_numDpi;
+
         private void LoadPantallaPage()
         {
+            // Desuscribir handlers previos para evitar doble suscripción
+            adbManager.OnDispositivoConectado -= ActualizarPantallaConectado;
+            adbManager.OnDispositivoDesconectado -= ActualizarPantallaDesconectado;
+            adbManager.OnDpiActualizado -= ActualizarLabelDpi;
+            adbManager.OnResolucionActualizada -= ActualizarLabelResolucion;
+
             _cargandoPagina = true;
             try
             {
@@ -77,6 +89,7 @@ namespace LyXel
                     Top = S(60),
                     AutoSize = true
                 };
+                _pantalla_lblResAncho = lblResAncho;
                 var lblResAlto = new Label()
                 {
                     Text = _resolucionAlto.ToString(),
@@ -86,6 +99,7 @@ namespace LyXel
                     Top = S(60),
                     AutoSize = true
                 };
+                _pantalla_lblResAlto = lblResAlto;
 
                 var lblResStatus = new Label()
                 {
@@ -720,6 +734,7 @@ namespace LyXel
                     Top = S(56),
                     AutoSize = true
                 };
+                _pantalla_lblDpiActual = lblDpiActual;
 
                 var btnDetectarDpi = new Guna2Button()
                 {
@@ -736,6 +751,7 @@ namespace LyXel
                 btnDetectarDpi.Image = IconMap.Sync;
 
                 var numDpi = CreateNumeric(S(160), S(100), S(100), 120, 800, _dpi, 10);
+                _pantalla_numDpi = numDpi;
                 numDpi.ValueChanged += (s, e) => { _dpi = (int)numDpi.Value; };
                 numDpi.KeyDown += (s, e) =>
                 {
@@ -900,8 +916,63 @@ namespace LyXel
                 ActualizarEstados();
                 if (btnAplicarRes != null) btnAplicarRes.FillColor = AppTheme.BtnWarning;
 
+                // Suscribir eventos reactivos de dispositivo
+                adbManager.OnDispositivoConectado += ActualizarPantallaConectado;
+                adbManager.OnDispositivoDesconectado += ActualizarPantallaDesconectado;
+                adbManager.OnDpiActualizado += ActualizarLabelDpi;
+                adbManager.OnResolucionActualizada += ActualizarLabelResolucion;
             }
             finally { _cargandoPagina = false; }
+        }
+
+        private void ActualizarPantallaConectado(string serial)
+        {
+            InvokeSeguro(() =>
+            {
+                if (_pantalla_lblDpiActual == null || _pantalla_lblDpiActual.IsDisposed) return;
+                _pantalla_lblDpiActual.Text = "DPI actual: Detectando...";
+                _pantalla_lblDpiActual.ForeColor = textSecondary;
+            });
+            if (_pantalla_lblDpiActual != null && !_pantalla_lblDpiActual.IsDisposed &&
+                _pantalla_numDpi != null && !_pantalla_numDpi.IsDisposed)
+                _ = DetectarDpiAlCargarAsync(_pantalla_lblDpiActual, _pantalla_numDpi);
+        }
+
+        private void ActualizarPantallaDesconectado()
+        {
+            InvokeSeguro(() =>
+            {
+                if (_pantalla_lblDpiActual != null && !_pantalla_lblDpiActual.IsDisposed)
+                {
+                    _pantalla_lblDpiActual.Text = "DPI actual: Sin dispositivo";
+                    _pantalla_lblDpiActual.ForeColor = textSecondary;
+                }
+                if (_pantalla_lblResAncho != null && !_pantalla_lblResAncho.IsDisposed)
+                    _pantalla_lblResAncho.Text = "—";
+                if (_pantalla_lblResAlto != null && !_pantalla_lblResAlto.IsDisposed)
+                    _pantalla_lblResAlto.Text = "—";
+            });
+        }
+
+        private void ActualizarLabelDpi(int dpi)
+        {
+            InvokeSeguro(() =>
+            {
+                if (_pantalla_lblDpiActual == null || _pantalla_lblDpiActual.IsDisposed) return;
+                _pantalla_lblDpiActual.Text = $"DPI actual: {dpi}";
+                _pantalla_lblDpiActual.ForeColor = AppTheme.Success;
+            });
+        }
+
+        private void ActualizarLabelResolucion(int w, int h)
+        {
+            InvokeSeguro(() =>
+            {
+                if (_pantalla_lblResAncho != null && !_pantalla_lblResAncho.IsDisposed)
+                    _pantalla_lblResAncho.Text = w.ToString();
+                if (_pantalla_lblResAlto != null && !_pantalla_lblResAlto.IsDisposed)
+                    _pantalla_lblResAlto.Text = h.ToString();
+            });
         }
     }
 }

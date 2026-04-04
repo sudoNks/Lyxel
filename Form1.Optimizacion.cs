@@ -15,6 +15,8 @@ namespace LyXel
         private Dictionary<string, bool> _optimizacionEstado = new();
         // Referencia al label de advertencia; se actualiza cuando cambia _hayDispositivo
         private Label? _lblOptAdvertencia;
+        // Referencia al label "sin dispositivo" para actualización reactiva
+        private Label? _lblOptNoDispositivo;
 
         /// <summary>Muestra u oculta el label de advertencia según el estado de dispositivo y toggles.</summary>
         private void ActualizarLabelOptAdvertencia()
@@ -26,6 +28,10 @@ namespace LyXel
 
         private void LoadOptimizacionPage()
         {
+            // Desuscribir handlers previos para evitar doble suscripción
+            adbManager.OnDispositivoConectado -= ActualizarOptimizacionConectado;
+            adbManager.OnDispositivoDesconectado -= ActualizarOptimizacionDesconectado;
+
             // ── Guardia de aceptación ────────────────────────────────────────────
             if (!_optimizacionAceptada)
             {
@@ -504,6 +510,23 @@ namespace LyXel
             };
             cardY += S(36) + S(14);
 
+            // Label "sin dispositivo" — visible cuando no hay dispositivo conectado
+            var lblNoDispositivo = new Label()
+            {
+                Text = "⚠ No se detecta ningún dispositivo. Verifica la conexión USB y que la depuración USB esté activa.",
+                Font = new Font("Segoe UI", 9f),
+                ForeColor = AppTheme.WarningText,
+                Left = cardLeft,
+                Top = cardY,
+                Width = contentPanel.Width - cardLeft * 2,
+                Height = S(40),
+                TextAlign = ContentAlignment.MiddleLeft,
+                AutoSize = false,
+                Visible = !_hayDispositivo
+            };
+            _lblOptNoDispositivo = lblNoDispositivo;
+            cardY += S(40) + S(10);
+
             // ════════════════════════════════════════════════════════════════════
             // CARD 1 — Rendimiento General
             // toggles: Fixed, Animaciones, GameDriver, Blur, VSync, OpenGL = 6×rowH
@@ -870,7 +893,29 @@ namespace LyXel
                 });
 
             contentPanel.Controls.AddRange(
-                new Control[] { btnRevertirTodo, lblAdvertencia, card1, card2, card2b, card3, card4, card5, card6 });
+                new Control[] { btnRevertirTodo, lblAdvertencia, lblNoDispositivo, card1, card2, card2b, card3, card4, card5, card6 });
+
+            // Suscribir eventos reactivos de dispositivo
+            adbManager.OnDispositivoConectado += ActualizarOptimizacionConectado;
+            adbManager.OnDispositivoDesconectado += ActualizarOptimizacionDesconectado;
+        }
+
+        private void ActualizarOptimizacionConectado(string serial)
+        {
+            InvokeSeguro(() =>
+            {
+                if (_lblOptNoDispositivo == null || _lblOptNoDispositivo.IsDisposed) return;
+                _lblOptNoDispositivo.Visible = false;
+            });
+        }
+
+        private void ActualizarOptimizacionDesconectado()
+        {
+            InvokeSeguro(() =>
+            {
+                if (_lblOptNoDispositivo == null || _lblOptNoDispositivo.IsDisposed) return;
+                _lblOptNoDispositivo.Visible = true;
+            });
         }
     }
 }

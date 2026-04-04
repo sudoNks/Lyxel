@@ -9,8 +9,14 @@ namespace LyXel
 {
     public partial class Form1
     {
+        // Referencia al label de estado en la página Conexión para actualización reactiva
+        private Label? _conexion_lblAdbEstado;
+
         private void LoadConexionPage()
         {
+            // Desuscribir handler previo para evitar doble suscripción
+            adbManager.OnEstadoConexionCambiado -= ActualizarEstadoConexion;
+
             _cargandoPagina = true;
             try
             {
@@ -20,13 +26,14 @@ namespace LyXel
 
                 var lblAdbEstado = new Label()
                 {
-                    Text = "●  Verificando...",
+                    Text = _hayDispositivo ? "●  Dispositivo conectado" : "●  Sin dispositivo",
                     Font = new Font("Segoe UI", 10f),
-                    ForeColor = textSecondary,
+                    ForeColor = _hayDispositivo ? AppTheme.Success : textSecondary,
                     Left = S(24),
                     Top = S(58),
                     AutoSize = true
                 };
+                _conexion_lblAdbEstado = lblAdbEstado;
 
                 var btnReiniciarAdb = new Guna2Button()
                 {
@@ -902,8 +909,29 @@ namespace LyXel
 
                 _ = ActualizarEstadoAdbAsync(lblAdbEstado);
 
+                // Suscribir evento reactivo de estado de conexión
+                adbManager.OnEstadoConexionCambiado += ActualizarEstadoConexion;
             }
             finally { _cargandoPagina = false; }
+        }
+
+        private void ActualizarEstadoConexion(bool conectado, string serial)
+        {
+            InvokeSeguro(() =>
+            {
+                if (_conexion_lblAdbEstado == null || _conexion_lblAdbEstado.IsDisposed) return;
+                if (conectado)
+                {
+                    string textoSerial = string.IsNullOrEmpty(serial) ? "Dispositivo conectado" : serial;
+                    _conexion_lblAdbEstado.Text = $"●  {textoSerial}";
+                    _conexion_lblAdbEstado.ForeColor = AppTheme.Success;
+                }
+                else
+                {
+                    _conexion_lblAdbEstado.Text = "●  Sin dispositivo detectado";
+                    _conexion_lblAdbEstado.ForeColor = AppTheme.Error;
+                }
+            });
         }
     }
 }

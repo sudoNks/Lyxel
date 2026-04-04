@@ -76,6 +76,7 @@ namespace LyXel
                         var partes = resolucion.Split('x');
                         int ancho = int.Parse(partes[0]);
                         int alto = int.Parse(partes[1]);
+                        OnResolucionActualizada?.Invoke(ancho, alto);
                         return (true, ancho, alto, $"Detectado: {ancho}x{alto}");
                     }
                 }
@@ -96,6 +97,7 @@ namespace LyXel
             var (exito, stdout, stderr) = EjecutarComando(
                 new List<string> { "shell", "wm", "size", wmSize });
 
+            if (exito) OnResolucionActualizada?.Invoke(ancho, altoIdeal);
             return (exito, wmSize, stderr);
         }
 
@@ -113,6 +115,14 @@ namespace LyXel
                 return (false, "Resolución vacía");
             var (exito, _, stderr) = EjecutarComando(
                 new List<string> { "shell", "wm", "size", resolucion.Trim() });
+            if (exito)
+            {
+                var partes = resolucion.Trim().Split('x');
+                if (partes.Length == 2 &&
+                    int.TryParse(partes[0], out int w) &&
+                    int.TryParse(partes[1], out int h))
+                    OnResolucionActualizada?.Invoke(w, h);
+            }
             return (exito, stderr);
         }
 
@@ -147,6 +157,7 @@ namespace LyXel
                     if (linea.ToLower().Contains("density:"))
                     {
                         int dpi = int.Parse(linea.Split(':')[^1].Trim());
+                        OnDpiActualizado?.Invoke(dpi);
                         return (true, dpi, $"Detectado: {dpi} DPI");
                     }
                 }
@@ -168,6 +179,7 @@ namespace LyXel
             var (exito, stdout, stderr) = EjecutarComando(
                 new List<string> { "shell", "wm", "density", nuevoDpi.ToString() });
 
+            if (exito) OnDpiActualizado?.Invoke(nuevoDpi);
             return exito
                 ? (true, $"DPI cambiado a {nuevoDpi}", "")
                 : (false, "Error aplicando DPI", stderr);
@@ -456,6 +468,13 @@ namespace LyXel
         // Solo USB — el serial WiFi tiene ':' así que es fácil distinguirlos
         public event Action<bool>? OnDispositivoUsbCambio;
 
+        // Eventos reactivos para actualización automática de UI
+        public event Action<string>? OnDispositivoConectado;
+        public event Action? OnDispositivoDesconectado;
+        public event Action<bool, string>? OnEstadoConexionCambiado;
+        public event Action<int>? OnDpiActualizado;
+        public event Action<int, int>? OnResolucionActualizada;
+
         private System.Diagnostics.Process? _trackProcess;
         private volatile bool _ultimoEstadoDispositivo = false;
         private volatile bool _ultimoEstadoDispositivoUsb = false;
@@ -625,6 +644,17 @@ namespace LyXel
                             {
                                 _ultimoEstadoDispositivo = hayDispositivo;
                                 OnDispositivoCambio?.Invoke(hayDispositivo);
+                                if (hayDispositivo)
+                                {
+                                    string serial = linea.Contains('\t') ? linea.Split('\t')[0].Trim() : "";
+                                    OnDispositivoConectado?.Invoke(serial);
+                                    OnEstadoConexionCambiado?.Invoke(true, serial);
+                                }
+                                else
+                                {
+                                    OnDispositivoDesconectado?.Invoke();
+                                    OnEstadoConexionCambiado?.Invoke(false, "");
+                                }
                             }
 
                             if (esUsb != _ultimoEstadoDispositivoUsb)
