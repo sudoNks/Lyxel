@@ -26,9 +26,9 @@ namespace LyXel
 
                 var lblAdbEstado = new Label()
                 {
-                    Text = _hayDispositivo ? "●  Dispositivo conectado" : "●  Sin dispositivo",
+                    Text = _hayDispositivo ? "●  Dispositivo conectado" : "●  Sin dispositivo detectado",
                     Font = new Font("Segoe UI", 10f),
-                    ForeColor = _hayDispositivo ? AppTheme.Success : textSecondary,
+                    ForeColor = _hayDispositivo ? AppTheme.Success : AppTheme.Error,
                     Left = S(24),
                     Top = S(58),
                     AutoSize = true
@@ -922,7 +922,7 @@ namespace LyXel
                 if (_conexion_lblAdbEstado == null || _conexion_lblAdbEstado.IsDisposed) return;
                 if (conectado)
                 {
-                    string textoSerial = string.IsNullOrEmpty(serial) ? "Dispositivo conectado" : serial;
+                    string textoSerial = string.IsNullOrEmpty(serial) ? "1 dispositivo(s) conectado(s)" : $"1 dispositivo(s): {serial}";
                     _conexion_lblAdbEstado.Text = $"●  {textoSerial}";
                     _conexion_lblAdbEstado.ForeColor = AppTheme.Success;
                 }

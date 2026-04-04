@@ -180,7 +180,8 @@ namespace LyXel
             {
                 cmd.Add($"--keyboard={config.TecladoModo}");
                 cmd.Add($"--mouse={config.MouseModo}");
-                cmd.Add($"--gamepad={config.GamepadModo}");
+                if (config.GamepadModo == "uhid" || config.GamepadModo == "aoa")
+                    cmd.Add($"--gamepad={config.GamepadModo}");
                 // Pasar todos los clics al dispositivo — fix para Shift+clic derecho en juegos
                 if (config.ForwardAllClicks)
                     cmd.Add("--mouse-bind=++++:++++");

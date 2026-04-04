@@ -102,6 +102,9 @@ namespace LyXel
         private string _tecladoModo = "uhid";
         private string _mouseModo = "uhid";
         private string _gamepadModo = "disabled";
+        // Estado previo de teclado/mouse antes de activar el gamepad (para restaurar al desactivarlo)
+        private string _gamepadPrevTeclado = "uhid";
+        private string _gamepadPrevMouse = "uhid";
 
         // Estado de conexión
         private bool _usarWifi = false;

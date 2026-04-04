@@ -14,6 +14,8 @@ namespace LyXel
         private Label? _pantalla_lblResAncho;
         private Label? _pantalla_lblResAlto;
         private StexNumericUpDown? _pantalla_numDpi;
+        // Delegado que encapsula ActualizarEstados() para llamarlo desde eventos reactivos
+        private Action? _pantalla_actualizarEstados;
 
         private void LoadPantallaPage()
         {
@@ -285,6 +287,7 @@ namespace LyXel
                     // Aviso visual de conflicto entre crop y ADB
                     if (lblAdbConflicto != null) lblAdbConflicto.Visible = cropActivo;
                 }
+                _pantalla_actualizarEstados = ActualizarEstados;
 
                 var btnCalcularCrop = new Guna2Button()
                 {
@@ -932,6 +935,7 @@ namespace LyXel
                 if (_pantalla_lblDpiActual == null || _pantalla_lblDpiActual.IsDisposed) return;
                 _pantalla_lblDpiActual.Text = "DPI actual: Detectando...";
                 _pantalla_lblDpiActual.ForeColor = textSecondary;
+                _pantalla_actualizarEstados?.Invoke();
             });
             if (_pantalla_lblDpiActual != null && !_pantalla_lblDpiActual.IsDisposed &&
                 _pantalla_numDpi != null && !_pantalla_numDpi.IsDisposed)
@@ -951,6 +955,7 @@ namespace LyXel
                     _pantalla_lblResAncho.Text = "—";
                 if (_pantalla_lblResAlto != null && !_pantalla_lblResAlto.IsDisposed)
                     _pantalla_lblResAlto.Text = "—";
+                _pantalla_actualizarEstados?.Invoke();
             });
         }
 
