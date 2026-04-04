@@ -332,6 +332,8 @@ namespace LyXel
                 {
                     foreach (var kv in data["optimizacion_estado"])
                     {
+                        // Saltamos "aceptado" para evitar contaminación cruzada con [optimizacion]
+                        if (kv.KeyName == "aceptado") continue;
                         if (bool.TryParse(kv.Value, out bool val))
                             _optimizacionEstado[kv.KeyName] = val;
                     }
@@ -351,36 +353,86 @@ namespace LyXel
             try
             {
                 var parser = new FileIniDataParser();
-                var data = new IniData();
+                // Lee el archivo existente para preservar [optimizacion] y [optimizacion_estado]
+                var data = File.Exists(_configPath) ? parser.ReadFile(_configPath) : new IniData();
 
-                // Sección de tema y config general
-                data.Sections.AddSection("Tema");
-                data["Tema"]["ultimo_perfil"] = _perfilSeleccionado ?? "";
-                data["Tema"]["aviso_adb_visto"] = _avisoAdbVisto.ToString().ToLower();
-                data["Tema"]["aviso_wmsize_visto"] = _avisoWmSizeVisto.ToString().ToLower();
+                void Reemplazar(string seccion, Action<IniData> poblar)
+                {
+                    if (data.Sections.ContainsSection(seccion))
+                        data.Sections.RemoveSection(seccion);
+                    data.Sections.AddSection(seccion);
+                    poblar(data);
+                }
 
-                data.Sections.AddSection("Video");
-                data["Video"]["encoders_detectados"] = string.Join("|", _encodersDetectados);
-                data["Video"]["encoders_display_labels"] = string.Join("|", _encodersDisplayLabels);
+                Reemplazar("Tema", d =>
+                {
+                    d["Tema"]["ultimo_perfil"]       = _perfilSeleccionado ?? "";
+                    d["Tema"]["aviso_adb_visto"]     = _avisoAdbVisto.ToString().ToLower();
+                    d["Tema"]["aviso_wmsize_visto"]   = _avisoWmSizeVisto.ToString().ToLower();
+                });
 
-                data.Sections.AddSection("Dispositivo");
-                data["Dispositivo"]["resolucion_pendiente_reset"] = (_wmSizeActivo || _resAdbActiva).ToString().ToLower();
+                Reemplazar("Video", d =>
+                {
+                    d["Video"]["encoders_detectados"]      = string.Join("|", _encodersDetectados);
+                    d["Video"]["encoders_display_labels"]  = string.Join("|", _encodersDisplayLabels);
+                });
 
-                data.Sections.AddSection("Sesion");
-                data["Sesion"]["ultima_sesion_wifi"] = _ultimaSesionWifi.ToString().ToLower();
-                data["Sesion"]["ultima_sesion_otg"] = _ultimaSesionOtg.ToString().ToLower();
-                data["Sesion"]["wifi_ip"] = _wifiIp ?? "";
-                data["Sesion"]["wifi_puerto"] = _wifiPuerto.ToString();
-                data["Sesion"]["otg_serial"] = _otgSerial ?? "";
-                data["Sesion"]["ultimo_dpi_aplicado"] = _ultimoDpiAplicado > 0 ? _ultimoDpiAplicado.ToString() : "";
-                data["Sesion"]["ultima_velocidad_cursor"] = _ultimaVelocidadCursor != int.MinValue ? _ultimaVelocidadCursor.ToString() : "";
+                Reemplazar("Dispositivo", d =>
+                {
+                    d["Dispositivo"]["resolucion_pendiente_reset"] = (_wmSizeActivo || _resAdbActiva).ToString().ToLower();
+                });
 
-                data.Sections.AddSection("optimizacion");
-                data["optimizacion"]["aceptado"] = _optimizacionAceptada.ToString().ToLower();
+                Reemplazar("Sesion", d =>
+                {
+                    d["Sesion"]["ultima_sesion_wifi"]       = _ultimaSesionWifi.ToString().ToLower();
+                    d["Sesion"]["ultima_sesion_otg"]        = _ultimaSesionOtg.ToString().ToLower();
+                    d["Sesion"]["wifi_ip"]                  = _wifiIp ?? "";
+                    d["Sesion"]["wifi_puerto"]              = _wifiPuerto.ToString();
+                    d["Sesion"]["otg_serial"]               = _otgSerial ?? "";
+                    d["Sesion"]["ultimo_dpi_aplicado"]      = _ultimoDpiAplicado > 0 ? _ultimoDpiAplicado.ToString() : "";
+                    d["Sesion"]["ultima_velocidad_cursor"]  = _ultimaVelocidadCursor != int.MinValue ? _ultimaVelocidadCursor.ToString() : "";
+                });
 
+                // [optimizacion] y [optimizacion_estado] NO se tocan aquí;
+                // son responsabilidad exclusiva de GuardarAceptacionOptimizacion
+                // y GuardarEstadoOptimizacion.
+
+                parser.WriteFile(_configPath, data);
+            }
+            catch { }
+        }
+
+        /// <summary>Persiste únicamente el estado ON/OFF de los toggles de optimización.</summary>
+        private void GuardarEstadoOptimizacion()
+        {
+            try
+            {
+                var parser = new FileIniDataParser();
+                var data   = File.Exists(_configPath) ? parser.ReadFile(_configPath) : new IniData();
+
+                if (data.Sections.ContainsSection("optimizacion_estado"))
+                    data.Sections.RemoveSection("optimizacion_estado");
                 data.Sections.AddSection("optimizacion_estado");
                 foreach (var kvp in _optimizacionEstado)
                     data["optimizacion_estado"][kvp.Key] = kvp.Value.ToString().ToLower();
+
+                parser.WriteFile(_configPath, data);
+            }
+            catch { }
+        }
+
+        /// <summary>Persiste únicamente la aceptación del aviso de optimizaciones.</summary>
+        private void GuardarAceptacionOptimizacion()
+        {
+            try
+            {
+                var parser = new FileIniDataParser();
+                var data   = File.Exists(_configPath) ? parser.ReadFile(_configPath) : new IniData();
+
+                if (data.Sections.ContainsSection("optimizacion"))
+                    data.Sections.RemoveSection("optimizacion");
+                data.Sections.AddSection("optimizacion");
+                data["optimizacion"]["aceptado"] = _optimizacionAceptada.ToString().ToLower();
 
                 parser.WriteFile(_configPath, data);
             }

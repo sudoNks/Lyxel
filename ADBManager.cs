@@ -480,8 +480,49 @@ namespace LyXel
         public (bool exito, string stdout, string stderr) EjecutarShell(string comando)
             => EjecutarComando(new List<string> { "shell", comando }, 15000);
 
-        public Task<(bool, string, string)> EjecutarShellAsync(string comando)
-            => Task.Run(() => EjecutarShell(comando));
+        public async Task<(bool, string, string)> EjecutarShellAsync(string comando)
+        {
+            try
+            {
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName               = _adbPath,
+                    Arguments              = $"shell {comando}",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError  = true,
+                    UseShellExecute        = false,
+                    CreateNoWindow         = true
+                };
+
+                using var proceso = new Process { StartInfo = startInfo, EnableRaisingEvents = true };
+                proceso.Start();
+
+                var stdoutTask = proceso.StandardOutput.ReadToEndAsync();
+                var stderrTask = proceso.StandardError.ReadToEndAsync();
+
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+                try
+                {
+                    await proceso.WaitForExitAsync(cts.Token);
+                }
+                catch (OperationCanceledException)
+                {
+                    try { proceso.Kill(); } catch { }
+                    return (false, "", "timeout");
+                }
+
+                string stdout = await stdoutTask;
+                string stderr = await stderrTask;
+                return (proceso.ExitCode == 0, stdout, stderr);
+            }
+            catch (Exception ex)
+            {
+                string stderr = (ex is UnauthorizedAccessException || ex is System.ComponentModel.Win32Exception)
+                    ? $"[PERMISOS] {ex.Message}"
+                    : ex.Message;
+                return (false, "", stderr);
+            }
+        }
 
         /// <summary>
         /// Ordena al dispositivo salir del modo tcpip y volver a escuchar por USB.

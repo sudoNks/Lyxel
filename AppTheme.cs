@@ -48,6 +48,7 @@ namespace LyXel
         public static Color TextModerate   => Color.FromArgb(160, 160, 160);   // texto moderado
         public static Color TextLight      => Color.FromArgb(190, 190, 190);   // texto claro
         public static Color TextLighter    => Color.FromArgb(210, 210, 210);   // texto más claro
+        public static Color TextCommand    => Color.FromArgb(200, 200, 200);   // texto comando (labels ADB)
         public static Color TextError      => Color.FromArgb(200, 80, 100);    // rojo-ish (no activo)
         public static Color TextGreenTerm  => Color.FromArgb(0, 220, 0);       // texto terminal verde
 

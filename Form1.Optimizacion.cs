@@ -42,7 +42,7 @@ namespace LyXel
 
                 _optimizacionAceptada = true;
                 if (aviso.NoVolverMostrar)
-                    GuardarConfigTema();
+                    GuardarAceptacionOptimizacion();
             }
 
             int cardLeft  = S(30);
@@ -60,7 +60,18 @@ namespace LyXel
             int  fallosRevert    = 0;
 
             // ── Ejecuta un comando shell con verificación de dispositivo ─────────
-            async Task EjecutarOpt(string cmd, Guna2ToggleSwitch? togOrigen = null)
+            static string ObtenerMensajeError(string output)
+            {
+                if (output.Contains("not found") || output.Contains("unknown"))
+                    return "Comando no reconocido por este dispositivo.";
+                if (output.Contains("permission denied") || output.Contains("securityexception"))
+                    return "Sin permisos para ejecutar este comando. Requiere Android 12 o anterior.";
+                if (output.Contains("timeout"))
+                    return "El dispositivo tardó demasiado en responder.";
+                return "No se pudo aplicar esta optimización.";
+            }
+
+            async Task EjecutarOpt(string cmd, Guna2ToggleSwitch? togOrigen = null, string? mensajeExito = null)
             {
                 if (!_hayDispositivo)
                 {
@@ -75,39 +86,29 @@ namespace LyXel
                     return;
                 }
 
-                var (exito, _, stderr) = await Task.Run(() => adbManager.EjecutarShell(cmd));
+                var (exito, stdout, stderr) = await adbManager.EjecutarShellAsync(cmd);
+                var output = (stdout + stderr).ToLower();
 
                 if (exito)
                 {
-                    if (!revirtiendoTodo && togOrigen != null && !IsDisposed)
-                    {
-                        string msg = togOrigen.Checked
-                            ? "Optimización aplicada correctamente."
-                            : "Optimización restablecida.";
-                        ToastNotification.Mostrar(this, msg, ToastNotification.ToastTipo.Exito);
-                    }
+                    string? mensaje = mensajeExito ?? (togOrigen != null ? "Optimización aplicada correctamente." : null);
+                    if (!revirtiendoTodo && !IsDisposed && mensaje != null)
+                        ToastNotification.Mostrar(this, mensaje, ToastNotification.ToastTipo.Exito);
                     return;
                 }
 
                 if (IsDisposed) return;
 
-                if (togOrigen != null)
-                {
-                    string msg;
-                    if (stderr.Contains("SecurityException") || stderr.Contains("Permission denial"))
-                        msg = "Este comando requiere permisos que tu versión de Android no permite. Prueba en Android 12 o anterior.";
-                    else if (stderr.Contains("not found") || stderr.Contains("Unknown command"))
-                        msg = "Este comando no es compatible con tu dispositivo o versión de Android.";
-                    else
-                        msg = "No se pudo aplicar esta optimización en tu dispositivo.";
-
-                    ToastNotification.Mostrar(this, msg, ToastNotification.ToastTipo.Error);
-                    togOrigen.Checked = false;
-                }
-                else if (revirtiendoTodo)
+                if (revirtiendoTodo)
                 {
                     fallosRevert++;
+                    return;
                 }
+
+                string msgError = ObtenerMensajeError(output);
+                ToastNotification.Mostrar(this, msgError, ToastNotification.ToastTipo.Error);
+                if (togOrigen != null)
+                    togOrigen.Checked = false;
             }
 
             // ── Fila de toggle ───────────────────────────────────────────────────
@@ -138,7 +139,7 @@ namespace LyXel
                 {
                     Text      = $"cmd: {cmdON}",
                     Font      = new Font("Consolas", 7.5f),
-                    ForeColor = Color.FromArgb(160, 160, 160),
+                    ForeColor = AppTheme.TextCommand,
                     Left = S(24), Top = y + S(52),
                     Width = rowWidth - S(64), Height = S(16),
                     AutoSize = false
@@ -147,10 +148,11 @@ namespace LyXel
                 bool initialChecked = _optimizacionEstado.TryGetValue(key, out bool sv) && sv;
                 var tog = new Guna2ToggleSwitch()
                 {
-                    Left    = card.Width - S(64),
-                    Top     = y + S(16),
-                    Checked = initialChecked,
-                    Anchor  = AnchorStyles.Top | AnchorStyles.Right
+                    Left     = card.Width - S(64),
+                    Top      = y + S(16),
+                    Checked  = initialChecked,
+                    Anchor   = AnchorStyles.Top | AnchorStyles.Right,
+                    TabStop  = false
                 };
                 tog.CheckedState.FillColor   = AppTheme.Accent;
                 tog.UncheckedState.FillColor = AppTheme.BtnDisabled;
@@ -159,7 +161,8 @@ namespace LyXel
                 tog.CheckedChanged += async (s, e) =>
                 {
                     if (enProgreso || revirtiendoTodo) return;
-                    enProgreso  = true;
+                    enProgreso = true;
+                    int scrollY = -contentPanel.AutoScrollPosition.Y;
                     tog.Enabled = false;
                     try
                     {
@@ -173,8 +176,9 @@ namespace LyXel
                         {
                             tog.Enabled = true;
                             _optimizacionEstado[key] = tog.Checked;
-                            GuardarConfigTema();
+                            GuardarEstadoOptimizacion();
                             ActualizarLabelOptAdvertencia();
+                            contentPanel.AutoScrollPosition = new Point(0, scrollY);
                         }
                     }
                 };
@@ -309,7 +313,7 @@ namespace LyXel
                 {
                     Text      = $"cmd: {cmdLabel}",
                     Font      = new Font("Consolas", 7.5f),
-                    ForeColor = Color.FromArgb(160, 160, 160),
+                    ForeColor = AppTheme.TextCommand,
                     Left = S(30), Top = y + S(80),
                     Width = rowWidth, Height = S(14),
                     AutoSize = false
@@ -346,7 +350,7 @@ namespace LyXel
                 {
                     Text      = $"cmd: {cmdLabel}",
                     Font      = new Font("Consolas", 7.5f),
-                    ForeColor = Color.FromArgb(160, 160, 160),
+                    ForeColor = AppTheme.TextCommand,
                     Left = S(24), Top = y + S(52),
                     Width = rowWidth - S(160), Height = S(14),
                     AutoSize = false
@@ -445,52 +449,58 @@ namespace LyXel
                     return;
                 }
 
-                btnRevertirTodo.Enabled = false;
-                btnRevertirTodo.Text    = "Revirtiendo...";
-                revirtiendoTodo         = true;
-                fallosRevert            = 0;
-                int togglesFallidos     = 0;
-                int total               = activos.Count;
-                try
+                async Task RevertirTodo()
                 {
-                    foreach (var (_, _, offCmd) in activos)
+                    btnRevertirTodo.Text = "Revirtiendo...";
+                    revirtiendoTodo      = true;
+                    fallosRevert         = 0;
+                    int togglesFallidos  = 0;
+                    int total            = activos.Count;
+                    try
                     {
-                        int fallosAntes = fallosRevert;
-                        await offCmd();
-                        if (fallosRevert > fallosAntes) togglesFallidos++;
-                    }
+                        foreach (var (_, _, offCmd) in activos)
+                        {
+                            int fallosAntes = fallosRevert;
+                            await offCmd();
+                            if (fallosRevert > fallosAntes) togglesFallidos++;
+                        }
 
-                    foreach (var (tog, key, _) in activos)
+                        foreach (var (tog, key, _) in activos)
+                        {
+                            if (!IsDisposed)
+                            {
+                                tog.Checked = false;
+                                _optimizacionEstado[key] = false;
+                            }
+                        }
+                        if (!IsDisposed) GuardarEstadoOptimizacion();
+                    }
+                    finally
                     {
+                        revirtiendoTodo = false;
                         if (!IsDisposed)
                         {
-                            tog.Checked = false;
-                            _optimizacionEstado[key] = false;
+                            btnRevertirTodo.Text = "  Revertir todo";
+                            ActualizarLabelOptAdvertencia();
                         }
                     }
-                    if (!IsDisposed) GuardarConfigTema();
-                }
-                finally
-                {
-                    revirtiendoTodo = false;
                     if (!IsDisposed)
                     {
-                        btnRevertirTodo.Text    = "  Revertir todo";
-                        btnRevertirTodo.Enabled = true;
-                        ActualizarLabelOptAdvertencia();
+                        if (togglesFallidos == 0)
+                            ToastNotification.Mostrar(this,
+                                $"{total} optimizaciones revertidas correctamente.",
+                                ToastNotification.ToastTipo.Exito);
+                        else
+                            ToastNotification.Mostrar(this,
+                                $"Se revirtieron {total - togglesFallidos} de {total} optimizaciones. Algunas pueden requerir reiniciar el dispositivo.",
+                                ToastNotification.ToastTipo.Advertencia);
                     }
                 }
-                if (!IsDisposed)
-                {
-                    if (togglesFallidos == 0)
-                        ToastNotification.Mostrar(this,
-                            "Todas las optimizaciones han sido revertidas.",
-                            ToastNotification.ToastTipo.Exito);
-                    else
-                        ToastNotification.Mostrar(this,
-                            $"Se revirtieron {total - togglesFallidos} de {total} optimizaciones. Algunas pueden requerir reiniciar el dispositivo.",
-                            ToastNotification.ToastTipo.Advertencia);
-                }
+
+                btnRevertirTodo.Enabled = false;
+                try   { await RevertirTodo(); }
+                catch { if (!IsDisposed) ToastNotification.Mostrar(this, "Error inesperado al revertir. Intenta de nuevo.", ToastNotification.ToastTipo.Error); }
+                finally { if (!IsDisposed) btnRevertirTodo.Enabled = true; }
             };
             cardY += S(36) + S(14);
 
@@ -519,15 +529,29 @@ namespace LyXel
                 cmdON: "settings put global window_animation_scale 0",
                 onEnable: async (t) =>
                 {
-                    await EjecutarOpt("settings put global window_animation_scale 0",    t);
-                    await EjecutarOpt("settings put global transition_animation_scale 0", t);
-                    await EjecutarOpt("settings put global animator_duration_scale 0",    t);
+                    if (!_hayDispositivo)
+                    {
+                        if (!IsDisposed) { ToastNotification.Mostrar(this, "Conecta tu teléfono antes de aplicar optimizaciones.", ToastNotification.ToastTipo.Advertencia); t.Checked = false; }
+                        return;
+                    }
+                    await Task.Run(() => adbManager.EjecutarShell("settings put global window_animation_scale 0"));
+                    await Task.Run(() => adbManager.EjecutarShell("settings put global transition_animation_scale 0"));
+                    await Task.Run(() => adbManager.EjecutarShell("settings put global animator_duration_scale 0"));
+                    if (!revirtiendoTodo && !IsDisposed)
+                        ToastNotification.Mostrar(this, "Optimización aplicada correctamente.", ToastNotification.ToastTipo.Exito);
                 },
                 onDisable: async (t) =>
                 {
-                    await EjecutarOpt("settings put global window_animation_scale 1",    t);
-                    await EjecutarOpt("settings put global transition_animation_scale 1", t);
-                    await EjecutarOpt("settings put global animator_duration_scale 1",    t);
+                    if (!_hayDispositivo)
+                    {
+                        if (!IsDisposed) { ToastNotification.Mostrar(this, "Conecta tu teléfono antes de aplicar optimizaciones.", ToastNotification.ToastTipo.Advertencia); if (t != null) t.Checked = false; }
+                        return;
+                    }
+                    await Task.Run(() => adbManager.EjecutarShell("settings put global window_animation_scale 1"));
+                    await Task.Run(() => adbManager.EjecutarShell("settings put global transition_animation_scale 1"));
+                    await Task.Run(() => adbManager.EjecutarShell("settings put global animator_duration_scale 1"));
+                    if (!revirtiendoTodo && !IsDisposed)
+                        ToastNotification.Mostrar(this, "Optimización restablecida.", ToastNotification.ToastTipo.Exito);
                 });
 
             AddComboRow(card1, ref c1y,
@@ -599,21 +623,21 @@ namespace LyXel
                 desc:     "Libera RAM cerrando procesos en segundo plano.",
                 btnText:  "Limpiar RAM",
                 cmdLabel: "am kill-all",
-                accion:   () => EjecutarOpt("am kill-all"));
+                accion:   () => EjecutarOpt("am kill-all", mensajeExito: "RAM liberada correctamente."));
 
             AddButtonRow(card1, ref c1y,
                 titulo:   "Limpiar caché de apps",
                 desc:     "Libera caché acumulada de todas las apps.",
                 btnText:  "Limpiar caché",
                 cmdLabel: "pm trim-caches 999G",
-                accion:   () => EjecutarOpt("pm trim-caches 999G"));
+                accion:   () => EjecutarOpt("pm trim-caches 999G", mensajeExito: "Caché limpiada correctamente."));
 
             AddButtonRow(card1, ref c1y,
                 titulo:   "Optimizar compilación ART",
                 desc:     "Recompila las apps según tu uso para abrirlas más rápido. Tarda unos segundos.",
                 btnText:  "Optimizar",
                 cmdLabel: "cmd package compile -m speed-profile -a",
-                accion:   () => EjecutarOpt("cmd package compile -m speed-profile -a"));
+                accion:   () => EjecutarOpt("cmd package compile -m speed-profile -a", mensajeExito: "Compilación optimizada correctamente."));
 
             AddButtonRow(card1, ref c1y,
                 titulo:   "Optimización DEXOPT",
@@ -671,10 +695,50 @@ namespace LyXel
                 accion:   async () =>
                 {
                     await EjecutarOpt("pm compile -m speed -f com.dts.freefireth");
-                    await EjecutarOpt("pm compile -m speed -f com.dts.freefiremax");
+                    await EjecutarOpt("pm compile -m speed -f com.dts.freefiremax", mensajeExito: "Free Fire compilado correctamente.");
                 });
 
             cardY += card2Height + S(20);
+
+            // ════════════════════════════════════════════════════════════════════
+            // CARD 2b — Gaming — Free Fire MAX
+            // ════════════════════════════════════════════════════════════════════
+            int c2by         = headerH;
+            int card2bHeight = headerH + rowH * 3 + btnRowH * 1 + cardPad;
+            var card2b = CreateCard("Gaming — Free Fire MAX", cardLeft, cardY, card2bHeight);
+
+            AddToggleRow(card2b, ref c2by,
+                key: "ffmax_game_mode",
+                titulo: "Game Mode Performance",
+                desc: "Prioriza rendimiento sobre batería para Free Fire MAX.",
+                cmdON: "cmd game mode performance com.dts.freefiremax",
+                onEnable:  (t) => EjecutarOpt("cmd game mode performance com.dts.freefiremax", t),
+                onDisable: (t) => EjecutarOpt("cmd game mode standard com.dts.freefiremax",    t));
+
+            AddToggleRow(card2b, ref c2by,
+                key: "ffmax_bg",
+                titulo: "Bloquear background en partida",
+                desc: "Impide que otras apps consuman CPU mientras juegas.",
+                cmdON: "cmd appops set com.dts.freefiremax RUN_ANY_IN_BACKGROUND deny",
+                onEnable:  (t) => EjecutarOpt("cmd appops set com.dts.freefiremax RUN_ANY_IN_BACKGROUND deny",  t),
+                onDisable: (t) => EjecutarOpt("cmd appops set com.dts.freefiremax RUN_ANY_IN_BACKGROUND allow", t));
+
+            AddToggleRow(card2b, ref c2by,
+                key: "ffmax_mem",
+                titulo: "Bloquear Free Fire MAX en memoria",
+                desc: "Evita que el sistema cierre el juego al cambiar de app.",
+                cmdON: "am set-standby-bucket com.dts.freefiremax active",
+                onEnable:  (t) => EjecutarOpt("am set-standby-bucket com.dts.freefiremax active",      t),
+                onDisable: (t) => EjecutarOpt("am set-standby-bucket com.dts.freefiremax working_set", t));
+
+            AddButtonRow(card2b, ref c2by,
+                titulo:   "Compilar Free Fire MAX (velocidad)",
+                desc:     "Compila el juego para tu procesador, mejora tiempos de carga.",
+                btnText:  "Compilar",
+                cmdLabel: "pm compile -m speed -f com.dts.freefiremax",
+                accion:   () => EjecutarOpt("pm compile -m speed -f com.dts.freefiremax", mensajeExito: "Free Fire MAX compilado correctamente."));
+
+            cardY += card2bHeight + S(20);
 
             // ════════════════════════════════════════════════════════════════════
             // CARD 3 — Samsung
@@ -806,7 +870,7 @@ namespace LyXel
                 });
 
             contentPanel.Controls.AddRange(
-                new Control[] { btnRevertirTodo, lblAdvertencia, card1, card2, card3, card4, card5, card6 });
+                new Control[] { btnRevertirTodo, lblAdvertencia, card1, card2, card2b, card3, card4, card5, card6 });
         }
     }
 }
