@@ -17,9 +17,10 @@ namespace LyXel
             2 => LoadPantallaPage,
             3 => LoadConexionPage,
             4 => LoadExtrasPage,
-            5 => LoadOptimizacionPage,
-            6 => LoadPerfilesPage,
-            7 => LoadAcercaPage,
+            5 => LoadControlesPage,
+            6 => LoadOptimizacionPage,
+            7 => LoadPerfilesPage,
+            8 => LoadAcercaPage,
             _ => LoadInicioPage
         };
 
@@ -68,15 +69,16 @@ namespace LyXel
             };
 
 
-            navButtons = new Guna2Button[8];
-            navButtons[0] = CreateNavButton("Inicio",          IconMap.Home,     0);
-            navButtons[1] = CreateNavButton("Video y Audio",  IconMap.Video,    1);
-            navButtons[2] = CreateNavButton("Pantalla",       IconMap.Screen,   2);
-            navButtons[3] = CreateNavButton("Conexión",       IconMap.Wifi,     3);
-            navButtons[4] = CreateNavButton("Opciones Extras",IconMap.Extras,   4);
-            navButtons[5] = CreateNavButton("Optimización",   IconMap.Bolt,     5);
-            navButtons[6] = CreateNavButton("Perfiles",       IconMap.Perfiles, 6);
-            navButtons[7] = CreateNavButton("Acerca de",      IconMap.Acerca,   7);
+            navButtons = new Guna2Button[9];
+            navButtons[0] = CreateNavButton("Inicio",          IconMap.Home,       0);
+            navButtons[1] = CreateNavButton("Video y Audio",  IconMap.Video,      1);
+            navButtons[2] = CreateNavButton("Pantalla",       IconMap.Screen,     2);
+            navButtons[3] = CreateNavButton("Conexión",       IconMap.Wifi,       3);
+            navButtons[4] = CreateNavButton("Opciones Extras",IconMap.Extras,     4);
+            navButtons[5] = CreateNavButton("Controles",      IconMap.Controller, 5);
+            navButtons[6] = CreateNavButton("Optimización",   IconMap.Bolt,       6);
+            navButtons[7] = CreateNavButton("Perfiles",       IconMap.Perfiles,   7);
+            navButtons[8] = CreateNavButton("Acerca de",      IconMap.Acerca,     8);
 
             navButtons[paginaActiva].Checked = true;
             navButtons[paginaActiva].FillColor = AppTheme.BtnNavActive;
@@ -123,7 +125,7 @@ namespace LyXel
                 lblLogo, lblVersion,
                 navButtons[0], navButtons[1], navButtons[2],
                 navButtons[3], navButtons[4], navButtons[5], navButtons[6],
-                navButtons[7],
+                navButtons[7], navButtons[8],
                 btnToggle, btnGuardadoRapido
             });
 
@@ -190,9 +192,10 @@ namespace LyXel
             navButtons[2].Click += (s, e) => LoadPage(2, "Pantalla", LoadPantallaPage);
             navButtons[3].Click += (s, e) => LoadPage(3, "Conexión", LoadConexionPage);
             navButtons[4].Click += (s, e) => LoadPage(4, "Opciones Extras", LoadExtrasPage);
-            navButtons[5].Click += (s, e) => LoadPage(5, "Optimización", LoadOptimizacionPage);
-            navButtons[6].Click += (s, e) => LoadPage(6, "Perfiles", LoadPerfilesPage);
-            navButtons[7].Click += (s, e) => LoadPage(7, "Acerca de", LoadAcercaPage);
+            navButtons[5].Click += (s, e) => LoadPage(5, "Controles", LoadControlesPage);
+            navButtons[6].Click += (s, e) => LoadPage(6, "Optimización", LoadOptimizacionPage);
+            navButtons[7].Click += (s, e) => LoadPage(7, "Perfiles", LoadPerfilesPage);
+            navButtons[8].Click += (s, e) => LoadPage(8, "Acerca de", LoadAcercaPage);
 
             LoadInicioPage();
         }
@@ -291,8 +294,8 @@ namespace LyXel
             if (lbl != null) lbl.Text = "⚠ Cambios sin guardar — ve a Perfiles para guardarlos";
             if (navButtons != null)
             {
-                navButtons[6].Text = sidebarExpanded ? "Perfiles ●" : "";
-                navButtons[6].Tag = "Perfiles ●";
+                navButtons[7].Text = sidebarExpanded ? "Perfiles ●" : "";
+                navButtons[7].Tag = "Perfiles ●";
             }
             // Difiero la visibilidad del botón para no interrumpir renders en curso
             if (btnGuardadoRapido != null && !string.IsNullOrEmpty(_perfilSeleccionado))
@@ -316,8 +319,8 @@ namespace LyXel
             if (lbl != null) lbl.Text = "";
             if (navButtons != null)
             {
-                navButtons[6].Text = sidebarExpanded ? "Perfiles" : "";
-                navButtons[6].Tag = "Perfiles";
+                navButtons[7].Text = sidebarExpanded ? "Perfiles" : "";
+                navButtons[7].Tag = "Perfiles";
             }
             if (btnGuardadoRapido != null)
                 btnGuardadoRapido.Visible = false;

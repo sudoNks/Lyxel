@@ -98,6 +98,11 @@ namespace LyXel
         private int _customRatioH = 9;
         private int _dpi = 420;
 
+        // Modos de entrada de controles (reemplazan a _inputMode en la construcción del comando)
+        private string _tecladoModo = "uhid";
+        private string _mouseModo = "uhid";
+        private string _gamepadModo = "disabled";
+
         // Estado de conexión
         private bool _usarWifi = false;
         private string _wifiIp = "";
@@ -703,6 +708,9 @@ namespace LyXel
             UseAdvancedEncoder = _useAdvancedEncoder,
             VideoEncoder = _videoEncoder,
             InputMode = _inputMode,
+            TecladoModo = _tecladoModo,
+            MouseModo = _mouseModo,
+            GamepadModo = _gamepadModo,
             PointerSpeed = _pointerSpeed
         };
 

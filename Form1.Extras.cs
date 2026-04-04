@@ -121,72 +121,8 @@ namespace LyXel
                 new Label() { Text = "ℹ El contador aparecerá al iniciar scrcpy, no al activar esta opción.", Font = new Font("Segoe UI", 8f, FontStyle.Bold), ForeColor = AppTheme.Warning, Left = S(24), Top = S(180), Width = cardDebug.Width - S(48), AutoSize = false, Height = S(20), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right }
                 });
 
-                // Card de configuración de mouse y teclado
-                var cardInput = CreateCard("Mouse y Teclado", S(30), S(510), S(240));
-
-                var togForwardClicks = new Guna2ToggleSwitch()
-                {
-                    Left = cardInput.Width - S(70),
-                    Top = S(58),
-                    Checked = _forwardAllClicks,
-                    CheckedState = { FillColor = accentColor },
-                    UncheckedState = { FillColor = AppTheme.BorderNeutral },
-                    Anchor = AnchorStyles.Top | AnchorStyles.Right
-                };
-                togForwardClicks.CheckedChanged += (s, e) => { _forwardAllClicks = togForwardClicks.Checked; if (!_cargandoPagina) MarcarCambiosSinGuardar(); };
-
-                var cmbInputMode = new Guna2ComboBox()
-                {
-                    Left = S(160),
-                    Top = S(128),
-                    Width = S(160),
-                    Height = S(32),
-                    Font = new Font("Segoe UI", 9f),
-                    FillColor = AppTheme.BgCard,
-                    ForeColor = textPrimary,
-                    BorderColor = AppTheme.Accent,
-                    BorderRadius = 4,
-                    DropDownStyle = ComboBoxStyle.DropDownList
-                };
-                cmbInputMode.Items.AddRange(new object[] { "uhid", "sdk" });
-                cmbInputMode.SelectedItem = _inputMode ?? "uhid";
-                if (cmbInputMode.SelectedIndex < 0) cmbInputMode.SelectedIndex = 0;
-
-                var lblInputDesc = new Label()
-                {
-                    Text = _inputMode == "uhid"
-                        ? "UHID — Simula teclado/mouse físico. Recomendado."
-                        : "SDK — Inyección vía API Android. Más compatible.",
-                    Font = new Font("Segoe UI", 8.5f),
-                    ForeColor = AppTheme.TextLighter,
-                    Left = S(24),
-                    Top = S(172),
-                    Width = S(280),
-                    AutoSize = false,
-                    Height = S(36)
-                };
-
-                cmbInputMode.SelectedIndexChanged += (s, e) =>
-                {
-                    _inputMode = cmbInputMode.SelectedItem?.ToString() ?? "uhid";
-                    lblInputDesc.Text = _inputMode == "uhid"
-                        ? "UHID — Simula teclado/mouse físico. Recomendado."
-                        : "SDK — Inyección vía API Android. Más compatible.";
-                    if (!_cargandoPagina) MarcarCambiosSinGuardar();
-                };
-
-                cardInput.Controls.AddRange(new Control[]
-                {
-                new Label() { Text = "Pasar todos los clics al dispositivo", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(60), AutoSize = true },
-                new Label() { Text = "Fix para Shift+clic derecho en juegos (Free Fire, etc.)", Font = new Font("Segoe UI", 8f), ForeColor = textSecondary, Left = S(24), Top = S(80), AutoSize = true },
-                togForwardClicks,
-                new Label() { Text = "Modo de Entrada", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(110), AutoSize = true },
-                cmbInputMode,
-                lblInputDesc
-                });
-
                 // Card para configurar la tecla MOD de scrcpy
-                var cardMod = CreateCard("Tecla de Atajos (MOD)", S(30), S(770), S(140));
+                var cardMod = CreateCard("Tecla de Atajos (MOD)", S(30), S(510), S(140));
 
                 var cmbMod = new Guna2ComboBox()
                 {
@@ -227,7 +163,7 @@ namespace LyXel
                 });
 
                 // Card de velocidad del cursor — experimental, aplica via ADB
-                var cardCursor = CreateCard("Velocidad del Cursor (Mouse)  —  Experimental", S(30), S(930), S(185));
+                var cardCursor = CreateCard("Velocidad del Cursor (Mouse)  —  Experimental", S(30), S(670), S(185));
 
                 var trackCursor = new Guna2TrackBar()
                 {
@@ -358,7 +294,7 @@ namespace LyXel
 
                 contentPanel.Controls.AddRange(new Control[]
                 {
-                cardComport, cardDebug, cardInput, cardMod, cardCursor
+                cardComport, cardDebug, cardMod, cardCursor
                 });
 
             }

@@ -48,6 +48,11 @@ namespace LyXel
         // sdk = API Android (más compatible), uhid = HID físico vía kernel (lo recomiendo), aoa = HID via AOA (solo USB)
         public string InputMode { get; set; } = "uhid";
 
+        // Modos separados por dispositivo de entrada (reemplazan InputMode en el comando)
+        public string TecladoModo { get; set; } = "uhid";   // uhid | disabled
+        public string MouseModo { get; set; } = "uhid";     // uhid | disabled
+        public string GamepadModo { get; set; } = "disabled"; // uhid | disabled
+
         // Velocidad del cursor Android (-7 a 7, 0 = default)
         public int PointerSpeed { get; set; } = 0;
 
@@ -173,14 +178,9 @@ namespace LyXel
 
             if (!config.ModoOtg)
             {
-                string mode = config.InputMode switch
-                {
-                    "sdk" => "sdk",
-                    "aoa" => "aoa",
-                    _ => "uhid"   // default seguro
-                };
-                cmd.Add($"--keyboard={mode}");
-                cmd.Add($"--mouse={mode}");
+                cmd.Add($"--keyboard={config.TecladoModo}");
+                cmd.Add($"--mouse={config.MouseModo}");
+                cmd.Add($"--gamepad={config.GamepadModo}");
                 // Pasar todos los clics al dispositivo — fix para Shift+clic derecho en juegos
                 if (config.ForwardAllClicks)
                     cmd.Add("--mouse-bind=++++:++++");

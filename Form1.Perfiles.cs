@@ -67,6 +67,9 @@ namespace LyXel
             _useAdvancedEncoder = cfg.UseAdvancedEncoder;
             _videoEncoder = cfg.VideoEncoder;
             _inputMode = cfg.InputMode ?? "uhid";
+            _tecladoModo = cfg.TecladoModo ?? "uhid";
+            _mouseModo = cfg.MouseModo ?? "uhid";
+            _gamepadModo = cfg.GamepadModo ?? "disabled";
             _pointerSpeed = cfg.PointerSpeed;
             LimpiarIndicadorCambios();
         }

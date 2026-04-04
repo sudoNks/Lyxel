@@ -13,9 +13,9 @@
     <Product>LyXel</Product>
 
     <!-- ── Versión — solo cambiar aquí, se propaga a toda la app ── -->
-    <Version>1.3.0</Version>
-    <AssemblyVersion>1.3.0.0</AssemblyVersion>
-    <FileVersion>1.3.0.0</FileVersion>
+    <Version>1.4.0</Version>
+    <AssemblyVersion>1.4.0.0</AssemblyVersion>
+    <FileVersion>1.4.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="bin\scrcpy\**\*.*">
@@ -91,5 +91,6 @@
     <EmbeddedResource Include="Assets\Icons\ic_redo.png" />
     <EmbeddedResource Include="Assets\Icons\ic_bolt.png" />
     <EmbeddedResource Include="Assets\Icons\ic_history.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_controller.png" />
   </ItemGroup>
 </Project>

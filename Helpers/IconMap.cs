@@ -10,6 +10,7 @@ namespace LyXel.Helpers
     {
         // Iconos de navegación del sidebar
         public static Image? Home         => IconHelper.Get("ic_home");
+        public static Image? Controller   => IconHelper.Get("ic_controller");
         public static Image? Video        => IconHelper.Get("ic_video");
         public static Image? Screen       => IconHelper.Get("ic_screen");
         public static Image? Wifi         => IconHelper.Get("ic_wifi");
