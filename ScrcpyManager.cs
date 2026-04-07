@@ -61,6 +61,8 @@ namespace LyXel
         public bool UsarWifi { get; set; } = false;
         public string WifiIp { get; set; } = "";
         public int WifiPuerto { get; set; } = 5555;
+
+        public bool ModoDebug { get; set; } = false;
     }
 
     public class ScrcpyManager
@@ -82,6 +84,13 @@ namespace LyXel
 
         public bool Lanzar(ScrcpyConfig config)
         {
+            if (config.UsarWifi && string.IsNullOrEmpty(config.WifiIp))
+                return false;
+            return LanzarProceso(ConstruirArgumentos(config), config);
+        }
+
+        public static string ConstruirArgumentos(ScrcpyConfig config)
+        {
             var cmd = new List<string>();
 
             // Tecla MOD
@@ -97,15 +106,11 @@ namespace LyXel
                     cmd.Add("-d");
                 if (config.DisableScreensaver) cmd.Add("--disable-screensaver");
                 cmd.AddRange(new[] { "--window-title", "LyXel_OTG" });
-                return LanzarProceso(cmd, config);
+                return string.Join(" ", cmd);
             }
 
-            if (config.UsarWifi)
-            {
-                if (string.IsNullOrEmpty(config.WifiIp))
-                    return false;
+            if (config.UsarWifi && !string.IsNullOrEmpty(config.WifiIp))
                 cmd.Add($"--tcpip={config.WifiIp}:{config.WifiPuerto}");
-            }
 
             cmd.AddRange(new[] { "--window-title",
                 config.UsarWifi ? "LyXel_WiFi" : "LyXel" });
@@ -176,70 +181,85 @@ namespace LyXel
                     cmd.Add($"--audio-bit-rate={config.AudioBitrate}K");
             }
 
-            if (!config.ModoOtg)
-            {
-                cmd.Add($"--keyboard={config.TecladoModo}");
-                cmd.Add($"--mouse={config.MouseModo}");
-                if (config.GamepadModo == "uhid" || config.GamepadModo == "aoa")
-                    cmd.Add($"--gamepad={config.GamepadModo}");
-                // Pasar todos los clics al dispositivo — fix para Shift+clic derecho en juegos
-                if (config.ForwardAllClicks)
-                    cmd.Add("--mouse-bind=++++:++++");
-            }
+            cmd.Add($"--keyboard={config.TecladoModo}");
+            cmd.Add($"--mouse={config.MouseModo}");
+            if (config.GamepadModo == "uhid" || config.GamepadModo == "aoa")
+                cmd.Add($"--gamepad={config.GamepadModo}");
+            // Pasar todos los clics al dispositivo — fix para Shift+clic derecho en juegos
+            if (config.ForwardAllClicks)
+                cmd.Add("--mouse-bind=++++:++++");
 
             // ── EXTRAS ────────────────────────────────────────────────
             if (config.DisableScreensaver) cmd.Add("--disable-screensaver");
             if (config.StayAwake) cmd.Add("-w");
             if (config.TurnScreenOff) cmd.Add("--turn-screen-off");
 
-            return LanzarProceso(cmd, config);
+            return string.Join(" ", cmd);
         }
 
         // Disparado en hilo de fondo — usar Invoke en la UI
         public event Action<string>? OnFpsUpdate;
 
-        private bool LanzarProceso(List<string> cmd, ScrcpyConfig config)
+        private bool LanzarProceso(string args, ScrcpyConfig config)
         {
             try
             {
-                var startInfo = new ProcessStartInfo
+                ProcessStartInfo startInfo;
+                if (config.ModoDebug)
                 {
-                    FileName = _scrcpyPath,
-                    Arguments = string.Join(" ", cmd),
-                    UseShellExecute = false,   // siempre false — sin consola externa
-                    CreateNoWindow = true,
-                    RedirectStandardOutput = true,   // scrcpy escribe FPS en stdout
-                    StandardOutputEncoding = Encoding.UTF8
-                };
-                startInfo.Environment["ADB"] = _adbPath;
+                    // Modo debug: consola visible para ver salida de scrcpy en tiempo real
+                    startInfo = new ProcessStartInfo
+                    {
+                        FileName = _scrcpyPath,
+                        Arguments = args,
+                        UseShellExecute = true,
+                        CreateNoWindow = false,
+                    };
+                }
+                else
+                {
+                    startInfo = new ProcessStartInfo
+                    {
+                        FileName = _scrcpyPath,
+                        Arguments = args,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        RedirectStandardOutput = true,   // scrcpy escribe FPS en stdout
+                        StandardOutputEncoding = Encoding.UTF8
+                    };
+                    startInfo.Environment["ADB"] = _adbPath;
+                }
 
                 _proceso = new Process { StartInfo = startInfo };
                 _proceso.Start();
                 Program.AsignarAlJob(_proceso.Handle);
 
-                bool capturarFps = config.PrintFps;
-                var procesoFps = _proceso;
-                Task.Run(() =>
+                if (!config.ModoDebug)
                 {
-                    try
+                    bool capturarFps = config.PrintFps;
+                    var procesoFps = _proceso;
+                    Task.Run(() =>
                     {
-                        while (!procesoFps.StandardOutput.EndOfStream)
+                        try
                         {
-                            string? linea = procesoFps.StandardOutput.ReadLine();
-                            if (linea == null) break;
+                            while (!procesoFps.StandardOutput.EndOfStream)
+                            {
+                                string? linea = procesoFps.StandardOutput.ReadLine();
+                                if (linea == null) break;
 
-                            if (!capturarFps) continue;
+                                if (!capturarFps) continue;
 
-                            var match = System.Text.RegularExpressions.Regex.Match(
-                                linea, @"(\d+)\s*fps",
-                                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                                var match = System.Text.RegularExpressions.Regex.Match(
+                                    linea, @"(\d+)\s*fps",
+                                    System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
-                            if (match.Success)
-                                OnFpsUpdate?.Invoke($"{match.Groups[1].Value} fps");
+                                if (match.Success)
+                                    OnFpsUpdate?.Invoke($"{match.Groups[1].Value} fps");
+                            }
                         }
-                    }
-                    catch { /* proceso terminado, salir limpiamente */ }
-                });
+                        catch { /* proceso terminado, salir limpiamente */ }
+                    });
+                }
 
                 return true;
             }
@@ -388,7 +408,7 @@ namespace LyXel
         // PRIVADOS
         // ══════════════════════════════════════════════════════════════
 
-        private string InferirCodecDeEncoder(string encoderName)
+        private static string InferirCodecDeEncoder(string encoderName)
         {
             string lower = encoderName.ToLower();
             if (lower.Contains("hevc") || lower.Contains("h265") || lower.Contains("h.265"))

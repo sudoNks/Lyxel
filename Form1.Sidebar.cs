@@ -289,6 +289,7 @@ namespace LyXel
         private void MarcarCambiosSinGuardar()
         {
             _haysCambiosSinGuardar = true;
+            ActualizarPreviewComando();
             MostrarAdvertenciaChips();
             var lbl = ObtenerLblAvisoHeader();
             if (lbl != null) lbl.Text = "⚠ Cambios sin guardar — ve a Perfiles para guardarlos";

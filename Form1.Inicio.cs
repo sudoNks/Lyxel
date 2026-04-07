@@ -104,7 +104,7 @@ namespace LyXel
 
             cardEstado.Controls.AddRange(new Control[] { lblEstadoIndicador, lblEstadoTexto, btnReconectar });
 
-            var cardRapido = CreateCard("Acceso Rápido", S(30), S(200), S(200));
+            var cardRapido = CreateCard("Acceso Rápido", S(30), S(200), S(365));
 
             btnIniciarScrcpy = new Guna2Button()
             {
@@ -162,12 +162,72 @@ namespace LyXel
             };
             ActualizarChipsPerfil();
 
-            cardRapido.Controls.AddRange(new Control[] { btnIniciarScrcpy, btnDetenerScrcpy, lblUltimoPerfil });
+            var lblModoDebug = new Label()
+            {
+                Text = "Modo Debug",
+                Font = new Font("Segoe UI", 9f),
+                ForeColor = AppTheme.TextSecondary,
+                Left = S(24),
+                Top = S(199),
+                AutoSize = true,
+                Anchor = AnchorStyles.Top | AnchorStyles.Left
+            };
+
+            var togModoDebug = new Guna2ToggleSwitch()
+            {
+                Left = cardRapido.Width - S(70),
+                Top = S(195),
+                Checked = _modoDebug,
+                CheckedState = { FillColor = accentColor },
+                UncheckedState = { FillColor = AppTheme.BorderNeutral },
+                Anchor = AnchorStyles.Top | AnchorStyles.Right
+            };
+            var ttDebug = new ToolTip();
+            ttDebug.SetToolTip(togModoDebug, "Muestra la consola de scrcpy al ejecutar. Útil para ver errores en tiempo real.");
+            togModoDebug.CheckedChanged += (s, e) =>
+            {
+                _modoDebug = togModoDebug.Checked;
+                GuardarConfigTema();
+            };
+
+            var lblComandoTitulo = new Label()
+            {
+                Text = "Comando a ejecutar:",
+                Font = new Font("Segoe UI", 8.5f),
+                ForeColor = AppTheme.TextSecondary,
+                Left = S(24),
+                Top = S(233),
+                AutoSize = true,
+                Anchor = AnchorStyles.Top | AnchorStyles.Left
+            };
+
+            txtPreviewComando = new TextBox()
+            {
+                Left = S(24),
+                Top = S(251),
+                Width = cardRapido.Width - S(48),
+                Height = S(90),
+                Multiline = true,
+                ReadOnly = true,
+                ScrollBars = ScrollBars.Vertical,
+                BackColor = AppTheme.BgDarkMid,
+                ForeColor = AppTheme.TextSecondary,
+                Font = new Font("Consolas", 8f),
+                BorderStyle = BorderStyle.None,
+                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+                TabStop = false
+            };
+
+            cardRapido.Controls.AddRange(new Control[] {
+                btnIniciarScrcpy, btnDetenerScrcpy, lblUltimoPerfil,
+                lblModoDebug, togModoDebug, lblComandoTitulo, txtPreviewComando
+            });
             contentPanel.Controls.AddRange(new Control[] { cardEstado, cardRapido });
 
             // Solo refresco el estado si la init ya terminó — durante el arranque se encarga IniciarDeteccionDispositivoAsync
             if (_inicializacionCompleta) _ = ActualizarEstadoDispositivoAsync();
             IniciarLoopEstadoScrcpy();
+            ActualizarPreviewComando();
         }
 
         private async void LanzarScrcpy()
@@ -383,6 +443,8 @@ namespace LyXel
                 if (corriendo  && _timerScrcpy.Interval != 500)  _timerScrcpy.Interval = 500;
                 else if (!corriendo && _timerScrcpy.Interval != 2000) _timerScrcpy.Interval = 2000;
             }
+
+            ActualizarPreviewComando();
         }
 
         private void IniciarLoopEstadoScrcpy()

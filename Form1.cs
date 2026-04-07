@@ -125,6 +125,8 @@ namespace LyXel
         private Panel _panelDetalle;
 
         private bool _optimizacionAceptada = false;
+        private bool _modoDebug = false;
+        private TextBox? txtPreviewComando = null;
 
         private string _configPath;
         private bool _sidebarAnimating = false;
@@ -330,6 +332,8 @@ namespace LyXel
                         _ultimoDpiAplicado = ud;
                     if (s.ContainsKey("ultima_velocidad_cursor") && int.TryParse(s["ultima_velocidad_cursor"], out int uvc))
                         _ultimaVelocidadCursor = uvc;
+                    if (s.ContainsKey("modo_debug"))
+                        bool.TryParse(s["modo_debug"], out _modoDebug);
                 }
 
                 if (data.Sections.ContainsSection("optimizacion") &&
@@ -399,6 +403,7 @@ namespace LyXel
                     d["Sesion"]["otg_serial"]               = _otgSerial ?? "";
                     d["Sesion"]["ultimo_dpi_aplicado"]      = _ultimoDpiAplicado > 0 ? _ultimoDpiAplicado.ToString() : "";
                     d["Sesion"]["ultima_velocidad_cursor"]  = _ultimaVelocidadCursor != int.MinValue ? _ultimaVelocidadCursor.ToString() : "";
+                    d["Sesion"]["modo_debug"]               = _modoDebug.ToString().ToLower();
                 });
 
                 // [optimizacion] y [optimizacion_estado] NO se tocan aquí;
@@ -671,6 +676,15 @@ namespace LyXel
             return chip;
         }
 
+        private void ActualizarPreviewComando()
+        {
+            if (txtPreviewComando == null) return;
+            bool tieneDispositivo = _hayDispositivo || _modoOtg || _wifiConectado;
+            txtPreviewComando.Text = tieneDispositivo
+                ? "scrcpy.exe " + ScrcpyManager.ConstruirArgumentos(ObtenerConfigActual())
+                : "scrcpy.exe (conecta un dispositivo para ver el comando completo)";
+        }
+
         private ScrcpyConfig ObtenerConfigActual() => new ScrcpyConfig
         {
             Video = _video,
@@ -714,7 +728,8 @@ namespace LyXel
             TecladoModo = _tecladoModo,
             MouseModo = _mouseModo,
             GamepadModo = _gamepadModo,
-            PointerSpeed = _pointerSpeed
+            PointerSpeed = _pointerSpeed,
+            ModoDebug = _modoDebug
         };
 
         private async Task DetectarDpiAlCargarAsync(Label lblDpiActual, StexNumericUpDown numDpi)
