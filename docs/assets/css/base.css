@@ -1,0 +1,212 @@
+:root {
+  --fondo: #0b0a0b;
+  --fondo-alterno: #0f0d0e;
+  --superficie: #141213;
+  --superficie-2: #1a1718;
+  --superficie-3: #231f21;
+
+  --borde: rgba(255, 255, 255, 0.08);
+  --borde-fuerte: rgba(255, 255, 255, 0.15);
+
+  --texto: #f4eff1;
+  --texto-suave: #b9aeb3;
+  --texto-tenue: #8d8287;
+
+  --vino-900: #22060f;
+  --vino-800: #3d0a1a;
+  --vino-700: #5b142b;
+  --vino-600: #6e1b37;
+  --vino-500: #9a3552;
+  --rosa: #c8506e;
+  --rosa-claro: #e48aa2;
+  --degradado: linear-gradient(90deg, #6e1b37 0%, #9a3552 50%, #c74f6d 100%);
+  --degradado-boton: linear-gradient(135deg, #7a1f3e 0%, #b2445f 100%);
+  --brillo: rgba(200, 80, 110, 0.35);
+
+  --ancho: 1180px;
+  --margen: 24px;
+  --radio: 18px;
+  --radio-medio: 12px;
+  --radio-chico: 8px;
+  --sombra: 0 40px 90px -40px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.06);
+
+  --fuente: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+* { margin: 0; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 84px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: var(--fuente);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img, svg { display: block; max-width: 100%; }
+
+img { height: auto; }
+
+a { color: inherit; }
+
+button { font: inherit; color: inherit; }
+
+ul[class], ol[class] { list-style: none; padding: 0; }
+
+code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--superficie-3);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  padding: 0.1em 0.4em;
+  overflow-wrap: anywhere;
+}
+
+::selection { background: var(--vino-500); color: #fff; }
+
+:focus-visible {
+  outline: 2px solid var(--rosa-claro);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+h1, h2, h3 {
+  color: var(--texto);
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 4.4vw, 3.65rem);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+
+h2 {
+  font-size: clamp(1.9rem, 3.6vw, 2.9rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+h3 {
+  font-size: 1.06rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+p { color: var(--texto-suave); text-wrap: pretty; }
+
+.degradado {
+  background: linear-gradient(95deg, #f4eff1 0%, #e48aa2 45%, #d0607c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+.ico {
+  width: 1.25em;
+  height: 1.25em;
+  flex: none;
+  fill: currentColor;
+}
+
+.ico-trazo {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.relleno { fill: currentColor; stroke: none; }
+
+.acento { stroke: var(--rosa); }
+
+.contenedor {
+  width: 100%;
+  max-width: var(--ancho);
+  margin-inline: auto;
+  padding-inline: var(--margen);
+}
+
+.oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.saltar {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 200;
+  padding: 10px 16px;
+  background: var(--vino-600);
+  color: #fff;
+  border-radius: var(--radio-chico);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.saltar:focus { top: 12px; }
+
+.js .revelar {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.js .revelar.visible { opacity: 1; transform: none; }
+
+@keyframes latido {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.8); }
+}
+
+@keyframes flotar {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .js .revelar { opacity: 1; transform: none; }
+}
+
+@media (max-width: 640px) {
+  :root { --margen: 16px; }
+  body { font-size: 15.5px; }
+}
