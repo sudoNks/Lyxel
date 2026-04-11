@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+  <html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lyxel - GUI para Scrcpy</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    <!-- HERO -->
+    <header class="hero">
+      <div class="hero-content">
+        <h1>&#10024; Lyxel</h1>
+        <p class="tagline">Interfaz gráfica para Scrcpy — controla tu Android desde PC, sin complicaciones.</p>
+        <div class="hero-buttons">
+          <a href="https://github.com/sudoNks/Lyxel/releases/latest" class="btn btn-primary">&#11015; Descargar v1.3.0</a>
+          <a href="https://github.com/sudoNks/Lyxel" class="btn btn-secondary">Ver en GitHub</a>
+        </div>
+        <p class="note">Windows 10/11 x64 &nbsp;|&nbsp; Requiere Scrcpy + ADB</p>
+      </div>
+    </header>
+
+    <!-- QUÉ ES -->
+    <section id="about" class="section">
+      <div class="container">
+        <h2>&#129302; ¿Qué es Lyxel?</h2>
+        <p>
+          Lyxel (antes <strong>MobiladorSteX</strong>) es una interfaz gráfica independiente para
+        <a href="https://github.com/Genymobile/scrcpy" target="_blank">Scrcpy</a> que facilita el
+        control de dispositivos Android desde tu PC. En lugar de tener que armar scripts BAT o
+        memorizar comandos ADB, Lyxel te da una interfaz clara con las opciones más útiles a un clic.
+        </p>
+      <p>
+        A partir de la versión <strong>v1.3.0</strong>, incluye además un módulo de optimización
+        Android que aplica configuraciones vía ADB para mejorar el rendimiento del dispositivo.
+      </p>
+      <div class="notice">
+        <strong>&#9888;&#65039; Nota:</strong> Lyxel <em>no es un fork</em> de Scrcpy. Es un proyecto
+        independiente que usa Scrcpy como herramienta subyacente.
+          Scrcpy es desarrollado por <a href="https://github.com/Genymobile" target="_blank">Genymobile</a>
+          bajo licencia Apache 2.0.
+        </div>
+      </div>
+    </section>
+
+    <!-- REQUISITOS -->
+    <section id="requirements" class="section section-alt">
+      <div class="container">
+        <h2>&#128203; Requisitos</h2>
+        <ul class="req-list">
+          <li>&#128187; Windows 10 / 11 (64 bits)</li>
+          <li>&#128241; <a href="https://github.com/Genymobile/scrcpy" target="_blank">Scrcpy</a> instalado y disponible en PATH</li>
+          <li>&#128279; ADB disponible en el sistema</li>
+        <li>&#128275; Depuración USB habilitada en el dispositivo Android</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- DESCARGAS -->
+    <section id="downloads" class="section">
+      <div class="container">
+        <h2>&#128229; Descargas</h2>
+        <p>Todos los archivos están hospedados directamente en GitHub Releases.</p>
+
+        <h3>Versiones estables — C# / .NET 8</h3>
+        <table>
+          <thead>
+            <tr><th>Versión</th><th>Nombre</th><th>Descarga</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>v1.3.0 &#10024;</strong></td><td>Lyxel</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.3.0">Download</a></td></tr>
+            <tr><td>v1.2.3</td><td>MORRIGAN Dreadnought</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.2.3">Download</a></td></tr>
+            <tr><td>v1.2.2</td><td>MORRIGAN Dreadnought</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.2.2">Download</a></td></tr>
+            <tr><td>v1.2.1</td><td>MORRIGAN Dreadnought</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.2.1">Download</a></td></tr>
+            <tr><td>v1.2.0</td><td>MORRIGAN</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.2.0">Download</a></td></tr>
+            <tr><td>v1.1.3</td><td>MobiladorSteX</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.1.3">Download</a></td></tr>
+            <tr><td>v1.1.2</td><td>MobiladorSteX</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.1.2">Download</a></td></tr>
+            <tr><td>v1.1.1</td><td>MobiladorSteX</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.1.1">Download</a></td></tr>
+            <tr><td>v1.1.0</td><td>MobiladorSteX</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.1.0">Download</a></td></tr>
+            <tr><td>v1.0.0</td><td>MobiladorSteX</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.0.0">Download</a></td></tr>
+          </tbody>
+        </table>
+
+        <h3>Versiones históricas — Python (pre-release)</h3>
+      <p class="small-note">Versiones antiguas conservadas para historial. No recomendadas para uso actual.</p>
+        <table>
+          <thead>
+            <tr><th>Versión</th><th>Nombre</th><th>Descarga</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>v0.3.8-debugfix</td><td>DEBUGFix &#9888;&#65039;</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.3.8-debugfix">Download</a></td></tr>
+            <tr><td>v0.3.7-insiderdebug</td><td>InsiderDebug</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.3.7-insiderdebug">Download</a></td></tr>
+            <tr><td>v0.3.6-insiderfix</td><td>InsiderFix</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.3.6-insiderfix">Download</a></td></tr>
+            <tr><td>v0.3.5-insider</td><td>Insider v0.3.5</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.3.5-insider">Download</a></td></tr>
+            <tr><td>v0.3.2-insider</td><td>Insider v0.3.0</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.3.2-insider">Download</a></td></tr>
+            <tr><td>v0.3.1-insider</td><td>Insider v0.1.0</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.3.1-insider">Download</a></td></tr>
+            <tr><td>v0.3.0-insider</td><td>Insider v0.0.0</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.3.0-insider">Download</a></td></tr>
+            <tr><td>v0.2.0-experimental</td><td>Experimental</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.2.0-experimental">Download</a></td></tr>
+            <tr><td>v0.1.0-beta</td><td>Beta</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.1.0-beta">Download</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container">
+        <p>Lyxel &copy; <a href="https://github.com/sudoNks" target="_blank">sudoNks</a> &nbsp;|&nbsp;
+      Usa <a href="https://github.com/Genymobile/scrcpy" target="_blank">Scrcpy</a> (Apache 2.0) &nbsp;|&nbsp;
+      <a href="https://github.com/sudoNks/Lyxel" target="_blank">GitHub</a></p>
+            </div>
+          </footer>
+
+        </body>
+        </html>
