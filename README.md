@@ -10,7 +10,7 @@
 > >
 > > ## 🚀 Descarga
 > >
-> > ➡️ **[Descargar última versión (v1.3.0)](https://github.com/sudoNks/Lyxel/releases/tag/v1.3.0)**
+> > ➡️ **[Descargar última versión (v1.4.0)](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.0)**
 > >
 > > Todas las versiones disponibles en: [Releases](https://github.com/sudoNks/Lyxel/releases)
 > >
