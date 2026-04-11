@@ -292,9 +292,57 @@ namespace LyXel
                         AutoSize = true
                     });
 
+                // Card de diagnóstico: modo debug y preview del comando completo
+                var cardDiag = CreateCard("Diagnóstico", S(30), S(875), S(220));
+
+                var togDebug = new Guna2ToggleSwitch()
+                {
+                    Left = cardDiag.Width - S(70),
+                    Top = S(58),
+                    Checked = _modoDebug,
+                    CheckedState = { FillColor = accentColor },
+                    UncheckedState = { FillColor = AppTheme.BorderNeutral },
+                    Anchor = AnchorStyles.Top | AnchorStyles.Right
+                };
+                var ttDebug = new ToolTip();
+                ttDebug.SetToolTip(togDebug, "Muestra la consola de scrcpy al ejecutar. Útil para ver errores en tiempo real.");
+                togDebug.CheckedChanged += (s, e) =>
+                {
+                    if (_cargandoPagina) return;
+                    _modoDebug = togDebug.Checked;
+                    GuardarConfigTema();
+                };
+
+                txtPreviewComandoCompleto = new TextBox()
+                {
+                    Left = S(24),
+                    Top = S(118),
+                    Width = cardDiag.Width - S(48),
+                    Height = S(80),
+                    Multiline = true,
+                    ReadOnly = true,
+                    ScrollBars = ScrollBars.Vertical,
+                    BackColor = AppTheme.BgDarkMid,
+                    ForeColor = AppTheme.TextSecondary,
+                    Font = new Font("Consolas", 8f),
+                    BorderStyle = BorderStyle.None,
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+                    TabStop = false
+                };
+
+                cardDiag.Controls.AddRange(new Control[]
+                {
+                new Label() { Text = "Modo Debug", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(60), AutoSize = true },
+                togDebug,
+                new Label() { Text = "Comando completo:", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = S(24), Top = S(100), AutoSize = true },
+                txtPreviewComandoCompleto
+                });
+
+                ActualizarPreviewComando();
+
                 contentPanel.Controls.AddRange(new Control[]
                 {
-                cardComport, cardDebug, cardMod, cardCursor
+                cardComport, cardDebug, cardMod, cardCursor, cardDiag
                 });
 
             }

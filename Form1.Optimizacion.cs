@@ -17,6 +17,8 @@ namespace LyXel
         private Label? _lblOptAdvertencia;
         // Referencia al label "sin dispositivo" para actualización reactiva
         private Label? _lblOptNoDispositivo;
+        // Toggles cuyo valor es volátil (setprop): se verifican al reconectar para detectar reset por reboot
+        private List<(string propName, string expectedVal, string key, Guna2ToggleSwitch tog)> _setpropToggles = new();
 
         /// <summary>Muestra u oculta el label de advertencia según el estado de dispositivo y toggles.</summary>
         private void ActualizarLabelOptAdvertencia()
@@ -557,10 +559,32 @@ namespace LyXel
                         if (!IsDisposed) { ToastNotification.Mostrar(this, "Conecta tu teléfono antes de aplicar optimizaciones.", ToastNotification.ToastTipo.Advertencia); t.Checked = false; }
                         return;
                     }
-                    await Task.Run(() => adbManager.EjecutarShell("settings put global window_animation_scale 0"));
-                    await Task.Run(() => adbManager.EjecutarShell("settings put global transition_animation_scale 0"));
-                    await Task.Run(() => adbManager.EjecutarShell("settings put global animator_duration_scale 0"));
-                    if (!revirtiendoTodo && !IsDisposed)
+                    (string on, string off)[] pairs =
+                    {
+                        ("settings put global window_animation_scale 0",     "settings put global window_animation_scale 1"),
+                        ("settings put global transition_animation_scale 0",  "settings put global transition_animation_scale 1"),
+                        ("settings put global animator_duration_scale 0",     "settings put global animator_duration_scale 1"),
+                    };
+                    var appliedOff = new List<string>();
+                    bool failed = false;
+                    foreach (var (on, off) in pairs)
+                    {
+                        var (ok, _, __) = await adbManager.EjecutarShellAsync(on);
+                        if (!ok)
+                        {
+                            foreach (var rollback in appliedOff)
+                                await adbManager.EjecutarShellAsync(rollback);
+                            if (!IsDisposed)
+                            {
+                                ToastNotification.Mostrar(this, "No se pudieron reducir todas las animaciones.", ToastNotification.ToastTipo.Error);
+                                t.Checked = false;
+                            }
+                            failed = true;
+                            break;
+                        }
+                        appliedOff.Add(off);
+                    }
+                    if (!failed && !revirtiendoTodo && !IsDisposed)
                         ToastNotification.Mostrar(this, "Optimización aplicada correctamente.", ToastNotification.ToastTipo.Exito);
                 },
                 onDisable: async (t) =>
@@ -792,7 +816,7 @@ namespace LyXel
                 desc: "Evita que Samsung limite CPU/GPU en juegos.",
                 cmdON: "pm disable-user --user 0 com.samsung.android.game.gos",
                 onEnable:  (t) => EjecutarOpt("pm disable-user --user 0 com.samsung.android.game.gos", t),
-                onDisable: (t) => EjecutarOpt("pm enable com.samsung.android.game.gos",                t));
+                onDisable: (t) => EjecutarOpt("pm enable --user 0 com.samsung.android.game.gos",       t));
 
             AddToggleRow(card3, ref c3y,
                 key: "samsung_cpu",
@@ -874,23 +898,24 @@ namespace LyXel
             // CARD 6 — Huawei
             // ════════════════════════════════════════════════════════════════════
             int c6y         = headerH;
-            int card6Height = headerH + rowH * 1 + cardPad;
+            int card6Height = headerH + btnRowH * 1 + cardPad;
             var card6 = CreateCard("Huawei", cardLeft, cardY, card6Height);
 
-            AddToggleRow(card6, ref c6y,
-                key: "huawei_powergenie",
-                titulo: "Optimizar PowerGenie",
-                desc: "Prioriza rendimiento sobre ahorro extremo de batería.",
-                cmdON: "cmd package compile -m speed -f com.huawei.powergenie",
-                onEnable:  (t) => EjecutarOpt("cmd package compile -m speed -f com.huawei.powergenie", t),
-                onDisable: (t) =>
-                {
-                    if (!IsDisposed)
-                        ToastNotification.Mostrar(this,
-                            "Aplicado permanentemente hasta reinicio.",
-                            ToastNotification.ToastTipo.Info);
-                    return Task.CompletedTask;
-                });
+            AddButtonRow(card6, ref c6y,
+                titulo:   "Optimizar PowerGenie",
+                desc:     "Prioriza rendimiento sobre ahorro extremo de batería. Se aplica hasta el próximo reinicio.",
+                btnText:  "Compilar",
+                cmdLabel: "cmd package compile -m speed -f com.huawei.powergenie",
+                accion:   () => EjecutarOpt("cmd package compile -m speed -f com.huawei.powergenie",
+                              mensajeExito: "PowerGenie optimizado correctamente."));
+
+            // Registrar toggles de setprop para verificación post-reboot
+            _setpropToggles.Clear();
+            foreach (var (tog, key, _) in toggleRegistry)
+            {
+                if (key == "vsync")  _setpropToggles.Add(("debug.hwc.force_gpu_vsync", "1", key, tog));
+                if (key == "opengl") _setpropToggles.Add(("debug.force-opengl",        "1", key, tog));
+            }
 
             contentPanel.Controls.AddRange(
                 new Control[] { btnRevertirTodo, lblAdvertencia, lblNoDispositivo, card1, card2, card2b, card3, card4, card5, card6 });
@@ -906,7 +931,32 @@ namespace LyXel
             {
                 if (_lblOptNoDispositivo == null || _lblOptNoDispositivo.IsDisposed) return;
                 _lblOptNoDispositivo.Visible = false;
+                _ = VerificarSetpropsAsync();
             });
+        }
+
+        private async Task VerificarSetpropsAsync()
+        {
+            if (_setpropToggles.Count == 0) return;
+            bool alguienDesynced = false;
+            foreach (var (propName, expectedVal, key, tog) in _setpropToggles)
+            {
+                if (!_optimizacionEstado.TryGetValue(key, out bool activo) || !activo) continue;
+                if (tog.IsDisposed) continue;
+                var (ok, stdout, _) = await adbManager.EjecutarShellAsync($"getprop {propName}");
+                if (!ok) continue;
+                if (stdout.Trim() != expectedVal)
+                {
+                    _optimizacionEstado[key] = false;
+                    GuardarEstadoOptimizacion();
+                    InvokeSeguro(() => { if (!tog.IsDisposed) tog.Checked = false; });
+                    alguienDesynced = true;
+                }
+            }
+            if (alguienDesynced && !IsDisposed)
+                InvokeSeguro(() => ToastNotification.Mostrar(this,
+                    "Algunos ajustes se perdieron al reiniciar el dispositivo.",
+                    ToastNotification.ToastTipo.Advertencia));
         }
 
         private void ActualizarOptimizacionDesconectado()

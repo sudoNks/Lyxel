@@ -552,6 +552,7 @@ namespace LyXel
 
                 cmbEncoders.SelectedIndexChanged += (s, e) =>
                 {
+                    if (_cargandoPagina) return;
                     int idx = cmbEncoders.SelectedIndex;
                     // Uso la lista persistida si está disponible, si no uso SelectedItem directamente
                     string sel = (_encodersDetectados.Count > idx && idx >= 0)

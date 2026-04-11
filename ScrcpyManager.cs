@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -45,13 +46,13 @@ namespace LyXel
         public int CustomRatioH { get; set; } = 9;
         public int Dpi { get; set; } = 420;
 
-        // sdk = API Android (más compatible), uhid = HID físico vía kernel (lo recomiendo), aoa = HID via AOA (solo USB)
+        // sdk = API Android (más compatible), uhid = HID físico vía kernel (recomendado)
         public string InputMode { get; set; } = "uhid";
 
         // Modos separados por dispositivo de entrada (reemplazan InputMode en el comando)
         public string TecladoModo { get; set; } = "uhid";   // uhid | disabled
         public string MouseModo { get; set; } = "uhid";     // uhid | disabled
-        public string GamepadModo { get; set; } = "disabled"; // uhid | disabled
+        public string GamepadModo { get; set; } = "disabled"; // "uhid" | "disabled"
 
         // Velocidad del cursor Android (-7 a 7, 0 = default)
         public int PointerSpeed { get; set; } = 0;
@@ -67,13 +68,11 @@ namespace LyXel
 
     public class ScrcpyManager
     {
-        private readonly string _scrcpyPath;
         private readonly string _adbPath;
         private Process? _proceso;
 
-        public ScrcpyManager(string scrcpyPath, string adbPath)
+        public ScrcpyManager(string adbPath)
         {
-            _scrcpyPath = scrcpyPath;
             _adbPath = adbPath;
         }
 
@@ -167,7 +166,8 @@ namespace LyXel
             }
             else
             {
-                cmd.Add($"--audio-buffer={config.AudioBuffer}");
+                if (config.AudioBuffer > 0)
+                    cmd.Add($"--audio-buffer={config.AudioBuffer}");
                 if (config.AudioDoble)
                     cmd.Add("--audio-dup");
 
@@ -183,8 +183,8 @@ namespace LyXel
 
             cmd.Add($"--keyboard={config.TecladoModo}");
             cmd.Add($"--mouse={config.MouseModo}");
-            if (config.GamepadModo == "uhid" || config.GamepadModo == "aoa")
-                cmd.Add($"--gamepad={config.GamepadModo}");
+            if (config.GamepadModo == "uhid")
+                cmd.Add("--gamepad=uhid");
             // Pasar todos los clics al dispositivo — fix para Shift+clic derecho en juegos
             if (config.ForwardAllClicks)
                 cmd.Add("--mouse-bind=++++:++++");
@@ -202,6 +202,17 @@ namespace LyXel
 
         private bool LanzarProceso(string args, ScrcpyConfig config)
         {
+            string scrcpyPath = ArquitecturaHelper.RutaScrcpy;
+            if (!File.Exists(scrcpyPath))
+            {
+                System.Windows.Forms.MessageBox.Show(
+                    "No se encontró scrcpy.exe. Verifica que los archivos de la aplicación estén completos.",
+                    "Error al iniciar scrcpy",
+                    System.Windows.Forms.MessageBoxButtons.OK,
+                    System.Windows.Forms.MessageBoxIcon.Error);
+                return false;
+            }
+
             try
             {
                 ProcessStartInfo startInfo;
@@ -210,7 +221,7 @@ namespace LyXel
                     // Modo debug: consola visible para ver salida de scrcpy en tiempo real
                     startInfo = new ProcessStartInfo
                     {
-                        FileName = _scrcpyPath,
+                        FileName = scrcpyPath,
                         Arguments = args,
                         UseShellExecute = true,
                         CreateNoWindow = false,
@@ -220,7 +231,7 @@ namespace LyXel
                 {
                     startInfo = new ProcessStartInfo
                     {
-                        FileName = _scrcpyPath,
+                        FileName = scrcpyPath,
                         Arguments = args,
                         UseShellExecute = false,
                         CreateNoWindow = true,
@@ -319,7 +330,7 @@ namespace LyXel
                 {
                     var encoderStartInfo = new ProcessStartInfo
                     {
-                        FileName = _scrcpyPath,
+                        FileName = ArquitecturaHelper.RutaScrcpy,
                         Arguments = "--list-encoders",
                         UseShellExecute = false,
                         CreateNoWindow = true,

@@ -47,13 +47,18 @@ namespace LyXel
             // Esta llamada pone _inicializacionCompleta = true al terminar
             await ActualizarEstadoDispositivoAsync(mostrarToast: true);
 
+            if (!ArquitecturaHelper.ScrcpyDisponible())
+                InvokeSeguro(() => ToastNotification.Mostrar(this,
+                    $"No se encontró scrcpy ({(ArquitecturaHelper.ModoCompatibilidad ? "32 bits" : "64 bits")}). Reinstala la aplicación.",
+                    ToastNotification.ToastTipo.Error));
+
             // Reactivo el monitor solo cuando el estado ya es definitivo
             if (!IsDisposed) adbManager.IniciarTrackDevices();
         }
 
         private void LoadInicioPage()
         {
-            var cardEstado = CreateCard("Estado del Dispositivo", S(30), S(20), S(160));
+            var cardEstado = CreateCard("Estado del Dispositivo", S(30), S(56), S(160));
 
             lblEstadoIndicador = new Label()
             {
@@ -104,7 +109,93 @@ namespace LyXel
 
             cardEstado.Controls.AddRange(new Control[] { lblEstadoIndicador, lblEstadoTexto, btnReconectar });
 
-            var cardRapido = CreateCard("Acceso Rápido", S(30), S(200), S(365));
+            // Toggle Modo Compatibilidad — lógica sin cambios
+            var togCompatInicio = new Guna2ToggleSwitch()
+            {
+                Checked = ArquitecturaHelper.ModoCompatibilidad,
+                CheckedState = { FillColor = accentColor },
+                UncheckedState = { FillColor = AppTheme.BorderNeutral },
+                Anchor = AnchorStyles.None,
+                Margin = new Padding(0)
+            };
+            var ttCompatInicio = new ToolTip();
+            ttCompatInicio.SetToolTip(togCompatInicio, "Usa scrcpy de 32 bits. Activa esto si tienes problemas de compatibilidad.");
+            togCompatInicio.CheckedChanged += (s, e) =>
+            {
+                ArquitecturaHelper.ModoCompatibilidad = togCompatInicio.Checked;
+                GuardarConfigTema();
+                ActualizarPreviewComando();
+                string msg = togCompatInicio.Checked
+                    ? "Modo Compatibilidad activado. Aplica al próximo inicio de scrcpy."
+                    : "Modo Compatibilidad desactivado. Aplica al próximo inicio de scrcpy.";
+                ToastNotification.Mostrar(this, msg, ToastNotification.ToastTipo.Info, 3500);
+            };
+
+            // TLP interno de cardCompat: [label Fill | toggle AutoSize]
+            var tblCompat = new TableLayoutPanel()
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 2,
+                RowCount = 1,
+                BackColor = Color.Transparent,
+                Padding = new Padding(0),
+                Margin = new Padding(0)
+            };
+            tblCompat.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); // label: Fill
+            tblCompat.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));     // toggle: AutoSize
+            tblCompat.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+
+            tblCompat.Controls.Add(new Label()
+            {
+                Text = "Modo Compatibilidad (32 bits)",
+                Font = new Font("Segoe UI", 8.5f),
+                ForeColor = AppTheme.TextSecondary,
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Margin = new Padding(0)
+            }, 0, 0);
+            tblCompat.Controls.Add(togCompatInicio, 1, 0);
+
+            // Card contenedora: fondo de card, padding interno, alineada a la derecha del header
+            var cardCompat = new Panel()
+            {
+                BackColor = AppTheme.BgCard,
+                BorderStyle = BorderStyle.None,
+                Padding = new Padding(10, 6, 10, 6),
+                Height = S(36),
+                AutoSize = false,
+                Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                Margin = new Padding(0, 2, 0, 2)
+            };
+            cardCompat.Controls.Add(tblCompat);
+
+            // TableLayoutPanel de encabezado: [título AutoSize | espacio Fill | cardCompat AutoSize]
+            var tblTituloFila = new TableLayoutPanel()
+            {
+                Dock = DockStyle.Top,
+                Height = 40,
+                ColumnCount = 3,
+                RowCount = 1,
+                BackColor = Color.Transparent,
+                Padding = new Padding(S(30), 0, S(16), 0)
+            };
+            tblTituloFila.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));      // "Inicio"
+            tblTituloFila.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));  // espacio
+            tblTituloFila.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));      // cardCompat
+            tblTituloFila.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+
+            tblTituloFila.Controls.Add(new Label()
+            {
+                Text = "Inicio",
+                Font = new Font("Segoe UI", 10f, FontStyle.Bold),
+                ForeColor = AppTheme.TextPrimary,
+                AutoSize = true,
+                Anchor = AnchorStyles.Left | AnchorStyles.Top,
+                Margin = new Padding(0, S(8), 0, 0)
+            }, 0, 0);
+            tblTituloFila.Controls.Add(cardCompat, 2, 0);
+
+            var cardRapido = CreateCard("Acceso Rápido", S(30), S(236), S(248));
 
             btnIniciarScrcpy = new Guna2Button()
             {
@@ -162,67 +253,89 @@ namespace LyXel
             };
             ActualizarChipsPerfil();
 
-            var lblModoDebug = new Label()
+            var lblCmd = new Label()
             {
-                Text = "Modo Debug",
-                Font = new Font("Segoe UI", 9f),
+                Text = "CMD:",
+                Font = new Font("Segoe UI", 8f),
                 ForeColor = AppTheme.TextSecondary,
-                Left = S(24),
-                Top = S(199),
                 AutoSize = true,
-                Anchor = AnchorStyles.Top | AnchorStyles.Left
-            };
-
-            var togModoDebug = new Guna2ToggleSwitch()
-            {
-                Left = cardRapido.Width - S(70),
-                Top = S(195),
-                Checked = _modoDebug,
-                CheckedState = { FillColor = accentColor },
-                UncheckedState = { FillColor = AppTheme.BorderNeutral },
-                Anchor = AnchorStyles.Top | AnchorStyles.Right
-            };
-            var ttDebug = new ToolTip();
-            ttDebug.SetToolTip(togModoDebug, "Muestra la consola de scrcpy al ejecutar. Útil para ver errores en tiempo real.");
-            togModoDebug.CheckedChanged += (s, e) =>
-            {
-                _modoDebug = togModoDebug.Checked;
-                GuardarConfigTema();
-            };
-
-            var lblComandoTitulo = new Label()
-            {
-                Text = "Comando a ejecutar:",
-                Font = new Font("Segoe UI", 8.5f),
-                ForeColor = AppTheme.TextSecondary,
-                Left = S(24),
-                Top = S(233),
-                AutoSize = true,
-                Anchor = AnchorStyles.Top | AnchorStyles.Left
+                Margin = new Padding(0, 4, 4, 0)
             };
 
             txtPreviewComando = new TextBox()
             {
-                Left = S(24),
-                Top = S(251),
-                Width = cardRapido.Width - S(48),
-                Height = S(90),
-                Multiline = true,
+                Height = S(24),
+                Width = cardRapido.Width - S(24) - S(24) - S(34), // panel - left pad - right pad - label approx
+                Multiline = false,
                 ReadOnly = true,
-                ScrollBars = ScrollBars.Vertical,
+                ScrollBars = ScrollBars.None,
                 BackColor = AppTheme.BgDarkMid,
                 ForeColor = AppTheme.TextSecondary,
                 Font = new Font("Consolas", 8f),
                 BorderStyle = BorderStyle.None,
-                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
-                TabStop = false
+                Anchor = AnchorStyles.Left | AnchorStyles.Right,
+                TabStop = false,
+                Margin = new Padding(0, 4, 0, 0)
+            };
+            txtPreviewComando.Enter += (s, e) => this.BeginInvoke(() => this.ActiveControl = null);
+
+            var btnCopiarComando = new Button()
+            {
+                Width = S(24),
+                Height = S(24),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.Transparent,
+                Cursor = Cursors.Hand,
+                TabStop = false,
+                Margin = new Padding(4, 4, 0, 0),
+                ImageAlign = ContentAlignment.MiddleCenter,
+                Image = IconMap.ContentCopy
+            };
+            btnCopiarComando.FlatAppearance.BorderSize = 0;
+            btnCopiarComando.FlatAppearance.MouseOverBackColor = Color.FromArgb(30, 255, 255, 255);
+            btnCopiarComando.FlatAppearance.MouseDownBackColor = Color.FromArgb(60, 255, 255, 255);
+            var ttCopiar = new ToolTip();
+            ttCopiar.SetToolTip(btnCopiarComando, "Copiar comando");
+            btnCopiarComando.Click += (s, e) =>
+            {
+                bool tieneDispositivo = _hayDispositivo || _modoOtg || _wifiConectado;
+                string prefijo = ArquitecturaHelper.ModoCompatibilidad ? "scrcpy.exe (x86)" : "scrcpy.exe (x86_64)";
+                string comandoCompleto = tieneDispositivo
+                    ? prefijo + " " + ScrcpyManager.ConstruirArgumentos(ObtenerConfigActual())
+                    : prefijo + " (conecta un dispositivo para ver el comando completo)";
+                Clipboard.SetText(comandoCompleto);
+                ToastNotification.Mostrar(this, "Comando copiado al portapapeles.", ToastNotification.ToastTipo.Info, 2500);
+            };
+
+            var panelCmd = new FlowLayoutPanel()
+            {
+                Left = S(24),
+                Top = S(197),
+                Width = cardRapido.Width - S(48),
+                Height = S(32),
+                FlowDirection = FlowDirection.LeftToRight,
+                WrapContents = false,
+                BackColor = AppTheme.BgDarkMid,
+                Padding = new Padding(0),
+                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
+            };
+            panelCmd.Click += (s, e) => this.ActiveControl = null;
+
+            // El TextBox ocupa el espacio restante entre label y botón copiar
+            panelCmd.Controls.AddRange(new Control[] { lblCmd, txtPreviewComando, btnCopiarComando });
+            panelCmd.Layout += (s, e) =>
+            {
+                int reservado = lblCmd.Width + lblCmd.Margin.Horizontal
+                              + S(24) + btnCopiarComando.Margin.Horizontal;
+                txtPreviewComando.Width = Math.Max(0,
+                    panelCmd.ClientSize.Width - reservado - txtPreviewComando.Margin.Horizontal);
             };
 
             cardRapido.Controls.AddRange(new Control[] {
                 btnIniciarScrcpy, btnDetenerScrcpy, lblUltimoPerfil,
-                lblModoDebug, togModoDebug, lblComandoTitulo, txtPreviewComando
+                panelCmd
             });
-            contentPanel.Controls.AddRange(new Control[] { cardEstado, cardRapido });
+            contentPanel.Controls.AddRange(new Control[] { tblTituloFila, cardEstado, cardRapido });
 
             // Solo refresco el estado si la init ya terminó — durante el arranque se encarga IniciarDeteccionDispositivoAsync
             if (_inicializacionCompleta) _ = ActualizarEstadoDispositivoAsync();
@@ -323,6 +436,7 @@ namespace LyXel
                     Action onDetenerFlotante = () =>
                     {
                         scrcpyManager.Detener();
+                        _scrcpyEstabaActivo = false;
                         if (adbManager.HayDispositivoConectado())
                         {
                             if (_wmSizeActivo) adbManager.ResetearResolucion();
@@ -380,6 +494,7 @@ namespace LyXel
                         while (scrcpyManager.EstaCorriendo)
                             await Task.Delay(500);
 
+                        _scrcpyEstabaActivo = false;
                         InvokeSeguro(() =>
                         {
                             this.WindowState = FormWindowState.Normal;
@@ -535,15 +650,21 @@ namespace LyXel
                     ? $"Conectado: {seriales[0]}"
                     : $"{seriales.Count} dispositivos conectados";
 
-                // Si la sesión anterior terminó con resolución modificada (crash o Task Manager),
-                // la revierto silenciosamente antes de que el usuario empiece a usar la app
+                // Si la sesión anterior terminó con resolución o DPI modificados (crash o Task Manager),
+                // revierto silenciosamente antes de que el usuario empiece a usar la app
                 if (_resolucionPendienteReset)
                 {
                     await Task.Run(() => adbManager.ResetearResolucion());
                     _wmSizeActivo = false;
                     _resAdbActiva = false;
                     _resolucionPendienteReset = false;
-                    GuardarConfigTema(); // limpio el flag persistido en config.ini
+                    GuardarConfigTema();
+                }
+                if (_dpiPendienteReset != 0)
+                {
+                    var (dpiOk, _, __) = await Task.Run(() => adbManager.ResetearDPI());
+                    if (dpiOk) _dpiPendienteReset = 0;
+                    GuardarConfigTema();
                 }
             }
             else

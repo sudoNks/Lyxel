@@ -35,7 +35,6 @@ namespace LyXel
         private Guna2Button btnGuardadoRapido;
         private Guna2Button[] navButtons;
         private ADBManager adbManager;
-        private string scrcpyPath;
         private ScrcpyManager scrcpyManager;
         private PerfilManager perfilManager;
         private Label lblEstadoIndicador;
@@ -82,6 +81,7 @@ namespace LyXel
         private bool _wifiConectado = false; // conexión WiFi establecida
         private bool _inicializacionCompleta = false; // detección inicial completada
         private string _videoEncoder = "";
+        private int _dpiPendienteReset = 0; // DPI aplicado que hay que revertir al cerrar/iniciar
         private List<string> _encodersDetectados = new();
         private List<string> _encodersDisplayLabels = new();
 
@@ -126,7 +126,8 @@ namespace LyXel
 
         private bool _optimizacionAceptada = false;
         private bool _modoDebug = false;
-        private TextBox? txtPreviewComando = null;
+        private TextBox? txtPreviewComando = null;          // compacto — Inicio
+        private TextBox? txtPreviewComandoCompleto = null;  // completo — Extras
 
         private string _configPath;
         private bool _sidebarAnimating = false;
@@ -146,10 +147,9 @@ namespace LyXel
             Application.AddMessageFilter(new ScrollFocusFilter());
 
             string adbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "adb", "adb.exe");
-            scrcpyPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "scrcpy", "scrcpy.exe");
 
             adbManager = new ADBManager(adbPath);
-            scrcpyManager = new ScrcpyManager(scrcpyPath, adbPath);
+            scrcpyManager = new ScrcpyManager(adbPath);
 
             string perfilesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "perfiles.ini");
             if (!File.Exists(perfilesPath))
@@ -245,6 +245,13 @@ namespace LyXel
                     }
                 }
 
+                // Si el DPI fue modificado lo revierto al cerrar
+                if (_dpiPendienteReset != 0 && hayDispositivo)
+                {
+                    var (dpiOk, _, __) = adbManager.ResetearDPI();
+                    if (dpiOk) _dpiPendienteReset = 0;
+                }
+
                 GuardarConfigTema();
 
                 adbManager.CerrarDaemonLocal();
@@ -296,10 +303,16 @@ namespace LyXel
                     }
                 }
 
-                // Si la sesión anterior terminó con resolución modificada, marco para revertir al inicio
-                if (data.Sections.ContainsSection("Dispositivo") &&
-                    data["Dispositivo"].ContainsKey("resolucion_pendiente_reset"))
-                    bool.TryParse(data["Dispositivo"]["resolucion_pendiente_reset"], out _resolucionPendienteReset);
+                // Si la sesión anterior terminó con resolución o DPI modificados, marco para revertir al inicio
+                if (data.Sections.ContainsSection("Dispositivo"))
+                {
+                    var secDev = data["Dispositivo"];
+                    if (secDev.ContainsKey("resolucion_pendiente_reset"))
+                        bool.TryParse(secDev["resolucion_pendiente_reset"], out _resolucionPendienteReset);
+                    if (secDev.ContainsKey("dpi_pendiente_reset") &&
+                        int.TryParse(secDev["dpi_pendiente_reset"], out int dpr) && dpr > 0)
+                        _dpiPendienteReset = dpr;
+                }
 
                 // Los encoders detectados los persisto separados por '|', paralelos a los display labels
                 var secVideo = data.Sections.ContainsSection("Video") ? data["Video"] : null;
@@ -334,6 +347,9 @@ namespace LyXel
                         _ultimaVelocidadCursor = uvc;
                     if (s.ContainsKey("modo_debug"))
                         bool.TryParse(s["modo_debug"], out _modoDebug);
+                    if (s.ContainsKey("modo_compatibilidad") &&
+                        bool.TryParse(s["modo_compatibilidad"], out bool modoCompat))
+                        ArquitecturaHelper.ModoCompatibilidad = modoCompat;
                 }
 
                 if (data.Sections.ContainsSection("optimizacion") &&
@@ -392,6 +408,7 @@ namespace LyXel
                 Reemplazar("Dispositivo", d =>
                 {
                     d["Dispositivo"]["resolucion_pendiente_reset"] = (_wmSizeActivo || _resAdbActiva).ToString().ToLower();
+                    d["Dispositivo"]["dpi_pendiente_reset"]        = _dpiPendienteReset.ToString();
                 });
 
                 Reemplazar("Sesion", d =>
@@ -404,6 +421,7 @@ namespace LyXel
                     d["Sesion"]["ultimo_dpi_aplicado"]      = _ultimoDpiAplicado > 0 ? _ultimoDpiAplicado.ToString() : "";
                     d["Sesion"]["ultima_velocidad_cursor"]  = _ultimaVelocidadCursor != int.MinValue ? _ultimaVelocidadCursor.ToString() : "";
                     d["Sesion"]["modo_debug"]               = _modoDebug.ToString().ToLower();
+                    d["Sesion"]["modo_compatibilidad"]      = ArquitecturaHelper.ModoCompatibilidad.ToString().ToLower();
                 });
 
                 // [optimizacion] y [optimizacion_estado] NO se tocan aquí;
@@ -678,11 +696,17 @@ namespace LyXel
 
         private void ActualizarPreviewComando()
         {
-            if (txtPreviewComando == null) return;
+            if (txtPreviewComando == null && txtPreviewComandoCompleto == null) return;
             bool tieneDispositivo = _hayDispositivo || _modoOtg || _wifiConectado;
-            txtPreviewComando.Text = tieneDispositivo
-                ? "scrcpy.exe " + ScrcpyManager.ConstruirArgumentos(ObtenerConfigActual())
-                : "scrcpy.exe (conecta un dispositivo para ver el comando completo)";
+            string prefijo = ArquitecturaHelper.ModoCompatibilidad ? "scrcpy.exe (x86)" : "scrcpy.exe (x86_64)";
+            string texto = tieneDispositivo
+                ? prefijo + " " + ScrcpyManager.ConstruirArgumentos(ObtenerConfigActual())
+                : prefijo + " (conecta un dispositivo para ver el comando completo)";
+            InvokeSeguro(() =>
+            {
+                if (txtPreviewComando != null) txtPreviewComando.Text = texto;
+                if (txtPreviewComandoCompleto != null) txtPreviewComandoCompleto.Text = texto;
+            });
         }
 
         private ScrcpyConfig ObtenerConfigActual() => new ScrcpyConfig

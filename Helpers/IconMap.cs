@@ -25,6 +25,7 @@ namespace LyXel.Helpers
 
         // Acciones generales
         public static Image? Refresh      => IconHelper.Get("ic_refresh");
+        public static Image? ContentCopy  => IconHelper.Get("ic_content_copy");
         public static Image? Sync         => IconHelper.Get("ic_sync");
         public static Image? Apply        => IconHelper.Get("ic_apply");
         public static Image? Reset        => IconHelper.Get("ic_reset");

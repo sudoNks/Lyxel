@@ -89,9 +89,7 @@ namespace LyXel
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
 
-                string gamepadInfoText = _gamepadModo == "aoa"
-                    ? "⚠ Teclado y Mouse desactivados por Gamepad AOA"
-                    : "⚠ Teclado y Mouse desactivados por Gamepad UHID";
+                string gamepadInfoText = "⚠ Teclado y Mouse desactivados por Gamepad UHID";
 
                 var lblGamepadInfo = new Label()
                 {
@@ -164,7 +162,7 @@ namespace LyXel
                 });
 
                 // ── Card: Gamepad ─────────────────────────────────────────────────
-                var cardGamepad = CreateCard("Gamepad", S(30), S(520), S(270));
+                var cardGamepad = CreateCard("Gamepad", S(30), S(520), S(150));
 
                 var togGamepadUhid = new Guna2ToggleSwitch()
                 {
@@ -176,15 +174,8 @@ namespace LyXel
                     Anchor = AnchorStyles.Top | AnchorStyles.Right
                 };
 
-                var togGamepadAoa = new Guna2ToggleSwitch()
-                {
-                    Left = cardGamepad.Width - S(70),
-                    Top = S(168),
-                    Checked = _gamepadModo == "aoa",
-                    CheckedState = { FillColor = accentColor },
-                    UncheckedState = { FillColor = AppTheme.BorderNeutral },
-                    Anchor = AnchorStyles.Top | AnchorStyles.Right
-                };
+                var ttGamepad = new ToolTip();
+                ttGamepad.SetToolTip(togGamepadUhid, "Conecta tu mando vía USB. Compatible con la mayoría de controladores.");
 
                 togGamepadUhid.CheckedChanged += (s, e) =>
                 {
@@ -200,7 +191,6 @@ namespace LyXel
                         _gamepadModo = "uhid";
 
                         _cargandoPagina = true;
-                        togGamepadAoa.Checked = false;
                         togTeclado.Checked = false;
                         togMouse.Checked = false;
                         _cargandoPagina = false;
@@ -208,86 +198,23 @@ namespace LyXel
                         togTeclado.Enabled = false;
                         togMouse.Enabled = false;
 
-                        lblGamepadInfo.Text = "⚠ Teclado y Mouse desactivados por Gamepad UHID";
                         lblGamepadInfo.Visible = true;
                     }
                     else
                     {
-                        if (_gamepadModo == "uhid")
-                        {
-                            _tecladoModo = _gamepadPrevTeclado;
-                            _mouseModo = _gamepadPrevMouse;
-                            _gamepadModo = "disabled";
-
-                            _cargandoPagina = true;
-                            togTeclado.Checked = _tecladoModo != "disabled";
-                            togMouse.Checked = _mouseModo != "disabled";
-                            _cargandoPagina = false;
-
-                            togTeclado.Enabled = true;
-                            togMouse.Enabled = true;
-
-                            lblGamepadInfo.Visible = false;
-                        }
-                    }
-
-                    MarcarCambiosSinGuardar();
-                };
-
-                togGamepadAoa.CheckedChanged += (s, e) =>
-                {
-                    if (_cargandoPagina) return;
-
-                    if (togGamepadAoa.Checked)
-                    {
-                        if (_usarWifi)
-                        {
-                            _cargandoPagina = true;
-                            togGamepadAoa.Checked = false;
-                            _cargandoPagina = false;
-                            ToastNotification.Mostrar(this,
-                                "AOA solo funciona por USB. Cambia a conexión USB para usar este modo.",
-                                ToastNotification.ToastTipo.Advertencia);
-                            return;
-                        }
-
-                        _gamepadPrevTeclado = _tecladoModo;
-                        _gamepadPrevMouse = _mouseModo;
-
-                        _tecladoModo = "disabled";
-                        _mouseModo = "disabled";
-                        _gamepadModo = "aoa";
+                        _tecladoModo = _gamepadPrevTeclado;
+                        _mouseModo = _gamepadPrevMouse;
+                        _gamepadModo = "disabled";
 
                         _cargandoPagina = true;
-                        togGamepadUhid.Checked = false;
-                        togTeclado.Checked = false;
-                        togMouse.Checked = false;
+                        togTeclado.Checked = _tecladoModo != "disabled";
+                        togMouse.Checked = _mouseModo != "disabled";
                         _cargandoPagina = false;
 
-                        togTeclado.Enabled = false;
-                        togMouse.Enabled = false;
+                        togTeclado.Enabled = true;
+                        togMouse.Enabled = true;
 
-                        lblGamepadInfo.Text = "⚠ Teclado y Mouse desactivados por Gamepad AOA";
-                        lblGamepadInfo.Visible = true;
-                    }
-                    else
-                    {
-                        if (_gamepadModo == "aoa")
-                        {
-                            _tecladoModo = _gamepadPrevTeclado;
-                            _mouseModo = _gamepadPrevMouse;
-                            _gamepadModo = "disabled";
-
-                            _cargandoPagina = true;
-                            togTeclado.Checked = _tecladoModo != "disabled";
-                            togMouse.Checked = _mouseModo != "disabled";
-                            _cargandoPagina = false;
-
-                            togTeclado.Enabled = true;
-                            togMouse.Enabled = true;
-
-                            lblGamepadInfo.Visible = false;
-                        }
+                        lblGamepadInfo.Visible = false;
                     }
 
                     MarcarCambiosSinGuardar();
@@ -295,7 +222,7 @@ namespace LyXel
 
                 cardGamepad.Controls.AddRange(new Control[]
                 {
-                    new Label() { Text = "Gamepad UHID", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(60), AutoSize = true },
+                    new Label() { Text = "Gamepad (UHID)", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(60), AutoSize = true },
                     new Label()
                     {
                         Text = "Simula gamepad físico HID. Funciona por USB y WiFi. Al activarlo, teclado y mouse se desactivan automáticamente.",
@@ -303,16 +230,7 @@ namespace LyXel
                         Left = S(24), Top = S(80), Width = cardGamepad.Width - S(100), Height = S(40),
                         AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                     },
-                    togGamepadUhid,
-                    new Label() { Text = "Gamepad AOA", Font = new Font("Segoe UI", 10f), ForeColor = textPrimary, Left = S(24), Top = S(170), AutoSize = true },
-                    new Label()
-                    {
-                        Text = "Gamepad vía AOA (Android Open Accessory). Solo USB, no requiere depuración USB. Incompatible con WiFi.",
-                        Font = new Font("Segoe UI", 8f), ForeColor = textSecondary,
-                        Left = S(24), Top = S(190), Width = cardGamepad.Width - S(100), Height = S(40),
-                        AutoSize = false, Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
-                    },
-                    togGamepadAoa
+                    togGamepadUhid
                 });
 
                 contentPanel.Controls.AddRange(new Control[] { cardModoEntrada, cardTecladoMouse, cardGamepad });

@@ -92,7 +92,7 @@ namespace LyXel
             {
                 Text      = ObtenerIcono(tipo),
                 Font      = new Font("Segoe UI", 14f),
-                ForeColor = Color.White,
+                ForeColor = AppTheme.TextPrimary,
                 Left      = iconLeft,
                 Top       = 0,       // llenará la altura total; MiddleCenter centra verticalmente
                 Width     = iconWidth,
@@ -105,7 +105,7 @@ namespace LyXel
             {
                 Text      = mensaje,
                 Font      = new Font("Segoe UI", 9f),
-                ForeColor = Color.White,
+                ForeColor = AppTheme.TextPrimary,
                 Left      = msgLeft,
                 Top       = S(10),
                 Width     = msgWidth,

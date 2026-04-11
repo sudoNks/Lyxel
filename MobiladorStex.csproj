@@ -18,7 +18,10 @@
     <FileVersion>1.4.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="bin\scrcpy\**\*.*">
+    <Content Include="bin\scrcpy\x86\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="bin\scrcpy\x86_64\**\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="bin\adb\**\*.*">
@@ -90,6 +93,7 @@
     <EmbeddedResource Include="Assets\Icons\ic_done.png" />
     <EmbeddedResource Include="Assets\Icons\ic_redo.png" />
     <EmbeddedResource Include="Assets\Icons\ic_bolt.png" />
+    <EmbeddedResource Include="Assets\Icons\ic_content_copy.png" />
     <EmbeddedResource Include="Assets\Icons\ic_history.png" />
     <EmbeddedResource Include="Assets\Icons\ic_controller.png" />
   </ItemGroup>

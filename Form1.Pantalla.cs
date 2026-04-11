@@ -810,15 +810,33 @@ namespace LyXel
                 btnAplicarDpi.Image = IconMap.Apply;
                 btnAplicarDpi.Click += async (s, e) =>
                 {
-                    if (MessageBox.Show($"¿Aplicar DPI {_dpi}?\n\nUsa 'Resetear' si algo sale mal.", "⚠ Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes) return;
+                    if (!_hayDispositivo)
+                    {
+                        ToastNotification.Mostrar(this, "Conecta un dispositivo primero.", ToastNotification.ToastTipo.Advertencia);
+                        return;
+                    }
+                    using var dlgDpi = new DialogoConfirmar($"¿Aplicar DPI {_dpi}?", "Usa 'Resetear' si algo sale mal.");
+                    if (dlgDpi.ShowDialog(this) != DialogResult.OK) return;
                     btnAplicarDpi.Enabled = false;
                     try
                     {
-                        var (exito, mensaje, _) = await adbManager.AplicarDPIAsync(_dpi);
+                        var (exito, mensaje, error) = await adbManager.AplicarDPIAsync(_dpi);
                         if (IsDisposed) return;
                         lblDpiStatus.Text = exito ? $"✓ {mensaje}" : $"✗ {mensaje}";
                         lblDpiStatus.ForeColor = exito ? AppTheme.Success : AppTheme.Error;
-                        if (exito) { _ultimoDpiAplicado = _dpi; GuardarConfigTema(); }
+                        if (exito)
+                        {
+                            _ultimoDpiAplicado = _dpi;
+                            _dpiPendienteReset = _dpi;
+                            GuardarConfigTema();
+                            ToastNotification.Mostrar(this, $"DPI aplicado: {_dpi}", ToastNotification.ToastTipo.Exito);
+                        }
+                        else
+                        {
+                            ToastNotification.Mostrar(this,
+                                string.IsNullOrWhiteSpace(error) ? mensaje : error,
+                                ToastNotification.ToastTipo.Error);
+                        }
                     }
                     finally
                     {
@@ -844,14 +862,32 @@ namespace LyXel
                 btnResetearDpi.Image = IconMap.Reset;
                 btnResetearDpi.Click += async (s, e) =>
                 {
+                    if (!_hayDispositivo)
+                    {
+                        ToastNotification.Mostrar(this, "Conecta un dispositivo primero.", ToastNotification.ToastTipo.Advertencia);
+                        return;
+                    }
                     btnResetearDpi.Enabled = false;
                     try
                     {
-                        var (exito, mensaje, _) = await adbManager.ResetearDPIAsync();
+                        var (exito, mensaje, error) = await adbManager.ResetearDPIAsync();
                         if (IsDisposed) return;
                         lblDpiStatus.Text = exito ? $"✓ {mensaje}" : $"✗ {mensaje}";
                         lblDpiStatus.ForeColor = exito ? AppTheme.Success : AppTheme.Error;
-                        if (exito) { var (eD, dpi, _2) = await adbManager.DetectarDPIAsync(); if (!IsDisposed && eD) { _dpi = dpi; numDpi.Value = dpi; lblDpiActual.Text = $"DPI actual: {dpi}"; } }
+                        if (exito)
+                        {
+                            _dpiPendienteReset = 0;
+                            GuardarConfigTema();
+                            ToastNotification.Mostrar(this, "DPI restablecido.", ToastNotification.ToastTipo.Exito);
+                            var (eD, dpi, _2) = await adbManager.DetectarDPIAsync();
+                            if (!IsDisposed && eD) { _dpi = dpi; numDpi.Value = dpi; lblDpiActual.Text = $"DPI actual: {dpi}"; }
+                        }
+                        else
+                        {
+                            ToastNotification.Mostrar(this,
+                                string.IsNullOrWhiteSpace(error) ? mensaje : error,
+                                ToastNotification.ToastTipo.Error);
+                        }
                     }
                     finally
                     {
