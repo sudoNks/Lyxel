@@ -1,135 +1,161 @@
 <!DOCTYPE html>
-<html lang="es" data-bs-theme="dark">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lyxel - GUI para Scrcpy</title>
-  
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <title>Lyxel - Interfaz Gráfica para Scrcpy</title>
   
   <link rel="stylesheet" href="style.css">
+  
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
 
-  <header class="hero-section text-center">
-    <div class="container" data-aos="zoom-in" data-aos-duration="1000">
-      <h1 class="hero-title mb-3">✨ Lyxel</h1>
-      <p class="lead text-secondary mb-5 mx-auto" style="max-width: 600px;">
-        Interfaz gráfica para Scrcpy — controla tu Android desde PC, sin complicaciones y con un estilo impecable.
+  <header class="hero-section">
+    <div class="container text-center" data-aos="zoom-in" data-aos-duration="1000">
+      <h1 class="hero-title">Lyxel</h1>
+      <p class="hero-tagline">
+        Interfaz gráfica para Scrcpy — controla tu dispositivo Android desde PC con total facilidad.
       </p>
-      <div class="d-flex justify-content-center gap-3 flex-wrap mb-4">
-        <a href="https://github.com/sudoNks/Lyxel/releases/latest" class="btn btn-amaranth rounded-pill">
-          ⬇ Descargar v1.4.0
+      <div class="hero-actions">
+        <a href="https://github.com/sudoNks/Lyxel/releases/latest" class="btn btn-amaranth">
+          Versión v1.4.0 <span class="download-label">(Windows 10/11 x64)</span>
         </a>
-        <a href="https://github.com/sudoNks/Lyxel" class="btn btn-outline-custom rounded-pill">
-          Ver en GitHub
+        <a href="https://github.com/sudoNks/Lyxel" class="btn btn-outline-custom">
+          Ver Proyecto en GitHub
         </a>
       </div>
-      <p class="small text-muted">Windows 10 x86 / Windows 10/11 x64 &nbsp;|&nbsp; Instalación simple</p>
+      <p class="hero-note">Requiere instalación simple. Soporte x86 disponible.</p>
     </div>
   </header>
 
   <section id="about" class="section-padding">
     <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
-          <h2 class="mb-4">🤖 ¿Qué es Lyxel?</h2>
-          <p class="text-secondary mb-4">
-            Lyxel (antes <strong>MobiladorSteX</strong>) es una interfaz gráfica independiente para 
-            <a href="https://github.com/Genymobile/scrcpy" target="_blank" class="text-amaranth">Scrcpy</a> 
-            que facilita el control de dispositivos Android desde tu PC. En lugar de tener que armar scripts BAT o memorizar comandos ADB, Lyxel te da una interfaz clara con las opciones más útiles a un clic.
+      <div class="row section-intro" data-aos="fade-up">
+        <div class="col-8-custom">
+          <h2 class="section-title">¿Qué es Lyxel?</h2>
+          <p class="section-description">
+            Lyxel (anteriormente <strong>MobiladorSteX</strong>) es una interfaz gráfica independiente para 
+            <a href="https://github.com/Genymobile/scrcpy" target="_blank" class="text-amaranth">Scrcpy</a>, 
+            diseñada para centralizar el control de dispositivos Android desde tu PC. Evita el uso de scripts BAT y memorización de comandos ADB; Lyxel te ofrece todas las opciones esenciales a un solo clic.
           </p>
-          <div class="card custom-card p-4 text-start mb-4" data-aos="fade-up" data-aos-delay="100">
-            <p class="mb-0 text-secondary">
-              A partir de la versión <strong class="text-white">v1.3.0</strong>, incluye además un módulo de optimización Android que aplica configuraciones vía ADB para mejorar el rendimiento del dispositivo.
-            </p>
-          </div>
-          <div class="p-3 rounded text-start notice-box text-secondary small" data-aos="fade-up" data-aos-delay="200">
-            <strong class="text-white">⚠️ Nota:</strong> Lyxel <em>no es un fork</em> de Scrcpy. Es un proyecto independiente. Scrcpy es desarrollado por Genymobile bajo licencia Apache 2.0.
-          </div>
         </div>
+      </div>
+      
+      <div class="card-large section-spacer" data-aos="fade-up" data-aos-delay="100">
+        <p>
+          Desde la versión <strong class="highlight-text">v1.3.0</strong>, Lyxel integra un módulo de optimización Android que aplica configuraciones avanzadas vía ADB para mejorar el rendimiento y la estabilidad del dispositivo conectado.
+        </p>
+      </div>
+
+      <div class="notice-box section-spacer" data-aos="fade-up" data-aos-delay="200">
+        <p>
+          <strong class="highlight-text">AVISO IMPORTANTE:</strong> Lyxel es un proyecto independiente y <em>no es un fork</em> de Scrcpy. Scrcpy es desarrollado por <a href="https://github.com/Genymobile" target="_blank" class="notice-link">Genymobile</a> bajo licencia Apache 2.0.
+        </p>
       </div>
     </div>
   </section>
 
   <section id="requirements" class="section-padding section-alt">
     <div class="container">
-      <h2 class="text-center mb-5" data-aos="fade-down">📋 Requisitos</h2>
-      <div class="row g-4 justify-content-center">
-        <div class="col-md-4" data-aos="flip-left" data-aos-delay="100">
-          <div class="custom-card p-4 text-center">
-            <h1 class="mb-3">💻</h1>
-            <h5>Sistema Operativo</h5>
-            <p class="text-secondary small">Windows 10 (x86 o x64) o Windows 11 (x64).</p>
-          </div>
+      <h2 class="section-title text-center" data-aos="fade-down">Requisitos del Sistema</h2>
+      <div class="req-grid" data-aos="fade-up">
+        <div class="req-item">
+          <div class="req-icon req-win"></div>
+          <h4>Sistema Operativo</h4>
+          <p>Windows 10 (x86 o x64) o Windows 11 (x64).</p>
         </div>
-        <div class="col-md-4" data-aos="flip-left" data-aos-delay="200">
-          <div class="custom-card p-4 text-center">
-            <h1 class="mb-3">📱</h1>
-            <h5>Dispositivo</h5>
-            <p class="text-secondary small">Un dispositivo Android con la <strong>Depuración USB</strong> habilitada.</p>
-          </div>
+        <div class="req-item">
+          <div class="req-icon req-android"></div>
+          <h4>Dispositivo Android</h4>
+          <p>Depuración USB habilitada en las opciones de desarrollador.</p>
         </div>
-        <div class="col-md-4" data-aos="flip-left" data-aos-delay="300">
-          <div class="custom-card p-4 text-center">
-            <h1 class="mb-3">🔔</h1>
-            <h5>Todo Incluido</h5>
-            <p class="text-secondary small">Scrcpy y ADB ya vienen integrados. No necesitas instalar nada extra.</p>
-          </div>
+        <div class="req-item">
+          <div class="req-icon req-scrcpy"></div>
+          <h4>Herramientas</h4>
+          <p>Scrcpy y ADB ya vienen integrados. No requiere instalación adicional.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="downloads" class="section-padding">
-    <div class="container" style="max-width: 800px;">
-      <h2 class="text-center mb-4" data-aos="fade-up">📥 Descargas</h2>
-      <p class="text-center text-secondary mb-5" data-aos="fade-up">Todos los archivos están hospedados directamente en GitHub Releases.</p>
+  <section id="downloads" class="section-padding Downloads">
+    <div class="container container-narrow downloads-container">
+      <h2 class="section-title text-center" data-aos="fade-up">Descargas y Versiones</h2>
+      <p class="section-intro-text text-center" data-aos="fade-up">Todos los archivos oficiales están hospedados directamente en GitHub Releases.</p>
 
-      <div data-aos="fade-up" data-aos-delay="100">
-        <h5 class="text-amaranth mb-3">Versiones estables — C# / .NET 8</h5>
-        <div class="table-responsive rounded border border-secondary border-opacity-25 mb-5">
-          <table class="table table-custom mb-0 text-center align-middle">
-            <thead class="table-dark">
-              <tr>
-                <th class="py-3">Versión</th>
-                <th class="py-3">Nombre</th>
-                <th class="py-3">Enlace</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="badge bg-danger rounded-pill px-3 py-2">v1.4.0 ✨</span></td>
-                <td>Lyxel</td>
-                <td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.0">Descargar</a></td>
-              </tr>
-              <tr><td>v1.3.0</td><td>Lyxel</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.3.0">Descargar</a></td></tr>
-              <tr><td>v1.2.3</td><td>MORRIGAN Dreadnought</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.2.3">Descargar</a></td></tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="downloads-list" data-aos="fade-up" data-aos-delay="100">
+        <h3 class="downloads-subtitle">Versiones estables — C# / .NET 8</h3>
+        <table class="table-custom text-center table-spacer">
+          <thead>
+            <tr>
+              <th>Versión</th>
+              <th>Nombre del Proyecto</th>
+              <th>Enlace de Descarga</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="active-row">
+              <td><span class="active-badge">v1.4.0</span></td>
+              <td>Lyxel</td>
+              <td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.0">Descargar</a></td>
+            </tr>
+            <tr><td>v1.3.0</td><td>Lyxel</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.3.0">Descargar</a></td></tr>
+            <tr><td>v1.2.3</td><td>MORRIGAN Dreadnought</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.2.3">Descargar</a></td></tr>
+            <tr><td>v1.2.2</td><td>MORRIGAN Dreadnought</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.2.2">Descargar</a></td></tr>
+            <tr><td>v1.2.1</td><td>MORRIGAN Dreadnought</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.2.1">Descargar</a></td></tr>
+            <tr><td>v1.2.0</td><td>MORRIGAN</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.2.0">Descargar</a></td></tr>
+            <tr><td>v1.1.3</td><td>MobiladorSteX</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.1.3">Descargar</a></td></tr>
+            <tr><td>v1.1.2</td><td>MobiladorSteX</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.1.2">Descargar</a></td></tr>
+            <tr><td>v1.1.1</td><td>MobiladorSteX</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.1.1">Descargar</a></td></tr>
+            <tr><td>v1.1.0</td><td>MobiladorSteX</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.1.0">Descargar</a></td></tr>
+            <tr><td>v1.0.0</td><td>MobiladorSteX</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.0.0">Descargar</a></td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="downloads-subtitle table-spacer section-spacer">Versiones históricas — Python (pre-release)</h3>
+        <p class="table-notice">Versiones antiguas conservadas con fines históricos. No recomendadas para uso en entornos de producción.</p>
+        <table class="table-custom table-custom-alt text-center table-spacer">
+          <thead>
+            <tr>
+              <th>Versión</th>
+              <th>Etiqueta</th>
+              <th>Enlace de Descarga</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>v0.3.8-debugfix</td><td>DEBUGFix</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.3.8-debugfix">Descargar</a></td></tr>
+            <tr><td>v0.3.7-insiderdebug</td><td>InsiderDebug</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.3.7-insiderdebug">Descargar</a></td></tr>
+            <tr><td>v0.3.6-insiderfix</td><td>InsiderFix</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.3.6-insiderfix">Descargar</a></td></tr>
+            <tr><td>v0.3.5-insider</td><td>Insider v0.3.5</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.3.5-insider">Descargar</a></td></tr>
+            <tr><td>v0.3.2-insider</td><td>Insider v0.3.0</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.3.2-insider">Descargar</a></td></tr>
+            <tr><td>v0.3.1-insider</td><td>Insider v0.1.0</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.3.1-insider">Descargar</a></td></tr>
+            <tr><td>v0.3.0-insider</td><td>Insider v0.0.0</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.3.0-insider">Descargar</a></td></tr>
+            <tr><td>v0.2.0-experimental</td><td>Experimental</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.2.0-experimental">Descargar</a></td></tr>
+            <tr><td>v0.1.0-beta</td><td>Beta</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v0.1.0-beta">Descargar</a></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
 
-  <footer class="py-4 text-center">
-    <div class="container">
-      <p class="mb-0 text-secondary small">
-        Lyxel &copy; <a href="https://github.com/sudoNks" target="_blank">sudoNks</a> &nbsp;|&nbsp;
-        Usa <a href="https://github.com/Genymobile/scrcpy" target="_blank">Scrcpy</a> (Apache 2.0) &nbsp;|&nbsp;
-        <a href="https://github.com/sudoNks/Lyxel" target="_blank">GitHub</a>
+  <footer class="footer section-padding">
+    <div class="container text-center">
+      <p class="footer-text">
+        Lyxel &copy; <a href="https://github.com/sudoNks" target="_blank" class="notice-link">sudoNks</a> &nbsp;|&nbsp;
+        Integración de <a href="https://github.com/Genymobile/scrcpy" target="_blank" class="notice-link">Scrcpy</a> (Apache 2.0) &nbsp;|&nbsp;
+        <a href="https://github.com/sudoNks/Lyxel" target="_blank" class="notice-link">GitHub</a>
       </p>
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     // Inicializar animaciones de scroll
     AOS.init({
-      once: true, // La animación solo sucede la primera vez que bajas
-      offset: 100 // Distancia en píxeles para que se active
+      once: true, // La animación solo sucede la primera vez
+      offset: 120, // Distancia para que se active
+      duration: 800 // Duración por defecto
     });
   </script>
 </body>
