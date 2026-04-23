@@ -1,137 +1,355 @@
 <!DOCTYPE html>
-<html lang="es" data-bs-theme="dark">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lyxel - GUI para Scrcpy</title>
 
-      <!-- Lyxel page -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  
-  <link rel="stylesheet" href="style.css">
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LyXel — GUI para Scrcpy</title>
+
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{--red:#6d1a36;--red-light:#8b2244;--red-bright:#a02850;--black:#080808;--surface:#0f0f0f;--surface2:#141414;--border:#1a1a1a;--text:#f0f0f0;--muted:#666;--muted2:#444}
+
+html{scroll-behavior:smooth}
+
+body{background:var(--black);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden}
+
+nav{position:sticky;top:0;z-index:100;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);backdrop-filter:blur(20px);background:rgba(8,8,8,0.9)}
+
+.nav-logo{font-size:18px;font-weight:800;letter-spacing:4px;color:var(--text)}.nav-logo span{color:var(--red-bright)}
+
+.nav-links{display:flex;gap:28px;list-style:none}.nav-links a{color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;transition:color 0.2s}.nav-links a:hover{color:var(--text)}
+
+.nav-ver{font-size:11px;font-weight:600;color:var(--red-bright);letter-spacing:1px;background:#6d1a3622;padding:4px 10px;border-radius:4px;border:1px solid #6d1a3644}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 40px 80px;position:relative;overflow:hidden}
+
+.hero::before{content:'';position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(109,26,54,0.12) 0%,transparent 70%);pointer-events:none}
+
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(#ffffff04 1px,transparent 1px),linear-gradient(90deg,#ffffff04 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black,transparent)}
+
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--red-bright);text-transform:uppercase;margin-bottom:20px;opacity:0;animation:fadeUp 0.7s 0.1s forwards}
+
+.hero-title{font-size:clamp(48px,8vw,88px);font-weight:800;line-height:0.95;letter-spacing:-2px;margin-bottom:20px;opacity:0;animation:fadeUp 0.7s 0.25s forwards}
+
+.hero-title em{font-style:normal;color:var(--red-bright)}
+
+.hero-sub{font-size:16px;color:var(--muted);max-width:460px;line-height:1.7;margin-bottom:44px;font-weight:400;opacity:0;animation:fadeUp 0.7s 0.4s forwards}
+
+.hero-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp 0.7s 0.55s forwards}
+
+.btn-p{display:inline-flex;align-items:center;gap:7px;padding:13px 24px;background:var(--red);color:#fff;font-weight:600;font-size:13px;text-decoration:none;border-radius:6px;transition:all 0.2s}.btn-p:hover{background:var(--red-light);transform:translateY(-1px)}
+
+.btn-s{display:inline-flex;align-items:center;gap:7px;padding:13px 24px;background:transparent;color:var(--muted);font-size:13px;text-decoration:none;border-radius:6px;border:1px solid var(--border);transition:all 0.2s;font-weight:500}.btn-s:hover{border-color:var(--red-bright);color:var(--red-bright)}
+
+.hero-note{margin-top:36px;font-size:11px;color:var(--muted2);letter-spacing:1px;opacity:0;animation:fadeUp 0.7s 0.7s forwards}
+
+.stats{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface)}
+
+.stats-inner{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+
+.stat{text-align:center;padding:28px 20px;border-right:1px solid var(--border)}.stat:last-child{border-right:none}
+
+.stat-num{font-size:28px;font-weight:800;color:var(--red-bright);display:block;letter-spacing:-1px}
+
+.stat-label{font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:0.5px}
+
+section{padding:90px 40px}.si{max-width:860px;margin:0 auto}
+
+.stag{font-size:10px;font-weight:600;letter-spacing:3px;color:var(--red-bright);text-transform:uppercase;margin-bottom:14px}
+
+.stitle{font-size:clamp(28px,4vw,44px);font-weight:800;line-height:1;letter-spacing:-1px;margin-bottom:14px}
+
+.ssub{font-size:15px;color:var(--muted);max-width:480px;line-height:1.7}
+
+.fg{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-top:52px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+
+.fi{background:var(--surface);padding:26px;transition:background 0.2s}.fi:hover{background:var(--surface2)}
+
+.ficon{width:34px;height:34px;background:#6d1a3618;border:1px solid #6d1a3633;border-radius:7px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+
+.ficon svg{width:16px;height:16px;color:var(--red-bright)}
+
+.ftitle{font-size:14px;font-weight:700;margin-bottom:6px}.fdesc{font-size:12px;color:var(--muted);line-height:1.6}
+
+.dl-sec{background:var(--surface);border-top:1px solid var(--border)}
+
+.dlg{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:44px}
+
+.dlc{background:var(--black);border:1px solid var(--border);border-radius:10px;padding:22px;display:flex;flex-direction:column;gap:10px;transition:border-color 0.2s}.dlc:hover{border-color:#6d1a3666}
+
+.dlc.feat{border-color:#6d1a3644;background:#0a0305}
+
+.da{font-size:10px;font-weight:600;letter-spacing:2px;color:var(--red-bright);text-transform:uppercase}
+
+.dn{font-size:19px;font-weight:800}.dd{font-size:12px;color:var(--muted);line-height:1.5}
+
+.db{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;background:var(--red);color:#fff;font-size:12px;font-weight:600;text-decoration:none;border-radius:5px;margin-top:2px;transition:all 0.15s;width:fit-content}.db:hover{background:var(--red-light)}
+
+.db2{background:transparent;border:1px solid var(--border);color:var(--muted)}.db2:hover{border-color:var(--red-bright);color:var(--red-bright);background:transparent}
+
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:44px}
+
+.rc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px}
+
+.rt{font-size:13px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}.rt::before{content:'';width:5px;height:5px;background:var(--red-bright);border-radius:50%;flex-shrink:0}
+
+.rl{list-style:none;display:flex;flex-direction:column;gap:7px}.rl li{font-size:12px;color:var(--muted);padding-left:12px;position:relative;line-height:1.5}.rl li::before{content:'—';position:absolute;left:0;color:var(--muted2)}
+
+.cl{border-top:1px solid var(--border)}
+
+.vl{margin-top:44px;display:flex;flex-direction:column;gap:2px}
+
+.vi{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:16px 20px;display:flex;align-items:center;gap:16px;transition:border-color 0.2s}.vi:hover{border-color:#6d1a3644}
+
+.vi.lat{border-color:#6d1a3655;background:#0a0305}
+
+.vn{font-size:15px;font-weight:800;color:var(--red-bright);min-width:70px}
+
+.vt{font-size:9px;font-weight:600;letter-spacing:1px;padding:3px 7px;border-radius:3px;background:#6d1a3622;color:var(--red-bright);white-space:nowrap}
+
+.vt.old{background:#1a1a1a;color:var(--muted)}
+
+.vd{font-size:12px;color:var(--muted);flex:1}
+
+.vdl{font-size:11px;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 10px;border-radius:4px;transition:all 0.15s;white-space:nowrap}.vdl:hover{border-color:var(--red-bright);color:var(--red-bright)}
+
+footer{padding:40px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+
+.fl{font-size:15px;font-weight:800;letter-spacing:3px}.fl span{color:var(--red-bright)}
+
+.flinks{display:flex;gap:20px}.flinks a{color:var(--muted);text-decoration:none;font-size:12px;transition:color 0.2s}.flinks a:hover{color:var(--text)}
+
+.fc{font-size:11px;color:var(--muted2)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+</style>
+
 </head>
+
 <body>
 
-  <header class="hero-section text-center">
-    <div class="container" data-aos="zoom-in" data-aos-duration="1000">
-      <h1 class="hero-title mb-3">✨ Lyxel</h1>
-      <p class="lead text-secondary mb-5 mx-auto" style="max-width: 600px;">
-        Interfaz gráfica para Scrcpy — controla tu Android desde PC, sin complicaciones y con un estilo impecable.
-      </p>
-      <div class="d-flex justify-content-center gap-3 flex-wrap mb-4">
-        <a href="https://github.com/sudoNks/Lyxel/releases/latest" class="btn btn-amaranth rounded-pill">
-          ⬇ Descargar v1.4.0
-        </a>
-        <a href="https://github.com/sudoNks/Lyxel" class="btn btn-outline-custom rounded-pill">
-          Ver en GitHub
-        </a>
+<nav>
+
+  <div class="nav-logo">Ly<span>X</span>el</div>
+
+  <ul class="nav-links">
+
+    <li><a href="#features">Funciones</a></li>
+
+    <li><a href="#download">Descargar</a></li>
+
+    <li><a href="#requirements">Requisitos</a></li>
+
+    <li><a href="#changelog">Versiones</a></li>
+
+    <li><a href="https://discord.gg/CU5quVNyun">Discord</a></li>
+
+  </ul>
+
+  <span class="nav-ver">v1.4.1 Estable</span>
+
+</nav>
+
+<div class="hero">
+
+  <div class="grid-bg"></div>
+
+  <p class="hero-eyebrow">Control total de tu Android desde PC</p>
+
+  <h1 class="hero-title">GUI para<br><em>Scrcpy.</em></h1>
+
+  <p class="hero-sub">Controla, optimiza y configura tu dispositivo Android desde Windows. Sin comandos, sin complicaciones.</p>
+
+  <div class="hero-actions">
+
+    <a href="#download" class="btn-p">
+
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zm7-18L5.33 9h3.84v4h5.66V9h3.84L12 2z"/></svg>
+
+      Descargar v1.4.1
+
+    </a>
+
+    <a href="https://github.com/sudoNks/Lyxel" class="btn-s">
+
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+
+      Ver en GitHub
+
+    </a>
+
+  </div>
+
+  <p class="hero-note">WINDOWS 10/11 · X86 · X64 · SCRCPY INCLUIDO</p>
+
+</div>
+
+<div class="stats">
+
+  <div class="stats-inner">
+
+    <div class="stat"><span class="stat-num">v1.4.1</span><span class="stat-label">Versión estable</span></div>
+
+    <div class="stat"><span class="stat-num">7</span><span class="stat-label">Perfiles base</span></div>
+
+    <div class="stat"><span class="stat-num">32/64</span><span class="stat-label">Bits compatible</span></div>
+
+    <div class="stat"><span class="stat-num">Free</span><span class="stat-label">Descarga gratuita</span></div>
+
+  </div>
+
+</div>
+
+<section id="features">
+
+  <div class="si">
+
+    <p class="stag">Funciones</p>
+
+    <h2 class="stitle">Todo en uno.</h2>
+
+    <p class="ssub">LyXel no es un fork de Scrcpy. Es un proyecto independiente que usa Scrcpy como base y agrega interfaz propia, optimizaciones ADB y nuevas funcionalidades.</p>
+
+    <div class="fg">
+
+      <div class="fi"><div class="ficon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg></div><div class="ftitle">Transmisión de pantalla</div><div class="fdesc">Video y audio desde tu Android a Windows. FPS, bitrate, resolución y codec configurables.</div></div>
+
+      <div class="fi"><div class="ficon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></div><div class="ftitle">Optimización ADB</div><div class="fdesc">Ajustes para Samsung, Xiaomi, Pixel, Huawei y Free Fire con un solo toggle. Sin comandos.</div></div>
+
+      <div class="fi"><div class="ficon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 7.5V2H9v5.5l3 3 3-3zM7.5 9H2v6h5.5l3-3-3-3zM9 16.5V22h6v-5.5l-3-3-3 3zM16.5 9l-3 3 3 3H22V9h-5.5z"/></svg></div><div class="ftitle">Controles configurables</div><div class="fdesc">Activa o desactiva teclado, mouse y gamepad. Modo UHID para máxima compatibilidad.</div></div>
+
+      <div class="fi"><div class="ficon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 0 0-6 0zm-4-4 2 2a7.074 7.074 0 0 1 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div><div class="ftitle">Conexión WiFi</div><div class="fdesc">Conecta de forma inalámbrica. Guarda la sesión y reconecta sin configurar de nuevo.</div></div>
+
+      <div class="fi"><div class="ficon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg></div><div class="ftitle">Perfiles guardados</div><div class="fdesc">7 perfiles preconfigurados. Crea, exporta e importa los tuyos. Cambia configuración en un clic.</div></div>
+
+      <div class="fi"><div class="ficon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div><div class="ftitle">Modo de renderizado</div><div class="fdesc">Direct3D, OpenGL, OpenGLES2 o Software. Filtrado automático según tu arquitectura.</div></div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section id="download" class="dl-sec">
+
+  <div class="si">
+
+    <p class="stag">Descargar</p>
+
+    <h2 class="stitle">Elige tu versión.</h2>
+
+    <p class="ssub">Scrcpy y ADB incluidos. No necesitas instalar nada adicional.</p>
+
+    <div class="dlg">
+
+      <div class="dlc feat">
+
+        <span class="da">Windows 10/11 — Recomendado</span>
+
+        <span class="dn">64 bits (x64)</span>
+
+        <span class="dd">Para la mayoría de PCs modernos. Rendimiento óptimo y compatibilidad completa.</span>
+
+        <a href="https://github.com/sudoNks/Lyxel/releases/download/v1.4.1/LyXel_Setup_v1.4.1.exe" class="db"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zm7-18L5.33 9h3.84v4h5.66V9h3.84L12 2z"/></svg>Descargar .exe</a>
+
       </div>
-      <p class="small text-muted">Windows 10 x86 / Windows 10/11 x64 &nbsp;|&nbsp; Instalación simple</p>
-    </div>
-  </header>
 
-  <section id="about" class="section-padding">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
-          <h2 class="mb-4">🤖 ¿Qué es Lyxel?</h2>
-          <p class="text-secondary mb-4">
-            Lyxel (antes <strong>MobiladorSteX</strong>) es una interfaz gráfica independiente para 
-            <a href="https://github.com/Genymobile/scrcpy" target="_blank" class="text-amaranth">Scrcpy</a> 
-            que facilita el control de dispositivos Android desde tu PC. En lugar de tener que armar scripts BAT o memorizar comandos ADB, Lyxel te da una interfaz clara con las opciones más útiles a un clic.
-          </p>
-          <div class="card custom-card p-4 text-start mb-4" data-aos="fade-up" data-aos-delay="100">
-            <p class="mb-0 text-secondary">
-              A partir de la versión <strong class="text-white">v1.3.0</strong>, incluye además un módulo de optimización Android que aplica configuraciones vía ADB para mejorar el rendimiento del dispositivo.
-            </p>
-          </div>
-          <div class="p-3 rounded text-start notice-box text-secondary small" data-aos="fade-up" data-aos-delay="200">
-            <strong class="text-white">⚠️ Nota:</strong> Lyxel <em>no es un fork</em> de Scrcpy. Es un proyecto independiente. Scrcpy es desarrollado por Genymobile bajo licencia Apache 2.0.
-          </div>
-        </div>
+      <div class="dlc">
+
+        <span class="da">Windows 10 — Compatibilidad</span>
+
+        <span class="dn">32 bits (x86)</span>
+
+        <span class="dd">Para equipos más antiguos. Activa el Modo Compatibilidad dentro de la app tras instalar.</span>
+
+        <a href="https://github.com/sudoNks/Lyxel/releases/download/v1.4.1/LyXel_Setup_v1.4.1.exe" class="db db2"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zm7-18L5.33 9h3.84v4h5.66V9h3.84L12 2z"/></svg>Descargar .exe</a>
+
       </div>
+
     </div>
-  </section>
 
-  <section id="requirements" class="section-padding section-alt">
-    <div class="container">
-      <h2 class="text-center mb-5" data-aos="fade-down">📋 Requisitos</h2>
-      <div class="row g-4 justify-content-center">
-        <div class="col-md-4" data-aos="flip-left" data-aos-delay="100">
-          <div class="custom-card p-4 text-center">
-            <h1 class="mb-3">💻</h1>
-            <h5>Sistema Operativo</h5>
-            <p class="text-secondary small">Windows 10 (x86 o x64) o Windows 11 (x64).</p>
-          </div>
-        </div>
-        <div class="col-md-4" data-aos="flip-left" data-aos-delay="200">
-          <div class="custom-card p-4 text-center">
-            <h1 class="mb-3">📱</h1>
-            <h5>Dispositivo</h5>
-            <p class="text-secondary small">Un dispositivo Android con la <strong>Depuración USB</strong> habilitada.</p>
-          </div>
-        </div>
-        <div class="col-md-4" data-aos="flip-left" data-aos-delay="300">
-          <div class="custom-card p-4 text-center">
-            <h1 class="mb-3">🔔</h1>
-            <h5>Todo Incluido</h5>
-            <p class="text-secondary small">Scrcpy y ADB ya vienen integrados. No necesitas instalar nada extra.</p>
-          </div>
-        </div>
-      </div>
+  </div>
+
+</section>
+
+<section id="requirements">
+
+  <div class="si">
+
+    <p class="stag">Requisitos</p>
+
+    <h2 class="stitle">Lo que necesitas.</h2>
+
+    <p class="ssub">Solo tu PC con Windows y tu teléfono Android. Todo lo demás ya viene incluido.</p>
+
+    <div class="rg">
+
+      <div class="rc"><div class="rt">PC — Windows</div><ul class="rl"><li>Windows 10 o Windows 11</li><li>Arquitectura x86 (32 bits) o x64 (64 bits)</li><li>Scrcpy y ADB incluidos — no requieren instalación adicional</li><li>Puerto USB disponible para la primera conexión</li></ul></div>
+
+      <div class="rc"><div class="rt">Teléfono — Android</div><ul class="rl"><li>Android 5.0 o superior</li><li>Depuración USB habilitada en Opciones de desarrollador</li><li>En Xiaomi: activar "Depuración USB (modo seguridad)"</li><li>Cable USB para configuración inicial (WiFi opcional después)</li></ul></div>
+
     </div>
-  </section>
 
-  <section id="downloads" class="section-padding">
-    <div class="container" style="max-width: 800px;">
-      <h2 class="text-center mb-4" data-aos="fade-up">📥 Descargas</h2>
-      <p class="text-center text-secondary mb-5" data-aos="fade-up">Todos los archivos están hospedados directamente en GitHub Releases.</p>
+  </div>
 
-      <div data-aos="fade-up" data-aos-delay="100">
-        <h5 class="text-amaranth mb-3">Versiones estables — C# / .NET 8</h5>
-        <div class="table-responsive rounded border border-secondary border-opacity-25 mb-5">
-          <table class="table table-custom mb-0 text-center align-middle">
-            <thead class="table-dark">
-              <tr>
-                <th class="py-3">Versión</th>
-                <th class="py-3">Nombre</th>
-                <th class="py-3">Enlace</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="badge bg-danger rounded-pill px-3 py-2">v1.4.0 ✨</span></td>
-                <td>Lyxel</td>
-                <td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.0">Descargar</a></td>
-              </tr>
-              <tr><td>v1.3.0</td><td>Lyxel</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.3.0">Descargar</a></td></tr>
-              <tr><td>v1.2.3</td><td>MORRIGAN Dreadnought</td><td><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.2.3">Descargar</a></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+</section>
+
+<section id="changelog" class="cl">
+
+  <div class="si">
+
+    <p class="stag">Historial</p>
+
+    <h2 class="stitle">Versiones.</h2>
+
+    <p class="ssub">Todas las versiones disponibles para descarga directa desde GitHub.</p>
+
+    <div class="vl">
+
+      <div class="vi lat"><span class="vn">v1.4.1</span><span class="vt">LATEST</span><span class="vd">Modo de renderizado, validación ADB, diálogos unificados, perfiles actualizados</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.1" class="vdl">Descargar</a></div>
+
+      <div class="vi"><span class="vn">v1.4.0</span><span class="vt old">STABLE</span><span class="vd">Soporte x86, sección Controles, Modo Debug, preview de comando</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.0" class="vdl">Descargar</a></div>
+
+      <div class="vi"><span class="vn">v1.3.0</span><span class="vt old">STABLE</span><span class="vd">Nuevo nombre LyXel, paleta Dark Amaranth, sección Optimización ADB</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.3.0" class="vdl">Descargar</a></div>
+
+      <div class="vi"><span class="vn">v1.2.x</span><span class="vt old">LEGACY</span><span class="vd">MobiladorSteX — arquitectura partial classes, AppTheme, IconMap</span><a href="https://github.com/sudoNks/Lyxel/releases" class="vdl">Ver todas</a></div>
+
     </div>
-  </section>
 
-  <footer class="py-4 text-center">
-    <div class="container">
-      <p class="mb-0 text-secondary small">
-        Lyxel &copy; <a href="https://github.com/sudoNks" target="_blank">sudoNks</a> &nbsp;|&nbsp;
-        Usa <a href="https://github.com/Genymobile/scrcpy" target="_blank">Scrcpy</a> (Apache 2.0) &nbsp;|&nbsp;
-        <a href="https://github.com/sudoNks/Lyxel" target="_blank">GitHub</a>
-      </p>
-    </div>
-  </footer>
+  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>
-    // Inicializar animaciones de scroll
-    AOS.init({
-      once: true, // La animación solo sucede la primera vez que bajas
-      offset: 100 // Distancia en píxeles para que se active
-    });
-  </script>
+</section>
+
+<footer>
+
+  <span class="fl">Ly<span>X</span>el</span>
+
+  <div class="flinks">
+
+    <a href="https://discord.gg/CU5quVNyun">Discord</a>
+
+    <a href="https://github.com/sudoNks/Lyxel">GitHub</a>
+
+    <a href="https://ko-fi.com/nks_array">Ko-fi</a>
+
+    <a href="https://www.tiktok.com/@nks_array">TikTok</a>
+
+    <a href="https://youtube.com/@nks_v1">YouTube</a>
+
+  </div>
+
+  <span class="fc">@nks_array 2026</span>
+
+</footer>
+
 </body>
+
 </html>
