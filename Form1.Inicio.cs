@@ -47,6 +47,32 @@ namespace LyXel
             // Esta llamada pone _inicializacionCompleta = true al terminar
             await ActualizarEstadoDispositivoAsync(mostrarToast: true);
 
+            {
+                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string rutaAdb        = System.IO.Path.Combine(baseDir, "bin", "adb", "adb.exe");
+                string rutaAdbWinApi  = System.IO.Path.Combine(baseDir, "bin", "adb", "AdbWinApi.dll");
+                string rutaAdbWinUsb  = System.IO.Path.Combine(baseDir, "bin", "adb", "AdbWinUsbApi.dll");
+
+                bool adbOk = System.IO.File.Exists(rutaAdb);
+                bool apiOk = System.IO.File.Exists(rutaAdbWinApi);
+                bool usbOk = System.IO.File.Exists(rutaAdbWinUsb);
+
+                if (!adbOk || !apiOk || !usbOk)
+                {
+                    string faltantes = string.Join(", ", new[]
+                    {
+                        !adbOk ? "adb.exe"          : null,
+                        !apiOk ? "AdbWinApi.dll"    : null,
+                        !usbOk ? "AdbWinUsbApi.dll" : null
+                    }.Where(x => x != null));
+
+                    InvokeSeguro(() => ToastNotification.Mostrar(this,
+                        $"Archivos de ADB incompletos: {faltantes}. " +
+                        "Puede ser un falso positivo del antivirus. Reinstala la aplicación.",
+                        ToastNotification.ToastTipo.Error));
+                }
+            }
+
             if (!ArquitecturaHelper.ScrcpyDisponible())
                 InvokeSeguro(() => ToastNotification.Mostrar(this,
                     $"No se encontró scrcpy ({(ArquitecturaHelper.ModoCompatibilidad ? "32 bits" : "64 bits")}). Reinstala la aplicación.",
@@ -125,10 +151,33 @@ namespace LyXel
                 ArquitecturaHelper.ModoCompatibilidad = togCompatInicio.Checked;
                 GuardarConfigTema();
                 ActualizarPreviewComando();
+
+                // Toast de modo compatibilidad — se muestra primero
                 string msg = togCompatInicio.Checked
                     ? "Modo Compatibilidad activado. Aplica al próximo inicio de scrcpy."
                     : "Modo Compatibilidad desactivado. Aplica al próximo inicio de scrcpy.";
                 ToastNotification.Mostrar(this, msg, ToastNotification.ToastTipo.Info, 3500);
+
+                // Fallback render driver: si activamos 32 bits y el driver no es compatible, lo reseteamos.
+                // Se muestra DESPUÉS del toast de compatibilidad para que quede visible al final.
+                if (ArquitecturaHelper.ModoCompatibilidad &&
+                    _renderDriver != "" && _renderDriver != "software")
+                {
+                    string renderDriverAnterior = _renderDriver;
+                    string nombreDriver = renderDriverAnterior switch
+                    {
+                        "opengl"    => "OpenGL",
+                        "opengles2" => "OpenGLES2",
+                        _           => renderDriverAnterior
+                    };
+                    _renderDriver = "";
+                    if (_cmbRenderDriver != null && !_cmbRenderDriver.IsDisposed)
+                        _cmbRenderDriver.SelectedIndex = 0;
+                    InvokeSeguro(() => ToastNotification.Mostrar(this,
+                        $"Modo de renderizado cambiado a Direct3D — {nombreDriver} " +
+                        "no está disponible en modo 32 bits.",
+                        ToastNotification.ToastTipo.Advertencia));
+                }
             };
 
             // TLP interno de cardCompat: [label Fill | toggle AutoSize]
@@ -354,13 +403,11 @@ namespace LyXel
 
                     if (!hayDispositivo || serialesAdb.Count == 0)
                     {
-                        MessageBox.Show(
-                            "No se puede iniciar scrcpy.\n\n" +
+                        LyXelDialog.Advertencia(this, "Dispositivo no detectado",
                             "Verifica que:\n" +
                             "• El teléfono esté conectado por USB o WiFi\n" +
                             "• La depuración USB esté habilitada\n" +
-                            "• ADB reconozca el dispositivo (botón Reconectar)",
-                            "Sin dispositivo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            "• ADB reconozca el dispositivo (botón Reconectar)");
                         return;
                     }
                 }
@@ -378,11 +425,9 @@ namespace LyXel
                         }
                         else if (serialesAdb.Count > 1)
                         {
-                            MessageBox.Show(
-                                "Hay varios dispositivos conectados.\n\n" +
+                            LyXelDialog.Advertencia(this, "Varios dispositivos detectados",
                                 "Ve a Conexión → Modo OTG → Detectar Dispositivos\n" +
-                                "y selecciona el serial del dispositivo a usar.",
-                                "OTG — Selecciona dispositivo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                "y selecciona el serial del dispositivo a usar.");
                             return;
                         }
                         // Si ADB no detecta nada (sin depuración USB), scrcpy --otg se arregla solo por USB físico
@@ -395,9 +440,8 @@ namespace LyXel
 
                 if (!exito)
                 {
-                    MessageBox.Show(
-                        "No se pudo lanzar scrcpy.\n\nIntenta reconectar ADB e inténtalo de nuevo.",
-                        "Error al iniciar scrcpy", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LyXelDialog.Error(this, "Error al iniciar",
+                        "No se pudo lanzar scrcpy.\n\nIntenta reconectar ADB e inténtalo de nuevo.");
                     return;
                 }
 
@@ -421,9 +465,9 @@ namespace LyXel
                                 this.WindowState = FormWindowState.Normal;
                                 this.BringToFront();
                                 this.Activate();
-                                MessageBox.Show(this,
-                                    "OTG no pudo iniciarse. Verifica que tu cable soporte modo OTG y que el dispositivo sea compatible con esta función.\n\n• Si usas cable normal con depuración USB habilitada, intenta desactivar y reactivar la depuración USB en tu teléfono antes de lanzar.",
-                                    "OTG — Error de inicio", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                LyXelDialog.Advertencia(this, "OTG no compatible",
+                                    "OTG no pudo iniciarse. Verifica que tu cable soporte modo OTG y que el dispositivo sea compatible.\n\n" +
+                                    "Si usas cable normal, intenta desactivar y reactivar la depuración USB antes de lanzar.");
                             });
                     });
                 }
@@ -506,7 +550,7 @@ namespace LyXel
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error inesperado al iniciar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LyXelDialog.Error(this, "Error inesperado", $"Error inesperado al iniciar:\n{ex.Message}");
                 ActualizarBotonesScrcpy();
             }
         }

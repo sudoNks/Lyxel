@@ -96,7 +96,10 @@ namespace LyXel
                     {
                         var (exito, cantidad, mensaje) = await adbManager.LimpiarConexionesWifiAsync(true);
                         if (!IsDisposed)
-                            MessageBox.Show(mensaje, exito ? "✓ Limpieza completada" : "Error al limpiar conexión WiFi", MessageBoxButtons.OK, exito ? MessageBoxIcon.Information : MessageBoxIcon.Error);
+                    {
+                        if (exito) LyXelDialog.Exito(this, "✓ Limpieza completada", mensaje);
+                        else LyXelDialog.Error(this, "Error al limpiar conexión WiFi", mensaje);
+                    }
                     }
                     finally
                     {
@@ -255,9 +258,8 @@ namespace LyXel
                         _cargandoPagina = true;
                         togOtg.Checked = false;
                         _cargandoPagina = false;
-                        MessageBox.Show(this,
-                            "El modo OTG solo funciona con cable USB.\nDesactiva WiFi primero.",
-                            "OTG no disponible", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        LyXelDialog.Advertencia(this, "OTG no disponible",
+                            "El modo OTG solo funciona con cable USB.\nDesactiva WiFi primero.");
                         return;
                     }
 
@@ -533,12 +535,13 @@ namespace LyXel
                         _cargandoPagina = false;
                         lblWifiStatus.Text = "⚪ Sin dispositivo — Conecta el cable USB primero";
                         lblWifiStatus.ForeColor = AppTheme.Warning;
-                        MessageBox.Show(this, "Necesitas conectar el teléfono por cable USB antes de activar el modo WiFi.\n\nEl cable es necesario para el primer paso de configuración.", "Cable USB requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        LyXelDialog.Advertencia(this, "Cable USB requerido",
+                            "Necesitas conectar el teléfono por cable USB antes de activar el modo WiFi.\n\nEl cable es necesario para el primer paso de configuración.");
                         return;
                     }
 
                     _usarWifi = togWifi.Checked;
-                    if (_usarWifi && _modoOtg) { _modoOtg = false; MessageBox.Show(this, "WiFi es incompatible con OTG. OTG desactivado.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+                    if (_usarWifi && _modoOtg) { _modoOtg = false; LyXelDialog.Info(this, "Aviso", "WiFi es incompatible con OTG. OTG desactivado."); }
                     if (_usarWifi)
                     {
                         // Si hay datos de sesión anterior le ofrezco usarlos directamente
@@ -695,7 +698,8 @@ namespace LyXel
                         {
                             lblWifiStatus.Text = "❌ Conecta el USB primero"; lblWifiStatus.ForeColor = AppTheme.Error;
                             btnHabilitarPuerto.Text = "Habilitar Puerto"; btnHabilitarPuerto.Enabled = true;
-                            MessageBox.Show("Conecta el teléfono por USB antes de habilitar el puerto WiFi.", "USB Requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            LyXelDialog.Advertencia(this, "USB Requerido",
+                                "Conecta el teléfono por USB antes de habilitar el puerto WiFi.");
                             return;
                         }
                         var (exito, mensaje, error) = await adbManager.HabilitarTcpipAsync(_wifiPuerto);
@@ -747,7 +751,7 @@ namespace LyXel
 
                 btnConectarWifi.Click += async (s, e) =>
                 {
-                    if (string.IsNullOrWhiteSpace(_wifiIp)) { MessageBox.Show(this, "Ingresa o detecta la IP del dispositivo primero.", "IP Requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+                    if (string.IsNullOrWhiteSpace(_wifiIp)) { LyXelDialog.Advertencia(this, "IP Requerida", "Ingresa o detecta la IP del dispositivo primero."); return; }
                     btnConectarWifi.Enabled = false; btnConectarWifi.Text = "Conectando...";
                     lblWifiStatus.Text = "⏳ Conectando via WiFi..."; lblWifiStatus.ForeColor = AppTheme.Warning;
                     _operacionWifiEnCurso = true;
@@ -759,12 +763,11 @@ namespace LyXel
                         {
                             lblWifiStatus.Text = "❌ No se pudo alcanzar el dispositivo"; lblWifiStatus.ForeColor = AppTheme.Error;
                             btnConectarWifi.Text = "Conectar WiFi"; btnConectarWifi.Enabled = true;
-                            MessageBox.Show(this,
+                            LyXelDialog.Advertencia(this, "Sin conexión WiFi",
                                 $"No se puede alcanzar el dispositivo en {_wifiIp}:{_wifiPuerto}.\n\n" +
                                 "• Verifica que el teléfono y el PC estén en la misma red WiFi\n" +
                                 "• Confirma que la IP sea correcta (usa 🔄 para detectarla)\n" +
-                                "• Asegúrate de haber completado el paso ③ Habilitar Puerto con el cable conectado",
-                                "Sin conexión WiFi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                "• Asegúrate de haber completado el paso ③ Habilitar Puerto con el cable conectado");
                             return;
                         }
                         var (exito, mensaje, error) = await adbManager.ConectarWifiAsync(_wifiIp, _wifiPuerto);
@@ -778,11 +781,10 @@ namespace LyXel
                             btnCerrarPuerto.Enabled = true;
                             // Actualizo el estado ADB inmediatamente para que el label refleje la conexión sin cambiar de pestaña
                             _ = ActualizarEstadoAdbAsync(lblAdbEstado);
-                            MessageBox.Show(this,
+                            LyXelDialog.Exito(this, "✓ WiFi Conectado",
                                 $"✓ El teléfono está conectado por WiFi ({_wifiIp}:{_wifiPuerto}).\n\n" +
                                 "Ya puedes desconectar el cable USB con seguridad.\n" +
-                                "La conexión seguirá activa mientras estén en la misma red WiFi.",
-                                "✓ WiFi Conectado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                "La conexión seguirá activa mientras estén en la misma red WiFi.");
                         }
                         else
                         {
@@ -803,11 +805,9 @@ namespace LyXel
 
                 btnCerrarPuerto.Click += async (s, e) =>
                 {
-                    if (MessageBox.Show(this,
-                            "¿Cerrar el puerto WiFi?\n\n" +
-                            "Esto desconectará la sesión WiFi actual y el dispositivo volverá a modo USB. " +
-                            "Necesitarás conectar el cable USB nuevamente para seguir usando la app.",
-                            "Confirmar cierre WiFi", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+                    if (!LyXelDialog.Confirmar(this, "Confirmar cierre WiFi",
+                            "¿Cerrar el puerto WiFi?",
+                            "Esto desconectará la sesión WiFi actual y el dispositivo volverá a modo USB. Necesitarás el cable USB para seguir usando la app.")) return;
                     btnCerrarPuerto.Enabled = false; btnCerrarPuerto.Text = "Cerrando...";
                     lblWifiStatus.Text = "⏳ Cerrando puerto, por favor espera..."; lblWifiStatus.ForeColor = AppTheme.Warning;
                     _operacionWifiEnCurso = true;
@@ -822,12 +822,12 @@ namespace LyXel
                         btnHabilitarPuerto.Text = "Habilitar Puerto"; btnHabilitarPuerto.Enabled = false;
                         btnConectarWifi.Text = "Conectar WiFi"; btnConectarWifi.Enabled = false;
                         btnCerrarPuerto.Text = "Cerrar Puerto"; btnCerrarPuerto.Enabled = false;
-                        MessageBox.Show(this,
-                            exito ? "Puerto cerrado correctamente.\n\nSi quieres volver a conectar por WiFi, pulsa ③ Habilitar Puerto."
-                                   : $"No se pudo cerrar automáticamente.\nPuedes reiniciar el teléfono para cerrar el puerto.\n\nError: {error}",
-                            exito ? "✓ Puerto Cerrado" : "⚠ Advertencia",
-                            MessageBoxButtons.OK,
-                            exito ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
+                        if (exito)
+                            LyXelDialog.Exito(this, "✓ Puerto Cerrado",
+                                "Puerto cerrado correctamente.\n\nSi quieres volver a conectar por WiFi, pulsa ③ Habilitar Puerto.");
+                        else
+                            LyXelDialog.Advertencia(this, "⚠ Advertencia",
+                                $"No se pudo cerrar automáticamente.\nPuedes reiniciar el teléfono para cerrar el puerto.\n\nError: {error}");
                         // Si el toggle sigue activo, restauro el flujo para que pueda habilitar el puerto otra vez
                         if (togWifi.Checked && _hayDispositivo)
                         {

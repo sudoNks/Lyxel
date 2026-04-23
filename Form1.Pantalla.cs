@@ -328,7 +328,8 @@ namespace LyXel
                 {
                     if (_resolucionAncho == 0 || _resolucionAlto == 0)
                     {
-                        MessageBox.Show(this, "Detecta la resolución nativa primero (presiona 🔄).", "Resolución no detectada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        LyXelDialog.Advertencia(this, "Resolución no detectada",
+                            "Detecta la resolución nativa primero (presiona 🔄).");
                         return;
                     }
                     double ratio = ObtenerAspectRatioValor();
@@ -343,7 +344,8 @@ namespace LyXel
                         lblCropAplicado.ForeColor = AppTheme.Success;
                         ActualizarEstados();
                         MarcarCambiosSinGuardar();
-                        MessageBox.Show($"Crop calculado para {_aspectRatio}:\n{_fullscreenCrop}\n\nAlto ideal: {altoIdeal}px  |  Offset: {offset}px", "Crop Calculado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        LyXelDialog.Info(this, "Crop calculado",
+                            $"Crop para {_aspectRatio}:\n{_fullscreenCrop}\n\nAlto ideal: {altoIdeal}px | Offset: {offset}px");
                     }
                     else
                     {
@@ -378,10 +380,10 @@ namespace LyXel
 
                 var lblAdbAdvertencia = new Label()
                 {
-                    Text = "Modifica cómo el teléfono renderiza la imagen. Puede mejorar la experiencia en algunos " +
-                           "dispositivos, pero en Qualcomm/Snapdragon puede causar caídas de FPS y latencia. " +
-                           "En ciertos modelos el fabricante puede bloquear este comando vía ADB. " +
-                           "Si experimentas problemas, desactívalo — los bordes son preferibles a un mal rendimiento.",
+                    Text = "Sincroniza el renderizado del teléfono con el monitor externo para mejorar la coherencia\n" +
+                           "visual. Nota: En dispositivos Snapdragon/Qualcomm puede causar latencia o caídas de" +
+                           "FPS. Si el fabricante bloquea el comando vía ADB o notas lentitud, desactívalo. Prioriza\n" +
+                           "siempre la fluidez sobre la estética.",
                     Font = new Font("Segoe UI", 8f),
                     ForeColor = AppTheme.TextSecondary,
                     Left = S(24),
@@ -815,8 +817,8 @@ namespace LyXel
                         ToastNotification.Mostrar(this, "Conecta un dispositivo primero.", ToastNotification.ToastTipo.Advertencia);
                         return;
                     }
-                    using var dlgDpi = new DialogoConfirmar($"¿Aplicar DPI {_dpi}?", "Usa 'Resetear' si algo sale mal.");
-                    if (dlgDpi.ShowDialog(this) != DialogResult.OK) return;
+                    if (!LyXelDialog.Confirmar(this, "Confirmar", $"¿Aplicar DPI {_dpi}?",
+                            "Usa 'Resetear' si algo sale mal.", "Aplicar")) return;
                     btnAplicarDpi.Enabled = false;
                     try
                     {

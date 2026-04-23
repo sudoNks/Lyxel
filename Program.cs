@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace LyXel
@@ -78,6 +80,53 @@ namespace LyXel
 
                 AssignProcessToJobObject(_hJob, System.Diagnostics.Process.GetCurrentProcess().Handle);
             }
+
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+            {
+                try
+                {
+                    // Intentar reset de DPI y resolución en crash
+                    // Ejecutar síncronamente con timeout de 3 segundos
+                    var adbPath = Path.Combine(
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        "bin", "adb", "adb.exe");
+
+                    if (File.Exists(adbPath))
+                    {
+                        // Reset DPI
+                        var pDpi = new Process
+                        {
+                            StartInfo = new ProcessStartInfo
+                            {
+                                FileName = adbPath,
+                                Arguments = "shell wm density reset",
+                                UseShellExecute = false,
+                                CreateNoWindow = true
+                            }
+                        };
+                        pDpi.Start();
+                        pDpi.WaitForExit(3000);
+
+                        // Reset resolución
+                        var pRes = new Process
+                        {
+                            StartInfo = new ProcessStartInfo
+                            {
+                                FileName = adbPath,
+                                Arguments = "shell wm size reset",
+                                UseShellExecute = false,
+                                CreateNoWindow = true
+                            }
+                        };
+                        pRes.Start();
+                        pRes.WaitForExit(3000);
+                    }
+                }
+                catch { }
+            };
+
+            Application.SetUnhandledExceptionMode(
+                UnhandledExceptionMode.CatchException);
 
             ApplicationConfiguration.Initialize();
             Application.Run(new Form1());

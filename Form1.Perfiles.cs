@@ -66,6 +66,7 @@ namespace LyXel
             _wmSizeValor = cfg.WmSizeValor ?? "";
             _useAdvancedEncoder = cfg.UseAdvancedEncoder;
             _videoEncoder = cfg.VideoEncoder;
+            _renderDriver = cfg.RenderDriver ?? "";
             _inputMode = cfg.InputMode ?? "uhid";
             _tecladoModo = cfg.TecladoModo ?? "uhid";
             _mouseModo = cfg.MouseModo ?? "uhid";
@@ -85,10 +86,10 @@ namespace LyXel
             };
             if (dlg.ShowDialog() != DialogResult.OK) return;
             var (exito, error) = perfilManager.ExportarPerfil(nombre, dlg.FileName);
-            MessageBox.Show(
-                exito ? $"Perfil '{nombre}' exportado correctamente." : $"Error al exportar:\n{error}",
-                exito ? "✓ Exportado" : "Error al exportar perfil", MessageBoxButtons.OK,
-                exito ? MessageBoxIcon.Information : MessageBoxIcon.Error);
+            if (exito)
+                LyXelDialog.Exito(this, "Perfil exportado", $"Perfil '{nombre}' exportado correctamente.");
+            else
+                LyXelDialog.Error(this, "Error al exportar", $"Error al exportar:\n{error}");
         }
 
         // Página de perfiles: lista izquierda + panel de detalle derecho
@@ -240,19 +241,18 @@ namespace LyXel
                 {
                     RefrescarListaPerfiles();
                     _lstPerfiles.SelectedItem = nombre;
-                    MessageBox.Show($"Perfil '{nombre}' importado.", "✓ Importado",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LyXelDialog.Exito(this, "Perfil importado", $"Perfil '{nombre}' importado correctamente.");
                 }
                 else
-                    MessageBox.Show($"Error:\n{error}", "Error al importar perfil", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LyXelDialog.Error(this, "Error al importar", $"Error al importar:\n{error}");
             };
 
             btnExportarLista.Click += (s, e) =>
             {
                 if (string.IsNullOrEmpty(_perfilSeleccionado))
                 {
-                    MessageBox.Show("Selecciona un perfil para exportar.", "Sin selección",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    LyXelDialog.Advertencia(this, "Sin selección",
+                        "Selecciona un perfil para exportar.");
                     return;
                 }
                 ExportarPerfilSeleccionado(_perfilSeleccionado);
@@ -554,8 +554,7 @@ namespace LyXel
                     MostrarPlaceholderDetalle();
                 }
                 else
-                    MessageBox.Show($"No se pudo eliminar:\n{error}", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LyXelDialog.Error(this, "Error al eliminar", $"No se pudo eliminar:\n{error}");
             };
 
             btnExportar.Click += (s, e) => ExportarPerfilSeleccionado(nombre);

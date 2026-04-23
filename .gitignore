@@ -1,7 +1,7 @@
-﻿.vs/
+.vs/
 bin/
 obj/
 *.user
 *.suo
 *.vsidx
-.claude/worktrees/
+.claude/

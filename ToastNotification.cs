@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -7,6 +8,7 @@ namespace LyXel
     /// <summary>
     /// Notificación flotante reutilizable que aparece en la esquina inferior derecha
     /// de la ventana padre y se desvanece automáticamente.
+    /// Soporta hasta 3 toasts apilados verticalmente (el más reciente encima).
     /// Uso: ToastNotification.Mostrar(owner, "Mensaje", ToastTipo.Exito);
     /// </summary>
     public class ToastNotification : Form
@@ -18,7 +20,7 @@ namespace LyXel
 
         private int S(int px) => (int)Math.Round(px * this.DeviceDpi / 96.0);
 
-        // Constructor privado — hay que usar el método estático Mostrar, no instanciar directo
+        // Constructor privado — usar el método estático Mostrar
         private ToastNotification(string mensaje, ToastTipo tipo, int duracionMs)
         {
             _duracionMs = duracionMs;
@@ -26,20 +28,26 @@ namespace LyXel
             IniciarFade();
         }
 
-        // Solo muestro un toast a la vez, si hay uno activo lo cierro primero
-        private static ToastNotification? _toastActivo;
+        // Lista de toasts activos — índice 0 = más antiguo (abajo), último = más reciente (arriba)
+        private static readonly List<ToastNotification> _toastsActivos = new();
+        private static readonly object _lock = new();
+
+        // Gap vertical entre toasts apilados (px lógicos)
+        private const int GapToasts = 8;
+        // Máximo de toasts simultáneos
+        private const int MaxToasts = 3;
 
         /// <summary>
         /// Muestra una notificación toast sobre la ventana owner.
-        /// Solo se muestra si la ventana no está minimizada.
-        /// Cierra cualquier toast previo antes de mostrar el nuevo.
+        /// Puede coexistir con hasta 2 toasts previos (máximo 3 simultáneos).
+        /// Si ya hay 3 activos, el nuevo se descarta silenciosamente.
         /// </summary>
         public static void Mostrar(Form owner, string mensaje,
             ToastTipo tipo = ToastTipo.Info, int duracionMs = 3000, bool forzar = false)
         {
             if (owner == null || owner.IsDisposed) return;
 
-            // Crear y mostrar en el hilo de UI
+            // Asegurar ejecución en el hilo UI
             if (owner.InvokeRequired)
             {
                 owner.Invoke(() => Mostrar(owner, mensaje, tipo, duracionMs, forzar));
@@ -49,27 +57,117 @@ namespace LyXel
             // No mostrar si la app está minimizada, salvo forzar=true
             if (!forzar && owner.WindowState == FormWindowState.Minimized) return;
 
-            // Cerrar toast anterior si existe — Hide() primero para que desaparezca de
-            // pantalla inmediatamente y no se superponga visualmente al nuevo toast
-            if (_toastActivo != null && !_toastActivo.IsDisposed)
+            // Descartar silenciosamente si ya hay el máximo de toasts
+            lock (_lock)
             {
-                var anterior = _toastActivo;
-                _toastActivo = null;
-                anterior._timerFade?.Stop();
-                anterior.Hide();
-                anterior.Close();
+                if (_toastsActivos.Count >= MaxToasts) return;
             }
 
             var toast = new ToastNotification(mensaje, tipo, duracionMs);
-            _toastActivo = toast;
+
+            lock (_lock)
+            {
+                _toastsActivos.Add(toast);
+            }
+
             toast.FormClosed += (s, e) =>
             {
-                if (_toastActivo == toast) _toastActivo = null;
+                lock (_lock) { _toastsActivos.Remove(toast); }
+                // Reposicionar los toasts restantes en el siguiente ciclo del message loop
+                if (!owner.IsDisposed && owner.IsHandleCreated)
+                    owner.BeginInvoke(() => RecalcularPosiciones(owner));
             };
-            PosicionarSobreOwner(toast, owner);
+
+            // Posicionar antes de mostrar para evitar salto visual
+            RecalcularPosicionesTodasMas(owner, toast);
             toast.Show(owner);
         }
 
+        /// <summary>
+        /// Recalcula y aplica la posición de todos los toasts activos.
+        /// Índice 0 = más antiguo, ocupa la posición inferior; cada siguiente queda encima.
+        /// </summary>
+        private static void RecalcularPosiciones(Form owner)
+        {
+            if (owner == null || owner.IsDisposed) return;
+
+            List<ToastNotification> snapshot;
+            lock (_lock)
+            {
+                snapshot = new List<ToastNotification>(_toastsActivos);
+            }
+
+            float scale  = owner.DeviceDpi / 96f;
+            int margen   = (int)(16 * scale);
+            int margenBottom = (int)(40 * scale);
+            int gap      = (int)(GapToasts * scale);
+
+            // Posición base: esquina inferior derecha del owner
+            int baseX = owner.Left + owner.Width  - margen;
+            int baseY = owner.Top  + owner.Height - margenBottom - margen;
+
+            for (int i = 0; i < snapshot.Count; i++)
+            {
+                var t = snapshot[i];
+                if (t == null || t.IsDisposed) continue;
+
+                int x = baseX - t.Width;
+                int y;
+                if (i == 0)
+                {
+                    y = baseY - t.Height;
+                }
+                else
+                {
+                    var prev = snapshot[i - 1];
+                    y = (prev == null || prev.IsDisposed)
+                        ? baseY - t.Height
+                        : prev.Top - t.Height - gap;
+                }
+                t.Location = new Point(x, y);
+            }
+        }
+
+        /// <summary>
+        /// Variante usada al agregar un nuevo toast: recalcula los existentes y
+        /// posiciona el recién creado (aún no en la lista) en la posición correcta.
+        /// Evita el salto visual que ocurriría si se añadiera a la lista antes de posicionar.
+        /// </summary>
+        private static void RecalcularPosicionesTodasMas(Form owner, ToastNotification nuevo)
+        {
+            // Primero reposiciona los ya existentes
+            RecalcularPosiciones(owner);
+
+            // Luego posiciona el nuevo encima del último activo
+            float scale      = owner.DeviceDpi / 96f;
+            int margen       = (int)(16 * scale);
+            int margenBottom = (int)(40 * scale);
+            int gap          = (int)(GapToasts * scale);
+
+            int baseX = owner.Left + owner.Width  - margen;
+            int baseY = owner.Top  + owner.Height - margenBottom - margen;
+
+            List<ToastNotification> snapshot;
+            lock (_lock)
+            {
+                snapshot = new List<ToastNotification>(_toastsActivos);
+            }
+
+            int x = baseX - nuevo.Width;
+            int y;
+            if (snapshot.Count == 0)
+            {
+                y = baseY - nuevo.Height;
+            }
+            else
+            {
+                var ultimo = snapshot[^1];
+                y = (ultimo == null || ultimo.IsDisposed)
+                    ? baseY - nuevo.Height
+                    : ultimo.Top - nuevo.Height - gap;
+            }
+            nuevo.Location = new Point(x, y);
+        }
 
         private void BuildUI(string mensaje, ToastTipo tipo)
         {
@@ -81,26 +179,24 @@ namespace LyXel
             this.BackColor = ObtenerColorFondo(tipo);
             this.Size = new Size(S(400), 0); // altura dinámica
 
-            // Ancho del ícono fijo para que quede bien a cualquier DPI, el mensaje arranca después
+            // Ancho del ícono fijo para que quede bien a cualquier DPI
             int iconLeft  = S(12);
-            int iconWidth = S(24); // fijo: suficiente para cualquier carácter a cualquier DPI
+            int iconWidth = S(24);
             int msgLeft   = iconLeft + iconWidth + S(4);
             int msgWidth  = this.Width - msgLeft - S(12);
 
-            // Ícono del tipo de toast
             var lblIcono = new Label()
             {
                 Text      = ObtenerIcono(tipo),
                 Font      = new Font("Segoe UI", 14f),
                 ForeColor = AppTheme.TextPrimary,
                 Left      = iconLeft,
-                Top       = 0,       // llenará la altura total; MiddleCenter centra verticalmente
+                Top       = 0,
                 Width     = iconWidth,
                 AutoSize  = false,
                 TextAlign = ContentAlignment.MiddleCenter
             };
 
-            // Label del mensaje
             var lblMensaje = new Label()
             {
                 Text      = mensaje,
@@ -112,20 +208,17 @@ namespace LyXel
                 AutoSize  = false
             };
 
-            // MeasureString ya devuelve píxeles DPI-aware, no aplico S() aquí
             using var g = Graphics.FromHwnd(IntPtr.Zero);
             var size = g.MeasureString(mensaje, lblMensaje.Font,
                 new SizeF(msgWidth, 200));
             int alturaTexto = (int)Math.Ceiling(size.Height);
             lblMensaje.Height = alturaTexto + S(4);
 
-            // Ajustar altura total del form
-            int alturaTotal = Math.Max(S(48), alturaTexto + S(28));
+            int alturaTotal  = Math.Max(S(48), alturaTexto + S(28));
             this.Height      = alturaTotal;
-            lblIcono.Height  = alturaTotal; // MiddleCenter se ocupa del centrado vertical
+            lblIcono.Height  = alturaTotal;
             lblMensaje.Top   = (alturaTotal - lblMensaje.Height) / 2;
 
-            // Barra de color izquierda según el tipo
             var barraIzq = new Panel()
             {
                 Left      = 0,
@@ -137,7 +230,6 @@ namespace LyXel
 
             this.Controls.AddRange(new Control[] { barraIzq, lblIcono, lblMensaje });
 
-            // Borde muy sutil para que no flote en el aire
             this.Paint += (s, e) =>
             {
                 using var pen = new Pen(AppTheme.WhiteBorderPen, 1);
@@ -147,9 +239,7 @@ namespace LyXel
 
         private void IniciarFade()
         {
-            // Espero la duración configurada y después hago fade out gradual
-            int pasoFade = 50;   // ms entre cada paso
-            int pasoOpac = 5;    // reducción de opacidad por paso (0-100)
+            int pasoFade = 50;
             int ticksEspera = _duracionMs / pasoFade;
             int tickActual = 0;
             double opacInicial = this.Opacity;
@@ -160,9 +250,8 @@ namespace LyXel
                 tickActual++;
 
                 if (tickActual < ticksEspera)
-                    return; // todavía en el tiempo de espera, aún no animar
+                    return;
 
-                // Reducir opacidad hasta cero y cerrar
                 double nuevaOpac = this.Opacity - (opacInicial / (1000.0 / pasoFade));
                 if (nuevaOpac <= 0 || this.IsDisposed)
                 {
@@ -175,44 +264,31 @@ namespace LyXel
             _timerFade.Start();
         }
 
-        private static void PosicionarSobreOwner(ToastNotification toast, Form owner)
-        {
-            // Lo pongo en la esquina inferior derecha, escalado por DPI para que quede bien en monitores 4K
-            float scale = owner.DeviceDpi / 96f;
-            int margen = (int)(16 * scale);
-            int margenBottom = (int)(40 * scale);
-            int x = owner.Left + owner.Width - toast.Width - margen;
-            int y = owner.Top + owner.Height - toast.Height - margen - margenBottom;
-            toast.Location = new Point(x, y);
-        }
-
-        // Helpers de color e ícono según el tipo de toast
+        // Helpers de color e ícono
 
         private static Color ObtenerColorFondo(ToastTipo tipo) => tipo switch
         {
-            ToastTipo.Exito => AppTheme.ToastBgSuccess,
+            ToastTipo.Exito       => AppTheme.ToastBgSuccess,
             ToastTipo.Advertencia => AppTheme.ToastBgWarning,
-            ToastTipo.Error => AppTheme.ToastBgError,
-            _ => AppTheme.ToastBgInfo   // Info
+            ToastTipo.Error       => AppTheme.ToastBgError,
+            _                     => AppTheme.ToastBgInfo
         };
 
         private static Color ObtenerColorBarra(ToastTipo tipo) => tipo switch
         {
-            ToastTipo.Exito => AppTheme.ToastBarSuccess,
+            ToastTipo.Exito       => AppTheme.ToastBarSuccess,
             ToastTipo.Advertencia => AppTheme.Warning,
-            ToastTipo.Error => AppTheme.Error,
-            _ => AppTheme.ToastBarInfo   // Info
+            ToastTipo.Error       => AppTheme.Error,
+            _                     => AppTheme.ToastBarInfo
         };
 
         private static string ObtenerIcono(ToastTipo tipo) => tipo switch
         {
-            ToastTipo.Exito => "✓",
+            ToastTipo.Exito       => "✓",
             ToastTipo.Advertencia => "⚠",
-            ToastTipo.Error => "✗",
-            _ => "ℹ"
+            ToastTipo.Error       => "✗",
+            _                     => "ℹ"
         };
-
-        // Limpieza del timer al cerrar
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {

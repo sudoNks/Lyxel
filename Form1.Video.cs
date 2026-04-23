@@ -515,34 +515,10 @@ namespace LyXel
                         lblEncoderStatus.Text = "⚠ Sin encoders — verifica que el dispositivo esté conectado";
                         lblEncoderStatus.ForeColor = AppTheme.Warning;
 
-                        var diagResult = MessageBox.Show(
-                            "No se pudieron detectar encoders.\n\n¿Ver el output de scrcpy para depurar?",
-                            "Diagnóstico Encoders", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                        if (diagResult == DialogResult.Yes)
-                        {
-                            using var diagForm = new Form()
-                            {
-                                Text = "Output: scrcpy --list-encoders",
-                                Width = 640,
-                                Height = 400,
-                                StartPosition = FormStartPosition.CenterParent,
-                                BackColor = AppTheme.BgDark
-                            };
-                            var txt = new TextBox()
-                            {
-                                Multiline = true,
-                                ReadOnly = true,
-                                ScrollBars = ScrollBars.Both,
-                                Dock = DockStyle.Fill,
-                                BackColor = AppTheme.BgDarkMid,
-                                ForeColor = AppTheme.TextGreenTerm,
-                                Font = new Font("Consolas", 9f),
-                                Text = string.IsNullOrWhiteSpace(rawOutput) ? "(Output vacío)" : rawOutput
-                            };
-                            diagForm.Controls.Add(txt);
-                            diagForm.ShowDialog(this);
-                        }
+                        LyXelDialog.Advertencia(this, "Encoders no detectados",
+                            "No se pudieron detectar los encoders del dispositivo.\n\n" +
+                            "Activa el Modo Debug en Opciones Extras e intenta " +
+                            "de nuevo para ver el detalle del error.");
                     }
 
                     } finally {
@@ -584,9 +560,85 @@ namespace LyXel
                 lblEncoderStatus, lblEncoderActivo
                 });
 
+                // Card de modo de renderizado
+                var cardRender = CreateCard("Modo de Renderizado", S(30), S(1160), S(140));
+
+                string[] renderItems;
+                string[] renderValues;
+                if (ArquitecturaHelper.ModoCompatibilidad)
+                {
+                    renderItems = new[] { "Direct3D (predeterminado)", "Software" };
+                    renderValues = new[] { "", "software" };
+                }
+                else
+                {
+                    renderItems = new[] { "Direct3D (predeterminado)", "OpenGL", "OpenGLES2", "Software" };
+                    renderValues = new[] { "", "opengl", "opengles2", "software" };
+                }
+
+                int renderIdx = Array.IndexOf(renderValues, _renderDriver);
+                if (renderIdx < 0) renderIdx = 0;
+
+                string GetRenderDesc(string val) => val switch
+                {
+                    "opengl"    => "Útil si Direct3D falla. No disponible en modo 32 bits.",
+                    "opengles2" => "Menor latencia en hardware antiguo. No disponible en modo 32 bits.",
+                    "software"  => "Renderiza por CPU. Úsalo solo si los demás fallan.",
+                    _           => "Recomendado. Mejor integración con Windows."
+                };
+
+                var lblRenderDesc = new Label()
+                {
+                    Text = GetRenderDesc(renderIdx < renderValues.Length ? renderValues[renderIdx] : ""),
+                    Font = new Font("Segoe UI", 8.5f),
+                    ForeColor = AppTheme.TextSecondary,
+                    Left = S(24),
+                    Top = S(88),
+                    Width = cardRender.Width - S(48),
+                    Height = S(30),
+                    AutoSize = false,
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
+                };
+
+                var cmbRenderDriver = new Guna2ComboBox()
+                {
+                    Left = S(24),
+                    Top = S(50),
+                    Width = S(280),
+                    Height = S(32),
+                    FillColor = AppTheme.BgCard,
+                    ForeColor = textPrimary,
+                    BorderColor = AppTheme.Accent,
+                    BorderRadius = 4,
+                    DropDownStyle = ComboBoxStyle.DropDownList,
+                    Font = new Font("Segoe UI", 9f)
+                };
+                foreach (var item in renderItems) cmbRenderDriver.Items.Add(item);
+                cmbRenderDriver.SelectedIndex = renderIdx;
+
+                // Expongo la referencia para el fallback en Form1.Inicio.cs
+                _cmbRenderDriver = cmbRenderDriver;
+                cmbRenderDriver.Disposed += (s, e) => { if (_cmbRenderDriver == cmbRenderDriver) _cmbRenderDriver = null; };
+
+                cmbRenderDriver.SelectedIndexChanged += (s, e) =>
+                {
+                    if (_cargandoPagina) return;
+                    int idx = cmbRenderDriver.SelectedIndex;
+                    string val = (idx >= 0 && idx < renderValues.Length) ? renderValues[idx] : "";
+                    _renderDriver = val;
+                    lblRenderDesc.Text = GetRenderDesc(val);
+                    MarcarCambiosSinGuardar();
+                };
+
+                cardRender.Controls.AddRange(new Control[]
+                {
+                cmbRenderDriver,
+                lblRenderDesc
+                });
+
                 contentPanel.Controls.AddRange(new Control[]
                 {
-                cardVideo, cardAudio, cardEncoder
+                cardVideo, cardAudio, cardEncoder, cardRender
                 });
 
             }

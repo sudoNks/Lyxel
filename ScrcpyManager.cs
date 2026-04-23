@@ -64,6 +64,9 @@ namespace LyXel
         public int WifiPuerto { get; set; } = 5555;
 
         public bool ModoDebug { get; set; } = false;
+
+        // Vacío = Direct3D predeterminado (no se envía flag)
+        public string RenderDriver { get; set; } = "";
     }
 
     public class ScrcpyManager
@@ -158,6 +161,9 @@ namespace LyXel
 
                 if (config.PrintFps)
                     cmd.Add("--print-fps");
+
+                if (!string.IsNullOrEmpty(config.RenderDriver))
+                    cmd.Add($"--render-driver={config.RenderDriver}");
             }
 
             if (!config.Audio)
@@ -205,11 +211,9 @@ namespace LyXel
             string scrcpyPath = ArquitecturaHelper.RutaScrcpy;
             if (!File.Exists(scrcpyPath))
             {
-                System.Windows.Forms.MessageBox.Show(
-                    "No se encontró scrcpy.exe. Verifica que los archivos de la aplicación estén completos.",
-                    "Error al iniciar scrcpy",
-                    System.Windows.Forms.MessageBoxButtons.OK,
-                    System.Windows.Forms.MessageBoxIcon.Error);
+                LyXelDialog.Error(null, "Archivo no encontrado",
+                    "No se encontró scrcpy.exe.\n\nVerifica que los archivos de la aplicación " +
+                    "estén completos. Si el problema persiste, reinstala la aplicación.");
                 return false;
             }
 
@@ -281,13 +285,12 @@ namespace LyXel
                     || ex.Message.Contains("Access", StringComparison.OrdinalIgnoreCase)
                     || ex.Message.Contains("denied", StringComparison.OrdinalIgnoreCase);
 
-                string mensaje = esPermisos
-                    ? "scrcpy no pudo iniciarse. Intenta ejecutar la app como administrador."
-                    : $"Error al iniciar scrcpy: {ex.Message}";
-
-                System.Windows.Forms.MessageBox.Show(mensaje, "Error al iniciar scrcpy",
-                    System.Windows.Forms.MessageBoxButtons.OK,
-                    System.Windows.Forms.MessageBoxIcon.Error);
+                if (esPermisos)
+                    LyXelDialog.Error(null, "Sin permisos",
+                        "scrcpy no pudo iniciarse.\n\nIntenta ejecutar LyXel como administrador.");
+                else
+                    LyXelDialog.Error(null, "Error al iniciar",
+                        $"Error al iniciar scrcpy:\n{ex.Message}");
 
                 _proceso = null;
                 return false;

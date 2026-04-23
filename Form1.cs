@@ -73,6 +73,8 @@ namespace LyXel
         private bool _resolucionPendienteReset = false; // true si la app se cerró con resolución modificada sin revertir
         private string _wmSizeValor = "";
         private bool _useAdvancedEncoder = false;
+        private string _renderDriver = "";
+        private Guna2ComboBox? _cmbRenderDriver; // referencia cross-partial para el fallback de arquitectura
         private bool _scrcpyEstabaActivo = false; // bandera para detección de desconexión inesperada
         private bool _hayDispositivo = false; // estado actual del dispositivo
         private bool _operacionWifiEnCurso = false; // suprime actualizaciones visuales de track-devices durante setup WiFi
@@ -80,6 +82,7 @@ namespace LyXel
         private bool _puertotcpActivo = false; // puerto tcpip habilitado
         private bool _wifiConectado = false; // conexión WiFi establecida
         private bool _inicializacionCompleta = false; // detección inicial completada
+        private bool _primeraDeteccionCompletada = false; // true tras el primer evento de IniciarTrackDevices
         private string _videoEncoder = "";
         private int _dpiPendienteReset = 0; // DPI aplicado que hay que revertir al cerrar/iniciar
         private List<string> _encodersDetectados = new();
@@ -184,6 +187,12 @@ namespace LyXel
                 {
                     if (_operacionWifiEnCurso || !_inicializacionCompleta) return;
                     if (_wifiConectado) return; // si WiFi está activo, lo maneja MonitorearUsbConWifiAsync
+
+                    // El primer evento de IniciarTrackDevices refleja el estado ya conocido del startup.
+                    // Lo suprimimos para evitar duplicar el toast que ya mostró IniciarDeteccionDispositivoAsync.
+                    bool esPrimerEvento = !_primeraDeteccionCompletada;
+                    _primeraDeteccionCompletada = true;
+                    if (esPrimerEvento) return;
 
                     if (hayUsb)
                     {
@@ -615,8 +624,7 @@ namespace LyXel
             }
             else
             {
-                MessageBox.Show($"No se pudo guardar:\n{error}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LyXelDialog.Error(this, "Error al guardar", $"No se pudo guardar:\n{error}");
             }
         }
 
@@ -748,6 +756,7 @@ namespace LyXel
             WmSizeValor = _wmSizeValor,
             UseAdvancedEncoder = _useAdvancedEncoder,
             VideoEncoder = _videoEncoder,
+            RenderDriver = _renderDriver,
             InputMode = _inputMode,
             TecladoModo = _tecladoModo,
             MouseModo = _mouseModo,

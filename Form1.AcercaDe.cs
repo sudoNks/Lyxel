@@ -92,7 +92,7 @@ namespace LyXel
                 picBox,
                 new Label() { Text = "Edición principal", Font = new Font("Segoe UI", 7.5f), ForeColor = textSecondary, Left = S(24), Top = S(14), AutoSize = true },
                 new Label() { Text = "LyXel", Font = new Font("Segoe UI", 13f, FontStyle.Bold), ForeColor = textPrimary, Left = S(24), Top = S(30), AutoSize = true },
-                new Label() { Text = $"LyXel Build — {ObtenerVersionApp()}", Font = new Font("Segoe UI", 9.5f), ForeColor = accentColor, Left = S(24), Top = S(60), AutoSize = true },
+                new Label() { Text = $"LyXel Build — {ObtenerVersionApp()} Estable", Font = new Font("Segoe UI", 9.5f), ForeColor = accentColor, Left = S(24), Top = S(60), AutoSize = true },
                 new Label() { Text = "Desarrollado por Dario (@nks_array)", Font = new Font("Segoe UI", 9f), ForeColor = textSecondary, Left = S(24), Top = S(84), AutoSize = true },
                 new Label() { Text = "\"Eliminando a todos los que supieran la historia, según ellos, mejor para el mundo que no haya memoria.\"", Font = new Font("Segoe UI", 9f, FontStyle.Italic), ForeColor = purpleLight, Left = S(24), Top = S(107), Width = cardHeader.Width - S(158), AutoSize = false, Height = S(20), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right },
                 new Label() { Text = "Versión principal del launcher.", Font = new Font("Segoe UI", 8.5f), ForeColor = textSecondary, Left = S(24), Top = S(132), AutoSize = true },
@@ -138,7 +138,7 @@ namespace LyXel
             // Badge de versión actual, solo informativo
             var lblBadge = new Label()
             {
-                Text = $"Versión actual: {ObtenerVersionApp()}",
+                Text = $"Versión actual: {ObtenerVersionApp()} — Estable",
                 Font = new Font("Segoe UI", 8f),
                 ForeColor = purpleLight,
                 BackColor = AppTheme.BgTabActive,

@@ -115,6 +115,7 @@ namespace LyXel
                 s["mouse_modo"] = config.MouseModo ?? "uhid";
                 s["gamepad_modo"] = config.GamepadModo ?? "disabled";
                 s["pointer_speed"] = config.PointerSpeed.ToString();
+                s["render_driver"] = config.RenderDriver ?? "";
                 GuardarIni();
                 return (true, "");
             }
@@ -184,7 +185,8 @@ namespace LyXel
                 TecladoModo = s.ContainsKey("teclado_modo") ? (s["teclado_modo"] ?? "uhid") : (s["input_mode"] ?? "uhid"),
                 MouseModo = s.ContainsKey("mouse_modo") ? (s["mouse_modo"] ?? "uhid") : (s["input_mode"] ?? "uhid"),
                 GamepadModo = s.ContainsKey("gamepad_modo") ? (s["gamepad_modo"] ?? "disabled") : "disabled",
-                PointerSpeed = ParseInt(s["pointer_speed"], 0)
+                PointerSpeed = ParseInt(s["pointer_speed"], 0),
+                RenderDriver = s.ContainsKey("render_driver") ? (s["render_driver"] ?? "") : ""
             };
         }
 
@@ -301,6 +303,7 @@ namespace LyXel
                 sec.AddKey("mouse_modo", config.MouseModo ?? "uhid");
                 sec.AddKey("gamepad_modo", config.GamepadModo ?? "disabled");
                 sec.AddKey("pointer_speed", config.PointerSpeed.ToString());
+                sec.AddKey("render_driver", config.RenderDriver ?? "");
 
                 GuardarIni();
                 return (true, "");
