@@ -70,7 +70,7 @@ PC
 
 Dispositivo Android
 
-- Android 5.0 o superior
+- Android 13 o superior (mínimo Android 11)
 
 - Depuración USB habilitada en Opciones de desarrollador
 
