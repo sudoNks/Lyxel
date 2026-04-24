@@ -52,9 +52,9 @@ Desde v1.4.0 incluye soporte para sistemas x86 con Modo Compatibilidad integrado
 
 |---|---|
 
-| Windows 10/11 x64 (recomendado) | [⬇️ LyXel_Setup_v1.4.1.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.4.1/LyXel_Setup_v1.4.1.exe) |
+| Windows 10/11 x64 (recomendado) | [⬇️ LyXel_Setup_v1.4.2.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.4.2/LyXel_Setup_v1.4.2.exe) |
 
-| Windows 10 x86 (32 bits) | [⬇️ LyXel_Setup_v1.4.1.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.4.1/LyXel_Setup_v1.4.1.exe) |
+| Windows 10 x86 (32 bits) | [⬇️ LyXel_Setup_v1.4.2.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.4.2/LyXel_Setup_v1.4.2.exe) |
 
 Todas las versiones: [Releases](https://github.com/sudoNks/Lyxel/releases)
 
@@ -88,7 +88,8 @@ Dispositivo Android
 
 |---|---|---|
 
-| v1.4.1 ⭐ | Modo de renderizado, validación ADB, diálogos unificados, perfiles actualizados | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.1) |
+| v1.4.2 ⭐ | Hotfix: ventana de debug permanece abierta al cerrar scrcpy | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.2) |
+| v1.4.1 | Modo de renderizado, validación ADB, diálogos unificados, perfiles actualizados | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.1) |
 
 | v1.4.0 | Soporte x86, sección Controles, Modo Debug, preview de comando | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.0) |
 
