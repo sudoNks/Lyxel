@@ -222,11 +222,11 @@ namespace LyXel
                 ProcessStartInfo startInfo;
                 if (config.ModoDebug)
                 {
-                    // Modo debug: consola visible para ver salida de scrcpy en tiempo real
+                    // Modo debug: consola visible que permanece abierta tras salir scrcpy
                     startInfo = new ProcessStartInfo
                     {
-                        FileName = scrcpyPath,
-                        Arguments = args,
+                        FileName = "cmd.exe",
+                        Arguments = $"/K \"\"{scrcpyPath}\" {args}\"",
                         UseShellExecute = true,
                         CreateNoWindow = false,
                     };
