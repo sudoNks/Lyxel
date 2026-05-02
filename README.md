@@ -148,6 +148,16 @@ Estas versiones son las raíces del proyecto, desarrolladas en Python antes de l
 
 ---
 
+## 🚀 Sobre el desarrollo de LyXel
+
+LyXel es desarrollado por sudoNks (@nks_array) en C# y .NET 8, con un enfoque directo en la experiencia del usuario y la integración nativa con scrcpy.
+
+El módulo de optimización Android está potenciado por investigación asistida con IA, una herramienta que acelera la exploración de documentación oficial, configuraciones por fabricante y comandos ADB especializados. Cada optimización es validada en entorno real bajo criterios de estabilidad, seguridad y rendimiento tangible antes de su integración.
+
+Este enfoque combina velocidad de iteración con supervisión humana en cada decisión.
+
+---
+
 ## 📄 Créditos
 
 - [Scrcpy](https://github.com/Genymobile/scrcpy) por Genymobile — licencia Apache 2.0
