@@ -85,9 +85,7 @@ Dispositivo Android
 ### 🆕 Versiones actuales — C# / .NET 8
 
 | Versión | Descripción | Descargar |
-
 |---|---|---|
-
 | v1.4.3 ⭐ | Hotfix de persistencia: perfiles y config se guardan en %LocalAppData% para usuarios sin admin | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.3) |
 | v1.4.2 | Hotfix: ventana de debug permanece abierta al cerrar scrcpy | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.2) |
 | v1.4.1 | Modo de renderizado, validación ADB, diálogos unificados, perfiles actualizados | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.1) |
