@@ -6,7 +6,7 @@ GUI para Scrcpy — Control total de tu Android desde PC
 
 [![Release](https://img.shields.io/github/v/release/sudoNks/Lyxel?label=versión&color=6d1a36)](https://github.com/sudoNks/Lyxel/releases/latest)
 
-[![Downloads](https://img.shields.io/github/downloads/sudoNks/Lyxel/total?color=6d1a36)](https://github.com/sudoNks/Lyxel/releases)
+[![Downloads](https://img.shields.io/github/downloads/sudoNks/Lyxel/latest/total?color=6d1a36)](https://github.com/sudoNks/Lyxel/releases)
 
 [![License](https://img.shields.io/github/license/sudoNks/Lyxel?color=6d1a36)](LICENSE)
 
