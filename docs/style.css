@@ -70,6 +70,8 @@ section{padding:90px 40px}.si{max-width:860px;margin:0 auto}
 
 .dlg{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:44px}
 
+.dlg.dlg-single{grid-template-columns:1fr;max-width:480px}
+
 .dlc{background:var(--black);border:1px solid var(--border);border-radius:10px;padding:22px;display:flex;flex-direction:column;gap:10px;transition:border-color 0.2s}.dlc:hover{border-color:#6d1a3666}
 
 .dlc.feat{border-color:#6d1a3644;background:#0a0305}
