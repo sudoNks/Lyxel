@@ -51,9 +51,9 @@ Desde v1.4.0 incluye soporte para sistemas x86 con Modo Compatibilidad integrado
 
 |---|---|
 
-| Windows 10/11 x64 (recomendado) | [⬇️ LyXel_Setup_v1.4.4.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.4.4/LyXel_Setup_v1.4.4.exe) |
+| Windows 10/11 x64 (recomendado) | [⬇️ LyXel_Setup_v1.4.5.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.4.5/LyXel_Setup_v1.4.5.exe) |
 
-| Windows 10 x86 (32 bits) | [⬇️ LyXel_Setup_v1.4.4.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.4.4/LyXel_Setup_v1.4.4.exe) |
+| Windows 10 x86 (32 bits) | [⬇️ LyXel_Setup_v1.4.5.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.4.5/LyXel_Setup_v1.4.5.exe) |
 
 Todas las versiones: [Releases](https://github.com/sudoNks/Lyxel/releases)
 
@@ -85,6 +85,7 @@ Dispositivo Android
 
 | Versión | Descripción | Descargar |
 |---|---|---|
+| v1.4.5 | Alineamiento de renderizado: nuevos modos (DirectX 11/12, GPU, Direct3D 9, OpenGL, OpenGL ES 2, Software) según arquitectura, y mejoras de estabilidad | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.5) |
 | v1.4.4 ⭐ | scrcpy 4.0, ADB 37.0.0, Keep Active, redimensionado libre, atajos y mejoras de estabilidad | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.4) |
 | v1.4.3 | Hotfix de persistencia: perfiles y config se guardan en %LocalAppData% para usuarios sin admin | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.3) |
 | v1.4.2 | Hotfix: ventana de debug permanece abierta al cerrar scrcpy | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.2) |
