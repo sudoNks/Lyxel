@@ -85,8 +85,8 @@ Dispositivo Android
 
 | Versión | Descripción | Descargar |
 |---|---|---|
-| v1.4.5 | Alineamiento de renderizado: nuevos modos (DirectX 11/12, GPU, Direct3D 9, OpenGL, OpenGL ES 2, Software) según arquitectura, y mejoras de estabilidad | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.5) |
-| v1.4.4 ⭐ | scrcpy 4.0, ADB 37.0.0, Keep Active, redimensionado libre, atajos y mejoras de estabilidad | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.4) |
+| v1.4.5 ⭐ | Alineamiento de renderizado: nuevos modos (DirectX 11/12, GPU, Direct3D 9, OpenGL, OpenGL ES 2, Software) según arquitectura, y mejoras de estabilidad | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.5) |
+| v1.4.4 | scrcpy 4.0, ADB 37.0.0, Keep Active, redimensionado libre, atajos y mejoras de estabilidad | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.4) |
 | v1.4.3 | Hotfix de persistencia: perfiles y config se guardan en %LocalAppData% para usuarios sin admin | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.3) |
 | v1.4.2 | Hotfix: ventana de debug permanece abierta al cerrar scrcpy | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.2) |
 | v1.4.1 | Modo de renderizado, validación ADB, diálogos unificados, perfiles actualizados | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.1) |
