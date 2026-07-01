@@ -1,5 +1,22 @@
 # LyXel
 
+
+**⚡ PREVIEW DISPONIBLE: LyXel v1.5.0** — [📥 Descargar v1.5.0 Preview](https://github.com/sudoNks/Lyxel/releases/tag/v1.5.0) *(pre-release — puede contener errores)*
+
+**🧪 Novedades en v1.5.0:**
+- 🖥️ Nueva interfaz **WPF** con diseño más moderno y navegación renovada
+- 🔀 **Modo Dual Experimental**: separa scrcpy en dos procesos (pantalla/audio + input de teclado y mouse)
+- 🎮 **Mapeador Beta**: overlay de controles con edición visual para jugar desde PC
+- 🎯 Controles de **sensibilidad para la mira/cámara** (X, Y, suavizado, tecla configurable)
+- 📦 **Instalador universal**: detecta automáticamente la arquitectura (x64/x86)
+
+⚠️ *Esta es una pre-release. La versión estable sigue siendo la **v1.4.5**.*
+
+---
+
+---
+
+
 <div align="center">
 
 GUI para Scrcpy — Control total de tu Android desde PC
