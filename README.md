@@ -1,9 +1,9 @@
 # LyXel
 
 
-**⚡ PREVIEW DISPONIBLE: LyXel v1.5.1** — [📥 Descargar v1.5.1 Preview](https://github.com/sudoNks/Lyxel/releases/tag/v1.5.1) *(pre-release — puede contener errores)*
+**⚡ PREVIEW DISPONIBLE: LyXel v1.5.3** — [📥 Descargar v1.5.3 Preview](https://github.com/sudoNks/Lyxel/releases/tag/v1.5.3) *(pre-release — puede contener errores)*
 
-**🧪 Novedades en v1.5.1:**
+**🧪 Novedades en v1.5.3:**
 - 🖥️ Nueva interfaz **WPF** con diseño más moderno y navegación renovada
 - 🔀 **Modo Dual Experimental**: separa scrcpy en dos procesos (pantalla/audio + input de teclado y mouse)
 - 🎮 **Mapeador Beta**: overlay de controles con edición visual para jugar desde PC
