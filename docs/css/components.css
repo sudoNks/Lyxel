@@ -35,16 +35,26 @@ nav{position:sticky;top:0;z-index:100;padding:14px 40px;display:flex;align-items
 
 .nav-social svg{width:15px;height:15px}
 
+/* --- CTA de descarga en el navbar, separado de los links normales --- */
+
+.nav-cta{display:inline-flex;align-items:center;padding:7px 16px;background:var(--red);color:#fff;font-size:12px;font-weight:600;border-radius:6px;text-decoration:none;transition:background 0.2s,transform 0.2s,box-shadow 0.2s;cursor:pointer}
+
+.nav-cta:hover{background:var(--red-light);transform:translateY(-1px);box-shadow:0 6px 18px -8px #6d1a3666}
+
+.nav-cta:active{transform:translateY(0);box-shadow:none}
+
+.nav-cta:focus-visible{outline:2px solid var(--red-bright);outline-offset:2px}
+
 /* --- Botones (usados en el hero, la comunidad y otras secciones) --- */
 
-.btn-p{display:inline-flex;align-items:center;gap:7px;padding:13px 24px;background:var(--red);color:#fff;font-weight:600;font-size:13px;text-decoration:none;border-radius:6px;transition:all 0.2s}
-
-.btn-p:hover{background:var(--red-light);transform:translateY(-1px)}
-
-.btn-s{display:inline-flex;align-items:center;gap:7px;padding:13px 24px;background:transparent;color:var(--muted);font-size:13px;text-decoration:none;border-radius:6px;border:1px solid var(--border);transition:all 0.2s;font-weight:500}
-
-.btn-s:hover{border-color:var(--red-bright);color:var(--red-bright)}
-
+.btn-p{display:inline-flex;align-items:center;gap:7px;padding:13px 24px;background:var(--red);color:#fff;font-weight:600;font-size:13px;text-decoration:none;border-radius:6px;transition:background 0.2s,transform 0.2s,box-shadow 0.2s;cursor:pointer}
+.btn-p:hover{background:var(--red-light);transform:translateY(-1px);box-shadow:0 8px 24px -8px #6d1a3666}
+.btn-p:active{transform:translateY(0);box-shadow:0 3px 10px -4px #6d1a3666}
+.btn-p:focus-visible{outline:2px solid var(--red-bright);outline-offset:2px}
+.btn-s{display:inline-flex;align-items:center;gap:7px;padding:13px 24px;background:transparent;color:var(--muted);font-size:13px;text-decoration:none;border-radius:6px;border:1px solid var(--border);transition:border-color 0.2s,color 0.2s,box-shadow 0.2s,transform 0.2s;font-weight:500;cursor:pointer}
+.btn-s:hover{border-color:var(--red-bright);color:var(--red-bright);box-shadow:0 8px 24px -10px #6d1a3666;transform:translateY(-1px)}
+.btn-s:active{transform:translateY(0);box-shadow:none}
+.btn-s:focus-visible{outline:2px solid var(--red-bright);outline-offset:2px}
 /* --- Texto con degradado (título del hero, título de la comunidad) --- */
 
 .grad-text{background:linear-gradient(100deg,var(--text) 20%,var(--red-bright) 80%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
