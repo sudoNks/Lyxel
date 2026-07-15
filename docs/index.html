@@ -10,9 +10,15 @@
 
 <title>LyXel GUI para Scrcpy</title>
 
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/sections.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="js/main.js" defer></script>
 
-</head>h
+</head>
 
 <body>
 
@@ -34,26 +40,28 @@
 
  </ul>
 
- <span class="nav-ver">v1.4.5 Estable</span>
+ <div class="nav-right"><span class="nav-ver">v1.4.5 Estable</span><a href="#preview-card" class="nav-preview">v1.5.2 Preview</a><div class="nav-social"><a href="https://discord.gg/CU5quVNyun" target="_blank" rel="noopener" aria-label="Discord"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A18 18 0 0 0 15.9 3l-.3.6a13 13 0 0 1 3.9 1.6 15 15 0 0 0-13 0A13 13 0 0 1 10.4 3l-.3-.6a18 18 0 0 0-4.4 1.4C3 8 2.3 11.5 2.6 15a18 18 0 0 0 4.7 2.4l.7-1.2a11 11 0 0 1-1.8-.9l.4-.3a13 13 0 0 0 11.2 0l.4.3a11 11 0 0 1-1.8.9l.7 1.2A18 18 0 0 0 21.4 15c.4-4-.6-7.4-1.1-10.6zM9 13.2c-.7 0-1.3-.7-1.3-1.5S8.3 10.2 9 10.2s1.3.7 1.3 1.5-.6 1.5-1.3 1.5zm6 0c-.7 0-1.3-.7-1.3-1.5s.6-1.5 1.3-1.5 1.3.7 1.3 1.5-.6 1.5-1.3 1.5z"/></svg></a><a href="https://www.youtube.com/@sudoNks" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.4-.4-5a3 3 0 0 0-2.1-2.1C18.9 4.5 12 4.5 12 4.5s-6.9 0-8.5.4A3 3 0 0 0 1.4 7C1 8.6 1 12 1 12s0 3.4.4 5a3 3 0 0 0 2.1 2.1c1.6.4 8.5.4 8.5.4s6.9 0 8.5-.4A3 3 0 0 0 22.6 17c.4-1.6.4-5 .4-5zM9.8 15.5v-7l6 3.5-6 3.5z"/></svg></a><a href="https://github.com/sudoNks/Lyxel" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1-1-1.3-1-1.3-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-4.9 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.6 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.3.2 2.3.1 2.6.6.7 1 1.6 1 2.7 0 3.8-2.4 4.6-4.6 4.9.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg></a></div></div>
 
 </nav>
-
-<div class="preview-banner">
- <div class="preview-banner-inner">
-  <span class="preview-tag">&#x1F9EA; PRE-RELEASE</span>
-  <p><strong>LyXel v1.5.2 Preview disponible</strong> &mdash; scrcpy 4.1, Modo Dual m&aacute;s estable, contador de FPS renovado y m&aacute;s.</p>
-  <a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.5.2" class="preview-btn">Probar v1.5.2 Preview &#x2192;</a>
-  <span class="preview-note">v1.4.5 sigue siendo la versi&oacute;n estable</span>
- </div>
-</div>
 
 <div class="hero">
 
  <div class="grid-bg"></div>
 
+ <span class="hero-star" style="top:22%;left:18%;animation-delay:0s"></span>
+
+ <span class="hero-star" style="top:65%;left:12%;animation-delay:0.8s"></span>
+
+ <span class="hero-star" style="top:30%;left:85%;animation-delay:1.6s"></span>
+
+ <span class="hero-star" style="top:70%;left:80%;animation-delay:2.4s"></span>
+
+ <span class="hero-star" style="top:15%;left:55%;animation-delay:1.1s"></span>
+
+ <div class="hero-badge"><span class="hero-badge-dot"></span><span id="hero-badge-text">Comunidad activa de jugadores</span></div>
  <p class="hero-eyebrow">Control total de tu Android desde PC</p>
 
- <h1 class="hero-title">GUI para<br><em>Scrcpy.</em></h1>
+ <h1 class="hero-title">GUI para<br><em class="grad-text">Scrcpy.</em></h1>
 
  <p class="hero-sub">Controla, optimiza y configura tu dispositivo Android desde Windows. Sin comandos, sin complicaciones.</p>
 
@@ -81,6 +89,12 @@
 
 </div>
 
+<div class="wallpaper-panel reveal">
+ <div class="wp-bg"></div>
+ <div class="wp-overlay"></div>
+ <div class="wp-logo"><div class="wp-glow"></div></div>
+</div>
+
 <div class="stats">
 
  <div class="stats-inner">
@@ -97,7 +111,7 @@
 
 </div>
 
-<section id="features">
+<section id="features" class="reveal">
 
  <div class="si">
 
@@ -127,7 +141,31 @@
 
 </section>
 
-<section id="download" class="dl-sec">
+<section id="comparison" class="reveal">
+
+ <div class="si">
+
+ <p class="stag">Comparativa</p>
+
+ <h2 class="stitle">LyXel vs. Scrcpy manual.</h2>
+
+ <p class="ssub">La misma base de Scrcpy, sin la fricción de configurarla a mano cada vez.</p>
+
+ <div class="cg">
+
+ <div class="ci"><div class="cicon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v2H4V4zm0 14h16v2H4v-2zm2-9h2v2H6v-2zm4 0h8v2h-8v-2zM6 13h12v2H6v-2z"/></svg></div><div class="ctitle">Conexión</div><div class="ccomp">Comandos en terminal <span class="carrow">→</span> <span class="cafter">Un solo clic</span></div></div>
+
+ <div class="ci"><div class="cicon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.49.49 0 0 0-.5-.42h-3.84a.49.49 0 0 0-.5.42l-.36 2.54c-.59.24-1.12.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L1.79 8.87a.49.49 0 0 0 .12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.13.22.39.3.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.25.42.5.42h3.84c.25 0 .45-.18.5-.42l.36-2.54c.59-.24 1.12-.57 1.62-.94l2.39.96c.2.08.46 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.03-1.58zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z"/></svg></div><div class="ctitle">Configuración</div><div class="ccomp">Flags manuales cada vez <span class="carrow">→</span> <span class="cafter">Perfiles guardados</span></div></div>
+
+ <div class="ci"><div class="cicon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 2 7v6c0 5.25 3.75 9.74 10 11 6.25-1.26 10-5.75 10-11V7l-10-5zm0 9.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V7.3l7-3.11v7.8z"/></svg></div><div class="ctitle">Ajustes por dispositivo</div><div class="ccomp">Prueba y error <span class="carrow">→</span> <span class="cafter">Optimización automática (Samsung, Xiaomi, Pixel...)</span></div></div>
+
+ </div>
+
+ </div>
+
+</section>
+
+<section id="download" class="dl-sec reveal">
 
  <div class="si">
 
@@ -137,7 +175,7 @@
 
  <p class="ssub">Scrcpy 4.0 y ADB 37.0.0 incluidos. No necesitas instalar nada adicional.</p>
 
- <div class="dlg dlg-single">
+ <div class="dlg">
 
  <div class="dlc feat">
 
@@ -151,11 +189,25 @@
 
  </div>
 
+ <div class="dlc pre" id="preview-card">
+
+ <span class="pre-pill">&#x1F9EA; PRE-RELEASE</span>
+
+ <span class="dn">LyXel v1.5.2 Preview disponible</span>
+
+ <span class="dd">scrcpy 4.1, Modo Dual m&aacute;s estable, contador de FPS renovado y m&aacute;s.</span>
+
+ <a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.5.2" class="db">Probar v1.5.2 Preview &#x2192;</a>
+
+ <span class="pre-note">v1.4.5 sigue siendo la versi&oacute;n estable</span>
+
+ </div>
+
  </div>
 
 </section>
 
-<section id="requirements">
+<section id="requirements" class="reveal">
 
  <div class="si">
 
@@ -177,25 +229,7 @@
 
 </section>
 
-<section id="development">
-
- <div class="si">
-
- <p class="stag">Desarrollo</p>
-
- <h2 class="stitle">🚀 Sobre el desarrollo de LyXel</h2>
-
- <p>LyXel es desarrollado por <strong>sudoNks</strong> (@nks_array) en <strong>C# y .NET 8</strong>, con un enfoque directo en la experiencia del usuario y la integración nativa con scrcpy.</p>
-
- <p>El módulo de optimización Android está <strong>potenciado por investigación asistida con IA</strong>, una herramienta que acelera la exploración de documentación oficial, configuraciones por fabricante y comandos ADB especializados. Cada optimización es <strong>validada en entorno real bajo criterios de estabilidad, seguridad y rendimiento tangible</strong> antes de su integración.</p>
-
- <p>Este enfoque combina velocidad de iteración con <strong>supervisión humana en cada decisión</strong>.</p>
-
- </div>
-
-</section>
-
-<section id="changelog" class="cl">
+<section id="changelog" class="cl reveal">
 
  <div class="si">
 
@@ -240,7 +274,27 @@
 
 </section>
 
-<footer>
+<section id="community" class="cs reveal">
+
+ <div class="cs-sep"></div>
+
+ <p class="cs-tag">Únete a la comunidad</p>
+
+ <h2 class="cs-title">Sé parte de la comunidad <em class="grad-text">LyXel</em></h2>
+
+ <p class="cs-sub">Comparte tu configuración, reporta errores y ayuda a decidir hacia dónde va el proyecto. LyXel se construye día a día junto a la gente que lo usa.</p>
+
+ <div class="cs-actions">
+
+ <a href="https://discord.gg/CU5quVNyun" target="_blank" rel="noopener" class="btn-p"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A18 18 0 0 0 15.9 3l-.3.6a13 13 0 0 1 3.9 1.6 15 15 0 0 0-13 0A13 13 0 0 1 10.4 3l-.3-.6a18 18 0 0 0-4.4 1.4C3 8 2.3 11.5 2.6 15a18 18 0 0 0 4.7 2.4l.7-1.2a11 11 0 0 1-1.8-.9l.4-.3a13 13 0 0 0 11.2 0l.4.3a11 11 0 0 1-1.8.9l.7 1.2A18 18 0 0 0 21.4 15c.4-4-.6-7.4-1.1-10.6zM9 13.2c-.7 0-1.3-.7-1.3-1.5S8.3 10.2 9 10.2s1.3.7 1.3 1.5-.6 1.5-1.3 1.5zm6 0c-.7 0-1.3-.7-1.3-1.5s.6-1.5 1.3-1.5 1.3.7 1.3 1.5-.6 1.5-1.3 1.5z"/></svg>Unirse al Discord</a>
+
+ <a href="https://youtube.com/@nks_v1" target="_blank" rel="noopener" class="btn-s"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.4-.4-5a3 3 0 0 0-2.1-2.1C18.9 4.5 12 4.5 12 4.5s-6.9 0-8.5.4A3 3 0 0 0 1.4 7C1 8.6 1 12 1 12s0 3.4.4 5a3 3 0 0 0 2.1 2.1c1.6.4 8.5.4 8.5.4s6.9 0 8.5-.4A3 3 0 0 0 22.6 17c.4-1.6.4-5 .4-5zM9.8 15.5v-7l6 3.5-6 3.5z"/></svg>Ver el canal</a>
+
+ </div>
+
+</section>
+
+<footer class="reveal">
 
  <span class="fl">Ly<span>X</span>el</span>
 
