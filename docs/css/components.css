@@ -1,0 +1,84 @@
+/* ============================================================
+   LyXel — components.css
+   Piezas de interfaz reutilizables en varias secciones: navbar,
+   botones, texto con degradado, utilidad de revelado por scroll,
+   patrón de encabezado de sección (eyebrow/título/párrafo) y footer.
+   ============================================================ */
+
+/* --- Barra de navegación --- */
+
+nav{position:sticky;top:0;z-index:100;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);backdrop-filter:blur(20px);background:rgba(8,8,8,0.9)}
+
+.nav-logo{font-family:var(--font-head);font-size:18px;font-weight:800;letter-spacing:4px;color:var(--text)}
+
+.nav-logo span{color:var(--red-bright)}
+
+.nav-links{display:flex;gap:28px;list-style:none}
+
+.nav-links a{color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;transition:color 0.2s}
+
+.nav-links a:hover{color:var(--text)}
+
+.nav-ver{font-size:11px;font-weight:600;color:var(--red-bright);letter-spacing:1px;background:#6d1a3622;padding:4px 10px;border-radius:4px;border:1px solid #6d1a3644}
+
+.nav-preview{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:1px;background:transparent;padding:4px 10px;border-radius:4px;border:1px solid var(--border);text-decoration:none;transition:all 0.2s;white-space:nowrap}
+
+.nav-preview:hover{color:var(--red-bright);border-color:#a0285066}
+
+.nav-right{display:flex;align-items:center;gap:16px}
+
+.nav-social{display:flex;align-items:center;gap:10px}
+
+.nav-social a{width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:var(--muted);border-radius:6px;transition:color 0.2s,background 0.2s}
+
+.nav-social a:hover{color:var(--red-bright);background:#6d1a3618}
+
+.nav-social svg{width:15px;height:15px}
+
+/* --- Botones (usados en el hero, la comunidad y otras secciones) --- */
+
+.btn-p{display:inline-flex;align-items:center;gap:7px;padding:13px 24px;background:var(--red);color:#fff;font-weight:600;font-size:13px;text-decoration:none;border-radius:6px;transition:all 0.2s}
+
+.btn-p:hover{background:var(--red-light);transform:translateY(-1px)}
+
+.btn-s{display:inline-flex;align-items:center;gap:7px;padding:13px 24px;background:transparent;color:var(--muted);font-size:13px;text-decoration:none;border-radius:6px;border:1px solid var(--border);transition:all 0.2s;font-weight:500}
+
+.btn-s:hover{border-color:var(--red-bright);color:var(--red-bright)}
+
+/* --- Texto con degradado (título del hero, título de la comunidad) --- */
+
+.grad-text{background:linear-gradient(100deg,var(--text) 20%,var(--red-bright) 80%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+
+/* --- Utilidad de revelado progresivo al hacer scroll --- */
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s ease,transform 0.7s ease}
+
+.reveal.is-visible{opacity:1;transform:translateY(0)}
+
+/* --- Patrón de encabezado de sección: eyebrow + título + párrafo --- */
+
+section{padding:90px 40px}
+
+.si{max-width:860px;margin:0 auto}
+
+.stag{font-size:10px;font-weight:600;letter-spacing:3px;color:var(--red-bright);text-transform:uppercase;margin-bottom:14px}
+
+.stitle{font-family:var(--font-head);font-size:clamp(28px,4vw,44px);font-weight:700;line-height:1;letter-spacing:-1px;margin-bottom:14px}
+
+.ssub{font-size:15px;color:var(--muted);max-width:480px;line-height:1.7}
+
+/* --- Pie de página --- */
+
+footer{padding:40px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+
+.fl{font-size:15px;font-weight:800;letter-spacing:3px}
+
+.fl span{color:var(--red-bright)}
+
+.flinks{display:flex;gap:20px}
+
+.flinks a{color:var(--muted);text-decoration:none;font-size:12px;transition:color 0.2s}
+
+.flinks a:hover{color:var(--text)}
+
+.fc{font-size:11px;color:var(--muted2)}
