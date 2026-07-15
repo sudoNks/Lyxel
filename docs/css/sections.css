@@ -1,0 +1,446 @@
+/* ============================================================
+   LyXel — sections.css
+   Estilos específicos de cada sección de la página, en el orden
+   en que aparecen, más los ajustes responsive al final.
+   ============================================================ */
+
+/* --- Hero --- */
+
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 40px 80px;position:relative;overflow:hidden}
+
+.hero::before{content:'';position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(109,26,54,0.12) 0%,transparent 70%);pointer-events:none}
+
+.hero-star{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--red-bright);box-shadow:0 0 6px 1px rgba(160,40,80,0.8);animation:twinkle 3.2s ease-in-out infinite;pointer-events:none}
+
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(#ffffff04 1px,transparent 1px),linear-gradient(90deg,#ffffff04 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black,transparent)}
+
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--red-bright);text-transform:uppercase;margin-bottom:20px;opacity:0;animation:fadeUp 0.7s 0.1s forwards}
+
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 10px;background:#6d1a3618;border:1px solid #6d1a3644;border-radius:20px;font-size:11px;font-weight:500;color:var(--muted);margin-bottom:22px;opacity:0;animation:fadeUp 0.7s 0.05s forwards}
+
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--red-bright);animation:pulseDot 1.8s ease-in-out infinite}
+
+.hero-title{font-family:var(--font-head);font-size:clamp(48px,8vw,88px);font-weight:700;line-height:0.95;letter-spacing:-2px;margin-bottom:20px;opacity:0;animation:fadeUp 0.7s 0.25s forwards}
+
+.hero-title em{font-style:normal;color:var(--red-bright)}
+
+.hero-sub{font-size:16px;color:var(--muted);max-width:460px;line-height:1.7;margin-bottom:44px;font-weight:400;opacity:0;animation:fadeUp 0.7s 0.4s forwards}
+
+.hero-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp 0.7s 0.55s forwards}
+
+.hero-note{margin-top:36px;font-size:11px;color:var(--muted);letter-spacing:1px;opacity:0;animation:fadeUp 0.7s 0.7s forwards}
+
+/* --- Panel de wallpaper con logo y glow --- */
+
+.wallpaper-panel{position:relative;height:340px;overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+
+.wp-bg{position:absolute;inset:-20px;background-image:url('../LyXelOs.png');background-size:cover;background-position:center;animation:wpDrift 18s ease-in-out infinite alternate}
+
+.wp-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,0.55) 0%,rgba(8,8,8,0.75) 100%)}
+
+.wp-logo{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+
+.wp-glow{width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(160,40,80,0.55) 0%,rgba(160,40,80,0.18) 45%,transparent 70%);animation:pulseGlow 2.6s ease-in-out infinite}
+
+/* --- Franja de estadísticas --- */
+
+.stats{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface)}
+
+.stats-inner{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+
+.stat{text-align:center;padding:28px 20px;border-right:1px solid var(--border)}
+
+.stat:last-child{border-right:none}
+
+.stat-num{font-size:28px;font-weight:800;color:var(--red-bright);display:block;letter-spacing:-1px}
+
+.stat-label{font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:0.5px}
+
+/* --- Funciones (#features): lista con ícono a la izquierda --- */
+
+#features .si{max-width:980px}
+
+.fg{display:grid;grid-template-columns:repeat(2,1fr);column-gap:48px;row-gap:64px;margin-top:56px}
+
+.fi{display:grid;grid-template-columns:44px 1fr;column-gap:18px;row-gap:6px;align-items:start}
+
+.fi .ficon{grid-column:1;grid-row:1/3;align-self:start;margin-bottom:0}
+
+.fi .ftitle{grid-column:2;grid-row:1;align-self:end}
+
+.fi .fdesc{grid-column:2;grid-row:2}
+
+.ficon{width:34px;height:34px;background:#6d1a3618;border:1px solid #6d1a3633;border-radius:7px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;transition:background 0.2s,border-color 0.2s}
+
+.fi:hover .ficon{background:#6d1a3630;border-color:#6d1a3655}
+
+.ficon svg{width:16px;height:16px;color:var(--red-bright)}
+
+.ftitle{font-size:14px;font-weight:700;margin-bottom:6px}
+
+.fdesc{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* --- Comparativa LyXel vs. Scrcpy manual --- */
+
+.cg{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:52px}
+
+.ci{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:26px;transition:border-color 0.2s}
+
+.ci:hover{border-color:#6d1a3644}
+
+.cicon{width:34px;height:34px;background:#6d1a3618;border:1px solid #6d1a3633;border-radius:7px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+
+.cicon svg{width:16px;height:16px;color:var(--red-bright)}
+
+.ctitle{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+
+.ccomp{font-size:15px;color:var(--muted);line-height:1.6}
+
+.carrow{color:var(--muted2);margin:0 2px}
+
+.cafter{color:var(--red-bright);font-weight:700}
+
+/* --- Descargas (#download) --- */
+
+.dl-sec{background:var(--surface);border-top:1px solid var(--border)}
+
+.dlg{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:44px}
+
+.dlg.dlg-single{grid-template-columns:1fr;max-width:480px;margin:0 auto}
+
+.dlc{background:var(--black);border:1px solid var(--border);border-radius:10px;padding:22px;display:flex;flex-direction:column;gap:10px;transition:border-color 0.2s}
+
+.dlc:hover{border-color:#6d1a3666}
+
+.dlc.feat{border-color:#6d1a3644;background:#0a0305}
+
+.da{font-size:10px;font-weight:600;letter-spacing:2px;color:var(--red-bright);text-transform:uppercase}
+
+.dn{font-size:19px;font-weight:800}
+
+.dd{font-size:12px;color:var(--muted);line-height:1.5}
+
+.db{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;background:var(--red);color:#fff;font-size:12px;font-weight:600;text-decoration:none;border-radius:5px;margin-top:2px;transition:all 0.15s;width:fit-content}
+
+.db:hover{background:var(--red-light)}
+
+.db2{background:transparent;border:1px solid var(--border);color:var(--muted)}
+
+.db2:hover{border-color:var(--red-bright);color:var(--red-bright);background:transparent}
+
+.dlc.pre{border-color:#a0285055;background:linear-gradient(160deg,#1a0810,var(--black))}
+
+.dlc.pre:hover{border-color:#a02850}
+
+.pre-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:20px;width:fit-content}
+
+.pre-note{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* --- Requisitos (#requirements) --- */
+
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:44px}
+
+.rc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px;transition:border-color 0.2s}
+
+.rc:hover{border-color:#6d1a3644}
+
+.rt{font-size:13px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+
+.rt::before{content:'';width:5px;height:5px;background:var(--red-bright);border-radius:50%;flex-shrink:0}
+
+.rl{list-style:none;display:flex;flex-direction:column;gap:7px}
+
+.rl li{font-size:12px;color:var(--muted);padding-left:12px;position:relative;line-height:1.5}
+
+.rl li::before{content:'—';position:absolute;left:0;color:var(--muted2)}
+
+/* --- Historial de versiones (#changelog) --- */
+
+.cl{border-top:1px solid var(--border)}
+
+.vl{margin-top:44px;display:flex;flex-direction:column;gap:2px}
+
+.vi{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:16px 20px;display:flex;align-items:center;gap:16px;transition:border-color 0.2s}
+
+.vi:hover{border-color:#6d1a3644}
+
+.vi.lat{border-color:#6d1a3655;background:#0a0305}
+
+.vn{font-size:15px;font-weight:800;color:var(--red-bright);min-width:70px}
+
+.vt{font-size:9px;font-weight:600;letter-spacing:1px;padding:3px 7px;border-radius:3px;background:#6d1a3622;color:var(--red-bright);white-space:nowrap}
+
+.vt.old{background:#1a1a1a;color:var(--muted)}
+
+.vd{font-size:12px;color:var(--muted);flex:1}
+
+.vdl{font-size:11px;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 10px;border-radius:4px;transition:all 0.15s;white-space:nowrap}
+
+.vdl:hover{border-color:var(--red-bright);color:var(--red-bright)}
+
+/* --- Comunidad (#community) --- */
+
+.cs{padding:150px 40px;text-align:center;display:flex;flex-direction:column;align-items:center;border-top:1px solid var(--border)}
+
+.cs-sep{width:40px;height:2px;background:var(--red-bright);margin-bottom:36px;opacity:0.6}
+
+.cs-tag{font-size:10px;font-weight:600;letter-spacing:3px;color:var(--red-bright);text-transform:uppercase;margin-bottom:18px}
+
+.cs-title{font-family:var(--font-head);font-size:clamp(32px,5vw,48px);font-weight:700;letter-spacing:-1px;margin-bottom:18px}
+
+.cs-title em{font-style:normal;color:var(--red-bright)}
+
+.cs-sub{font-size:15px;color:var(--muted);max-width:460px;line-height:1.7;margin-bottom:40px}
+
+.cs-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ============================================================
+   Responsive — cubre ajustes de secciones y, donde corresponde,
+   overrides puntuales de componentes (nav, botones) a este ancho.
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+  nav {
+
+    padding: 12px 16px;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+  }
+
+  .nav-links {
+
+    display: none;
+
+  }
+
+  .nav-ver {
+
+    margin-left: auto;
+
+  }
+
+  .hero {
+
+    padding: 100px 20px 60px;
+
+  }
+
+  .hero-title {
+
+    font-size: 48px;
+
+    letter-spacing: -1px;
+
+  }
+
+  .hero-actions {
+
+    flex-direction: column;
+
+    align-items: center;
+
+    width: 100%;
+
+  }
+
+  .btn-p, .btn-s {
+
+    width: 100%;
+
+    justify-content: center;
+
+  }
+
+  .stats-inner {
+
+    grid-template-columns: repeat(2, 1fr);
+
+  }
+
+  .stat:nth-child(2) {
+
+    border-right: none;
+
+  }
+
+  .stat:nth-child(3) {
+
+    border-top: 1px solid var(--border);
+
+  }
+
+  section {
+
+    padding: 60px 20px;
+
+  }
+
+  .fg {
+
+    grid-template-columns: 1fr;
+
+    gap: 16px;
+
+  }
+
+  .cg {
+
+    grid-template-columns: 1fr;
+
+    gap: 16px;
+
+  }
+
+  .wallpaper-panel {
+
+    height: 220px;
+
+  }
+
+  .cs {
+
+    padding: 90px 20px;
+
+  }
+
+  .cs-actions {
+
+    flex-direction: column;
+
+    width: 100%;
+
+  }
+
+  .cs-actions .btn-p, .cs-actions .btn-s {
+
+    width: 100%;
+
+    justify-content: center;
+
+  }
+
+  #features .si {
+
+    max-width: none;
+
+  }
+
+  .dlg {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .rg {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .vi {
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+  }
+
+  .vd {
+
+    width: 100%;
+
+    flex: none;
+
+  }
+
+  .vdl {
+
+    margin-left: auto;
+
+  }
+
+  footer {
+
+    padding: 32px 20px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 16px;
+
+  }
+
+  .flinks {
+
+    flex-wrap: wrap;
+
+    gap: 16px;
+
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .hero-title {
+
+    font-size: 42px;
+
+  }
+
+  .wallpaper-panel {
+
+    height: 200px;
+
+  }
+
+  .fg {
+
+    gap: 16px;
+
+  }
+
+  .stats-inner {
+
+    grid-template-columns: 1fr 1fr;
+
+  }
+
+  .stitle {
+
+    font-size: 28px;
+
+  }
+
+  .vi {
+
+    padding: 12px 14px;
+
+  }
+
+  .vn {
+
+    min-width: 60px;
+
+    font-size: 13px;
+
+  }
+
+  .cs {
+
+    padding: 70px 20px;
+
+  }
+
+  .cs-title {
+
+    font-size: 30px;
+
+  }
+
+}
