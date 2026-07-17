@@ -1,14 +1,14 @@
 # LyXel
 
 
-**⚡ PREVIEW DISPONIBLE: LyXel v1.5.3** — [📥 Descargar v1.5.3 Preview](https://github.com/sudoNks/Lyxel/releases/tag/v1.5.3) *(pre-release — puede contener errores)*
+**⚡ PREVIEW DISPONIBLE: LyXel v1.5.6** — [📥 Descargar v1.5.6 Preview](https://github.com/sudoNks/Lyxel/releases/tag/v1.5.6) *(pre-release — puede contener errores)*
 
-**🧪 Novedades en v1.5.3:**
-- 🖥️ Nueva interfaz **WPF** con diseño más moderno y navegación renovada
-- 🔀 **Modo Dual Experimental**: separa scrcpy en dos procesos (pantalla/audio + input de teclado y mouse)
-- 🎮 **Mapeador Beta**: overlay de controles con edición visual para jugar desde PC
-- 🎯 Controles de **sensibilidad para la mira/cámara** (X, Y, suavizado, tecla configurable)
-- 📦 **Instalador universal**: detecta automáticamente la arquitectura (x64/x86)
+**🧪 Novedades en v1.5.6:**
+- 🖥️ **Pantalla virtual (modo DeX)**: escritorio virtual independiente del teléfono, con su propia resolución, al estilo Samsung DeX
+- 🎮 **Mapeador en pantalla virtual**: mapea los controles jugando sobre la pantalla virtual, con mejor precisión de cámara (hasta 2560×1440)
+- ⚙️ **Resolución y DPI configurables**: de 720p a 4K y DPI 160 / 240 / 320 o personalizado, como en un emulador
+- 🔊 **Audio en la PC**: al usar la pantalla virtual, el sonido del juego se reproduce en la computadora
+- ⛶ **Pantalla completa y multitarea**: espejo del Mapeador a pantalla completa, cursor oculto al jugar y uso de otras ventanas del PC sin interferencias
 
 ⚠️ *Esta es una pre-release. La versión estable sigue siendo la **v1.4.5**.*
 
