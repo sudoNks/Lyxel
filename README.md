@@ -76,6 +76,41 @@ Todas las versiones: [Releases](https://github.com/sudoNks/Lyxel/releases)
 
 ---
 
+## 🐧 LyXel para Linux
+
+Edición Linux de LyXel: mira y maneja tu Android directamente desde el PC, con interfaz gráfica. Paquete autocontenido — incluye todo lo necesario, no hay que instalar nada aparte. Versionado propio, independiente del de Windows.
+
+**⚠️ Nota:** esta edición no incluye el Mapeador, disponible solo en LyXel para Windows.
+
+| Plataforma | Enlace |
+|---|---|
+| Linux x64 (64 bits) | [⬇️ lyxel-v1.0.3-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v1.0.3/lyxel-v1.0.3-linux-x64.tar.gz) |
+
+Release: [linux-v1.0.3](https://github.com/sudoNks/Lyxel/releases/tag/linux-v1.0.3)
+
+### Guía de instalación (Linux)
+
+**1.** Descarga el paquete `lyxel-v1.0.3-linux-x64.tar.gz`
+
+**2.** Extráelo con clic derecho → "Extraer aquí", o en terminal:
+```
+tar -xzf lyxel-v1.0.3-linux-x64.tar.gz
+```
+
+**3.** Entra a la carpeta y ejecuta el instalador:
+```
+cd lyxel-v1.0.3-linux-x64
+bash instalar.sh
+```
+
+El instalador hace todo por ti y abre la app al terminar; después la encuentras buscando "LyXel" en tu menú de aplicaciones.
+
+**4.** En tu teléfono, activa la Depuración USB: Ajustes → Acerca del teléfono → toca 7 veces "Número de compilación"; luego en Opciones de desarrollador activa "Depuración USB".
+
+**5.** Conecta el cable, acepta "¿Permitir depuración USB?" en el teléfono (marca "Permitir siempre"), elige un perfil en LyXel y pulsa Iniciar.
+
+---
+
 ## 📋 Requisitos
 
 PC
