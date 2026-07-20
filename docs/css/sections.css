@@ -100,6 +100,7 @@
 
 .dlg{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:48px}
 .dlg.dlg-single{grid-template-columns:1fr;max-width:480px;margin:0 auto}
+.dlg.dlg-wide{grid-template-columns:1fr}
 
 .dlc{background:var(--black);border:1px solid var(--border);border-radius:10px;padding:28px;display:flex;flex-direction:column;gap:10px;transition:border-color 0.2s,transform 0.2s}
 
