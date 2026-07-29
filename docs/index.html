@@ -142,25 +142,41 @@
 
 <section id="comparison" class="reveal">
 
- <div class="si">
+<div class="si">
 
- <p class="stag">Comparativa</p>
+<p class="stag">Comparativa</p>
 
- <h2 class="stitle">LyXel vs. Scrcpy manual.</h2>
+<h2 class="stitle">LyXel vs. Scrcpy.</h2>
 
- <p class="ssub">La misma base de Scrcpy, sin la fricción de configurarla a mano cada vez.</p>
+<p class="ssub">La misma base de Scrcpy, pero pensada para que empieces a usarla sin fricción.</p>
 
- <div class="cg">
+<style>
+.ctable{width:100%;border-collapse:separate;border-spacing:0;margin-top:52px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;font-family:var(--font-body)}
+.ctable th,.ctable td{padding:18px 22px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+.ctable thead th{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);background:var(--surface2)}
+.ctable thead th.ct-lyxel{color:var(--red-bright)}
+.ctable tbody tr:last-child td{border-bottom:none}
+.ctable .ct-feat{font-size:14px;font-weight:600;color:var(--text);width:32%}
+.ctable .ct-lyxel{font-size:14px;color:var(--text);line-height:1.6}
+.ctable .ct-scrcpy{font-size:14px;color:var(--muted);line-height:1.6}
+.ctable tbody tr:hover{background:#6d1a360d}
+@media(max-width:720px){.ctable .ct-feat{width:auto}.ctable th,.ctable td{padding:14px 14px}}
+</style>
 
- <div class="ci"><div class="cicon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v2H4V4zm0 14h16v2H4v-2zm2-9h2v2H6v-2zm4 0h8v2h-8v-2zM6 13h12v2H6v-2z"/></svg></div><div class="ctitle">Conexión</div><div class="ccomp">Comandos en terminal <span class="carrow">→</span> <span class="cafter">Un solo clic</span></div></div>
+<table class="ctable">
+<thead>
+<tr><th class="ct-feat">Característica</th><th class="ct-lyxel">LyXel</th><th class="ct-scrcpy">Scrcpy</th></tr>
+</thead>
+<tbody>
+<tr><td class="ct-feat">Interfaz</td><td class="ct-lyxel">Interfaz gráfica: todo a un clic, sin escribir nada</td><td class="ct-scrcpy">Uso mediante comandos en la terminal</td></tr>
+<tr><td class="ct-feat">Configuración</td><td class="ct-lyxel">Perfiles de configuración reutilizables, listos para volver a usar</td><td class="ct-scrcpy">Parámetros manuales cada vez que se ejecuta</td></tr>
+<tr><td class="ct-feat">Controles</td><td class="ct-lyxel">Mapeador de controles integrado para crear y organizar tus controles</td><td class="ct-scrcpy">No incluye mapeador de controles</td></tr>
+<tr><td class="ct-feat">Mantenimiento</td><td class="ct-lyxel">Herramientas de mantenimiento y optimización del sistema integradas</td><td class="ct-scrcpy">No incluye herramientas de mantenimiento</td></tr>
+<tr><td class="ct-feat">Rendimiento</td><td class="ct-lyxel">Ajustado para una experiencia fluida y aprovechar mejor tu equipo</td><td class="ct-scrcpy">Rendimiento en su configuración por defecto</td></tr>
+</tbody>
+</table>
 
- <div class="ci"><div class="cicon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.49.49 0 0 0-.5-.42h-3.84a.49.49 0 0 0-.5.42l-.36 2.54c-.59.24-1.12.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L1.79 8.87a.49.49 0 0 0 .12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.13.22.39.3.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.25.42.5.42h3.84c.25 0 .45-.18.5-.42l.36-2.54c.59-.24 1.12-.57 1.62-.94l2.39.96c.2.08.46 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.03-1.58zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z"/></svg></div><div class="ctitle">Configuración</div><div class="ccomp">Flags manuales cada vez <span class="carrow">→</span> <span class="cafter">Perfiles guardados</span></div></div>
-
- <div class="ci"><div class="cicon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 2 7v6c0 5.25 3.75 9.74 10 11 6.25-1.26 10-5.75 10-11V7l-10-5zm0 9.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V7.3l7-3.11v7.8z"/></svg></div><div class="ctitle">Ajustes por dispositivo</div><div class="ccomp">Prueba y error <span class="carrow">→</span> <span class="cafter">Optimización automática (Samsung, Xiaomi, Pixel...)</span></div></div>
-
- </div>
-
- </div>
+</div>
 
 </section>
 
