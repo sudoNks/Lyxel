@@ -25,8 +25,6 @@ GUI para Scrcpy: control total de tu Android desde PC
 
 LyXel es una interfaz grafica (GUI) para [Scrcpy](https://github.com/Genymobile/scrcpy) que simplifica el control de dispositivos Android desde Windows, sin necesidad de usar comandos ni herramientas externas.
 
-*LyXel NO es un fork de Scrcpy. Es un proyecto independiente que usa Scrcpy como herramienta subyacente. Scrcpy es desarrollado por [Genymobile](https://github.com/Genymobile) bajo licencia Apache 2.0.*
-
 Antes conocido como MobiladorSteX.
 
 ---
