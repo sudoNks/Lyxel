@@ -98,6 +98,10 @@ El instalador hace todo por ti y abre la app al terminar; despues la encuentras 
 |---|---|---|
 | v1.6.4 | Tecla Mod personalizable y mejor compatibilidad de teclado en el Mapeador; conserva todo lo de la v1.6.0 | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.6.4) |
 | v1.6.0 | Aceleracion por hardware (hasta 83% menos CPU), Mapeador rediseñado y Pantalla dedicada | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.6.0) |
+| v1.5.6 | Preview: Pantalla virtual (modo DeX) con resolucion y DPI configurables, Mapeador sobre pantalla virtual, audio en la PC y pantalla completa | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.5.6) |
+| v1.5.3 | Preview: Mapeador corregido con scrcpy 4.1, mejor deteccion del dispositivo, modo dual mas estable y contador de FPS renovado | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.5.3) |
+| v1.5.1 | Preview: mejoras del Mapeador Beta, mouse sobre la ventana del juego y botones del mouse como tecla de captura | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.5.1) |
+| v1.5.0 | Preview: nueva interfaz WPF, Modo Dual experimental, Mapeador Beta y modulo de Optimizacion Android | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.5.0) |
 | v1.4.5 | Alineamiento de renderizado: nuevos modos segun arquitectura y mejoras de estabilidad | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.5) |
 | v1.4.4 | scrcpy 4.0, ADB 37.0.0, Keep Active, redimensionado libre, atajos y mejoras de estabilidad | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.4) |
 | v1.4.3 | Hotfix de persistencia: perfiles y config se guardan en %LocalAppData% para usuarios sin admin | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.3) |
