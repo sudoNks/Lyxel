@@ -1,8 +1,8 @@
 # LyXel
 
-**Version estable actual: LyXel v1.6.0**: [Descargar v1.6.0](https://github.com/sudoNks/Lyxel/releases/download/v1.6.0/LyXel_Setup_v1.6.0.exe)
+**Version estable actual: LyXel v1.6.4**: [Descargar v1.6.4](https://github.com/sudoNks/Lyxel/releases/download/v1.6.4/LyXel_Setup_v1.6.4.exe)
 
-**Novedades destacadas en v1.6.0:** aceleracion por hardware (el video se procesa en la tarjeta grafica, con hasta 83% menos uso del procesador), Mapeador rediseñado (camara continua y precisa, editor de controles renovado y perfiles importables/exportables) y Pantalla dedicada (juega en una pantalla propia con la resolucion y el DPI que elijas, de 720p a 4K).
+**Novedades destacadas en v1.6.4:** ahora puedes personalizar la tecla Mod (elige la tecla de atajos del espejo que prefieras) y mejora la compatibilidad del teclado en el Mapeador. Se mantienen las novedades de la v1.6.0: aceleracion por hardware (el video se procesa en la tarjeta grafica, con hasta 83% menos uso del procesador), Mapeador rediseñado (camara continua y precisa, editor de controles renovado y perfiles importables/exportables) y Pantalla dedicada (juega en una pantalla propia con la resolucion y el DPI que elijas, de 720p a 4K).
 
 ---
 
@@ -48,8 +48,8 @@ Antes conocido como MobiladorSteX.
 
 | Plataforma | Enlace |
 |---|---|
-| Windows 10/11 x64 (recomendado) | [LyXel_Setup_v1.6.0.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.6.0/LyXel_Setup_v1.6.0.exe) |
-| Windows 10 x86 (32 bits) | [LyXel_Setup_v1.6.0.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.6.0/LyXel_Setup_v1.6.0.exe) |
+| Windows 10/11 x64 (recomendado) | [LyXel_Setup_v1.6.4.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.6.4/LyXel_Setup_v1.6.4.exe) |
+| Windows 10 x86 (32 bits) | [LyXel_Setup_v1.6.4.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.6.4/LyXel_Setup_v1.6.4.exe) |
 
 Todas las versiones: [Releases](https://github.com/sudoNks/Lyxel/releases)
 
@@ -96,6 +96,7 @@ El instalador hace todo por ti y abre la app al terminar; despues la encuentras 
 
 | Version | Descripcion | Descargar |
 |---|---|---|
+| v1.6.4 | Tecla Mod personalizable y mejor compatibilidad de teclado en el Mapeador; conserva todo lo de la v1.6.0 | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.6.4) |
 | v1.6.0 | Aceleracion por hardware (hasta 83% menos CPU), Mapeador rediseñado y Pantalla dedicada | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.6.0) |
 | v1.4.5 | Alineamiento de renderizado: nuevos modos segun arquitectura y mejoras de estabilidad | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.5) |
 | v1.4.4 | scrcpy 4.0, ADB 37.0.0, Keep Active, redimensionado libre, atajos y mejoras de estabilidad | [Download](https://github.com/sudoNks/Lyxel/releases/tag/v1.4.4) |
