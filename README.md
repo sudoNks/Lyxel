@@ -35,7 +35,7 @@ Antes conocido como MobiladorSteX.
 
 **Sin comandos.** Todo lo que normalmente harias en una terminal (cambiar DPI, resolucion, modo de entrada, codificador) lo haces desde la interfaz.
 
-**Scrcpy y ADB incluidos.** No necesitas instalar nada adicional. LyXel incluye scrcpy 4.0 y ADB 37.0.0 (platform-tools).
+**Todo listo para usar.** No necesitas instalar scrcpy, ADB ni ninguna herramienta por separado: todo viene incluido y actualizado en cada version.
 
 **Compatible con 32 y 64 bits.** Desde v1.4.0 incluye soporte para sistemas x86 con Modo Compatibilidad integrado.
 
