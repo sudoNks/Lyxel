@@ -31,7 +31,7 @@ Antes conocido como MobiladorSteX.
 
 ## Por que LyXel?
 
-**Pensado para jugadores.** Perfiles preconfigurados para gama baja, media y alta. Optimizaciones ADB para Free Fire, Samsung, Xiaomi, Pixel y Huawei con un solo toggle.
+**Rendimiento y mantenimiento.** Perfiles preconfigurados para gama baja, media y alta. Herramientas de optimizacion via ADB: libera RAM y limpia la cache del dispositivo con un solo toggle.
 
 **Sin comandos.** Todo lo que normalmente harias en una terminal (cambiar DPI, resolucion, modo de entrada, codificador) lo haces desde la interfaz.
 
