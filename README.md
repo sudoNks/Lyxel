@@ -32,17 +32,15 @@ LyXel es una aplicación gratuita para Windows que muestra la pantalla de tu tel
 
 Antes se llamaba MobiladorSteX.
 
-## Novedades de la 1.8.1
+## Novedades de la 1.9.0
 
-- La cámara ya no se acelera al apuntar con el mouse.
-- Scripts y macros, con editor al estilo BlueStacks.
-- Importa los controles de tu emulador: BlueStacks y MSI App Player.
-- La rueda del mouse se puede asignar como tecla.
-- Interfaz renovada: íconos, textos y una mascota nueva.
-- Conexión sin cable con asistente.
-- Benchmarks para ver el rendimiento de cada sesión.
-- Disponible en español, inglés, portugués y alemán.
-- Arreglos en la captura suspendida, avisos y notificaciones.
+- scrcpy 5.0, la versión más reciente.
+- Aceleración por hardware activada: la tarjeta gráfica de tu PC muestra el video del teléfono.
+- La aceleración ahora también funciona en equipos de 32 bits.
+- Nuevo modo de renderizado Vulkan.
+- Mantener audio pasa todo el sonido del teléfono, también el de los juegos.
+- El modo dual arranca bien también por Wi-Fi.
+- Arreglos en el codificador avanzado, la tecla AltGr como MOD y la Compatibilidad x86.
 
 ### Video
 
@@ -91,7 +89,7 @@ BlueStacks y MSI guardan los esquemas en la carpeta `Engine\UserData\InputMapper
   </tr>
 </table>
 
-También trae tecla de atajos (MOD) a tu gusto, pantalla virtual con la resolución y el DPI que elijas, aceleración por hardware en 64 bits y un modo de compatibilidad para equipos de 32 bits.
+También trae tecla de atajos (MOD) a tu gusto, pantalla virtual con la resolución y el DPI que elijas, aceleración por hardware activada de fábrica y un modo de compatibilidad para equipos de 32 bits.
 
 ## scrcpy y LyXel
 
@@ -110,10 +108,10 @@ También trae tecla de atajos (MOD) a tu gusto, pantalla virtual con la resoluci
 
 | Plataforma | Archivo |
 |---|---|
-| Windows 10 y 11, 64 y 32 bits | [LyXel_Setup_v1.8.1.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.8.1/LyXel_Setup_v1.8.1.exe) · [.zip](https://github.com/sudoNks/Lyxel/releases/download/v1.8.1/LyXel_Setup_v1.8.1.zip) |
+| Windows 10 y 11, 64 y 32 bits | [LyXel_Setup_v1.9.0.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.9.0/LyXel_Setup_v1.9.0.exe) · [.zip](https://github.com/sudoNks/Lyxel/releases/download/v1.9.0/LyXel_Setup_v1.9.0.zip) |
 | Linux x64 | [lyxel-v1.0.3-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v1.0.3/lyxel-v1.0.3-linux-x64.tar.gz) |
 
-En un equipo de 32 bits, activa **Compatibilidad x86** en Inicio después de instalar. Los hashes SHA-256 están en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/v1.8.1/SHA256SUMS.txt).
+En un equipo de 32 bits, activa **Compatibilidad x86** en Inicio después de instalar. Los hashes SHA-256 están en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/v1.9.0/SHA256SUMS.txt).
 
 Todas las versiones: [Releases](https://github.com/sudoNks/Lyxel/releases)
 
@@ -141,6 +139,7 @@ Edición para Linux de 64 bits: muestra y controla tu Android desde la PC, con t
 
 | Versión | Qué trae | Enlace |
 |---|---|---|
+| 1.9.0 | scrcpy 5.0, aceleración por hardware activada, modo Vulkan, mantener audio con todo el sonido y arreglos del modo dual | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.9.0) |
 | 1.8.1 | Cámara sin aceleración, scripts, importar controles de BlueStacks y MSI, conexión sin cable, benchmarks, cuatro idiomas e interfaz renovada | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.8.1) |
 | 1.6.4 | Tecla MOD a tu gusto y más teclas en el Mapeador | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.6.4) |
 | 1.6.0 | Aceleración por hardware, Mapeador rediseñado y pantalla dedicada | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.6.0) |
@@ -180,7 +179,7 @@ Comparte tus perfiles, reporta errores y propón ideas en [Discord](https://disc
 
 ## Créditos y licencias
 
-LyXel incluye componentes de otros autores, cada uno con su licencia: [scrcpy](https://github.com/Genymobile/scrcpy) de Genymobile (Apache 2.0, versión modificada), Android SDK Platform-Tools de Google (Apache 2.0), FFmpeg y libusb (LGPL 2.1 o posterior), libiconv (LGPL 2.1), SDL3 y zlib (zlib), winpthreads, WPF-UI con Fluent UI System Icons, CommunityToolkit.Mvvm, ini-parser y .NET (MIT), y la fuente Inter (SIL Open Font License 1.1).
+LyXel incluye componentes de otros autores, cada uno con su licencia: [scrcpy](https://github.com/Genymobile/scrcpy) de Genymobile (Apache 2.0, versión modificada), Android SDK Platform-Tools de Google (Apache 2.0), FFmpeg y libusb (LGPL 2.1 o posterior), SDL3 y zlib (zlib), dav1d (BSD 2-Clause), winpthreads, WPF-UI con Fluent UI System Icons, CommunityToolkit.Mvvm, ini-parser y .NET (MIT), y la fuente Inter (SIL Open Font License 1.1).
 
 El robot de Android se reproduce o modifica a partir de trabajo creado y compartido por Google, y se usa según los términos de la licencia [Creative Commons Atribución 3.0](https://creativecommons.org/licenses/by/3.0/deed.es).
 
