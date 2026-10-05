@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Página no encontrada · LyXel</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0b0a0b">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="/Lyxel/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/Lyxel/assets/img/marca/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="/Lyxel/assets/css/base.css">
+  <link rel="stylesheet" href="/Lyxel/assets/css/components.css">
+  <style>
+    .no-existe {
+      display: grid;
+      place-items: center;
+      min-height: calc(100vh - 69px);
+      padding: 48px var(--margen);
+      text-align: center;
+      background: radial-gradient(640px 420px at 50% 40%, rgba(110, 27, 55, 0.35), transparent 70%);
+    }
+    .no-existe img {
+      width: min(240px, 60vw);
+      margin: 0 auto 8px;
+      filter: drop-shadow(0 24px 30px rgba(0, 0, 0, 0.6));
+      animation: flotar 6s ease-in-out infinite;
+    }
+    .no-existe h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 12px; }
+    .no-existe p { max-width: 30em; margin: 0 auto 28px; }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-in contenedor">
+      <a class="marca" href="/Lyxel/">
+        <img src="/Lyxel/assets/img/marca/icono-64.png" width="32" height="32" alt="">
+        <span>LyXel</span>
+      </a>
+      <div class="nav-acciones">
+        <a class="btn btn-primario btn-chico" href="/Lyxel/#descargar">Descargar</a>
+      </div>
+    </div>
+  </header>
+  <main class="no-existe">
+    <div>
+      <img src="/Lyxel/assets/img/mascota/durmiendo.webp" width="482" height="412" alt="La mascota de LyXel durmiendo">
+      <h1>Esta página no existe.</h1>
+      <p>Puede que el enlace esté mal escrito o que la página ya no esté aquí.</p>
+      <a class="btn btn-primario" href="/Lyxel/">Volver al inicio</a>
+    </div>
+  </main>
+</body>
+</html>

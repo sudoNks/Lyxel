@@ -1,365 +1,615 @@
 <!DOCTYPE html>
-
 <html lang="es">
-
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LyXel: tu Android en la PC con teclado y mouse</title>
+  <meta name="description" content="Aplicación gratuita para Windows que muestra y controla tu Android en la PC. Juega con teclado y mouse e importa tus controles de BlueStacks y MSI.">
+  <link rel="canonical" href="https://sudonks.github.io/Lyxel/">
+  <meta name="theme-color" content="#0b0a0b">
+  <meta name="color-scheme" content="dark">
+  <script>document.documentElement.classList.add("js")</script>
 
-<meta charset="UTF-8">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="LyXel">
+  <meta property="og:locale" content="es_LA">
+  <meta property="og:url" content="https://sudonks.github.io/Lyxel/">
+  <meta property="og:title" content="LyXel: tu Android en la PC con teclado y mouse">
+  <meta property="og:description" content="Muestra y controla tu teléfono desde Windows. Mapeador para jugar con teclado y mouse, perfiles y conexión sin cable. Gratis.">
+  <meta property="og:image" content="https://sudonks.github.io/Lyxel/assets/img/marca/og-lyxel.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="La mascota de LyXel junto a la ventana de la aplicación">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="LyXel: tu Android en la PC con teclado y mouse">
+  <meta name="twitter:description" content="Muestra y controla tu teléfono desde Windows. Mapeador para jugar con teclado y mouse, perfiles y conexión sin cable. Gratis.">
+  <meta name="twitter:image" content="https://sudonks.github.io/Lyxel/assets/img/marca/og-lyxel.jpg">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/img/marca/icono-192.png">
+  <link rel="apple-touch-icon" href="assets/img/marca/apple-touch-icon.png">
 
-<title>LyXel GUI para Scrcpy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/sections.css">
+  <script src="assets/js/main.js" defer></script>
 
-<link rel="stylesheet" href="css/base.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/sections.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="js/main.js" defer></script>
-
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "LyXel",
+    "description": "Aplicación gratuita para Windows que muestra y controla tu Android desde la PC, con un Mapeador para jugar con teclado y mouse.",
+    "url": "https://sudonks.github.io/Lyxel/",
+    "operatingSystem": "Windows 10, Windows 11, Linux",
+    "applicationCategory": "UtilitiesApplication",
+    "softwareVersion": "1.8.1",
+    "inLanguage": ["es", "en", "pt-BR", "de"],
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "downloadUrl": "https://github.com/sudoNks/Lyxel/releases/download/v1.8.1/LyXel_Setup_v1.8.1.exe",
+    "fileSize": "129 MB",
+    "image": "https://sudonks.github.io/Lyxel/assets/img/marca/og-lyxel.jpg",
+    "screenshot": [
+      "https://sudonks.github.io/Lyxel/assets/img/capturas/inicio.webp",
+      "https://sudonks.github.io/Lyxel/assets/img/capturas/mapeador-en-juego.webp"
+    ],
+    "author": { "@type": "Person", "name": "nks_array", "url": "https://github.com/sudoNks" }
+  }
+  </script>
 </head>
 
 <body>
-
-<nav>
-
- <div class="nav-logo">Ly<span>X</span>el</div>
-
- <ul class="nav-links">
-
- <li><a href="#features">Funciones</a></li>
-
- 
-
- <li><a href="#requirements">Requisitos</a></li>
-
- <li><a href="#changelog">Versiones</a></li>
-
- <li><a href="https://discord.gg/CU5quVNyun">Discord</a></li>
-
- </ul>
-
-<div class="nav-right"><a href="#download" class="nav-cta">Descargar</a><a href="https://github.com/sudoNks/Lyxel/releases/download/v1.6.4/LyXel_Setup_v1.6.4.exe" class="nav-ver" style="text-decoration:none">v1.6.4 Estable</a><a href="#download-linux" class="nav-ver" style="text-decoration:none">Linux v1.0.3</a><div class="nav-social"><a href="https://discord.gg/CU5quVNyun" target="_blank" rel="noopener" aria-label="Discord"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A18 18 0 0 0 15.9 3l-.3.6a13 13 0 0 1 3.9 1.6 15 15 0 0 0-13 0A13 13 0 0 1 10.4 3l-.3-.6a18 18 0 0 0-4.4 1.4C3 8 2.3 11.5 2.6 15a18 18 0 0 0 4.7 2.4l.7-1.2a11 11 0 0 1-1.8-.9l.4-.3a13 13 0 0 0 11.2 0l.4.3a11 11 0 0 1-1.8.9l.7 1.2A18 18 0 0 0 21.4 15c.4-4-.6-7.4-1.1-10.6zM9 13.2c-.7 0-1.3-.7-1.3-1.5S8.3 10.2 9 10.2s1.3.7 1.3 1.5-.6 1.5-1.3 1.5zm6 0c-.7 0-1.3-.7-1.3-1.5s.6-1.5 1.3-1.5 1.3.7 1.3 1.5-.6 1.5-1.3 1.5z"></path></svg></a><a href="https://www.youtube.com/@sudoNks" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.4-.4-5a3 3 0 0 0-2.1-2.1C18.9 4.5 12 4.5 12 4.5s-6.9 0-8.5.4A3 3 0 0 0 1.4 7C1 8.6 1 12 1 12s0 3.4.4 5a3 3 0 0 0 2.1 2.1c1.6.4 8.5.4 8.5.4s6.9 0 8.5-.4A3 3 0 0 0 22.6 17c.4-1.6.4-5 .4-5zM9.8 15.5v-7l6 3.5-6 3.5z"></path></svg></a><a href="https://github.com/sudoNks/Lyxel" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1-1-1.3-1-1.3-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-4.9 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.6 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.3.2 2.3.1 2.6.6.7 1 1.6 1 2.7 0 3.8-2.4 4.6-4.6 4.9.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2z"></path></svg></a></div></div>
-</nav>
-
-<div class="hero">
-
- <div class="grid-bg"></div>
-
- <span class="hero-star" style="top:22%;left:18%;animation-delay:0s"></span>
-
- <span class="hero-star" style="top:65%;left:12%;animation-delay:0.8s"></span>
-
- <span class="hero-star" style="top:30%;left:85%;animation-delay:1.6s"></span>
-
- <span class="hero-star" style="top:70%;left:80%;animation-delay:2.4s"></span>
-
- <span class="hero-star" style="top:15%;left:55%;animation-delay:1.1s"></span>
-
- <div class="hero-badge"><span class="hero-badge-dot"></span><span id="hero-badge-text">Comunidad activa de jugadores</span></div>
- <p class="hero-eyebrow">Control total de tu Android desde PC</p>
-
- <h1 class="hero-title">GUI para<br><em class="grad-text">Scrcpy.</em></h1>
-
-<p class="hero-sub">Controla, optimiza y configura tu dispositivo Android desde Windows y Linux. Sin comandos, sin complicaciones.</p>
- 
- <div class="hero-actions">
-
- <a href="#download" class="btn-p">
-
- <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zm7-18L5.33 9h3.84v4h5.66V9h3.84L12 2z"/></svg>
-
- Descargar v1.6.4
-
- </a>
-
- <a href="https://github.com/sudoNks/Lyxel" class="btn-s">
-
- <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
-
- Ver en GitHub
-
- </a>
-
- </div>
-
-<p class="hero-note">WINDOWS 10/11 · LINUX X64 · SCRCPY INCLUIDO</p>
- 
-</div>
-
-<div class="wallpaper-panel reveal">
- <div class="wp-bg"></div>
- <div class="wp-overlay"></div>
- <div class="wp-logo"><div class="wp-glow"></div></div>
-</div>
-
-<div class="stats">
-
- <div class="stats-inner">
-
- <div class="stat"><span class="stat-num">v1.6.4</span><span class="stat-label">Versión estable</span></div>
-
- <div class="stat"><span class="stat-num">7</span><span class="stat-label">Perfiles base</span></div>
-
- <div class="stat"><span class="stat-num">32/64</span><span class="stat-label">Bits compatible</span></div>
-
- <div class="stat"><span class="stat-num">Free</span><span class="stat-label">Descarga gratuita</span></div>
-
- </div>
-
-</div>
-
-<section id="features" class="reveal">
-
- <div class="si">
-
- <p class="stag">Funciones</p>
-
- <h2 class="stitle">Todo en uno.</h2>
-
- <p class="ssub">LyXel no es un fork de Scrcpy. Es un proyecto independiente que usa Scrcpy como base y agrega interfaz propia, optimizaciones ADB y nuevas funcionalidades.</p>
-
- <div class="fg">
-
- <div class="fi"><div class="ficon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg></div><div class="ftitle">Transmisión de pantalla</div><div class="fdesc">Video y audio desde tu Android a Windows. FPS, bitrate, resolución y codec configurables.</div></div>
-
- <div class="fi"><div class="ficon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></div><div class="ftitle">Optimización del sistema</div><div class="fdesc">Mantén tu equipo ágil: limpieza de caché y cierre de procesos innecesarios para una experiencia más fluida.</div></div>
-
- <div class="fi"><div class="ficon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 7.5V2H9v5.5l3 3 3-3zM7.5 9H2v6h5.5l3-3-3-3zM9 16.5V22h6v-5.5l-3-3-3 3zM16.5 9l-3 3 3 3H22V9h-5.5z"/></svg></div><div class="ftitle">Controles configurables</div><div class="fdesc">Activa o desactiva teclado, mouse y gamepad. Modo UHID para máxima compatibilidad.</div></div>
-
- <div class="fi"><div class="ficon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 0 0-6 0zm-4-4 2 2a7.074 7.074 0 0 1 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></div><div class="ftitle">Conexión WiFi</div><div class="fdesc">Conecta de forma inalámbrica. Guarda la sesión y reconecta sin configurar de nuevo.</div></div>
-
- <div class="fi"><div class="ficon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg></div><div class="ftitle">Perfiles guardados</div><div class="fdesc">7 perfiles preconfigurados. Crea, exporta e importa los tuyos. Cambia configuración en un clic.</div></div>
-
- <div class="fi"><div class="ficon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div><div class="ftitle">Modo de renderizado</div><div class="fdesc">DirectX 11, DirectX 12, GPU, Direct3D 9, OpenGL, OpenGL ES 2 y Software. Hasta 7 modos en 64 bits (5 en 32 bits), con filtrado automático según tu arquitectura.</div></div>
-
- </div>
-
- </div>
-
-</section>
-
-<section id="comparison" class="reveal">
-
-<div class="si">
-
-<p class="stag">Comparativa</p>
-
-<h2 class="stitle">LyXel vs. Scrcpy.</h2>
-
-<p class="ssub">La misma base de Scrcpy, pero pensada para que empieces a usarla sin fricción.</p>
-
-<style>
-.ctable{width:100%;border-collapse:separate;border-spacing:0;margin-top:52px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;font-family:var(--font-body)}
-.ctable th,.ctable td{padding:18px 22px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
-.ctable thead th{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);background:var(--surface2)}
-.ctable thead th.ct-lyxel{color:var(--red-bright)}
-.ctable tbody tr:last-child td{border-bottom:none}
-.ctable .ct-feat{font-size:14px;font-weight:600;color:var(--text);width:32%}
-.ctable .ct-lyxel{font-size:14px;color:var(--text);line-height:1.6}
-.ctable .ct-scrcpy{font-size:14px;color:var(--muted);line-height:1.6}
-.ctable tbody tr:hover{background:#6d1a360d}
-@media(max-width:720px){.ctable .ct-feat{width:auto}.ctable th,.ctable td{padding:14px 14px}}
-</style>
-
-<table class="ctable">
-<thead>
-<tr><th class="ct-feat">Característica</th><th class="ct-lyxel">LyXel</th><th class="ct-scrcpy">Scrcpy</th></tr>
-</thead>
-<tbody>
-<tr><td class="ct-feat">Interfaz</td><td class="ct-lyxel">Interfaz gráfica: todo a un clic, sin escribir nada</td><td class="ct-scrcpy">Uso mediante comandos en la terminal</td></tr>
-<tr><td class="ct-feat">Configuración</td><td class="ct-lyxel">Perfiles de configuración reutilizables, listos para volver a usar</td><td class="ct-scrcpy">Parámetros manuales cada vez que se ejecuta</td></tr>
-<tr><td class="ct-feat">Controles</td><td class="ct-lyxel">Mapeador de controles integrado para crear y organizar tus controles</td><td class="ct-scrcpy">No incluye mapeador de controles</td></tr>
-<tr><td class="ct-feat">Mantenimiento</td><td class="ct-lyxel">Herramientas de mantenimiento y optimización del sistema integradas</td><td class="ct-scrcpy">No incluye herramientas de mantenimiento</td></tr>
-<tr><td class="ct-feat">Rendimiento</td><td class="ct-lyxel">Ajustado para una experiencia fluida y aprovechar mejor tu equipo</td><td class="ct-scrcpy">Rendimiento en su configuración por defecto</td></tr>
-</tbody>
-</table>
-
-</div>
-
-</section>
-
-<section id="download" class="dl-sec reveal">
-
- <div class="si">
-
- <p class="stag">Descargar</p>
-
- <h2 class="stitle">Elige tu versión.</h2>
-
-<p class="ssub">Scrcpy y ADB incluidos. No necesitas instalar nada adicional.</p>
-  
- <div class="dlg">
-
- <div class="dlc feat">
-
- <span class="da">Windows 10/11 — 32 y 64 bits</span>
-
- <span class="dn">Descarga universal</span>
-
- <span class="dd">Un solo instalador que detecta automáticamente tu arquitectura. Para equipos de 32 bits, activa el Modo Compatibilidad dentro de la app tras instalar.</span>
-
- <a href="https://github.com/sudoNks/Lyxel/releases/download/v1.6.4/LyXel_Setup_v1.6.4.exe" class="db"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zm7-18L5.33 9h3.84v4h5.66V9h3.84L12 2z"/></svg>Descargar LyXel v1.6.4</a>
-
- </div>
-
- <div class="dlc" id="alt-card">
-
- <span class="da">VERSION ALTERNATIVA</span>
-
- <span class="dn">LyXel 1.4.5 (version anterior)</span>
-
- <span class="dd">Si la version 1.6.4 no funciona bien en tu equipo, puedes usar la 1.4.5 como alternativa.</span>
-
- <a href="https://github.com/sudoNks/Lyxel/releases/download/v1.4.5/LyXel_Setup_v1.4.5.exe" class="db">Descargar LyXel v1.4.5 &#x2192;</a>
-
- 
-
- </div>
-
- </div>
-
- </div>
-
-</section>
-
-<section id="download-linux" class="dl-sec reveal">
-
-  <div class="si">
-
-    <p class="stag">Linux</p>
-
-    <h2 class="stitle">LyXel para Linux.</h2>
-
-    <p class="ssub">Edición independiente para escritorios Linux de 64 bits.</p>
-
-    <div class="dlg dlg-wide">
-
-      <div class="dlc" id="linux-card">
-        <span class="da">LINUX X64 — 64 BITS</span>
-        <span class="dn">LyXel para Linux 1.0.3</span>
-        <span class="dd">Espejo y control de tu Android en Linux, paquete todo incluido. No incluye el Mapeador (exclusivo de la versión de Windows).</span>
-        <p class="dd">Extrae el paquete y ejecuta <code>bash instalar.sh</code> — el instalador hace todo por ti.</p>
-        <a href="https://github.com/sudoNks/Lyxel/releases/download/linux-v1.0.3/lyxel-v1.0.3-linux-x64.tar.gz" class="db"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zm7-18L5.33 9h3.84v4h5.66V9h3.84L12 2z"></path></svg>Descargar LyXel para Linux 1.0.3</a>
-        <a href="https://github.com/sudoNks/Lyxel#-lyxel-para-linux" class="dd" style="margin-top:10px;display:inline-block" target="_blank" rel="noopener">Guía de instalación completa →</a>
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-descargar" viewBox="0 0 24 24"><path d="M12 4v11"/><path d="M7.5 10.5 12 15l4.5-4.5"/><path d="M5 19.5h14"/></symbol>
+      <symbol id="i-flecha" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+      <symbol id="i-cerrar" viewBox="0 0 24 24"><path d="m6.5 6.5 11 11M17.5 6.5l-11 11"/></symbol>
+      <symbol id="i-si" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+      <symbol id="i-no" viewBox="0 0 24 24"><path d="M7 12h10"/></symbol>
+      <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M3.5 9.5a12 12 0 0 1 17 0"/><path d="M6.5 12.8a7.5 7.5 0 0 1 11 0"/><path d="M9.4 16a3.3 3.3 0 0 1 5.2 0"/><circle class="acento" cx="12" cy="19" r="1.1"/></symbol>
+      <symbol id="i-perfiles" viewBox="0 0 24 24"><path d="M4 7h9.5M18.5 7H20M4 17h1.5M10.5 17H20"/><circle cx="16" cy="7" r="2.3"/><circle class="acento" cx="8" cy="17" r="2.3"/></symbol>
+      <symbol id="i-rayo" viewBox="0 0 24 24"><path d="M13.5 3 5.5 13.5h6l-1 7.5 8-10.5h-6z"/></symbol>
+      <symbol id="i-control" viewBox="0 0 24 24"><path d="M7.2 8h9.6a4 4 0 0 1 3.9 4.8l-.8 3.7a2.3 2.3 0 0 1-3.9 1.1L13.8 15.5h-3.6L8 17.6a2.3 2.3 0 0 1-3.9-1.1l-.8-3.7A4 4 0 0 1 7.2 8z"/><path d="M8.3 10.6v3.2M6.7 12.2h3.2"/><circle class="acento" cx="15.6" cy="11.3" r="1"/><circle cx="17.4" cy="13.3" r=".6"/></symbol>
+      <symbol id="i-grafica" viewBox="0 0 24 24"><path d="M4 4v16h16"/><path class="acento" d="m7.5 15 3.8-4.2 3 2.8L19 8"/></symbol>
+      <symbol id="i-teclado" viewBox="0 0 24 24"><rect x="3" y="6.5" width="18" height="11" rx="2.5"/><path d="M7 10.2h.01M10 10.2h.01M13 10.2h.01M16.5 10.2h.01"/><path class="acento" d="M8 14h8"/></symbol>
+      <symbol id="i-pantallas" viewBox="0 0 24 24"><rect x="2.8" y="4.5" width="13.5" height="10" rx="1.8"/><path d="M6 18.8h6.5M9.3 14.5v4.3"/><rect class="acento" x="15.2" y="9" width="6" height="10.5" rx="1.6"/></symbol>
+      <symbol id="i-idiomas" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path class="acento" d="M12 3.5c2.4 2.6 3.6 5.4 3.6 8.5s-1.2 5.9-3.6 8.5c-2.4-2.6-3.6-5.4-3.6-8.5s1.2-5.9 3.6-8.5z"/></symbol>
+      <symbol id="i-chip" viewBox="0 0 24 24"><rect x="6.5" y="6.5" width="11" height="11" rx="2"/><path d="M9.5 3.5v3M14.5 3.5v3M9.5 17.5v3M14.5 17.5v3M3.5 9.5h3M3.5 14.5h3M17.5 9.5h3M17.5 14.5h3"/><rect class="acento" x="10" y="10" width="4" height="4" rx=".8"/></symbol>
+      <symbol id="i-mira" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5"/><path d="M12 2.5v4.2M12 17.3v4.2M2.5 12h4.2M17.3 12h4.2"/><circle class="acento" cx="12" cy="12" r="1.4"/></symbol>
+      <symbol id="i-editor" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3.2"/><circle cx="9" cy="9" r="2.1"/><circle class="acento" cx="15.3" cy="15.3" r="2.1"/><path d="M15.3 6.8v4.2M13.2 8.9h4.2"/></symbol>
+      <symbol id="i-velocidad" viewBox="0 0 24 24"><path d="M4.3 16.5a8.2 8.2 0 1 1 15.4 0"/><path class="acento" d="m12 13.2 4.2-4.2"/><circle cx="12" cy="13.2" r="1.2"/></symbol>
+      <symbol id="i-pulso" viewBox="0 0 24 24"><path d="M3 12h4l2.5-6.5 4.5 13 2.5-6.5H21"/></symbol>
+      <symbol id="i-barra" viewBox="0 0 24 24"><rect x="3" y="5" width="13.5" height="14" rx="2.2"/><rect class="acento" x="18.5" y="5" width="2.7" height="9.5" rx="1.3"/></symbol>
+      <symbol id="i-capas" viewBox="0 0 24 24"><path d="m12 4 8.5 4.5L12 13 3.5 8.5z"/><path class="acento" d="m3.5 12.6 8.5 4.5 8.5-4.5"/><path d="m3.5 16.4 8.5 4.5 8.5-4.5"/></symbol>
+      <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path class="acento" d="m7 9.5 3 2.5-3 2.5"/><path d="M12.5 15H17"/></symbol>
+      <symbol id="i-windows" viewBox="0 0 24 24"><path class="relleno" d="M3 5.5 10.4 4.4v7.1H3zM11.4 4.3 21 3v8.5h-9.6zM3 12.5h7.4v7.1L3 18.5zM11.4 12.5H21V21l-9.6-1.3z"/></symbol>
+      <symbol id="i-github" viewBox="0 0 24 24"><path class="relleno" d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></symbol>
+      <symbol id="i-discord" viewBox="0 0 24 24"><path class="relleno" d="M20.3 4.4A18 18 0 0 0 15.9 3l-.3.6a13 13 0 0 1 3.9 1.6 15 15 0 0 0-13 0A13 13 0 0 1 10.4 3l-.3-.6a18 18 0 0 0-4.4 1.4C3 8 2.3 11.5 2.6 15a18 18 0 0 0 4.7 2.4l.7-1.2a11 11 0 0 1-1.8-.9l.4-.3a13 13 0 0 0 11.2 0l.4.3a11 11 0 0 1-1.8.9l.7 1.2A18 18 0 0 0 21.4 15c.4-4-.6-7.4-1.1-10.6zM9 13.2c-.7 0-1.3-.7-1.3-1.5S8.3 10.2 9 10.2s1.3.7 1.3 1.5-.6 1.5-1.3 1.5zm6 0c-.7 0-1.3-.7-1.3-1.5s.6-1.5 1.3-1.5 1.3.7 1.3 1.5-.6 1.5-1.3 1.5z"/></symbol>
+      <symbol id="i-youtube" viewBox="0 0 24 24"><path class="relleno" d="M23 12s0-3.4-.4-5a3 3 0 0 0-2.1-2.1C18.9 4.5 12 4.5 12 4.5s-6.9 0-8.5.4A3 3 0 0 0 1.4 7C1 8.6 1 12 1 12s0 3.4.4 5a3 3 0 0 0 2.1 2.1c1.6.4 8.5.4 8.5.4s6.9 0 8.5-.4A3 3 0 0 0 22.6 17c.4-1.6.4-5 .4-5zM9.8 15.5v-7l6 3.5-6 3.5z"/></symbol>
+      <symbol id="i-tiktok" viewBox="0 0 24 24"><path class="relleno" d="M12.53.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></symbol>
+      <symbol id="i-kofi" viewBox="0 0 24 24"><path class="relleno" d="M23.88 8.95c-.77-4.09-4.86-4.6-4.86-4.6H.72c-.6 0-.68.8-.68.8s-.08 7.32-.02 11.82c.16 2.42 2.59 2.67 2.59 2.67s8.27-.02 11.97-.05c2.44-.43 2.68-2.57 2.66-3.73 4.35.24 7.42-2.83 6.64-6.91zm-11.06 3.51c-1.25 1.45-4.01 3.98-4.01 3.98s-.12.12-.31.02c-.08-.06-.11-.09-.11-.09-.44-.44-3.37-3.05-4.03-3.95-.71-.97-1.04-2.7-.09-3.71.95-1.01 3-1.09 4.36.41 0 0 1.57-1.78 3.47-.96 1.9.82 1.83 3.01.72 4.3zm6.17.48c-.93.12-1.68.03-1.68.03V7.28h1.77s1.97.55 1.97 2.64c0 1.91-.98 2.67-2.06 3.02z"/></symbol>
+    </defs>
+  </svg>
+
+  <header class="nav" id="inicio">
+    <div class="nav-in contenedor">
+      <a class="marca" href="#inicio" aria-label="LyXel, ir al inicio">
+        <img src="assets/img/marca/icono-64.png" width="32" height="32" alt="">
+        <span>LyXel</span>
+      </a>
+
+      <nav class="nav-menu" id="nav-menu" aria-label="Secciones">
+        <a href="#mapeador">Mapeador</a>
+        <a href="#recorrido">Recorrido</a>
+        <a href="#comparativa">Comparativa</a>
+        <a href="#novedades">Novedades</a>
+        <a href="#preguntas">Preguntas</a>
+      </nav>
+
+      <div class="nav-acciones">
+        <a class="nav-red" href="https://discord.gg/CU5quVNyun" target="_blank" rel="noopener" aria-label="Discord"><svg class="ico"><use href="#i-discord"/></svg></a>
+        <a class="nav-red" href="https://github.com/sudoNks/Lyxel" target="_blank" rel="noopener" aria-label="GitHub"><svg class="ico"><use href="#i-github"/></svg></a>
+        <a class="btn btn-primario btn-chico" href="#descargar">Descargar</a>
+        <button class="nav-boton" type="button" aria-controls="nav-menu" aria-expanded="false" aria-label="Abrir menú">
+          <svg class="ico ico-trazo abrir"><use href="#i-menu"/></svg>
+          <svg class="ico ico-trazo cerrar"><use href="#i-cerrar"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenido">
+
+    <section class="hero" aria-labelledby="hero-titulo">
+      <div class="hero-fondo" aria-hidden="true"></div>
+      <div class="contenedor hero-in">
+        <div class="hero-texto">
+          <a class="chip chip-nuevo" href="#novedades"><span class="punto"></span>Nuevo: versión 1.8.1</a>
+          <h1 id="hero-titulo">Tu Android en la PC, <span class="degradado">con teclado y mouse.</span></h1>
+          <p class="hero-lead">LyXel es una aplicación gratuita para Windows que muestra y controla tu teléfono desde la computadora. Trae un Mapeador para jugar con teclado y mouse, y acepta los controles de BlueStacks y MSI.</p>
+          <div class="hero-botones">
+            <a class="btn btn-primario btn-grande" href="#descargar">
+              <svg class="ico ico-trazo"><use href="#i-descargar"/></svg>
+              <span>Descargar para Windows<small>v1.8.1 · 64 y 32 bits</small></span>
+            </a>
+            <a class="btn btn-secundario btn-grande" href="https://github.com/sudoNks/Lyxel" target="_blank" rel="noopener">
+              <svg class="ico"><use href="#i-github"/></svg>
+              <span>Ver en GitHub</span>
+            </a>
+          </div>
+          <ul class="hero-datos">
+            <li><svg class="ico ico-trazo"><use href="#i-si"/></svg>Gratis</li>
+            <li><svg class="ico ico-trazo"><use href="#i-si"/></svg>scrcpy y ADB incluidos</li>
+            <li><svg class="ico ico-trazo"><use href="#i-si"/></svg>Sin root</li>
+          </ul>
+        </div>
+
+        <div class="hero-visual">
+          <figure class="ventana ventana-hero">
+            <img src="assets/img/capturas/inicio.webp" width="1280" height="800" alt="Pantalla de Inicio de LyXel con el teléfono conectado y el perfil activo" fetchpriority="high" decoding="async">
+          </figure>
+          <img class="hero-mascota" src="assets/img/mascota/corona-senalando.webp" width="450" height="482" alt="" decoding="async">
+        </div>
       </div>
 
+      <div class="contenedor">
+        <dl class="cifras">
+          <div><dt>Descargas</dt><dd id="cifra-descargas">+23 mil</dd></div>
+          <div><dt>Versión estable</dt><dd>1.8.1</dd></div>
+          <div><dt>Idiomas</dt><dd>4</dd></div>
+          <div><dt>Windows</dt><dd>64 y 32 bits</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="seccion" id="mapeador" aria-labelledby="mapeador-titulo">
+      <div class="contenedor">
+        <header class="encabezado revelar">
+          <p class="etiqueta">Mapeador</p>
+          <h2 id="mapeador-titulo">Juega como en un emulador, pero con tu teléfono.</h2>
+          <p>Pon controles encima del juego y úsalos con el teclado y el mouse. El juego corre en tu teléfono, con tu cuenta; la PC solo lo muestra y le manda tus teclas.</p>
+        </header>
+
+        <figure class="ventana ventana-ancha revelar">
+          <img src="assets/img/capturas/mapeador-en-juego.webp" width="1079" height="492" alt="Free Fire MAX en la ventana de LyXel con los controles del Mapeador encima y la barra flotante a un lado" loading="lazy" decoding="async">
+        </figure>
+
+        <ul class="puntos revelar">
+          <li>
+            <svg class="ico ico-trazo"><use href="#i-editor"/></svg>
+            <h3>Editor al estilo emulador</h3>
+            <p>Toque, mantener, joystick, apuntar, deslizar, zoom, scripts y controles MOBA.</p>
+          </li>
+          <li>
+            <svg class="ico ico-trazo"><use href="#i-mira"/></svg>
+            <h3>Cámara sin aceleración</h3>
+            <p>El giro con el mouse se siente parejo al apuntar.</p>
+          </li>
+          <li>
+            <svg class="ico ico-trazo"><use href="#i-velocidad"/></svg>
+            <h3>Hasta 1000 Hz</h3>
+            <p>Elige cada cuánto se manda el movimiento de la cámara: 125, 250, 500 o 1000 Hz.</p>
+          </li>
+          <li>
+            <svg class="ico ico-trazo"><use href="#i-pulso"/></svg>
+            <h3>FPS y latencia</h3>
+            <p>Míralos en pantalla mientras juegas, en la esquina que prefieras.</p>
+          </li>
+          <li>
+            <svg class="ico ico-trazo"><use href="#i-capas"/></svg>
+            <h3>Perfiles que se adaptan</h3>
+            <p>Cada perfil guarda teclas, posiciones y tamaños, y se ajusta solo a cualquier resolución.</p>
+          </li>
+          <li>
+            <svg class="ico ico-trazo"><use href="#i-barra"/></svg>
+            <h3>Barra flotante</h3>
+            <p>Oculta los controles, pasa a pantalla completa o juega mirando el teléfono sin video.</p>
+          </li>
+        </ul>
+
+        <div class="importar revelar" id="importar">
+          <div class="importar-texto">
+            <p class="etiqueta">Importar</p>
+            <h3>Trae tus controles de BlueStacks o MSI.</h3>
+            <p>Si ya tienes tus teclas acomodadas en tu emulador, no empieces de cero.</p>
+            <ol class="pasos">
+              <li><span>1</span><div><strong>Abre el editor</strong>Durante la sesión, pulsa Controles en la barra flotante.</div></li>
+              <li><span>2</span><div><strong>Pulsa Importar</strong>Está en Perfil de controles.</div></li>
+              <li><span>3</span><div><strong>Elige el archivo .cfg</strong>El esquema de tu emulador se vuelve un perfil de LyXel, con sus teclas y su sensibilidad.</div></li>
+            </ol>
+            <p class="nota">BlueStacks y MSI guardan los esquemas en la carpeta <code>Engine\UserData\InputMapper\UserFiles</code> de su instalación.</p>
+          </div>
+          <div class="importar-imagenes">
+            <figure class="ventana ventana-panel">
+              <img src="assets/img/capturas/panel-importar.webp" width="580" height="998" alt="Panel de controles del editor con el botón Importar resaltado en Perfil de controles" loading="lazy" decoding="async">
+            </figure>
+            <figure class="ventana ventana-dialogo">
+              <img src="assets/img/capturas/importar-dialogo-recorte.webp" width="640" height="168" alt="Ventana para elegir el archivo .cfg del emulador, con el esquema de Free Fire de MSI" loading="lazy" decoding="async">
+            </figure>
+          </div>
+        </div>
+
+        <figure class="ventana ventana-ancha editor revelar">
+          <img src="assets/img/capturas/editor-controles.webp" width="1385" height="499" alt="Editor de controles con la lista para agregar toque, mantener, joystick, apuntar, deslizar, zoom, scripts y controles MOBA" loading="lazy" decoding="async">
+          <figcaption>El editor: arrastra un control al juego y asígnale una tecla.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="seccion seccion-alterna" id="recorrido" aria-labelledby="recorrido-titulo">
+      <div class="contenedor">
+        <header class="encabezado encabezado-centro revelar">
+          <p class="etiqueta">Recorrido</p>
+          <h2 id="recorrido-titulo">Todo desde una sola ventana.</h2>
+          <p>Así se ve LyXel 1.8.1. Elige una sección.</p>
+        </header>
+
+        <div class="recorrido revelar">
+          <div class="pestanas" role="tablist" aria-label="Secciones de LyXel">
+            <button type="button" role="tab" id="tab-inicio" aria-controls="panel-recorrido" aria-selected="true" data-img="assets/img/capturas/inicio.webp" data-texto="Elige el teléfono y el perfil, y empieza con un clic.">Inicio</button>
+            <button type="button" role="tab" id="tab-mapeador" aria-controls="panel-recorrido" aria-selected="false" tabindex="-1" data-img="assets/img/capturas/mapeador.webp" data-texto="La sesión de juego, la pantalla dedicada y la frecuencia de la cámara.">Mapeador</button>
+            <button type="button" role="tab" id="tab-controles" aria-controls="panel-recorrido" aria-selected="false" tabindex="-1" data-img="assets/img/capturas/controles.webp" data-texto="Activa teclado, mouse y gamepad, y elige el modo de entrada.">Controles</button>
+            <button type="button" role="tab" id="tab-perfiles" aria-controls="panel-recorrido" aria-selected="false" tabindex="-1" data-img="assets/img/capturas/perfiles.webp" data-texto="Seis perfiles listos y los tuyos. Cambia entre ellos con un clic.">Perfiles</button>
+            <button type="button" role="tab" id="tab-optimizacion" aria-controls="panel-recorrido" aria-selected="false" tabindex="-1" data-img="assets/img/capturas/optimizacion.webp" data-texto="Lee el estado real del teléfono y lo prepara para jugar.">Optimización</button>
+            <button type="button" role="tab" id="tab-conexion" aria-controls="panel-recorrido" aria-selected="false" tabindex="-1" data-img="assets/img/capturas/conexion.webp" data-texto="Por cable o sin cable, y reconexión en un clic.">Conexión</button>
+            <button type="button" role="tab" id="tab-video" aria-controls="panel-recorrido" aria-selected="false" tabindex="-1" data-img="assets/img/capturas/video-audio.webp" data-texto="FPS, bitrate, códec y aceleración por hardware.">Video y audio</button>
+            <button type="button" role="tab" id="tab-pantalla" aria-controls="panel-recorrido" aria-selected="false" tabindex="-1" data-img="assets/img/capturas/pantalla.webp" data-texto="Pantalla completa, pantalla virtual tipo DeX y recorte de imagen.">Pantalla</button>
+            <button type="button" role="tab" id="tab-extras" aria-controls="panel-recorrido" aria-selected="false" tabindex="-1" data-img="assets/img/capturas/opciones-extras.webp" data-texto="FPS en pantalla, tecla de atajos a tu gusto y ventana flotante.">Opciones extras</button>
+            <button type="button" role="tab" id="tab-info" aria-controls="panel-recorrido" aria-selected="false" tabindex="-1" data-img="assets/img/capturas/informacion.webp" data-texto="Versión, descargas oficiales y comunidad.">Información</button>
+          </div>
+
+          <div class="recorrido-panel" id="panel-recorrido" role="tabpanel" aria-labelledby="tab-inicio" tabindex="0">
+            <figure class="ventana">
+              <img id="recorrido-img" src="assets/img/capturas/inicio.webp" width="1280" height="800" alt="Pantalla de Inicio de LyXel" loading="lazy" decoding="async">
+            </figure>
+            <p class="recorrido-texto" id="recorrido-texto" aria-live="polite">Elige el teléfono y el perfil, y empieza con un clic.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="seccion" id="funciones" aria-labelledby="funciones-titulo">
+      <div class="contenedor">
+        <header class="encabezado revelar">
+          <p class="etiqueta">Funciones</p>
+          <h2 id="funciones-titulo">Lo que trae, sin escribir un solo comando.</h2>
+        </header>
+
+        <ul class="tarjetas revelar">
+          <li class="tarjeta">
+            <svg class="ico ico-trazo"><use href="#i-wifi"/></svg>
+            <h3>Conexión sin cable</h3>
+            <p>Asistente para Android 11 o superior y reconexión en un clic.</p>
+          </li>
+          <li class="tarjeta">
+            <svg class="ico ico-trazo"><use href="#i-perfiles"/></svg>
+            <h3>Perfiles</h3>
+            <p>De gama baja a máxima calidad. Crea, importa y exporta los tuyos.</p>
+          </li>
+          <li class="tarjeta tarjeta-mascota">
+            <svg class="ico ico-trazo"><use href="#i-rayo"/></svg>
+            <h3>Optimización</h3>
+            <p>Limpia caché, libera procesos y quita al juego las restricciones de batería.</p>
+            <img src="assets/img/mascota/barriendo.webp" width="482" height="433" alt="" loading="lazy" decoding="async">
+          </li>
+          <li class="tarjeta">
+            <svg class="ico ico-trazo"><use href="#i-control"/></svg>
+            <h3>Teclado, mouse y gamepad</h3>
+            <p>Actívalos por separado y usa el modo UHID para que el teléfono los reconozca como propios.</p>
+          </li>
+          <li class="tarjeta">
+            <svg class="ico ico-trazo"><use href="#i-grafica"/></svg>
+            <h3>Benchmarks</h3>
+            <p>Guarda los FPS, la latencia y el uso del equipo de cada sesión y compáralas.</p>
+          </li>
+          <li class="tarjeta">
+            <svg class="ico ico-trazo"><use href="#i-teclado"/></svg>
+            <h3>Tecla de atajos a tu gusto</h3>
+            <p>Usa cualquier tecla como MOD y deja Ctrl y Alt libres para el juego.</p>
+          </li>
+          <li class="tarjeta">
+            <svg class="ico ico-trazo"><use href="#i-pantallas"/></svg>
+            <h3>Pantalla virtual</h3>
+            <p>Juega en una pantalla aparte, con la resolución y el DPI que elijas.</p>
+          </li>
+          <li class="tarjeta">
+            <svg class="ico ico-trazo"><use href="#i-idiomas"/></svg>
+            <h3>Cuatro idiomas</h3>
+            <p>Español, English, Português y Deutsch.</p>
+          </li>
+          <li class="tarjeta">
+            <svg class="ico ico-trazo"><use href="#i-chip"/></svg>
+            <h3>64 y 32 bits</h3>
+            <p>El modo de compatibilidad la deja funcionar en equipos de 32 bits.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="seccion seccion-alterna" id="comparativa" aria-labelledby="comparativa-titulo">
+      <div class="contenedor">
+        <header class="encabezado encabezado-centro revelar">
+          <p class="etiqueta">Comparativa</p>
+          <h2 id="comparativa-titulo">scrcpy y LyXel.</h2>
+          <p>LyXel usa scrcpy como motor y le suma lo que hace falta para jugar y configurar sin comandos.</p>
+        </header>
+
+        <div class="tabla-envoltura revelar">
+          <table class="comparativa">
+            <caption class="oculto">Diferencias entre scrcpy y LyXel</caption>
+            <thead>
+              <tr><th scope="col">Función</th><th scope="col">scrcpy</th><th scope="col" class="col-lyxel">LyXel</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Cómo se usa</th><td data-etiqueta="scrcpy">Comandos en la terminal</td><td data-etiqueta="LyXel"><svg class="ico ico-trazo si"><use href="#i-si"/></svg>Interfaz gráfica en cuatro idiomas</td></tr>
+              <tr><th scope="row">Mapeador para juegos</th><td data-etiqueta="scrcpy"><svg class="ico ico-trazo no"><use href="#i-no"/></svg>No incluye</td><td data-etiqueta="LyXel"><svg class="ico ico-trazo si"><use href="#i-si"/></svg>Editor de controles al estilo emulador</td></tr>
+              <tr><th scope="row">Controles de BlueStacks o MSI</th><td data-etiqueta="scrcpy"><svg class="ico ico-trazo no"><use href="#i-no"/></svg>No los lee</td><td data-etiqueta="LyXel"><svg class="ico ico-trazo si"><use href="#i-si"/></svg>Los importa en un clic</td></tr>
+              <tr><th scope="row">Tecla de atajos (MOD)</th><td data-etiqueta="scrcpy">Solo Ctrl, Alt o Super, con un comando</td><td data-etiqueta="LyXel"><svg class="ico ico-trazo si"><use href="#i-si"/></svg>Cualquier tecla, desde la aplicación</td></tr>
+              <tr><th scope="row">Configuración</th><td data-etiqueta="scrcpy">Parámetros cada vez que lo abres</td><td data-etiqueta="LyXel"><svg class="ico ico-trazo si"><use href="#i-si"/></svg>Perfiles listos y los tuyos</td></tr>
+              <tr><th scope="row">Conexión sin cable</th><td data-etiqueta="scrcpy">Comandos de adb</td><td data-etiqueta="LyXel"><svg class="ico ico-trazo si"><use href="#i-si"/></svg>Asistente y reconexión en un clic</td></tr>
+              <tr><th scope="row">Optimización del teléfono</th><td data-etiqueta="scrcpy"><svg class="ico ico-trazo no"><use href="#i-no"/></svg>No incluye</td><td data-etiqueta="LyXel"><svg class="ico ico-trazo si"><use href="#i-si"/></svg>Limpieza y ajustes para jugar</td></tr>
+              <tr><th scope="row">Rendimiento</th><td data-etiqueta="scrcpy">FPS en la consola</td><td data-etiqueta="LyXel"><svg class="ico ico-trazo si"><use href="#i-si"/></svg>FPS y latencia en pantalla, y benchmarks guardados</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="nota nota-centro revelar">scrcpy es un proyecto de Genymobile. Si te sirve, <a href="https://github.com/Genymobile/scrcpy" target="_blank" rel="noopener">dale una estrella en GitHub</a>.</p>
+      </div>
+    </section>
+
+    <section class="seccion" id="novedades" aria-labelledby="novedades-titulo">
+      <div class="contenedor novedades revelar">
+        <div class="novedades-texto">
+          <p class="etiqueta">Novedades</p>
+          <h2 id="novedades-titulo">Lo nuevo en la 1.8.1.</h2>
+          <ul class="lista-novedades">
+            <li>La cámara ya no se acelera al apuntar con el mouse.</li>
+            <li>Importa los controles de tu emulador: BlueStacks y MSI.</li>
+            <li>Interfaz renovada: íconos, textos y una mascota nueva.</li>
+            <li>Conexión sin cable con asistente.</li>
+            <li>Benchmarks para ver el rendimiento de cada sesión.</li>
+            <li>Disponible en español, inglés, portugués y alemán.</li>
+            <li>Arreglos en avisos y notificaciones.</li>
+          </ul>
+          <a class="enlace-flecha" href="https://github.com/sudoNks/Lyxel/releases/tag/v1.8.1" target="_blank" rel="noopener">Notas completas en GitHub<svg class="ico ico-trazo"><use href="#i-flecha"/></svg></a>
+        </div>
+        <div class="novedades-visual" aria-hidden="true">
+          <img class="novedades-mascota" src="assets/img/mascota/petalos.webp" width="440" height="482" alt="" loading="lazy" decoding="async">
+          <figure class="ventana ventana-idiomas">
+            <img src="assets/img/capturas/idiomas.webp" width="420" height="250" alt="" loading="lazy" decoding="async">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="seccion seccion-descarga" id="descargar" aria-labelledby="descargar-titulo">
+      <div class="contenedor">
+        <header class="encabezado encabezado-centro revelar">
+          <p class="etiqueta">Descargar</p>
+          <h2 id="descargar-titulo">Elige tu versión.</h2>
+          <p>scrcpy y ADB vienen incluidos. No tienes que instalar nada más.</p>
+        </header>
+
+        <div class="descargas revelar">
+          <article class="descarga descarga-principal">
+            <img class="descarga-mascota" src="assets/img/mascota/sonriendo.webp" width="482" height="472" alt="" loading="lazy" decoding="async">
+            <div class="descarga-cabeza">
+              <svg class="ico"><use href="#i-windows"/></svg>
+              <div>
+                <h3>LyXel para Windows</h3>
+                <p>Versión 1.8.1 · Windows 10 y 11 · 64 y 32 bits</p>
+              </div>
+            </div>
+            <p>Un solo instalador para los dos tipos de equipo. En uno de 32 bits, activa la Compatibilidad x86 en Inicio después de instalar.</p>
+            <div class="descarga-botones">
+              <a class="btn btn-primario" href="https://github.com/sudoNks/Lyxel/releases/download/v1.8.1/LyXel_Setup_v1.8.1.exe">
+                <svg class="ico ico-trazo"><use href="#i-descargar"/></svg>Descargar instalador
+              </a>
+              <a class="btn btn-secundario" href="https://github.com/sudoNks/Lyxel/releases/download/v1.8.1/LyXel_Setup_v1.8.1.zip">Versión .zip</a>
+            </div>
+            <p class="descarga-pie">129 MB · <a href="https://github.com/sudoNks/Lyxel/releases/download/v1.8.1/SHA256SUMS.txt">SHA-256</a> · ¿Algo no funciona? <a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.6.4">Usa la 1.6.4</a></p>
+          </article>
+
+          <article class="descarga">
+            <div class="descarga-cabeza">
+              <svg class="ico ico-trazo"><use href="#i-terminal"/></svg>
+              <div>
+                <h3>LyXel para Linux</h3>
+                <p>Versión 1.0.3 · x64</p>
+              </div>
+            </div>
+            <p>Espejo y control de tu Android en Linux, con todo incluido. Esta edición no trae el Mapeador.</p>
+            <div class="descarga-botones">
+              <a class="btn btn-secundario" href="https://github.com/sudoNks/Lyxel/releases/download/linux-v1.0.3/lyxel-v1.0.3-linux-x64.tar.gz">
+                <svg class="ico ico-trazo"><use href="#i-descargar"/></svg>Descargar .tar.gz
+              </a>
+            </div>
+            <p class="descarga-pie">Extrae el paquete y ejecuta <code>bash instalar.sh</code>. <a href="https://github.com/sudoNks/Lyxel#lyxel-para-linux">Guía de instalación</a></p>
+          </article>
+        </div>
+
+        <div class="primeros-pasos revelar">
+          <h3>Primeros pasos</h3>
+          <ol class="pasos pasos-fila">
+            <li><span>1</span><div><strong>Activa la depuración USB</strong>En Ajustes &gt; Acerca del teléfono, toca 7 veces Número de compilación. Luego, en Opciones de desarrollador, activa Depuración USB.</div></li>
+            <li><span>2</span><div><strong>Conecta el teléfono</strong>Usa el cable la primera vez y acepta el permiso en el teléfono (marca Permitir siempre).</div></li>
+            <li><span>3</span><div><strong>Elige un perfil y pulsa Iniciar</strong>Para jugar con teclado y mouse, entra al Mapeador.</div></li>
+          </ol>
+          <p class="nota">En Xiaomi activa también Depuración USB (ajustes de seguridad).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="seccion" id="requisitos" aria-labelledby="requisitos-titulo">
+      <div class="contenedor">
+        <header class="encabezado revelar">
+          <p class="etiqueta">Requisitos</p>
+          <h2 id="requisitos-titulo">Lo que necesitas.</h2>
+        </header>
+        <div class="requisitos revelar">
+          <div class="requisito">
+            <h3>Computadora</h3>
+            <ul>
+              <li>Windows 10 u 11, de 64 o 32 bits</li>
+              <li>Linux x64 con la edición para Linux</li>
+              <li>Un puerto USB para la primera conexión</li>
+            </ul>
+          </div>
+          <div class="requisito">
+            <h3>Teléfono</h3>
+            <ul>
+              <li>Android 11 o superior (recomendado 13 o más)</li>
+              <li>Depuración USB activada</li>
+              <li>Cable USB la primera vez; después puedes conectarte sin cable</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="seccion seccion-alterna" id="versiones" aria-labelledby="versiones-titulo">
+      <div class="contenedor">
+        <header class="encabezado revelar">
+          <p class="etiqueta">Historial</p>
+          <h2 id="versiones-titulo">Versiones.</h2>
+          <p>Todas siguen disponibles en GitHub.</p>
+        </header>
+        <ul class="versiones revelar">
+          <li class="version-actual"><span class="v">1.8.1</span><span class="tipo tipo-nueva">Nueva</span><span class="desc">Cámara sin aceleración, importar controles de BlueStacks y MSI, conexión sin cable, benchmarks, cuatro idiomas e interfaz renovada.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.8.1">Descargar</a></li>
+          <li><span class="v">1.6.4</span><span class="tipo">Estable</span><span class="desc">Tecla MOD a tu gusto y más teclas en el Mapeador.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.6.4">Descargar</a></li>
+          <li><span class="v">1.6.0</span><span class="tipo">Estable</span><span class="desc">Aceleración por hardware, Mapeador rediseñado y pantalla dedicada.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.6.0">Descargar</a></li>
+          <li><span class="v">Linux 1.0.3</span><span class="tipo">Linux</span><span class="desc">Primera edición para Linux de 64 bits.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/linux-v1.0.3">Descargar</a></li>
+          <li><span class="v">1.5.6</span><span class="tipo">Preview</span><span class="desc">Pantalla virtual con resolución y DPI configurables, audio en la PC y pantalla completa.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.5.6">Descargar</a></li>
+        </ul>
+        <details class="versiones-mas revelar">
+          <summary>Ver versiones anteriores</summary>
+          <ul class="versiones">
+            <li><span class="v">1.5.3</span><span class="tipo">Preview</span><span class="desc">Mapeador con scrcpy 4.1 y mejor detección del teléfono.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.5.3">Descargar</a></li>
+            <li><span class="v">1.5.1</span><span class="tipo">Preview</span><span class="desc">Mouse sobre la ventana del juego y botones del mouse como tecla.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.5.1">Descargar</a></li>
+            <li><span class="v">1.5.0</span><span class="tipo">Preview</span><span class="desc">Interfaz nueva, modo dual, primer Mapeador y optimización de Android.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.5.0">Descargar</a></li>
+            <li><span class="v">1.4.5</span><span class="tipo">Estable</span><span class="desc">Más modos de renderizado según la arquitectura.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.5">Descargar</a></li>
+            <li><span class="v">1.4.4</span><span class="tipo">Estable</span><span class="desc">scrcpy 4.0, ADB 37.0.0 y ventana redimensionable.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.4">Descargar</a></li>
+            <li><span class="v">1.4.3</span><span class="tipo">Estable</span><span class="desc">Perfiles y configuración guardados en tu usuario.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.3">Descargar</a></li>
+            <li><span class="v">1.4.2</span><span class="tipo">Estable</span><span class="desc">Arreglo de la ventana de depuración.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.2">Descargar</a></li>
+            <li><span class="v">1.4.1</span><span class="tipo">Estable</span><span class="desc">Modo de renderizado y perfiles actualizados.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.1">Descargar</a></li>
+            <li><span class="v">1.4.0</span><span class="tipo">Estable</span><span class="desc">Soporte para 32 bits y sección Controles.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.0">Descargar</a></li>
+            <li><span class="v">1.3.0</span><span class="tipo">Estable</span><span class="desc">Primera versión con el nombre LyXel.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.3.0">Descargar</a></li>
+            <li><span class="v">1.2.x y anteriores</span><span class="tipo">MobiladorSteX</span><span class="desc">Las versiones de antes del cambio de nombre.</span><a href="https://github.com/sudoNks/Lyxel/releases">Ver todas</a></li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+    <section class="seccion" id="preguntas" aria-labelledby="preguntas-titulo">
+      <div class="contenedor preguntas-in">
+        <header class="encabezado revelar">
+          <p class="etiqueta">Preguntas</p>
+          <h2 id="preguntas-titulo">Preguntas frecuentes.</h2>
+          <img class="preguntas-mascota" src="assets/img/mascota/confundido.webp" width="453" height="480" alt="" loading="lazy" decoding="async">
+        </header>
+        <div class="acordeon revelar">
+          <details>
+            <summary>¿LyXel es gratis?</summary>
+            <p>Sí. Es gratuita para uso personal.</p>
+          </details>
+          <details>
+            <summary>¿Necesito root o un emulador?</summary>
+            <p>No. Solo activa la depuración USB. El juego corre en tu teléfono y LyXel lo muestra en la PC.</p>
+          </details>
+          <details>
+            <summary>¿Puedo usar mis controles de BlueStacks o MSI?</summary>
+            <p>Sí. En el editor de controles pulsa Importar y elige el archivo .cfg de tu emulador.</p>
+          </details>
+          <details>
+            <summary>¿Funciona sin cable?</summary>
+            <p>Sí. En Conexión hay un asistente para conectar por Wi-Fi con Android 11 o superior.</p>
+          </details>
+          <details>
+            <summary>¿Con qué juegos funciona el Mapeador?</summary>
+            <p>Con los que corren en tu teléfono. Está pensado para juegos de disparos como Free Fire, y sirve para cualquier juego táctil.</p>
+          </details>
+          <details>
+            <summary>¿Hay versión para Linux?</summary>
+            <p>Sí, la edición para Linux 1.0.3. Muestra y controla tu teléfono, pero no trae el Mapeador.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="seccion comunidad" id="comunidad" aria-labelledby="comunidad-titulo">
+      <div class="contenedor">
+        <div class="comunidad-in revelar">
+        <img class="comunidad-mascota" src="assets/img/mascota/saludando.webp" width="442" height="482" alt="" loading="lazy" decoding="async">
+        <div>
+          <h2 id="comunidad-titulo">Únete a la comunidad.</h2>
+          <p>Comparte tus perfiles, reporta errores y propón ideas. LyXel crece con la gente que lo usa.</p>
+          <div class="redes">
+            <a class="btn btn-primario" href="https://discord.gg/CU5quVNyun" target="_blank" rel="noopener"><svg class="ico"><use href="#i-discord"/></svg>Discord</a>
+            <a class="btn btn-secundario" href="https://www.youtube.com/@Nks_v1" target="_blank" rel="noopener"><svg class="ico"><use href="#i-youtube"/></svg>YouTube</a>
+            <a class="btn btn-secundario" href="https://www.tiktok.com/@nks_array" target="_blank" rel="noopener"><svg class="ico"><use href="#i-tiktok"/></svg>TikTok</a>
+            <a class="btn btn-secundario" href="https://ko-fi.com/nks_array" target="_blank" rel="noopener"><svg class="ico"><use href="#i-kofi"/></svg>Ko-fi</a>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="seccion seccion-alterna" id="creditos" aria-labelledby="creditos-titulo">
+      <div class="contenedor">
+        <header class="encabezado revelar">
+          <p class="etiqueta">Créditos</p>
+          <h2 id="creditos-titulo">Créditos y licencias.</h2>
+          <p>LyXel incluye estos componentes de otros autores. Cada uno conserva su licencia, y sus textos viajan en la carpeta <code>Licencias</code> de la aplicación.</p>
+        </header>
+        <ul class="creditos revelar">
+          <li><strong><a href="https://github.com/Genymobile/scrcpy" target="_blank" rel="noopener">scrcpy 4.1</a></strong><span>Genymobile · Apache 2.0 · versión modificada para LyXel</span></li>
+          <li><strong><a href="https://developer.android.com/tools/releases/platform-tools" target="_blank" rel="noopener">Android SDK Platform-Tools (adb)</a></strong><span>Google · Apache 2.0</span></li>
+          <li><strong><a href="https://ffmpeg.org" target="_blank" rel="noopener">FFmpeg 8.1.2</a></strong><span>LGPL 2.1 o posterior</span></li>
+          <li><strong><a href="https://libusb.info" target="_blank" rel="noopener">libusb 1.0.30</a></strong><span>LGPL 2.1 o posterior</span></li>
+          <li><strong><a href="https://www.gnu.org/software/libiconv" target="_blank" rel="noopener">libiconv</a></strong><span>LGPL 2.1</span></li>
+          <li><strong><a href="https://libsdl.org" target="_blank" rel="noopener">SDL3</a></strong><span>Sam Lantinga · zlib</span></li>
+          <li><strong><a href="https://zlib.net" target="_blank" rel="noopener">zlib</a></strong><span>Jean-loup Gailly y Mark Adler · zlib</span></li>
+          <li><strong>winpthreads</strong><span>Proyecto mingw-w64 · MIT</span></li>
+          <li><strong><a href="https://github.com/lepoco/wpfui" target="_blank" rel="noopener">WPF-UI</a></strong><span>Leszek Pomianowski y colaboradores · MIT (incluye Fluent UI System Icons)</span></li>
+          <li><strong><a href="https://github.com/CommunityToolkit/dotnet" target="_blank" rel="noopener">CommunityToolkit.Mvvm</a></strong><span>.NET Foundation · MIT</span></li>
+          <li><strong><a href="https://github.com/rickyah/ini-parser" target="_blank" rel="noopener">ini-parser</a></strong><span>Ricardo Amores Hernández · MIT</span></li>
+          <li><strong><a href="https://dotnet.microsoft.com" target="_blank" rel="noopener">.NET</a></strong><span>.NET Foundation · MIT</span></li>
+          <li><strong><a href="https://rsms.me/inter/" target="_blank" rel="noopener">Inter</a></strong><span>Rasmus Andersson · SIL Open Font License 1.1</span></li>
+        </ul>
+        <div class="avisos-legales revelar">
+          <p>El robot de Android se reproduce o modifica a partir de trabajo creado y compartido por Google, y se usa según los términos de la licencia <a href="https://creativecommons.org/licenses/by/3.0/deed.es" target="_blank" rel="noopener">Creative Commons Atribución 3.0</a>.</p>
+          <p>Android es una marca de Google LLC. Free Fire es una marca de Garena. BlueStacks y MSI App Player pertenecen a sus respectivos dueños. LyXel es un proyecto independiente y no está afiliado a ninguno de ellos.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie">
+    <div class="contenedor pie-in">
+      <div class="pie-marca">
+        <img src="assets/img/marca/icono-64.png" width="28" height="28" alt="">
+        <span>LyXel</span>
+      </div>
+      <nav class="pie-enlaces" aria-label="Enlaces">
+        <a href="https://github.com/sudoNks/Lyxel" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://discord.gg/CU5quVNyun" target="_blank" rel="noopener">Discord</a>
+        <a href="https://www.youtube.com/@Nks_v1" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.tiktok.com/@nks_array" target="_blank" rel="noopener">TikTok</a>
+        <a href="https://ko-fi.com/nks_array" target="_blank" rel="noopener">Ko-fi</a>
+        <a href="https://github.com/sudoNks/Lyxel/blob/main/LICENSE" target="_blank" rel="noopener">Licencia</a>
+      </nav>
+      <p class="pie-autor">© <span id="anio">2026</span> @nks_array</p>
     </div>
+  </footer>
 
-  </div>
-
-</section>
-
-<section id="requirements" class="reveal">
-
- <div class="si">
-
- <p class="stag">Requisitos</p>
-
- <h2 class="stitle">Lo que necesitas.</h2>
-
- <p class="ssub">Solo tu PC con Windows o Linux y tu teléfono Android. Todo lo demás ya viene incluido.</p>
-
- <div class="rg">
-
- <div class="rc"><div class="rt">PC — Windows o Linux</div><ul class="rl"><li>Windows 10/11, o una distro Linux (edición Linux v1.0.3)</li><li>Arquitectura x86 (32 bits) o x64 (64 bits) en Windows; x64 en Linux</li><li>Scrcpy y ADB incluidos — no requieren instalación adicional</li><li>Puerto USB disponible para la primera conexión</li><li>En Linux: instalación con un solo comando (bash instalar.sh)</li></ul></div>
-
- <div class="rc"><div class="rt">Teléfono — Android</div><ul class="rl"><li>Android 13 o superior (recomendado Android 11 mínimo)</li><li>Depuración USB habilitada en Opciones de desarrollador</li><li>En Xiaomi: activar "Depuración USB (modo seguridad)"</li><li>Cable USB para configuración inicial (WiFi opcional después)</li></ul></div>
-
- </div>
-
- </div>
-
-</section>
-
-<section id="changelog" class="cl reveal">
-
- <div class="si">
-
- <p class="stag">Historial</p>
-
- <h2 class="stitle">Versiones.</h2>
-
- <p class="ssub">Todas las versiones disponibles para descarga directa desde GitHub.</p>
-
- <div class="vl">
-
- <div class="vi lat"><span class="vn">v1.6.4</span><span class="vt old">STABLE</span><span class="vd">Tecla Mod personalizable y mejor compatibilidad de teclado en el Mapeador; conserva todo lo de la v1.6.0.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.6.4" class="vdl">Descargar</a></div><div class="vi"><span class="vn">v1.6.0</span><span class="vt old">STABLE</span><span class="vd">Aceleracion por hardware (hasta 83% menos CPU), Mapeador rediseñado y Pantalla dedicada.</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.6.0" class="vdl">Descargar</a></div><div class="vi">
- <span class="vn">v1.4.5</span>
- <span class="vt old">STABLE</span>
- <span class="vd">Alineamiento de renderizado: más modos de renderizado (DirectX 11/12, GPU, Direct3D 9) según arquitectura y correcciones de estabilidad.</span>
- <a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.5" class="vdl">Descargar</a>
- </div>
-
-
- <div class="vi">
- <span class="vn">v1.4.4</span>
- <span class="vt old">STABLE</span>
- <span class="vd">scrcpy 4.0, ADB 37.0.0, Keep Active, redimensionado libre, atajos y mejoras de estabilidad</span>
- <a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.4" class="vdl">Descargar</a>
- </div>
-
- <div class="vi"><span class="vn">v1.4.3</span><span class="vt old">STABLE</span><span class="vd">Hotfix de persistencia: perfiles y config se guardan en %LocalAppData% para usuarios sin admin</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.3" class="vdl">Descargar</a></div>
-
- <div class="vi"><span class="vn">v1.4.2</span><span class="vt old">STABLE</span><span class="vd">Hotfix: ventana de debug permanece abierta al cerrar scrcpy</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.2" class="vdl">Descargar</a></div>
-
- <div class="vi"><span class="vn">v1.4.1</span><span class="vt old">STABLE</span><span class="vd">Modo de renderizado, validación ADB, diálogos unificados, perfiles actualizados</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.1" class="vdl">Descargar</a></div>
-
- <div class="vi"><span class="vn">v1.4.0</span><span class="vt old">STABLE</span><span class="vd">Soporte x86, sección Controles, Modo Debug, preview de comando</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.4.0" class="vdl">Descargar</a></div>
-
- <div class="vi"><span class="vn">v1.3.0</span><span class="vt old">STABLE</span><span class="vd">Nuevo nombre LyXel, paleta Dark Amaranth, sección Optimización ADB</span><a href="https://github.com/sudoNks/Lyxel/releases/tag/v1.3.0" class="vdl">Descargar</a></div>
-
- <div class="vi"><span class="vn">v1.2.x</span><span class="vt old">LEGACY</span><span class="vd">MobiladorSteX — arquitectura partial classes, AppTheme, IconMap</span><a href="https://github.com/sudoNks/Lyxel/releases" class="vdl">Ver todas</a></div>
-
- </div>
-
- </div>
-
-</section>
-
-<section id="community" class="cs reveal">
-
- <div class="cs-sep"></div>
-
- <p class="cs-tag">Únete a la comunidad</p>
-
- <h2 class="cs-title">Sé parte de la comunidad <em class="grad-text">LyXel</em></h2>
-
- <p class="cs-sub">Comparte tu configuración, reporta errores y ayuda a decidir hacia dónde va el proyecto. LyXel se construye día a día junto a la gente que lo usa.</p>
-
- <div class="cs-actions">
-
- <a href="https://discord.gg/CU5quVNyun" target="_blank" rel="noopener" class="btn-p"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A18 18 0 0 0 15.9 3l-.3.6a13 13 0 0 1 3.9 1.6 15 15 0 0 0-13 0A13 13 0 0 1 10.4 3l-.3-.6a18 18 0 0 0-4.4 1.4C3 8 2.3 11.5 2.6 15a18 18 0 0 0 4.7 2.4l.7-1.2a11 11 0 0 1-1.8-.9l.4-.3a13 13 0 0 0 11.2 0l.4.3a11 11 0 0 1-1.8.9l.7 1.2A18 18 0 0 0 21.4 15c.4-4-.6-7.4-1.1-10.6zM9 13.2c-.7 0-1.3-.7-1.3-1.5S8.3 10.2 9 10.2s1.3.7 1.3 1.5-.6 1.5-1.3 1.5zm6 0c-.7 0-1.3-.7-1.3-1.5s.6-1.5 1.3-1.5 1.3.7 1.3 1.5-.6 1.5-1.3 1.5z"/></svg>Unirse al Discord</a>
-
- <a href="https://youtube.com/@nks_v1" target="_blank" rel="noopener" class="btn-s"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.4-.4-5a3 3 0 0 0-2.1-2.1C18.9 4.5 12 4.5 12 4.5s-6.9 0-8.5.4A3 3 0 0 0 1.4 7C1 8.6 1 12 1 12s0 3.4.4 5a3 3 0 0 0 2.1 2.1c1.6.4 8.5.4 8.5.4s6.9 0 8.5-.4A3 3 0 0 0 22.6 17c.4-1.6.4-5 .4-5zM9.8 15.5v-7l6 3.5-6 3.5z"/></svg>Ver el canal</a>
-
- </div>
-
-</section>
-
-<footer class="reveal">
-
- <span class="fl">Ly<span>X</span>el</span>
-
- <div class="flinks">
-
- <a href="https://discord.gg/CU5quVNyun">Discord</a>
-
- <a href="https://github.com/sudoNks/Lyxel">GitHub</a>
-
- <a href="https://ko-fi.com/nks_array">Ko-fi</a>
-
- <a href="https://www.tiktok.com/@nks_array">TikTok</a>
-
- <a href="https://youtube.com/@nks_v1">YouTube</a>
-
- </div>
-
- <span class="fc">@nks_array 2026</span>
-
-</footer>
-
+  <dialog class="visor" id="visor" aria-label="Imagen ampliada">
+    <button class="visor-cerrar" type="button" aria-label="Cerrar"><svg class="ico ico-trazo"><use href="#i-cerrar"/></svg></button>
+    <img id="visor-img" src="" alt="">
+  </dialog>
 </body>
-
 </html>
