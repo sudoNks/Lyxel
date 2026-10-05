@@ -552,8 +552,11 @@
 .pie-autor { color: var(--texto-tenue); font-size: 0.88rem; }
 
 .visor {
+  position: fixed;
+  inset: 0;
   max-width: min(1400px, 94vw);
   max-height: 92vh;
+  margin: auto;
   padding: 0;
   overflow: visible;
   border: 0;
@@ -568,7 +571,9 @@
 
 .visor img {
   width: auto;
+  max-width: 100%;
   max-height: 88vh;
+  margin-inline: auto;
   border-radius: 12px;
   box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8);
 }
