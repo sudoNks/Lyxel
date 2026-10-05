@@ -484,6 +484,28 @@
   margin-top: 26px;
 }
 
+.seccion-creditos {
+  padding: clamp(44px, 6vw, 64px) 0;
+  border-top: 1px solid var(--borde);
+}
+
+.seccion-creditos h2 {
+  margin-bottom: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.seccion-creditos p {
+  max-width: 920px;
+  margin-top: 8px;
+  color: var(--texto-tenue);
+  font-size: 0.86rem;
+  line-height: 1.7;
+}
+
+.seccion-creditos a { color: var(--texto-suave); }
+
 @media (max-width: 1024px) {
   .puntos, .tarjetas { grid-template-columns: repeat(2, 1fr); }
 

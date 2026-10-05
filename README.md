@@ -167,29 +167,13 @@ Edición para Linux de 64 bits: muestra y controla tu Android desde la PC, con t
 
 Comparte tus perfiles, reporta errores y propón ideas en [Discord](https://discord.gg/CU5quVNyun). También hay guías en [YouTube](https://www.youtube.com/@Nks_v1) y novedades en [TikTok](https://www.tiktok.com/@nks_array). Si quieres apoyar el proyecto, está [Ko-fi](https://ko-fi.com/nks_array).
 
-## Créditos
+## Créditos y licencias
 
-LyXel es un proyecto independiente de [@sudoNks](https://github.com/sudoNks). Incluye estos componentes de otros autores; cada uno conserva su licencia y sus textos viajan en la carpeta `Licencias` de la aplicación.
-
-| Componente | Autor | Licencia |
-|---|---|---|
-| [scrcpy 4.1](https://github.com/Genymobile/scrcpy) (versión modificada) | Genymobile | Apache 2.0 |
-| [Android SDK Platform-Tools](https://developer.android.com/tools/releases/platform-tools) (adb) | Google | Apache 2.0 |
-| [FFmpeg 8.1.2](https://ffmpeg.org) | Proyecto FFmpeg | LGPL 2.1 o posterior |
-| [libusb 1.0.30](https://libusb.info) | Proyecto libusb | LGPL 2.1 o posterior |
-| [libiconv](https://www.gnu.org/software/libiconv) | Proyecto GNU | LGPL 2.1 |
-| [SDL3](https://libsdl.org) | Sam Lantinga | zlib |
-| [zlib](https://zlib.net) | Jean-loup Gailly y Mark Adler | zlib |
-| winpthreads | Proyecto mingw-w64 | MIT |
-| [WPF-UI](https://github.com/lepoco/wpfui) (incluye Fluent UI System Icons) | Leszek Pomianowski y colaboradores | MIT |
-| [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) | .NET Foundation | MIT |
-| [ini-parser](https://github.com/rickyah/ini-parser) | Ricardo Amores Hernández | MIT |
-| [.NET](https://dotnet.microsoft.com) | .NET Foundation | MIT |
-| [Inter](https://rsms.me/inter/) | Rasmus Andersson | SIL Open Font License 1.1 |
+LyXel incluye componentes de otros autores, cada uno con su licencia: [scrcpy](https://github.com/Genymobile/scrcpy) de Genymobile (Apache 2.0, versión modificada), Android SDK Platform-Tools de Google (Apache 2.0), FFmpeg y libusb (LGPL 2.1 o posterior), libiconv (LGPL 2.1), SDL3 y zlib (zlib), winpthreads, WPF-UI con Fluent UI System Icons, CommunityToolkit.Mvvm, ini-parser y .NET (MIT), y la fuente Inter (SIL Open Font License 1.1).
 
 El robot de Android se reproduce o modifica a partir de trabajo creado y compartido por Google, y se usa según los términos de la licencia [Creative Commons Atribución 3.0](https://creativecommons.org/licenses/by/3.0/deed.es).
 
-Android es una marca de Google LLC. Free Fire es una marca de Garena. BlueStacks y MSI App Player pertenecen a sus respectivos dueños. LyXel no está afiliado a ninguno de ellos.
+Android es una marca de Google LLC. Free Fire es una marca de Garena. BlueStacks y MSI App Player pertenecen a sus respectivos dueños. LyXel es un proyecto independiente de [@sudoNks](https://github.com/sudoNks) y no está afiliado a ninguno de ellos.
 
 ## Licencia
 
@@ -199,4 +183,4 @@ Copyright (c) 2026 sudoNks (@nks_array)
 
 LyXel is free to use for personal, non-commercial purposes. Redistribution, modification, or commercial use of this software or any of its components is not permitted without explicit written permission from the author. The source code of this project is proprietary and not publicly available.
 
-Scrcpy is developed by Genymobile and is not part of this license. Third-party components keep their own licenses, listed above.
+Scrcpy is developed by Genymobile and is not part of this license. Third-party components keep their own licenses.
