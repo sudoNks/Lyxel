@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://github.com/sudoNks/Lyxel/releases/latest"><img src="https://img.shields.io/github/v/release/sudoNks/Lyxel?label=versi%C3%B3n&color=6d1a36" alt="Versión"></a>
   <a href="https://github.com/sudoNks/Lyxel/releases"><img src="https://img.shields.io/github/downloads/sudoNks/Lyxel/total?label=descargas&color=6d1a36&cacheSeconds=3600" alt="Descargas"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/licencia-gratuita-6d1a36" alt="Licencia"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/licencia-freeware-6d1a36" alt="Licencia freeware"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-6d1a36" alt="Windows 10 y 11">
 </p>
 
