@@ -34,12 +34,14 @@ Antes se llamaba MobiladorSteX.
 ## Novedades de la 1.8.1
 
 - La cámara ya no se acelera al apuntar con el mouse.
+- Scripts y macros, con editor al estilo BlueStacks.
 - Importa los controles de tu emulador: BlueStacks y MSI App Player.
+- La rueda del mouse se puede asignar como tecla.
 - Interfaz renovada: íconos, textos y una mascota nueva.
 - Conexión sin cable con asistente.
 - Benchmarks para ver el rendimiento de cada sesión.
 - Disponible en español, inglés, portugués y alemán.
-- Arreglos en avisos y notificaciones.
+- Arreglos en la captura suspendida, avisos y notificaciones.
 
 ## Mapeador
 
@@ -130,7 +132,7 @@ Edición para Linux de 64 bits: muestra y controla tu Android desde la PC, con t
 
 | Versión | Qué trae | Enlace |
 |---|---|---|
-| 1.8.1 | Cámara sin aceleración, importar controles de BlueStacks y MSI, conexión sin cable, benchmarks, cuatro idiomas e interfaz renovada | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.8.1) |
+| 1.8.1 | Cámara sin aceleración, scripts, importar controles de BlueStacks y MSI, conexión sin cable, benchmarks, cuatro idiomas e interfaz renovada | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.8.1) |
 | 1.6.4 | Tecla MOD a tu gusto y más teclas en el Mapeador | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.6.4) |
 | 1.6.0 | Aceleración por hardware, Mapeador rediseñado y pantalla dedicada | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.6.0) |
 | Linux 1.0.3 | Primera edición para Linux de 64 bits | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/linux-v1.0.3) |
