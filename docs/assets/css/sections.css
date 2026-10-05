@@ -282,7 +282,12 @@
   background: rgba(200, 80, 110, 0.18) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e48aa2' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / 12px no-repeat;
 }
 
-.novedades .enlace-flecha { margin-top: 26px; }
+.novedades-enlaces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 30px;
+  margin-top: 26px;
+}
 
 .novedades-visual {
   position: relative;
@@ -318,6 +323,63 @@
 }
 
 .ventana-idiomas img { cursor: default; }
+
+.seccion-video { padding-top: 0; }
+
+.video {
+  max-width: 980px;
+  margin-inline: auto;
+}
+
+.video-portada,
+.video iframe {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radio);
+  background: var(--superficie);
+  box-shadow: var(--sombra);
+}
+
+.video-portada img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.video-portada:hover img,
+.video-portada:focus-visible img {
+  transform: scale(1.02);
+  filter: brightness(0.82);
+}
+
+.video-boton {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  width: clamp(64px, 9vw, 88px);
+  height: clamp(64px, 9vw, 88px);
+  margin: auto;
+  border-radius: 50%;
+  background: var(--degradado-boton);
+  box-shadow: 0 0 0 8px rgba(200, 80, 110, 0.2), 0 20px 40px -12px rgba(0, 0, 0, 0.8);
+  color: #fff;
+  transition: transform 0.25s ease;
+}
+
+.video-boton .ico {
+  width: 42%;
+  height: 42%;
+  margin-left: 6%;
+}
+
+.video-portada:hover .video-boton,
+.video-portada:focus-visible .video-boton { transform: scale(1.07); }
 
 .seccion-descarga {
   background:

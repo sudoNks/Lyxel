@@ -164,6 +164,20 @@
     visor.addEventListener("close", function () { visorImg.removeAttribute("src"); });
   }
 
+  document.querySelectorAll(".video-portada[data-video]").forEach(function (enlace) {
+    enlace.addEventListener("click", function (e) {
+      e.preventDefault();
+      var marco = document.createElement("iframe");
+      marco.src = "https://www.youtube-nocookie.com/embed/" + enlace.dataset.video + "?autoplay=1&rel=0";
+      marco.title = enlace.dataset.titulo;
+      marco.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      marco.referrerPolicy = "strict-origin-when-cross-origin";
+      marco.allowFullscreen = true;
+      enlace.replaceWith(marco);
+      marco.focus();
+    });
+  });
+
   var anio = document.getElementById("anio");
   if (anio) anio.textContent = new Date().getFullYear();
 })();
