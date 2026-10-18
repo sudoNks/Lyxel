@@ -131,6 +131,7 @@
 
   var cifra = document.getElementById("cifra-descargas");
   if (cifra && window.fetch) {
+    var historico = 27975;
     var control = "AbortController" in window ? new AbortController() : null;
     var limite = setTimeout(function () { if (control) control.abort(); }, 5000);
     fetch("https://api.github.com/repos/sudoNks/Lyxel/releases?per_page=100", { signal: control ? control.signal : undefined })
@@ -139,12 +140,11 @@
         return r.json();
       })
       .then(function (versiones) {
-        var total = 0;
+        var total = historico;
         versiones.forEach(function (v) {
           (v.assets || []).forEach(function (a) { total += a.download_count || 0; });
         });
-        if (total >= 1000) cifra.textContent = "+" + Math.floor(total / 1000) + " mil";
-        else if (total > 0) cifra.textContent = "+" + total;
+        cifra.textContent = "+" + Math.floor(total / 1000) + " mil";
       })
       .catch(function () {})
       .then(function () { clearTimeout(limite); });
