@@ -16,7 +16,7 @@
 <p align="center">
   <a href="https://sudonks.github.io/Lyxel/">Sitio web</a> ·
   <a href="https://github.com/sudoNks/Lyxel/releases/latest">Descargar</a> ·
-  <a href="https://youtu.be/0U5Nx-Umb50">Video</a> ·
+  <a href="https://youtu.be/MzgNHeaW9Cg">Video</a> ·
   <a href="https://discord.gg/CU5quVNyun">Discord</a> ·
   <a href="https://www.youtube.com/@Nks_v1">YouTube</a> ·
   <a href="https://ko-fi.com/nks_array">Ko-fi</a>
@@ -46,10 +46,10 @@ Antes se llamaba MobiladorSteX.
 ### Video
 
 <p align="center">
-  <a href="https://youtu.be/0U5Nx-Umb50"><img src="docs/assets/img/video/portada-1.8.1.jpg" width="820" alt="Video de LyXel 1.8.1: Free Fire en PC sin aceleración"></a>
+  <a href="https://youtu.be/MzgNHeaW9Cg"><img src="docs/assets/img/video/portada-1.10.0.jpg" width="820" alt="Video de LyXel 1.10.0: Free Fire en PC con sensibilidad tipo MSI y calidad sin delay"></a>
 </p>
 
-La instalación, la conexión sin cable, el Mapeador sin aceleración y cómo traer tus controles de MSI y BlueStacks, paso a paso: [ver en YouTube](https://youtu.be/0U5Nx-Umb50).
+La cámara como en MSI App Player, las actualizaciones desde la aplicación, el editor de controles y cómo evitar que se vea borroso o con retraso, paso a paso: [ver en YouTube](https://youtu.be/MzgNHeaW9Cg).
 
 ## Mapeador
 
