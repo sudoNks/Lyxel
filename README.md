@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/sudoNks/Lyxel/releases/latest"><img src="https://img.shields.io/github/v/release/sudoNks/Lyxel?label=versi%C3%B3n&color=6d1a36" alt="Versión"></a>
-  <a href="https://github.com/sudoNks/Lyxel/releases"><img src="https://img.shields.io/badge/descargas-%2B28%20mil-6d1a36" alt="Descargas"></a>
+  <a href="https://github.com/sudoNks/Lyxel/releases"><img src="https://img.shields.io/badge/descargas-%2B29%20mil-6d1a36" alt="Descargas"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/licencia-freeware-6d1a36" alt="Licencia freeware"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-6d1a36" alt="Windows 10 y 11">
 </p>
@@ -32,8 +32,9 @@ LyXel es una aplicación gratuita para Windows que muestra la pantalla de tu tel
 
 Antes se llamaba MobiladorSteX.
 
-## Novedades de la 1.10.0
+## Novedades de la 1.10
 
+- 1.10.1: cada teléfono recuerda su codificador avanzado y el botón Detectar funciona con dos conectados. Si el teléfono no tiene el codec de tu perfil, LyXel avisa y usa H.264.
 - La cámara se mueve como en MSI App Player y vuelve a responder en Samsung, Infinix y Xiaomi 17.
 - Editor de controles como el de los emuladores: cámara y disparo en un solo control, y sensibilidad con flechas.
 - Botón para apagar la pantalla del teléfono mientras juegas.
@@ -109,10 +110,10 @@ También trae tecla de atajos (MOD) a tu gusto, pantalla virtual con la resoluci
 
 | Plataforma | Archivo |
 |---|---|
-| Windows 10 y 11, 64 y 32 bits | [LyXel_Setup_v1.10.0.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.10.0/LyXel_Setup_v1.10.0.exe) · [.zip](https://github.com/sudoNks/Lyxel/releases/download/v1.10.0/LyXel_Setup_v1.10.0.zip) |
+| Windows 10 y 11, 64 y 32 bits | [LyXel_Setup_v1.10.1.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.10.1/LyXel_Setup_v1.10.1.exe) · [.zip](https://github.com/sudoNks/Lyxel/releases/download/v1.10.1/LyXel_Setup_v1.10.1.zip) |
 | Linux x64 | [lyxel-v1.0.3-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v1.0.3/lyxel-v1.0.3-linux-x64.tar.gz) |
 
-En un equipo de 32 bits, activa **Compatibilidad x86** en Inicio después de instalar. Los hashes SHA-256 están en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/v1.10.0/SHA256SUMS.txt).
+En un equipo de 32 bits, activa **Compatibilidad x86** en Inicio después de instalar. Los hashes SHA-256 están en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/v1.10.1/SHA256SUMS.txt).
 
 Todas las versiones: [Releases](https://github.com/sudoNks/Lyxel/releases)
 
@@ -140,6 +141,7 @@ Edición para Linux de 64 bits: muestra y controla tu Android desde la PC, con t
 
 | Versión | Qué trae | Enlace |
 |---|---|---|
+| 1.10.1 | Codificador avanzado por teléfono, botón Detectar con dos conectados y cambio a H.264 si el teléfono no tiene el codec del perfil | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.10.1) |
 | 1.10.0 | Mejoras en la cámara y el editor de controles, actualizaciones desde LyXel, instalador de una pantalla y scrcpy 5.0.1 | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.10.0) |
 | 1.9.0 | scrcpy 5.0, aceleración por hardware activada, modo Vulkan, mantener audio con todo el sonido y arreglos del modo dual | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.9.0) |
 | 1.8.1 | Cámara sin aceleración, scripts, importar controles de BlueStacks y MSI, conexión sin cable, benchmarks, cuatro idiomas e interfaz renovada | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.8.1) |
