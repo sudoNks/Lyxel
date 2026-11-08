@@ -1,15 +1,115 @@
-LyXel — Freeware License
+LYXEL FREEWARE LICENSE
+Version 1.0 | Effective November 7, 2026
 
-Copyright (c) 2026 sudoNks (@nks_array)
+Copyright © 2026 sudoNks (@nks_array). All rights reserved.
 
-LyXel is free to use for personal, non-commercial purposes.
 
-Redistribution, modification, or commercial use of this software
+1. OWNERSHIP
 
-or any of its components is not permitted without explicit written
+LyXel is proprietary software developed and maintained by sudoNks (@nks_array).
 
-permission from the author.
+All original components of LyXel, including its proprietary source code, compiled code, user interface designs, graphical assets, original documentation, and other copyrightable materials, remain the intellectual property of the LyXel rights holder.
 
-The source code of this project is proprietary and not publicly available.
 
-Scrcpy is developed by Genymobile and is not part of this license.
+2. FREEWARE, NOT OPEN SOURCE
+
+LyXel is distributed as freeware, not as open-source software. Free access to the application does not grant ownership of its source code or other intellectual property.
+
+All rights not expressly granted under this license are reserved.
+
+
+3. LICENSE GRANT
+
+The author grants users a limited, non-exclusive, non-transferable, revocable license to install and use LyXel free of charge for lawful personal, non-commercial purposes.
+
+This license does not authorize redistribution, modification, sublicensing, resale, or commercial exploitation.
+
+Commercial use or other uses outside this permission require prior written authorization from the author.
+
+
+4. RESTRICTIONS
+
+Unless expressly authorized in writing by the author, users may not:
+
+  a) Copy, modify, adapt, translate, or create derivative works from LyXel's proprietary software or protected materials.
+  b) Reverse engineer, decompile, or disassemble LyXel's proprietary components to reconstruct its source code, except where permitted by applicable law.
+  c) Extract, reproduce, or incorporate protected graphical assets, original interface designs, or other protected materials into competing or unrelated software.
+  d) Redistribute, republish, repackage, mirror, sublicense, rent, or sell LyXel, whether in its original or modified form.
+  e) Remove, alter, or conceal copyright notices, authorship information, or proprietary notices.
+  f) Misrepresent the authorship, origin, affiliation, or official status of LyXel or its proprietary components.
+  g) Circumvent technical protection measures in violation of applicable law.
+
+These restrictions do not override rights or exceptions that cannot legally be excluded.
+
+
+5. SOURCE CODE
+
+LyXel's proprietary source code is not publicly distributed or licensed for modification.
+
+Receiving an executable, installer, update, development build, or beta version does not grant access to or permission to reproduce, publish, modify, or redistribute the proprietary source code.
+
+Any source code provided separately under an express written confidentiality agreement remains subject to that agreement.
+
+
+6. OFFICIAL DISTRIBUTION AND PRE-RELEASE VERSIONS
+
+Official versions of LyXel are distributed through channels authorized by the author.
+
+Third parties may share links to official download locations but may not independently host, redistribute, repackage, or distribute LyXel installers or binaries without written permission.
+
+Development, preview, and beta versions are intended exclusively for authorized recipients and remain subject to this license and any additional testing conditions communicated by the author.
+
+
+7. THIRD-PARTY SOFTWARE
+
+LyXel uses third-party technologies, including scrcpy, developed by Genymobile and contributors. scrcpy is licensed under the Apache License, Version 2.0:
+https://www.apache.org/licenses/LICENSE-2.0
+
+scrcpy and other third-party components remain subject to their respective copyright notices and licenses. Their notices and license texts are included with LyXel.
+
+This LyXel license applies only to the proprietary components and materials owned or lawfully controlled by the LyXel rights holder. It does not replace, restrict, or supersede the licenses of third-party software.
+
+Users retain all rights granted by the applicable third-party licenses.
+
+
+8. DISCLAIMER OF WARRANTY
+
+LyXel is provided free of charge on an "AS IS" basis, without warranties of any kind, express or implied, to the maximum extent permitted by applicable law.
+
+The author does not guarantee uninterrupted operation, compatibility with every device, or freedom from errors.
+
+Nothing in this section excludes responsibilities or user rights that cannot lawfully be excluded.
+
+
+9. TERMINATION
+
+The permission to use LyXel may terminate if the user materially violates this license.
+
+Upon termination, the user must cease unauthorized use and remove unauthorized copies of LyXel's proprietary components, subject to applicable law.
+
+Termination does not affect independently granted third-party software licenses.
+
+
+10. INTELLECTUAL PROPERTY PROTECTION
+
+LyXel's original copyrightable materials are protected under applicable intellectual property laws, including the Mexican Federal Copyright Law (Ley Federal del Derecho de Autor). Relevant provisions include Articles 5, 13, 101, 102, 106, and 111.
+
+The rights holder reserves the right to pursue legally available remedies against unauthorized reproduction, distribution, adaptation, or other infringement of protected LyXel materials.
+
+Nothing in this license creates exclusive rights over unprotected ideas, generic functionality, or independently developed implementations.
+
+
+11. PERMISSIONS AND CONTACT
+
+Requests for redistribution, commercial licensing, integration, or other permissions must be submitted to the author through LyXel's official communication channels.
+
+Any additional authorization must be granted explicitly in writing.
+
+
+12. GOVERNING LAW
+
+This license shall be interpreted in accordance with applicable Mexican law, subject to mandatory legal protections and applicable conflict-of-laws rules.
+
+
+Copyright © 2026 sudoNks (@nks_array). All rights reserved.
+LyXel is free to use under the conditions of this license. Its proprietary source code is not open source.

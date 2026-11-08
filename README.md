@@ -191,10 +191,4 @@ Android es una marca de Google LLC. Free Fire es una marca de Garena. BlueStacks
 
 ## Licencia
 
-LyXel - Freeware License
-
-Copyright (c) 2026 sudoNks (@nks_array)
-
-LyXel is free to use for personal, non-commercial purposes. Redistribution, modification, or commercial use of this software or any of its components is not permitted without explicit written permission from the author. The source code of this project is proprietary and not publicly available.
-
-Scrcpy is developed by Genymobile and is not part of this license. Third-party components keep their own licenses.
+LyXel es freeware: gratis para uso personal y no comercial. Su código es propietario y no es de código abierto. Los términos completos están en [LICENSE](LICENSE) (versión 1.0, vigente desde el 7 de noviembre de 2026). Qué usa LyXel de tu teléfono y cómo se protege: [Privacidad y seguridad](https://sudonks.github.io/Lyxel/privacidad.html).
