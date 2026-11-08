@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacidad y seguridad · LyXel</title>
+  <meta name="description" content="Qué permisos usa LyXel, qué datos lee de tu teléfono, cómo se protege y qué dice su licencia.">
+  <link rel="canonical" href="https://sudonks.github.io/Lyxel/privacidad.html">
+  <meta name="theme-color" content="#0b0a0b">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="assets/img/marca/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/sections.css">
+  <style>
+    html { scroll-behavior: smooth; }
+    .nav-acciones { margin-left: auto; }
+    .privacidad { background: radial-gradient(720px 420px at 50% 0%, rgba(110, 27, 55, 0.28), transparent 70%); }
+    .privacidad h1 { font-size: clamp(2rem, 5vw, 3rem); }
+    .indice { display: flex; flex-wrap: wrap; gap: 10px; margin: -12px 0 clamp(40px, 6vw, 64px); }
+    .indice a {
+      padding: 8px 16px;
+      border: 1px solid var(--borde-fuerte);
+      border-radius: 999px;
+      color: var(--texto-suave);
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .indice a:hover { color: var(--texto); border-color: var(--rosa); }
+    .apartado { scroll-margin-top: 90px; }
+    .apartado + .apartado { margin-top: clamp(56px, 8vw, 88px); }
+    .apartado > h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 12px; }
+    .apartado > p { max-width: 760px; color: var(--texto-suave); }
+    .apartado > p + p { margin-top: 12px; }
+    .apartado > p strong { color: var(--texto); font-weight: 600; }
+    .apartado .requisitos { margin-top: 28px; }
+    .apartado .requisitos + .requisitos { margin-top: 18px; }
+    .requisito li strong { color: var(--texto); font-weight: 600; }
+    .apartado .acordeon { max-width: 860px; margin-top: 24px; }
+    .apartado .acordeon details { scroll-margin-top: 90px; }
+    .apartado .acordeon details p { color: var(--texto-suave); }
+    .apartado .btn { margin-top: 24px; }
+    .privacidad code { font-family: var(--mono); font-size: 0.9em; color: var(--rosa-claro); }
+    @media (max-width: 760px) { .privacidad .requisitos { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-in contenedor">
+      <a class="marca" href="index.html">
+        <img src="assets/img/marca/icono-64.png" width="32" height="32" alt="">
+        <span>LyXel</span>
+      </a>
+      <div class="nav-acciones">
+        <a class="btn btn-primario btn-chico" href="index.html#descargar">Descargar</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="seccion privacidad">
+    <div class="contenedor">
+      <header class="encabezado">
+        <p class="etiqueta">Privacidad y seguridad</p>
+        <h1>Lo que LyXel usa de tu teléfono, y lo que no.</h1>
+        <p>LyXel funciona en tu PC. No tiene cuentas, anuncios ni servidores propios: lo que pasa entre tu teléfono y tu PC se queda ahí.</p>
+      </header>
+
+      <nav class="indice" aria-label="En esta página">
+        <a href="#permisos">Permisos</a>
+        <a href="#datos">Datos y conexión</a>
+        <a href="#seguridad">Seguridad</a>
+        <a href="#preguntas">Preguntas</a>
+        <a href="#legal">Información legal</a>
+      </nav>
+
+      <section class="apartado" id="permisos" aria-labelledby="permisos-titulo">
+        <h2 id="permisos-titulo">Permisos</h2>
+        <p>LyXel se conecta con la <strong>depuración USB (ADB)</strong>, la herramienta oficial de Android para desarrolladores. Es la misma que usan scrcpy y Android Studio, y no necesita root.</p>
+        <p>Ese permiso le da a la PC un acceso técnico amplio al teléfono. <strong>Eso no significa que LyXel lo use todo:</strong> solo hace lo que se explica en esta página. Además, el teléfono pregunta antes de dar acceso a cada PC nueva.</p>
+      </section>
+
+      <section class="apartado" id="datos" aria-labelledby="datos-titulo">
+        <h2 id="datos-titulo">Datos y conexión</h2>
+        <div class="requisitos">
+          <div class="requisito">
+            <h3>Lo que sale a internet</h3>
+            <ul>
+              <li><strong>Solo la búsqueda de actualizaciones.</strong> LyXel consulta las versiones publicadas en GitHub y, si hay una nueva, la descarga de ahí. GitHub ve tu IP y tu versión de LyXel. Se apaga en Información → Buscar al abrir LyXel.</li>
+              <li>Los enlaces (Discord, YouTube, Ko-fi, la IA del asistente) se abren en tu navegador solo cuando los pulsas.</li>
+            </ul>
+          </div>
+          <div class="requisito">
+            <h3>Lo que lee de tu teléfono</h3>
+            <ul>
+              <li>Marca, modelo y versión de Android, para reconocerlo y elegir ajustes compatibles.</li>
+              <li>Resolución, densidad y frecuencia de la pantalla, para el espejo y la sección Pantalla.</li>
+              <li>Los codificadores de video y audio, para la calidad del espejo.</li>
+              <li>El número de serie, para guardar los ajustes de cada teléfono.</li>
+              <li>Si un juego está instalado, preguntando solo por ese juego.</li>
+              <li>La lista de apps instaladas, solo si la pides en las opciones avanzadas de Optimización.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="requisitos">
+          <div class="requisito">
+            <h3>Lo que cambia, solo si tú lo eliges</h3>
+            <ul>
+              <li>La resolución y la densidad de la pantalla, desde Pantalla.</li>
+              <li>Animaciones, frecuencia de pantalla y prioridad del juego, desde Optimización. Guarda los valores de antes para regresarlos.</li>
+              <li>Cerrar apps en segundo plano, limpiar caché o quitar y restaurar apps, desde las opciones avanzadas.</li>
+            </ul>
+          </div>
+          <div class="requisito">
+            <h3>El espejo y los controles</h3>
+            <ul>
+              <li>La imagen y el sonido van directo del teléfono a tu PC, por cable o por tu Wi-Fi. LyXel no los graba.</li>
+              <li>En una sesión normal, lo que copias se comparte entre la PC y el teléfono para poder pegarlo.</li>
+              <li>El Mapeador usa tu teclado y tu mouse solo mientras está activo, para convertirlos en toques. No guarda lo que escribes.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="requisitos">
+          <div class="requisito">
+            <h3>El asistente de perfiles con IA</h3>
+            <ul>
+              <li>Junta en un texto datos técnicos de tu teléfono y tu PC: modelo, sistema, procesador, tarjeta de video, memoria, monitor y codificadores. Nada personal.</li>
+              <li>Abre la IA que elijas con ese texto listo. Tú decides si lo envías, y ahí aplica la privacidad de ese servicio.</li>
+            </ul>
+          </div>
+          <div class="requisito">
+            <h3>Lo que no hace</h3>
+            <ul>
+              <li>No lee fotos, mensajes, contactos, archivos, notificaciones ni ubicación.</li>
+              <li>No tiene cuentas, anuncios ni estadísticas de uso.</li>
+              <li>No vende ni comparte datos: no recibe ninguno.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="apartado" id="seguridad" aria-labelledby="seguridad-titulo">
+        <h2 id="seguridad-titulo">Medidas de seguridad</h2>
+        <div class="requisitos">
+          <div class="requisito">
+            <h3>Acceso y conexión</h3>
+            <ul>
+              <li><strong>Solo las PCs que autorizas.</strong> La primera vez, el teléfono pregunta «¿Permitir depuración USB?» y muestra la huella de la PC.</li>
+              <li><strong>Conexión local.</strong> Va por cable o por tu red Wi-Fi, no por internet. Con Android 11 o superior se empareja con el código que muestra tu teléfono.</li>
+              <li><strong>Sin servidor propio.</strong> No hay cuentas ni bases de datos que se puedan filtrar.</li>
+            </ul>
+          </div>
+          <div class="requisito">
+            <h3>Actualizaciones y archivos</h3>
+            <ul>
+              <li><strong>Actualizaciones verificadas.</strong> LyXel solo descarga de los releases oficiales en GitHub y comprueba su firma antes de instalarlas.</li>
+              <li><strong>Huellas publicadas.</strong> Cada versión trae <code>SHA256SUMS.txt</code> para comprobar que el instalador es el original.</li>
+              <li><strong>Tus datos, en tu PC.</strong> Ajustes, perfiles, mapeos y registros se guardan en <code>%LOCALAPPDATA%\LyXel</code> en Windows y en <code>~/.local/share/LyXel</code> en Linux. En los registros, el número de serie aparece oculto.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="apartado" id="preguntas" aria-labelledby="preguntas-titulo">
+        <h2 id="preguntas-titulo">Preguntas frecuentes</h2>
+        <div class="acordeon">
+          <details id="adb">
+            <summary>¿Por qué LyXel necesita la depuración USB?</summary>
+            <p>Es la forma que da Android para mostrar y controlar el teléfono desde una PC sin root. LyXel la usa para el espejo, los toques del Mapeador y los ajustes que tú eliges.</p>
+          </details>
+          <details id="adb-riesgo">
+            <summary>¿La depuración USB es peligrosa?</summary>
+            <p>Le da un acceso amplio a las PCs que tú autorizas, por eso conviene autorizar solo las tuyas. Si te preocupa, apágala cuando no uses LyXel y revoca las autorizaciones en Opciones de desarrollador.</p>
+          </details>
+          <details id="fotos">
+            <summary>¿LyXel puede ver mis fotos o mensajes?</summary>
+            <p>No los lee ni los copia. El espejo muestra en tu PC lo mismo que se ve en tu pantalla en ese momento, y no se guarda.</p>
+          </details>
+          <details id="servidor">
+            <summary>¿Manda mis datos a algún servidor?</summary>
+            <p>No. LyXel no tiene servidor. Lo único que consulta en internet son las versiones publicadas en GitHub, para avisarte de actualizaciones.</p>
+          </details>
+          <details id="wifi">
+            <summary>¿Es seguro usarlo por Wi-Fi?</summary>
+            <p>La conexión va por tu red, no por internet. Úsala en tu casa o en redes de confianza; en una Wi-Fi pública, mejor usa el cable.</p>
+          </details>
+          <details id="ia">
+            <summary>¿El asistente manda mis datos a una IA?</summary>
+            <p>Solo si tú lo envías. LyXel abre tu IA con un texto que tiene datos técnicos de tu teléfono y tu PC, nada personal, y tú decides si lo mandas.</p>
+          </details>
+          <details id="smartscreen">
+            <summary>¿Por qué Windows dice que protegió mi PC al instalar?</summary>
+            <p>Es el aviso de SmartScreen para programas sin un certificado comercial de firma. Si lo descargaste de esta página o de GitHub, pulsa Más información → Ejecutar de todas formas. Si quieres, compara el instalador con <code>SHA256SUMS.txt</code> de su versión.</p>
+          </details>
+          <details id="quitar">
+            <summary>¿Cómo le quito el acceso a mi PC?</summary>
+            <p>En el teléfono: Opciones de desarrollador → Revocar autorizaciones de depuración USB, y apaga la depuración USB. Para borrar lo que LyXel guarda en tu PC, borra su carpeta de datos.</p>
+          </details>
+          <details id="otra">
+            <summary>Tengo otra duda</summary>
+            <p>Pregúntanos en <a href="https://discord.gg/CU5quVNyun" target="_blank" rel="noopener">Discord</a>. Las dudas que se repitan se agregan aquí.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="apartado" id="legal" aria-labelledby="legal-titulo">
+        <h2 id="legal-titulo">Información legal</h2>
+        <p>LyXel es <strong>freeware</strong>: gratis para uso personal y no comercial. Su código es propietario, no es de código abierto. No se permite redistribuirlo, modificarlo ni venderlo sin permiso por escrito del autor.</p>
+        <p>Usa componentes de otros autores, como scrcpy de Genymobile (Apache 2.0), cada uno con su propia licencia. Sus textos vienen en la carpeta Licencias de la instalación.</p>
+        <p>Se ofrece tal cual, sin garantías. Las versiones oficiales solo se descargan de esta página y del repositorio oficial; otras apps con un nombre o un diseño parecido no son LyXel.</p>
+        <a class="btn btn-primario" href="https://github.com/sudoNks/Lyxel/blob/main/LICENSE" target="_blank" rel="noopener">Leer la licencia de uso</a>
+        <p class="nota">Actualizado el 7 de noviembre de 2026.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="pie">
+    <div class="contenedor pie-in">
+      <div class="pie-marca">
+        <img src="assets/img/marca/icono-64.png" width="28" height="28" alt="">
+        <span>LyXel</span>
+      </div>
+      <nav class="pie-enlaces" aria-label="Enlaces">
+        <a href="https://github.com/sudoNks/Lyxel" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://discord.gg/CU5quVNyun" target="_blank" rel="noopener">Discord</a>
+        <a href="https://www.youtube.com/@Nks_v1" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.tiktok.com/@nks_array" target="_blank" rel="noopener">TikTok</a>
+        <a href="https://ko-fi.com/nks_array" target="_blank" rel="noopener">Ko-fi</a>
+        <a href="https://github.com/sudoNks/Lyxel/blob/main/LICENSE" target="_blank" rel="noopener">Licencia</a>
+        <a href="privacidad.html">Privacidad y seguridad</a>
+      </nav>
+      <p class="pie-autor">© 2026 @nks_array</p>
+    </div>
+  </footer>
+  <script>
+    function abrirPregunta() {
+      var d = location.hash && document.getElementById(location.hash.slice(1));
+      if (d && d.tagName === "DETAILS") d.open = true;
+    }
+    abrirPregunta();
+    window.addEventListener("hashchange", abrirPregunta);
+  </script>
+</body>
+</html>
