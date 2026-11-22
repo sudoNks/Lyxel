@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/sudoNks/Lyxel/releases/latest"><img src="https://img.shields.io/github/v/release/sudoNks/Lyxel?label=versi%C3%B3n&color=6d1a36" alt="Versión"></a>
-  <a href="https://github.com/sudoNks/Lyxel/releases"><img src="https://img.shields.io/badge/descargas-%2B45%20mil-6d1a36" alt="Descargas"></a>
+  <a href="https://github.com/sudoNks/Lyxel/releases"><img src="https://img.shields.io/badge/descargas-%2B46%20mil-6d1a36" alt="Descargas"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/licencia-freeware-6d1a36" alt="Licencia freeware"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-6d1a36" alt="Windows 10 y 11">
   <img src="https://img.shields.io/badge/Linux-x64%20%7C%20X11-6d1a36" alt="Linux x64 con X11">
@@ -33,17 +33,15 @@ LyXel es una aplicación gratuita para Windows y Linux que muestra la pantalla d
 
 Antes se llamaba MobiladorSteX.
 
-## Novedades de la 1.11 y de Linux 2.0
+## Novedades de la 1.12
 
-- LyXel para Linux 2.0.0 se pone a la par: Mapeador, editor de controles, pantalla dedicada y actualizaciones desde LyXel.
-- Tres perfiles a tu medida (menor retraso, equilibrado y calidad) armados con los datos de tu teléfono y tu PC.
-- Escribe en el chat del juego sin salir del Mapeador, con Enter o con la tecla que elijas.
-- El joystick ya no se traba en diagonales y cambia de dirección más suave, también en Modo pantalla dedicada.
-- Las teclas rápidas llegan completas y, sin cable, los toques ya no se pierden cuando la red se atora.
-- Avisos más claros: por qué no arranca el Mapeador, un cable que no pasa datos y los Xiaomi sin «Depuración USB (ajustes de seguridad)».
-- El Mapeador sigue funcionando con Veyra encima del espejo.
-- Navegación nueva, con las secciones en un arco abajo.
-- Conexión más estable y menos consumo mientras juegas.
+- Al crear tus perfiles, LyXel te pregunta cómo vas a jugar: normal sin Mapeador, normal con Mapeador o con pantalla dedicada.
+- También te pregunta si apagar la pantalla del teléfono y dónde escuchar el juego; tus respuestas van igual en los tres perfiles.
+- Con la pantalla dedicada, los perfiles nuevos respetan dónde eliges escuchar el juego.
+- El botón para apagar la pantalla del teléfono avisa que la cámara puede sentirse menos fluida.
+- LyXel lee bien el refresco de la pantalla del teléfono, también al cambiar de teléfono.
+- Benchmarks guarda los FPS que pide tu perfil y si la pantalla iba apagada.
+- LyXel para Linux 2.0.0 ya trae el Mapeador, el editor de controles, la pantalla dedicada y las actualizaciones desde LyXel.
 
 ### Video
 
@@ -111,10 +109,10 @@ También trae tecla de atajos (MOD) a tu gusto, pantalla virtual con la resoluci
 
 | Plataforma | Archivo |
 |---|---|
-| Windows 10 y 11, 64 y 32 bits | [LyXel_Setup_v1.11.0.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.11.0/LyXel_Setup_v1.11.0.exe) · [.zip](https://github.com/sudoNks/Lyxel/releases/download/v1.11.0/LyXel_Setup_v1.11.0.zip) |
+| Windows 10 y 11, 64 y 32 bits | [LyXel_Setup_v1.12.0.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.12.0/LyXel_Setup_v1.12.0.exe) · [.zip](https://github.com/sudoNks/Lyxel/releases/download/v1.12.0/LyXel_Setup_v1.12.0.zip) |
 | Linux x64 (sesión X11) | [lyxel-v2.0.0-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v2.0.0/lyxel-v2.0.0-linux-x64.tar.gz) |
 
-En un equipo de 32 bits, activa **Compatibilidad x86** en Inicio después de instalar. Los hashes SHA-256 están en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/v1.11.0/SHA256SUMS.txt) para Windows y en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/linux-v2.0.0/SHA256SUMS.txt) para Linux.
+En un equipo de 32 bits, activa **Compatibilidad x86** en Inicio después de instalar. Los hashes SHA-256 están en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/v1.12.0/SHA256SUMS.txt) para Windows y en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/linux-v2.0.0/SHA256SUMS.txt) para Linux.
 
 Todas las versiones: [Releases](https://github.com/sudoNks/Lyxel/releases)
 
@@ -227,6 +225,7 @@ scrcpy y ADB vienen incluidos en las dos ediciones.
 
 | Versión | Qué trae | Enlace |
 |---|---|---|
+| 1.12.0 | Te pregunta cómo vas a jugar al crear tus perfiles, lee bien el refresco del teléfono y avisa al apagar la pantalla | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.12.0) |
 | 1.11.0 | Tres perfiles a tu medida, chat en el Mapeador, joystick más firme, avisos más claros y navegación nueva | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.11.0) |
 | Linux 2.0.0 | El Mapeador llega a Linux: editor de controles, pantalla dedicada, perfiles a tu medida y actualizaciones desde LyXel | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/linux-v2.0.0) |
 | 1.10.1 | Codificador avanzado por teléfono, botón Detectar con dos conectados y cambio a H.264 si el teléfono no tiene el codec del perfil | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.10.1) |
