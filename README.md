@@ -101,6 +101,7 @@ También trae tecla de atajos (MOD) a tu gusto, pantalla virtual con la resoluci
 | Controles de BlueStacks o MSI | No los lee | Los importa |
 | Tecla de atajos (MOD) | Solo Ctrl, Alt o Super, con un comando | Cualquier tecla, desde la aplicación |
 | Configuración | Parámetros cada vez que lo abres | Perfiles listos y los tuyos |
+| Ajuste a tu equipo | Pruebas los valores a mano | Un asistente lee tu teléfono y tu PC, y arma tres perfiles |
 | Conexión sin cable | Comandos de adb | Asistente y reconexión en un clic |
 | Optimización del teléfono | No incluye | Limpieza y ajustes para jugar |
 | Rendimiento | FPS en la consola | FPS y latencia en pantalla, y benchmarks |
