@@ -110,7 +110,7 @@ También trae tecla de atajos (MOD) a tu gusto, pantalla virtual con la resoluci
 | Plataforma | Archivo |
 |---|---|
 | Windows 10 y 11, 64 y 32 bits | [LyXel_Setup_v1.11.0.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.11.0/LyXel_Setup_v1.11.0.exe) · [.zip](https://github.com/sudoNks/Lyxel/releases/download/v1.11.0/LyXel_Setup_v1.11.0.zip) |
-| Linux x64 | [lyxel-v1.0.3-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v1.0.3/lyxel-v1.0.3-linux-x64.tar.gz) |
+| Linux x64 (sesión X11) | [lyxel-v2.0.0-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v2.0.0/lyxel-v2.0.0-linux-x64.tar.gz) |
 
 En un equipo de 32 bits, activa **Compatibilidad x86** en Inicio después de instalar. Los hashes SHA-256 están en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/v1.11.0/SHA256SUMS.txt).
 
@@ -124,16 +124,18 @@ Todas las versiones: [Releases](https://github.com/sudoNks/Lyxel/releases)
 
 ## LyXel para Linux
 
-Edición para Linux de 64 bits: muestra y controla tu Android desde la PC, con todo incluido. Tiene su propia numeración de versiones y no trae el Mapeador.
+Edición para Linux de 64 bits: muestra y controla tu Android desde la PC, con todo incluido, también el Mapeador. Tiene su propia numeración de versiones y requiere sesión X11.
 
-1. Descarga [lyxel-v1.0.3-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v1.0.3/lyxel-v1.0.3-linux-x64.tar.gz).
-2. Extráelo con clic derecho > Extraer aquí, o en la terminal con `tar -xzf lyxel-v1.0.3-linux-x64.tar.gz`.
-3. Entra a la carpeta (`cd lyxel-v1.0.3-linux-x64`) y ejecuta el instalador con `bash instalar.sh`. Al terminar abre la aplicación; después la encuentras buscando "LyXel" en tu menú.
+1. Descarga [lyxel-v2.0.0-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v2.0.0/lyxel-v2.0.0-linux-x64.tar.gz).
+2. Extráelo con clic derecho > Extraer aquí, o en la terminal con `tar -xzf lyxel-v2.0.0-linux-x64.tar.gz`.
+3. Entra a la carpeta (`cd lyxel-v2.0.0-linux-x64`) y ejecuta el instalador con `bash instalar.sh`. Te pide tu contraseña para dos reglas: la USB y la de teclado y mouse, sin la cual el Mapeador no lee tu teclado ni tu mouse. Al terminar abre la aplicación; después la encuentras buscando "LyXel" en tu menú.
 4. Activa la depuración USB en el teléfono, conecta el cable y acepta el permiso.
+
+Para desinstalar: `bash instalar.sh --desinstalar`.
 
 ## Requisitos
 
-- **PC:** Windows 10 u 11 (64 o 32 bits), o Linux x64 con la edición para Linux. scrcpy y ADB vienen incluidos.
+- **PC:** Windows 10 u 11 (64 o 32 bits), o Linux x64 con sesión X11 y la edición para Linux. scrcpy y ADB vienen incluidos.
 - **Teléfono:** Android 11 o superior (recomendado 13 o más) con la depuración USB activada. Cable USB para la primera conexión; después puedes conectarte sin cable.
 
 ## Historial de versiones
@@ -141,6 +143,7 @@ Edición para Linux de 64 bits: muestra y controla tu Android desde la PC, con t
 | Versión | Qué trae | Enlace |
 |---|---|---|
 | 1.11.0 | Tres perfiles a tu medida, chat en el Mapeador, joystick más firme, avisos más claros y navegación nueva | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.11.0) |
+| Linux 2.0.0 | El Mapeador llega a Linux: editor de controles, pantalla dedicada, perfiles a tu medida y actualizaciones desde LyXel | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/linux-v2.0.0) |
 | 1.10.1 | Codificador avanzado por teléfono, botón Detectar con dos conectados y cambio a H.264 si el teléfono no tiene el codec del perfil | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.10.1) |
 | 1.10.0 | Mejoras en la cámara y el editor de controles, actualizaciones desde LyXel, instalador de una pantalla y scrcpy 5.0.1 | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.10.0) |
 | 1.9.0 | scrcpy 5.0, aceleración por hardware activada, modo Vulkan, mantener audio con todo el sonido y arreglos del modo dual | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.9.0) |
