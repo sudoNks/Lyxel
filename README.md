@@ -11,6 +11,7 @@
   <a href="https://github.com/sudoNks/Lyxel/releases"><img src="https://img.shields.io/badge/descargas-%2B45%20mil-6d1a36" alt="Descargas"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/licencia-freeware-6d1a36" alt="Licencia freeware"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-6d1a36" alt="Windows 10 y 11">
+  <img src="https://img.shields.io/badge/Linux-x64%20%7C%20X11-6d1a36" alt="Linux x64 con X11">
 </p>
 
 <p align="center">
@@ -28,12 +29,13 @@
 
 ## Qué es LyXel
 
-LyXel es una aplicación gratuita para Windows que muestra la pantalla de tu teléfono Android en la computadora y te deja usarlo con el teclado y el mouse. Usa [scrcpy](https://github.com/Genymobile/scrcpy) como motor y le agrega una interfaz, un Mapeador para juegos, perfiles y herramientas para el teléfono, sin escribir comandos.
+LyXel es una aplicación gratuita para Windows y Linux que muestra la pantalla de tu teléfono Android en la computadora y te deja usarlo con el teclado y el mouse. Usa [scrcpy](https://github.com/Genymobile/scrcpy) como motor y le agrega una interfaz, un Mapeador para juegos, perfiles y herramientas para el teléfono, sin escribir comandos.
 
 Antes se llamaba MobiladorSteX.
 
-## Novedades de la 1.11
+## Novedades de la 1.11 y de Linux 2.0
 
+- LyXel para Linux 2.0.0 se pone a la par: Mapeador, editor de controles, pantalla dedicada y actualizaciones desde LyXel.
 - Tres perfiles a tu medida (menor retraso, equilibrado y calidad) armados con los datos de tu teléfono y tu PC.
 - Escribe en el chat del juego sin salir del Mapeador, con Enter o con la tecla que elijas.
 - El joystick ya no se traba en diagonales y cambia de dirección más suave, también en Modo pantalla dedicada.
@@ -112,7 +114,7 @@ También trae tecla de atajos (MOD) a tu gusto, pantalla virtual con la resoluci
 | Windows 10 y 11, 64 y 32 bits | [LyXel_Setup_v1.11.0.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.11.0/LyXel_Setup_v1.11.0.exe) · [.zip](https://github.com/sudoNks/Lyxel/releases/download/v1.11.0/LyXel_Setup_v1.11.0.zip) |
 | Linux x64 (sesión X11) | [lyxel-v2.0.0-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v2.0.0/lyxel-v2.0.0-linux-x64.tar.gz) |
 
-En un equipo de 32 bits, activa **Compatibilidad x86** en Inicio después de instalar. Los hashes SHA-256 están en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/v1.11.0/SHA256SUMS.txt).
+En un equipo de 32 bits, activa **Compatibilidad x86** en Inicio después de instalar. Los hashes SHA-256 están en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/v1.11.0/SHA256SUMS.txt) para Windows y en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/linux-v2.0.0/SHA256SUMS.txt) para Linux.
 
 Todas las versiones: [Releases](https://github.com/sudoNks/Lyxel/releases)
 
@@ -124,7 +126,7 @@ Todas las versiones: [Releases](https://github.com/sudoNks/Lyxel/releases)
 
 ## LyXel para Linux
 
-Edición para Linux de 64 bits: muestra y controla tu Android desde la PC, con todo incluido, también el Mapeador. Tiene su propia numeración de versiones y requiere sesión X11.
+Edición para Linux de 64 bits, a la par de la de Windows: el Mapeador, el editor de controles, los perfiles y la conexión sin cable. Tiene su propia numeración de versiones y requiere sesión X11 (Ubuntu 22.04+, Debian 12+, Fedora, Arch y derivadas).
 
 1. Descarga [lyxel-v2.0.0-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v2.0.0/lyxel-v2.0.0-linux-x64.tar.gz).
 2. Extráelo con clic derecho > Extraer aquí, o en la terminal con `tar -xzf lyxel-v2.0.0-linux-x64.tar.gz`.
@@ -135,8 +137,11 @@ Para desinstalar: `bash instalar.sh --desinstalar`.
 
 ## Requisitos
 
-- **PC:** Windows 10 u 11 (64 o 32 bits), o Linux x64 con sesión X11 y la edición para Linux. scrcpy y ADB vienen incluidos.
+- **PC con Windows:** Windows 10 u 11, de 64 o 32 bits.
+- **PC con Linux:** x64 con sesión X11 (Ubuntu 22.04+, Debian 12+, Fedora, Arch y derivadas).
 - **Teléfono:** Android 11 o superior (recomendado 13 o más) con la depuración USB activada. Cable USB para la primera conexión; después puedes conectarte sin cable.
+
+scrcpy y ADB vienen incluidos en las dos ediciones.
 
 ## Historial de versiones
 
@@ -186,7 +191,7 @@ Comparte tus perfiles, reporta errores y propón ideas en [Discord](https://disc
 
 ## Créditos y licencias
 
-LyXel incluye componentes de otros autores, cada uno con su licencia: [scrcpy](https://github.com/Genymobile/scrcpy) de Genymobile (Apache 2.0, versión modificada), Android SDK Platform-Tools de Google (Apache 2.0), FFmpeg y libusb (LGPL 2.1 o posterior), SDL3 y zlib (zlib), dav1d (BSD 2-Clause), winpthreads, WPF-UI con Fluent UI System Icons, CommunityToolkit.Mvvm, ini-parser y .NET (MIT), y la fuente Inter (SIL Open Font License 1.1).
+LyXel incluye componentes de otros autores, cada uno con su licencia: [scrcpy](https://github.com/Genymobile/scrcpy) de Genymobile (Apache 2.0, versión modificada), Android SDK Platform-Tools de Google (Apache 2.0), FFmpeg y libusb (LGPL 2.1 o posterior), SDL3 y zlib (zlib), dav1d (BSD 2-Clause), winpthreads, WPF-UI con Fluent UI System Icons, CommunityToolkit.Mvvm, ini-parser, .NET y, en la edición para Linux, Avalonia (MIT), y la fuente Inter (SIL Open Font License 1.1).
 
 El robot de Android se reproduce o modifica a partir de trabajo creado y compartido por Google, y se usa según los términos de la licencia [Creative Commons Atribución 3.0](https://creativecommons.org/licenses/by/3.0/deed.es).
 

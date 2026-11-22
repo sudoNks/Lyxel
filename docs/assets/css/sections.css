@@ -57,6 +57,8 @@
   margin-top: 32px;
 }
 
+.hero-botones .btn-grande { min-width: 17.5rem; }
+
 .hero-datos {
   display: flex;
   flex-wrap: wrap;
@@ -390,7 +392,7 @@
 
 .descargas {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: stretch;
   gap: 18px;
   margin-top: 76px;
@@ -468,7 +470,7 @@
 
 .requisitos {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 18px;
 }
 
@@ -599,6 +601,8 @@
   .cifras > div:nth-child(-n + 2) { border-bottom: 1px solid var(--borde); }
 
   .descargas { grid-template-columns: 1fr; gap: 64px; }
+
+  .requisitos { grid-template-columns: 1fr; }
 
   .pasos-fila { grid-template-columns: 1fr; gap: 0; }
 }

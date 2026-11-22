@@ -178,6 +178,15 @@
     });
   });
 
+  var botonLinux = document.querySelector('.hero-botones [data-so="linux"]');
+  var botonWindows = document.querySelector('.hero-botones [data-so="windows"]');
+  var agente = navigator.userAgent;
+  if (botonLinux && botonWindows && /Linux/.test(agente) && !/Android/.test(agente)) {
+    botonLinux.classList.replace("btn-secundario", "btn-primario");
+    botonWindows.classList.replace("btn-primario", "btn-secundario");
+    botonWindows.parentNode.insertBefore(botonLinux, botonWindows);
+  }
+
   var anio = document.getElementById("anio");
   if (anio) anio.textContent = new Date().getFullYear();
 })();
