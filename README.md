@@ -32,17 +32,16 @@ LyXel es una aplicación gratuita para Windows que muestra la pantalla de tu tel
 
 Antes se llamaba MobiladorSteX.
 
-## Novedades de la 1.10
+## Novedades de la 1.11
 
-- 1.10.1: cada teléfono recuerda su codificador avanzado y el botón Detectar funciona con dos conectados. Si el teléfono no tiene el codec de tu perfil, LyXel avisa y usa H.264.
-- La cámara se mueve como en MSI App Player y vuelve a responder en Samsung, Infinix y Xiaomi 17.
-- Editor de controles como el de los emuladores: cámara y disparo en un solo control, y sensibilidad con flechas.
-- Botón para apagar la pantalla del teléfono mientras juegas.
-- El toque repetido baja hasta 20 ms entre toques.
-- Clic derecho para liberar el cursor y teclado numérico con Bloq Num apagado.
-- LyXel avisa cuando hay una versión nueva y se actualiza con un botón.
-- Instalador de una sola pantalla: actualiza sin desinstalar y conserva tus perfiles.
-- scrcpy 5.0.1: la imagen ya no sale verde con H.265 en algunas tarjetas gráficas.
+- Tres perfiles a tu medida (menor retraso, equilibrado y calidad) armados con los datos de tu teléfono y tu PC.
+- Escribe en el chat del juego sin salir del Mapeador, con Enter o con la tecla que elijas.
+- El joystick ya no se traba en diagonales y cambia de dirección más suave, también en Modo pantalla dedicada.
+- Las teclas rápidas llegan completas y, sin cable, los toques ya no se pierden cuando la red se atora.
+- Avisos más claros: por qué no arranca el Mapeador, un cable que no pasa datos y los Xiaomi sin «Depuración USB (ajustes de seguridad)».
+- El Mapeador sigue funcionando con Veyra encima del espejo.
+- Navegación nueva, con las secciones en un arco abajo.
+- Conexión más estable y menos consumo mientras juegas.
 
 ### Video
 
@@ -61,7 +60,7 @@ La cámara como en MSI App Player, las actualizaciones desde la aplicación, el 
 Pon controles encima del juego y úsalos con el teclado y el mouse. El juego corre en tu teléfono, con tu cuenta; la PC solo lo muestra y le manda tus teclas.
 
 - Editor al estilo de los emuladores: toque, mantener, joystick, apuntar, deslizar, zoom, scripts y controles MOBA.
-- Cámara sin aceleración y frecuencia de envío de 125 a 1000 Hz.
+- Cámara como en MSI App Player y frecuencia de envío de 125 a 1000 Hz.
 - FPS y latencia en pantalla.
 - Perfiles que se ajustan solos a cualquier resolución.
 - Barra flotante para ocultar los controles, pasar a pantalla completa o jugar mirando el teléfono.
@@ -110,10 +109,10 @@ También trae tecla de atajos (MOD) a tu gusto, pantalla virtual con la resoluci
 
 | Plataforma | Archivo |
 |---|---|
-| Windows 10 y 11, 64 y 32 bits | [LyXel_Setup_v1.10.1.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.10.1/LyXel_Setup_v1.10.1.exe) · [.zip](https://github.com/sudoNks/Lyxel/releases/download/v1.10.1/LyXel_Setup_v1.10.1.zip) |
+| Windows 10 y 11, 64 y 32 bits | [LyXel_Setup_v1.11.0.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.11.0/LyXel_Setup_v1.11.0.exe) · [.zip](https://github.com/sudoNks/Lyxel/releases/download/v1.11.0/LyXel_Setup_v1.11.0.zip) |
 | Linux x64 | [lyxel-v1.0.3-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v1.0.3/lyxel-v1.0.3-linux-x64.tar.gz) |
 
-En un equipo de 32 bits, activa **Compatibilidad x86** en Inicio después de instalar. Los hashes SHA-256 están en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/v1.10.1/SHA256SUMS.txt).
+En un equipo de 32 bits, activa **Compatibilidad x86** en Inicio después de instalar. Los hashes SHA-256 están en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/v1.11.0/SHA256SUMS.txt).
 
 Todas las versiones: [Releases](https://github.com/sudoNks/Lyxel/releases)
 
@@ -141,6 +140,7 @@ Edición para Linux de 64 bits: muestra y controla tu Android desde la PC, con t
 
 | Versión | Qué trae | Enlace |
 |---|---|---|
+| 1.11.0 | Tres perfiles a tu medida, chat en el Mapeador, joystick más firme, avisos más claros y navegación nueva | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.11.0) |
 | 1.10.1 | Codificador avanzado por teléfono, botón Detectar con dos conectados y cambio a H.264 si el teléfono no tiene el codec del perfil | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.10.1) |
 | 1.10.0 | Mejoras en la cámara y el editor de controles, actualizaciones desde LyXel, instalador de una pantalla y scrcpy 5.0.1 | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.10.0) |
 | 1.9.0 | scrcpy 5.0, aceleración por hardware activada, modo Vulkan, mantener audio con todo el sonido y arreglos del modo dual | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.9.0) |
