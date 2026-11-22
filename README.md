@@ -41,7 +41,7 @@ Antes se llamaba MobiladorSteX.
 - El botón para apagar la pantalla del teléfono avisa que la cámara puede sentirse menos fluida.
 - LyXel lee bien el refresco de la pantalla del teléfono, también al cambiar de teléfono.
 - Benchmarks guarda los FPS que pide tu perfil y si la pantalla iba apagada.
-- LyXel para Linux 2.1.0 trae lo mismo que la 1.12 de Windows, con el Mapeador, la pantalla dedicada y las actualizaciones desde LyXel.
+- LyXel para Linux 2.1.1 trae lo mismo que la 1.12 de Windows y ya funciona en Ubuntu, Linux Mint, Debian y Fedora.
 
 ### Video
 
@@ -111,9 +111,9 @@ También trae tecla de atajos (MOD) a tu gusto, pantalla virtual con la resoluci
 | Plataforma | Archivo |
 |---|---|
 | Windows 10 y 11, 64 y 32 bits | [LyXel_Setup_v1.12.0.exe](https://github.com/sudoNks/Lyxel/releases/download/v1.12.0/LyXel_Setup_v1.12.0.exe) · [.zip](https://github.com/sudoNks/Lyxel/releases/download/v1.12.0/LyXel_Setup_v1.12.0.zip) |
-| Linux x64 (sesión X11) | [lyxel-v2.1.0-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v2.1.0/lyxel-v2.1.0-linux-x64.tar.gz) |
+| Linux x64 (sesión X11) | [lyxel-v2.1.1-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v2.1.1/lyxel-v2.1.1-linux-x64.tar.gz) |
 
-En un equipo de 32 bits, activa **Compatibilidad x86** en Inicio después de instalar. Los hashes SHA-256 están en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/v1.12.0/SHA256SUMS.txt) para Windows y en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/linux-v2.1.0/SHA256SUMS.txt) para Linux.
+En un equipo de 32 bits, activa **Compatibilidad x86** en Inicio después de instalar. Los hashes SHA-256 están en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/v1.12.0/SHA256SUMS.txt) para Windows y en [SHA256SUMS.txt](https://github.com/sudoNks/Lyxel/releases/download/linux-v2.1.1/SHA256SUMS.txt) para Linux.
 
 Todas las versiones: [Releases](https://github.com/sudoNks/Lyxel/releases)
 
@@ -127,16 +127,14 @@ Todas las versiones: [Releases](https://github.com/sudoNks/Lyxel/releases)
 
 Edición para Linux de 64 bits, a la par de la de Windows: el Mapeador, el editor de controles, los perfiles y la conexión sin cable. Tiene su propia numeración de versiones.
 
-Funciona en Linux x64 con sesión X11.
-
-> **Por ahora necesita glibc 2.43 o más nueva**, como Kali o Arch. Revísalo con `ldd --version`. En Ubuntu 24.04, Mint 22 y Debian 12 el espejo todavía no arranca; el arreglo llega en la próxima versión.
+Funciona en Linux x64 con sesión X11: Ubuntu 22.04+, Linux Mint 21+, Debian 12+, Fedora, Arch y derivadas.
 
 ### 1. Descarga
 
-Bájalo desde el navegador, [lyxel-v2.1.0-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v2.1.0/lyxel-v2.1.0-linux-x64.tar.gz) (53 MB), o en una terminal:
+Bájalo desde el navegador, [lyxel-v2.1.1-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v2.1.1/lyxel-v2.1.1-linux-x64.tar.gz) (52 MB), o en una terminal:
 
 ```bash
-wget https://github.com/sudoNks/Lyxel/releases/download/linux-v2.1.0/lyxel-v2.1.0-linux-x64.tar.gz
+wget https://github.com/sudoNks/Lyxel/releases/download/linux-v2.1.1/lyxel-v2.1.1-linux-x64.tar.gz
 ```
 
 <details>
@@ -145,7 +143,7 @@ wget https://github.com/sudoNks/Lyxel/releases/download/linux-v2.1.0/lyxel-v2.1.
 En la misma carpeta del archivo:
 
 ```bash
-wget https://github.com/sudoNks/Lyxel/releases/download/linux-v2.1.0/SHA256SUMS.txt
+wget https://github.com/sudoNks/Lyxel/releases/download/linux-v2.1.1/SHA256SUMS.txt
 sha256sum -c SHA256SUMS.txt
 ```
 
@@ -158,8 +156,8 @@ Si está bien, la línea del archivo termina en `OK` (o «La suma coincide»). S
 Abre una terminal en la carpeta donde quedó el archivo (normalmente `cd ~/Descargas`, o `cd ~/Downloads` si tu sistema está en inglés) y corre:
 
 ```bash
-tar -xzf lyxel-v2.1.0-linux-x64.tar.gz
-cd lyxel-v2.1.0-linux-x64
+tar -xzf lyxel-v2.1.1-linux-x64.tar.gz
+cd lyxel-v2.1.1-linux-x64
 bash instalar.sh
 ```
 
@@ -208,7 +206,7 @@ bash ~/.local/opt/lyxel/instalar.sh --quitar-regla
 <details>
 <summary>Si algo no funciona</summary>
 
-- **Sale «El espejo no apareció»:** corre `ldd --version`. Si es menor a 2.43, tu distribución todavía no es compatible; el arreglo llega en la próxima versión.
+- **Con la 2.0.0 o la 2.1.0 sale «El espejo no apareció»:** actualiza a la 2.1.1 desde Información > Buscar actualizaciones.
 - **El Mapeador se ve mal acomodado o no captura:** cierra sesión y entra con una sesión X11 (Xorg) desde la pantalla de inicio de sesión. En Wayland, las ventanas de LyXel pasan por XWayland.
 - **El instalador dice que faltan bibliotecas:** copia el comando que te muestra para tu distribución (apt, dnf o pacman), córrelo y vuelve a correr `bash instalar.sh` en la carpeta que extrajiste.
 - **Por cable sale `no permissions`:** vuelve a correr `bash instalar.sh` en la carpeta que extrajiste, acepta la regla USB y conecta otra vez el teléfono.
@@ -220,7 +218,7 @@ bash ~/.local/opt/lyxel/instalar.sh --quitar-regla
 ## Requisitos
 
 - **PC con Windows:** Windows 10 u 11, de 64 o 32 bits.
-- **PC con Linux:** x64 con sesión X11 y, por ahora, glibc 2.43 o más nueva (Kali, Arch).
+- **PC con Linux:** x64 con sesión X11 (Ubuntu 22.04+, Linux Mint 21+, Debian 12+, Fedora, Arch y derivadas).
 - **Teléfono:** Android 11 o superior (recomendado 13 o más) con la depuración USB activada. Cable USB para la primera conexión; después puedes conectarte sin cable.
 
 scrcpy y ADB vienen incluidos en las dos ediciones.
@@ -231,6 +229,7 @@ scrcpy y ADB vienen incluidos en las dos ediciones.
 |---|---|---|
 | 1.12.0 | Te pregunta cómo vas a jugar al crear tus perfiles, lee bien el refresco del teléfono y avisa al apagar la pantalla | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.12.0) |
 | 1.11.0 | Tres perfiles a tu medida, chat en el Mapeador, joystick más firme, avisos más claros y navegación nueva | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.11.0) |
+| Linux 2.1.1 | Arreglo: el espejo ya arranca en Ubuntu, Linux Mint, Debian y Fedora | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/linux-v2.1.1) |
 | Linux 2.1.0 | Lo mismo que la 1.12.0: te pregunta cómo vas a jugar al crear tus perfiles, lee bien el refresco del teléfono y avisa al apagar la pantalla | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/linux-v2.1.0) |
 | Linux 2.0.0 | El Mapeador llega a Linux: editor de controles, pantalla dedicada, perfiles a tu medida y actualizaciones desde LyXel | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/linux-v2.0.0) |
 | 1.10.1 | Codificador avanzado por teléfono, botón Detectar con dos conectados y cambio a H.264 si el teléfono no tiene el codec del perfil | [Descargar](https://github.com/sudoNks/Lyxel/releases/tag/v1.10.1) |
