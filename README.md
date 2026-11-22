@@ -126,14 +126,94 @@ Todas las versiones: [Releases](https://github.com/sudoNks/Lyxel/releases)
 
 ## LyXel para Linux
 
-Edición para Linux de 64 bits, a la par de la de Windows: el Mapeador, el editor de controles, los perfiles y la conexión sin cable. Tiene su propia numeración de versiones y requiere sesión X11 (Ubuntu 22.04+, Debian 12+, Fedora, Arch y derivadas).
+Edición para Linux de 64 bits, a la par de la de Windows: el Mapeador, el editor de controles, los perfiles y la conexión sin cable. Tiene su propia numeración de versiones.
 
-1. Descarga [lyxel-v2.0.0-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v2.0.0/lyxel-v2.0.0-linux-x64.tar.gz).
-2. Extráelo con clic derecho > Extraer aquí, o en la terminal con `tar -xzf lyxel-v2.0.0-linux-x64.tar.gz`.
-3. Entra a la carpeta (`cd lyxel-v2.0.0-linux-x64`) y ejecuta el instalador con `bash instalar.sh`. Te pide tu contraseña para dos reglas: la USB y la de teclado y mouse, sin la cual el Mapeador no lee tu teclado ni tu mouse. Al terminar abre la aplicación; después la encuentras buscando "LyXel" en tu menú.
-4. Activa la depuración USB en el teléfono, conecta el cable y acepta el permiso.
+Funciona en Linux x64 con sesión X11: Ubuntu 22.04+, Debian 12+, Fedora, Arch y derivadas.
 
-Para desinstalar: `bash instalar.sh --desinstalar`.
+### 1. Descarga
+
+Bájalo desde el navegador, [lyxel-v2.0.0-linux-x64.tar.gz](https://github.com/sudoNks/Lyxel/releases/download/linux-v2.0.0/lyxel-v2.0.0-linux-x64.tar.gz) (53 MB), o en una terminal:
+
+```bash
+wget https://github.com/sudoNks/Lyxel/releases/download/linux-v2.0.0/lyxel-v2.0.0-linux-x64.tar.gz
+```
+
+<details>
+<summary>Comprobar que el archivo es el original (opcional)</summary>
+
+En la misma carpeta del archivo:
+
+```bash
+wget https://github.com/sudoNks/Lyxel/releases/download/linux-v2.0.0/SHA256SUMS.txt
+sha256sum -c SHA256SUMS.txt
+```
+
+Si está bien, la línea del archivo termina en `OK` (o «La suma coincide»). Si dice `FAILED`, vuelve a descargarlo.
+
+</details>
+
+### 2. Instala
+
+Abre una terminal en la carpeta donde quedó el archivo (normalmente `cd ~/Descargas`, o `cd ~/Downloads` si tu sistema está en inglés) y corre:
+
+```bash
+tar -xzf lyxel-v2.0.0-linux-x64.tar.gz
+cd lyxel-v2.0.0-linux-x64
+bash instalar.sh
+```
+
+> [!IMPORTANT]
+> Córrelo con tu usuario normal, sin `sudo`. El instalador pide tu contraseña solo para las dos reglas de abajo.
+
+El instalador te hace dos preguntas:
+
+| Pregunta | Para qué sirve | Qué contestar |
+|---|---|---|
+| ¿Crear la regla USB? | Que LyXel vea el teléfono por cable sin root | **Enter** (ya viene en sí) |
+| ¿Crear la regla de teclado y mouse? | Que el Mapeador lea tu teclado y tu mouse | Escribe **s**: si solo pulsas Enter, queda en no |
+
+Al terminar, LyXel queda en `~/.local/opt/lyxel`, aparece en tu menú de aplicaciones como **LyXel** y se abre solo.
+
+### 3. Conecta el teléfono
+
+1. En el teléfono, entra a Ajustes > Acerca del teléfono y toca 7 veces **Número de compilación**. Luego, en **Opciones de desarrollador**, activa **Depuración USB**. En Xiaomi activa también **Depuración USB (ajustes de seguridad)**.
+2. Conecta el cable y acepta el permiso en el teléfono (marca **Permitir siempre**).
+3. Elige un perfil y pulsa **Iniciar**. Para jugar con teclado y mouse, entra al **Mapeador**.
+
+Después puedes conectarte sin cable desde **Conexión** (Android 11 o superior).
+
+### Actualizar
+
+- LyXel avisa cuando hay una versión nueva y se actualiza desde **Información**, comprobando que sea la oficial. Las reglas y el lanzador se quedan como están.
+- Si tienes la 1.0.3, instala esta encima con los pasos de arriba: conserva tus ajustes.
+- Si lo instalaste para todo el sistema (en `/opt/lyxel`), esa copia no se actualiza sola: LyXel te avisa y te lleva a la página oficial.
+
+### Desinstalar
+
+Desde cualquier carpeta:
+
+```bash
+bash ~/.local/opt/lyxel/instalar.sh --desinstalar
+```
+
+Quita la aplicación, el lanzador y las dos reglas. Tus ajustes y perfiles (en `~/.local/share/LyXel`) solo se borran si lo confirmas, y la carpeta que extrajiste se queda para que la borres tú.
+
+Para quitar solo la regla de teclado y mouse:
+
+```bash
+bash ~/.local/opt/lyxel/instalar.sh --quitar-regla
+```
+
+<details>
+<summary>Si algo no funciona</summary>
+
+- **El Mapeador se ve mal acomodado o no captura:** cierra sesión y entra con una sesión X11 (Xorg) desde la pantalla de inicio de sesión. En Wayland, las ventanas de LyXel pasan por XWayland.
+- **El instalador dice que faltan bibliotecas:** copia el comando que te muestra para tu distribución (apt, dnf o pacman), córrelo y vuelve a correr `bash instalar.sh` en la carpeta que extrajiste.
+- **Por cable sale `no permissions`:** vuelve a correr `bash instalar.sh` en la carpeta que extrajiste, acepta la regla USB y conecta otra vez el teléfono.
+- **El Mapeador no lee tu teclado o tu mouse:** vuelve a correr `bash instalar.sh` en la carpeta que extrajiste y escribe **s** en la regla de teclado y mouse.
+- **En una máquina virtual:** pasa el teléfono a la máquina (VM > Removable Devices > tu teléfono > Connect).
+
+</details>
 
 ## Requisitos
 
