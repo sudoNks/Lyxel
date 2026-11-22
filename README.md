@@ -127,7 +127,9 @@ Todas las versiones: [Releases](https://github.com/sudoNks/Lyxel/releases)
 
 Edición para Linux de 64 bits, a la par de la de Windows: el Mapeador, el editor de controles, los perfiles y la conexión sin cable. Tiene su propia numeración de versiones.
 
-Funciona en Linux x64 con sesión X11: Ubuntu 22.04+, Debian 12+, Fedora, Arch y derivadas.
+Funciona en Linux x64 con sesión X11.
+
+> **Por ahora necesita glibc 2.43 o más nueva**, como Kali o Arch. Revísalo con `ldd --version`. En Ubuntu 24.04, Mint 22 y Debian 12 el espejo todavía no arranca; el arreglo llega en la próxima versión.
 
 ### 1. Descarga
 
@@ -206,6 +208,7 @@ bash ~/.local/opt/lyxel/instalar.sh --quitar-regla
 <details>
 <summary>Si algo no funciona</summary>
 
+- **Sale «El espejo no apareció»:** corre `ldd --version`. Si es menor a 2.43, tu distribución todavía no es compatible; el arreglo llega en la próxima versión.
 - **El Mapeador se ve mal acomodado o no captura:** cierra sesión y entra con una sesión X11 (Xorg) desde la pantalla de inicio de sesión. En Wayland, las ventanas de LyXel pasan por XWayland.
 - **El instalador dice que faltan bibliotecas:** copia el comando que te muestra para tu distribución (apt, dnf o pacman), córrelo y vuelve a correr `bash instalar.sh` en la carpeta que extrajiste.
 - **Por cable sale `no permissions`:** vuelve a correr `bash instalar.sh` en la carpeta que extrajiste, acepta la regla USB y conecta otra vez el teléfono.
@@ -217,7 +220,7 @@ bash ~/.local/opt/lyxel/instalar.sh --quitar-regla
 ## Requisitos
 
 - **PC con Windows:** Windows 10 u 11, de 64 o 32 bits.
-- **PC con Linux:** x64 con sesión X11 (Ubuntu 22.04+, Debian 12+, Fedora, Arch y derivadas).
+- **PC con Linux:** x64 con sesión X11 y, por ahora, glibc 2.43 o más nueva (Kali, Arch).
 - **Teléfono:** Android 11 o superior (recomendado 13 o más) con la depuración USB activada. Cable USB para la primera conexión; después puedes conectarte sin cable.
 
 scrcpy y ADB vienen incluidos en las dos ediciones.

@@ -442,6 +442,8 @@
 
 .descarga-pie { color: var(--texto-tenue); font-size: 0.86rem; }
 
+.descarga code { white-space: nowrap; overflow-wrap: normal; }
+
 .descarga-mascota {
   position: absolute;
   top: -70px;
