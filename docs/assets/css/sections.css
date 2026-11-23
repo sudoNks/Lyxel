@@ -215,7 +215,7 @@
   transform: translateY(18%);
 }
 
-.editor { margin-top: clamp(56px, 7vw, 88px); }
+.editor, .en-linux { margin-top: clamp(56px, 7vw, 88px); }
 
 .recorrido {
   display: grid;
