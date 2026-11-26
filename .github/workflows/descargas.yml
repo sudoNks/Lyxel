@@ -1,0 +1,38 @@
+name: Descargas
+
+on:
+  schedule:
+    - cron: "17 12 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: descargas
+  cancel-in-progress: false
+
+jobs:
+  cifra:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Poner la cifra al día
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          historico=$(grep -oP 'var historico = \K[0-9]+' docs/assets/js/main.js)
+          api=$(gh api "repos/${GITHUB_REPOSITORY}/releases?per_page=100" --paginate --jq '.[].assets[].download_count' | awk '{s += $1} END {print s + 0}')
+          mil=$(( (historico + api) / 1000 ))
+          echo "Histórico ${historico} + releases ${api} = +${mil} mil"
+          sed -i -E "s/descargas-%2B[0-9]+%20mil/descargas-%2B${mil}%20mil/" README.md
+          sed -i -E "s|(<dd id=\"cifra-descargas\">)\+[0-9]+ mil(</dd>)|\1+${mil} mil\2|" docs/index.html
+          if git diff --quiet; then
+            echo "Sin cambios"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Descargas +${mil} mil"
+          git push
